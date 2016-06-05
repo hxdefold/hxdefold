@@ -1,0 +1,11 @@
+{
+    "name": "hxdefold",
+    "url": "https://github.com/nadako/hxdefold",
+    "description": "Defold game engine externs",
+    "license": "MIT",
+    "version": "1.2.82",
+    "classPath": "src",
+    "releasenote": "Initial release",
+    "contributors": ["nadako"],
+    "tags": ["game", "lua", "extern"]
+}
