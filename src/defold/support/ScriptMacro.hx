@@ -9,6 +9,12 @@ import haxe.macro.Type;
 using StringTools;
 using haxe.macro.Tools;
 
+enum ScriptType {
+    SCode;
+    SGui;
+    // SRender;
+}
+
 class ScriptMacro {
     static function use(defoldRoot:String, outDir = "scripts") {
         var defoldRoot = sys.FileSystem.fullPath(defoldRoot).replace("\\", "/");
@@ -34,18 +40,28 @@ class ScriptMacro {
 
             // collect script classes
             var scriptClasses = [];
-            var baseScriptMethods = null; // this will contain a map of callback method names
+
+            // these will contain a map of callback method names
+            var baseScriptMethods = new Map();
+            var baseGuiScriptMethods = new Map();
+
             for (type in types) {
                 switch (type) {
                     case TInst(_.get() => cl, _):
                         switch (cl) {
                             case {pack: ["defold", "support"], name: "Script"}:
-                                baseScriptMethods = new Map();
                                 for (field in cl.fields.get())
                                     baseScriptMethods[field.name] = true;
 
+                            case {pack: ["defold", "support"], name: "GuiScript"}:
+                                for (field in cl.fields.get())
+                                    baseGuiScriptMethods[field.name] = true;
+
                             case {superClass: {t: _.get() => {pack: ["defold", "support"], name: "Script"}, params: [tData]}}:
-                                scriptClasses.push({cls: cl, data: tData});
+                                scriptClasses.push({cls: cl, data: tData, type: SCode});
+
+                            case {superClass: {t: _.get() => {pack: ["defold", "support"], name: "GuiScript"}, params: [tData]}}:
+                                scriptClasses.push({cls: cl, data: tData, type: SGui});
 
                             default:
                         }
@@ -94,10 +110,21 @@ class ScriptMacro {
                 var dotPath = haxe.macro.MacroStringTools.toDotPath(cl.pack, cl.name);
                 b.add('local script = $dotPath.new()\n\n');
 
+                var baseMethods;
+                var ext;
+                switch (script.type) {
+                    case SCode:
+                        baseMethods = baseScriptMethods;
+                        ext = "script";
+                    case SGui:
+                        baseMethods = baseGuiScriptMethods;
+                        ext = "gui_script";
+                }
+
                 // generate callback fields
                 for (field in cl.fields.get()) {
                     // this is a callback field, if it's overriden from the base Script class
-                    if (baseScriptMethods.exists(field.name)) {
+                    if (baseMethods.exists(field.name)) {
                         // generate arguments
                         var args = switch (field.type) {
                             case TFun(args, _):
@@ -113,7 +140,7 @@ class ScriptMacro {
                 // finally, save the generated script file, using the name of the class
                 var scriptDir = Path.join([outDir].concat(cl.pack));
                 sys.FileSystem.createDirectory(scriptDir);
-                sys.io.File.saveContent('$scriptDir/${cl.name}.script', b.toString());
+                sys.io.File.saveContent('$scriptDir/${cl.name}.$ext', b.toString());
             }
         });
     }
