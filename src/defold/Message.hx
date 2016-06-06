@@ -40,6 +40,9 @@ class DefoldMessages {
 
     // render
     static var ClearColor(default,never) = new Message<{color:Vector4}>("clear_color");
+    static var DrawLine(default,never) = new Message<DrawLineData>("draw_line");
+    static var DrawText(default,never) = new Message<DrawTextData>("draw_text");
+    static var WindowResized(default,never) = new Message<{width:Int, height:Int}>("window_resized");
 }
 
 typedef RebootData = {
@@ -95,4 +98,15 @@ typedef SetCameraData = {
     fov:Float,
     near_z:Float,
     far_z:Float,
+}
+
+typedef DrawLineData = {
+    start_point:Vector3,
+    end_point:Vector3,
+    color:Vector4,
+}
+
+typedef DrawTextData = {
+    position:Vector3,
+    text:String,
 }
