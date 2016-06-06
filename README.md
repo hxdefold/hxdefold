@@ -2,7 +2,7 @@
 
 # Haxe/Lua externs for the Defold game engine
 
-**Status: very much work in progress, getting ready for ALPHA. Currently requires latest Haxe [development builds](http://builds.haxe.org/).**
+**Status: PRE-ALPHA, very much work in progress, API may change. Currently requires latest Haxe [development builds](http://builds.haxe.org/).**
 
 ## Example
 
