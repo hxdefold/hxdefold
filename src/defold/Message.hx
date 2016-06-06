@@ -43,6 +43,10 @@ class DefoldMessages {
     static var DrawLine(default,never) = new Message<DrawLineData>("draw_line");
     static var DrawText(default,never) = new Message<DrawTextData>("draw_text");
     static var WindowResized(default,never) = new Message<{width:Int, height:Int}>("window_resized");
+
+    // sprite
+    static var AnimationDone(default,never) = new Message<{current_tile:Int, id:Hash}>("animation_done");
+    static var PlayAnimation(default,never) = new Message<{id:Hash}>("play_animation");
 }
 
 typedef RebootData = {
