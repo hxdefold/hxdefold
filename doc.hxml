@@ -1,0 +1,10 @@
+-cp src
+-lua dummy
+-D doc-gen
+--macro include("", true, null, ["src"])
+--no-output
+-xml bin/lua.xml
+
+--next
+
+-cmd haxelib run dox -o bin/api -i bin -in ^[Dd]efold.*$  -D source-path https://github.com/hxdefold/hxdefold/blob/master/src/
