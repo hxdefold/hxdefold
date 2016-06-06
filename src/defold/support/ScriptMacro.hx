@@ -12,7 +12,7 @@ using haxe.macro.Tools;
 enum ScriptType {
     SCode;
     SGui;
-    // SRender;
+    SRender;
 }
 
 class ScriptMacro {
@@ -44,6 +44,7 @@ class ScriptMacro {
             // these will contain a map of callback method names
             var baseScriptMethods = new Map();
             var baseGuiScriptMethods = new Map();
+            var baseRenderScriptMethods = new Map();
 
             for (type in types) {
                 switch (type) {
@@ -57,11 +58,18 @@ class ScriptMacro {
                                 for (field in cl.fields.get())
                                     baseGuiScriptMethods[field.name] = true;
 
+                            case {pack: ["defold", "support"], name: "RenderScript"}:
+                                for (field in cl.fields.get())
+                                    baseRenderScriptMethods[field.name] = true;
+
                             case {superClass: {t: _.get() => {pack: ["defold", "support"], name: "Script"}, params: [tData]}}:
                                 scriptClasses.push({cls: cl, data: tData, type: SCode});
 
                             case {superClass: {t: _.get() => {pack: ["defold", "support"], name: "GuiScript"}, params: [tData]}}:
                                 scriptClasses.push({cls: cl, data: tData, type: SGui});
+
+                            case {superClass: {t: _.get() => {pack: ["defold", "support"], name: "RenderScript"}, params: [tData]}}:
+                                scriptClasses.push({cls: cl, data: tData, type: SRender});
 
                             default:
                         }
@@ -119,6 +127,9 @@ class ScriptMacro {
                     case SGui:
                         baseMethods = baseGuiScriptMethods;
                         ext = "gui_script";
+                    case SRender:
+                        baseMethods = baseRenderScriptMethods;
+                        ext = "render_script";
                 }
 
                 // generate callback fields
