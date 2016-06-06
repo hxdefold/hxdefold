@@ -91,7 +91,8 @@ class ScriptMacro {
                 }
 
                 // make an instance of script
-                b.add('local script = ${cl.name}.new()\n\n');
+                var dotPath = haxe.macro.MacroStringTools.toDotPath(cl.pack, cl.name);
+                b.add('local script = $dotPath.new()\n\n');
 
                 // generate callback fields
                 for (field in cl.fields.get()) {
