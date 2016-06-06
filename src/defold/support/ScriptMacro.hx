@@ -159,6 +159,8 @@ class ScriptMacro {
     }
 
     static function getProperties(type:Type, pos:Position):Array<{name:String, value:String}> {
+        // TODO: hash, msg.url, vmath.vector3, vmath.vector4, vmath.quat,
+        // TODO: also check allowed types and values for them
         var result = [];
         switch (type.follow()) {
             case TAnonymous(_.get() => anon):
@@ -169,7 +171,7 @@ class ScriptMacro {
                             continue;
                         case [prop]:
                             switch (prop.params) {
-                                case [{expr: EConst(CInt(s) | CFloat(s))}]:
+                                case [{expr: EConst(CInt(s) | CFloat(s)) | EConst(CIdent(s = "true" | "false"))}]:
                                     result.push({name: field.name, value: s});
                                 default:
                                     throw new Error("Invalid @property params", prop.pos);
