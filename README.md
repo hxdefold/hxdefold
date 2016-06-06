@@ -23,9 +23,21 @@ class Greeter extends defold.support.Script<GreeterData> {
 }
 ```
 
-## API Documentation
+## Documentation
 
-[Generated Haxe API documentation](http://hxdefold.github.io/hxdefold/).
+Required haxe compilation flags:
+ * `-lib hxdefold` - use this library, obviously
+ * `-lua something.lua` - the output lua module
+ * `-D luajit` - compile for LuaJIT, because that's what Defold uses
+ * `--macro defold.support.ScriptMacro.use(".")` - generate glue `.script` files for script classes, first argument is the path to Defold project root folder
+
+More docs to be written...
+
+Here's some [generated Haxe API documentation](http://hxdefold.github.io/hxdefold/).
+
+And example Defold projects, ported from Lua:
+ * https://github.com/hxdefold/hxdefold-example-sidescroller
+ * https://github.com/hxdefold/hxdefold-example-frogrunner
 
 ## How does it work?
 
