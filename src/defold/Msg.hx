@@ -1,5 +1,6 @@
 package defold;
 
+import haxe.extern.EitherType;
 import defold.support.HashOrString;
 import defold.support.HashOrStringOrUrl;
 
@@ -9,6 +10,6 @@ extern class Msg {
     static function post<T>(receiver:Null<HashOrStringOrUrl>, message_id:Message<T>, message:T):Void;
 
     @:overload(function():Url {})
-    @:overload(function(socket:String, path:HashOrString, fragment:HashOrString):Url {})
+    @:overload(function(socket:EitherType<String,Int>, path:HashOrString, fragment:HashOrString):Url {})
     static function url(urlstring:String):Url;
 }
