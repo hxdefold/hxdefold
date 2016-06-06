@@ -1,6 +1,6 @@
 package defold;
 
-@:native("go")
+@:native("_G.go")
 @:enum extern abstract Easing(Dynamic) {
     var EASING_INBACK;
     var EASING_INBOUNCE;

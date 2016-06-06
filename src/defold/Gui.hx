@@ -3,7 +3,7 @@ package defold;
 import haxe.extern.EitherType;
 import defold.support.HashOrString;
 
-@:native("gui")
+@:native("_G.gui")
 extern class Gui {
     static var PROP_POSITION(default,null):String;
     static var PROP_ROTATION(default,null):String;
@@ -115,19 +115,19 @@ extern class Gui {
     static function show_keyboard(type:GuiKeyboardType, autoclose:Bool):Void;
 }
 
-@:native("gui")
+@:native("_G.gui")
 @:enum extern abstract GuiPlayback({}) {
 
 }
 
-@:native("gui")
+@:native("_G.gui")
 @:enum extern abstract GuiAdjustMode({}) {
     var ADJUST_FIT;
     var ADJUST_ZOOM;
     var ADJUST_STRETCH;
 }
 
-@:native("gui")
+@:native("_G.gui")
 @:enum extern abstract GuiBlendMode({}) {
     var BLEND_ALPHA;
     var BLEND_ADD;
@@ -135,13 +135,13 @@ extern class Gui {
     var BLEND_MULT;
 }
 
-@:native("gui")
+@:native("_G.gui")
 @:enum extern abstract GuiClippingMode({}) {
     var CLIPPING_MODE_NONE;
     var CLIPPING_MODE_STENCIL;
 }
 
-@:native("gui")
+@:native("_G.gui")
 @:enum extern abstract GuiPivot({}) {
     var PIVOT_CENTER;
     var PIVOT_N;
@@ -154,7 +154,7 @@ extern class Gui {
     var PIVOT_NW;
 }
 
-@:native("gui")
+@:native("_G.gui")
 @:enum extern abstract GuiSizeMode({}) {
     var SIZE_MODE_MANUAL;
     var SIZE_MODE_AUTOMATIC;
@@ -167,27 +167,27 @@ typedef GuiTextMetrics = {
     var max_descent:Float;
 }
 
-@:native("gui")
+@:native("_G.gui")
 @:enum extern abstract GuiXAnchor({}) {
     var ANCHOR_NONE;
     var ANCHOR_LEFT;
     var ANCHOR_RIGHT;
 }
 
-@:native("gui")
+@:native("_G.gui")
 @:enum extern abstract GuiYAnchor({}) {
     var ANCHOR_NONE;
     var ANCHOR_TOP;
     var ANCHOR_BOTTOM;
 }
 
-@:native("gui")
+@:native("_G.gui")
 @:enum extern abstract GuiOuterBounds({}) {
     var BOUNDS_RECTANGLE;
     var BOUNDS_ELLIPSE;
 }
 
-@:native("gui")
+@:native("_G.gui")
 @:enum extern abstract GuiKeyboardType({}) {
     var KEYBOARD_TYPE_DEFAULT;
     var KEYBOARD_TYPE_EMAIL;
@@ -195,7 +195,7 @@ typedef GuiTextMetrics = {
     var KEYBOARD_TYPE_PASSWORD;
 }
 
-@:native("gui")
+@:native("_G.gui")
 @:enum extern abstract GuiEasing({}) {
     var EASING_INBACK;
     var EASING_INBOUNCE;

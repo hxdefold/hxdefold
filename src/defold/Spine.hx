@@ -3,7 +3,7 @@ package defold;
 import defold.support.HashOrString;
 import defold.support.UrlOrString;
 
-@:native("spine")
+@:native("_G.spine")
 extern class Spine {
     static function cancel(url:UrlOrString):Void;
     static function get_go(url:UrlOrString, bone_id:HashOrString):Hash;

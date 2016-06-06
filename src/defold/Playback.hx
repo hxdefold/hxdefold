@@ -1,6 +1,6 @@
 package defold;
 
-@:native("go")
+@:native("_G.go")
 @:enum extern abstract Playback(Dynamic) {
     var PLAYBACK_ONCE_FORWARD;
     var PLAYBACK_ONCE_BACKWARD;

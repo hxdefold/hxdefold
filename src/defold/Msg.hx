@@ -3,7 +3,7 @@ package defold;
 import defold.support.HashOrString;
 import defold.support.HashOrStringOrUrl;
 
-@:native("msg")
+@:native("_G.msg")
 extern class Msg {
     @:overload(function(receiver:Null<HashOrStringOrUrl>, message_id:Message<Void>):Void {})
     static function post<T>(receiver:Null<HashOrStringOrUrl>, message_id:Message<T>, message:T):Void;

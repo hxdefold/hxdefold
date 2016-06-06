@@ -1,6 +1,6 @@
 package defold;
 
-@:native("vmath")
+@:native("_G.vmath")
 extern class Vmath {
     static function conj(q:Quaternion):Quaternion;
 

@@ -6,7 +6,7 @@ import defold.support.*;
 /**
     Manipulation of game objects and core hooks for Lua script logic.
 **/
-@:native("go")
+@:native("_G.go")
 extern class Go {
     static function animate(url:HashOrStringOrUrl, property:HashOrString, playback:Playback, to:EitherType<Vector3,EitherType<Quaternion,Float>>, easing:EitherType<Easing,Vector3>, duration:Float, ?delay:Float, ?complete_function:Void->Void):Void;
     static function cancel_animations(url:HashOrStringOrUrl, property:HashOrString):Void;

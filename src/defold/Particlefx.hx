@@ -2,7 +2,7 @@ package defold;
 
 import defold.support.HashOrString;
 
-@:native("particlefx")
+@:native("_G.particlefx")
 extern class Particlefx {
     static function play(url:Url):Void;
     static function reset_constant(url:Url, emitter_id:HashOrString, name:HashOrString):Void;
