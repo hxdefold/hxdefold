@@ -1,0 +1,5 @@
+{
+    "haxe.displayConfigurations": [
+        ["-cp", "src", "-lua", "main.lua"]
+    ]
+}
