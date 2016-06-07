@@ -52,6 +52,10 @@ class DefoldMessages {
     static var PlaySound(default,never) = new Message<{?delay:Float, ?gain:Float}>("play_sound");
     static var SetGain(default,never) = new Message<{?gain:Float}>("set_gain");
     static var StopSound(default,never) = new Message<Void>("stop_sound");
+
+    // tilemap
+    @:deprecated
+    static var SetTile(default,never) = new Message<SetTileData>("set_tile");
 }
 
 typedef RebootData = {
@@ -118,4 +122,12 @@ typedef DrawLineData = {
 typedef DrawTextData = {
     position:Vector3,
     text:String,
+}
+
+typedef SetTileData = {
+    layer_id:Hash,
+    position:Vector3,
+    tile:Int,
+    dx:Int,
+    dy:Int,
 }
