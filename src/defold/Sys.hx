@@ -17,6 +17,7 @@ extern class Sys {
     static function set_error_handler(error_handler:String->String->String->Void):Void;
 }
 
+@:publicFields
 class SysMessages {
     static var Exit(default,never) = new Message<{code:Int}>("exit");
     static var Reboot(default,never) = new Message<SysMessageReboot>("reboot");

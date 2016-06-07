@@ -39,6 +39,7 @@ extern class Go {
     static function set_scale(rotation:EitherType<Float,Vector3>, ?id:HashOrStringOrUrl):Void;
 }
 
+@:publicFields
 class GoMessages {
     static var AcquireInputFocus(default,never) = new Message<Void>("acquire_input_focus");
     static var Disable(default,never) = new Message<Void>("disable");

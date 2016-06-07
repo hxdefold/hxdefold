@@ -24,6 +24,7 @@ abstract SoundLeftRight<T>(lua.Table<Int,T>) {
     inline function get_right() return this[2];
 }
 
+@:publicFields
 class SoundMessages {
     static var PlaySound(default,never) = new Message<{?delay:Float, ?gain:Float}>("play_sound");
     static var SetGain(default,never) = new Message<{?gain:Float}>("set_gain");

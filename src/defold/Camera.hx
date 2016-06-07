@@ -1,5 +1,6 @@
 package defold;
 
+@:publicFields
 class CameraMessages {
     static var AcquireCameraFocus(default,never) = new Message<Void>("acquire_camera_focus");
     static var ReleaseCameraFocus(default,never) = new Message<Void>("release_camera_focus");

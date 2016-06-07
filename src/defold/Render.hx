@@ -41,6 +41,7 @@ extern class Render {
     static function set_viewport(x:Int, y:Int, width:Int, height:Int):Void;
 }
 
+@:publicFields
 class RenderMessages {
     static var ClearColor(default,never) = new Message<{color:Vector4}>("clear_color");
     static var DrawLine(default,never) = new Message<RenderMessageDrawLine>("draw_line");

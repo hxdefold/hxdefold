@@ -5,6 +5,7 @@ extern class Physics {
     static function ray_cast(from:Vector3, to:Vector3, groups:lua.Table<Int,Hash>, ?request_id:Int):Void;
 }
 
+@:publicFields
 class PhysicsMessages {
     static var ApplyForce(default,never) = new Message<{force:Vector3, position:Vector3}>("apply_force");
     static var CollisionResponse(default,never) = new Message<{other_id:Hash, other_position:Vector3, group:Hash}>("collision_response");
