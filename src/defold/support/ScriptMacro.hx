@@ -15,6 +15,17 @@ enum ScriptType {
     SRender;
 }
 
+enum PropertyType {
+    PBool;
+    PInt;
+    PFloat;
+    PHash;
+    PUrl;
+    PVector3;
+    PVector4;
+    PQuaternion;
+}
+
 class ScriptMacro {
     static function use(defoldRoot:String, outDir = "scripts") {
         var defoldRoot = sys.FileSystem.fullPath(defoldRoot).replace("\\", "/");
@@ -170,8 +181,6 @@ class ScriptMacro {
     }
 
     static function getProperties(type:Type, pos:Position):Array<{name:String, value:String}> {
-        // TODO: hash, msg.url, vmath.vector3, vmath.vector4, vmath.quat,
-        // TODO: also check allowed types and values for them
         var result = [];
         switch (type.follow()) {
             case TAnonymous(_.get() => anon):
@@ -181,12 +190,9 @@ class ScriptMacro {
                         case []:
                             continue;
                         case [prop]:
-                            switch (prop.params) {
-                                case [{expr: EConst(CInt(s) | CFloat(s)) | EConst(CIdent(s = "true" | "false"))}]:
-                                    result.push({name: field.name, value: s});
-                                default:
-                                    throw new Error("Invalid @property params", prop.pos);
-                            }
+                            var type = getPropertyType(field.type, field.pos);
+                            var value = if (prop.params.length == 0) getDefaultValue(type) else parsePropertyExpr(type, prop.params, prop.pos);
+                            result.push({name: field.name, value: value});
                         default:
                             throw new Error("Only single @property metadata is allowed", field.pos);
                     }
@@ -195,6 +201,56 @@ class ScriptMacro {
                 throw new Error('Invalid component data type: ${type.toString()}. Should be a structure.', pos);
         }
         return result;
+    }
+
+    static function getPropertyType(type:Type, pos:Position):PropertyType {
+        return switch (type.follow()) {
+            case TInst(_.get() => {pack: ["defold"], name: "Hash"}, _): PHash;
+            case TInst(_.get() => {pack: ["defold"], name: "Url"}, _): PUrl;
+            case TAbstract(_.get() => {pack: ["defold"], name: "Vector3"}, _): PVector3;
+            case TAbstract(_.get() => {pack: ["defold"], name: "Vector4"}, _): PVector4;
+            case TInst(_.get() => {pack: ["defold"], name: "Quaternion"}, _): PQuaternion;
+            case TAbstract(_.get() => {pack: [], name: "Int"}, _): PInt;
+            case TAbstract(_.get() => {pack: [], name: "Float"}, _): PFloat;
+            case TAbstract(_.get() => {pack: [], name: "Bool"}, _): PBool;
+            default: throw new Error('Unsupported type for script property: ${type.toString()}', pos);
+        }
+    }
+
+    static function getDefaultValue(type:PropertyType):String {
+        return switch (type) {
+            case PHash: 'hash("")';
+            case PUrl: 'msg.url()';
+            case PVector3: 'vmath.vector3()';
+            case PVector4: 'vmath.vector4()';
+            case PBool: 'false';
+            case PInt: '0';
+            case PFloat: '0.0';
+            case PQuaternion: 'vmath.quat()';
+        }
+    }
+
+    static function parsePropertyExpr(type:PropertyType, exprs:Array<Expr>, pos:Position):String {
+        return switch [type, exprs] {
+            case [PBool, [{expr: EConst(CIdent(s = "true" | "false"))}]]:
+                s;
+            case [PHash, [{expr: EConst(CString(s))}]]:
+                'hash(${haxe.Json.stringify(s)})';
+            case [PUrl, _]:
+                throw new Error("No default value allowed for URL properties", pos);
+            case [PFloat, [{expr: EConst(CFloat(s) | CInt(s))}]]:
+                s;
+            case [PInt, [{expr: EConst(CInt(s))}]] if (Std.parseInt(s) != null):
+                s;
+            case [PVector3, [{expr: EConst(CFloat(x) | CInt(x))}, {expr: EConst(CFloat(y) | CInt(y))}, {expr: EConst(CFloat(z) | CInt(z))}]]:
+                'vmath.vector3($x, $y, $z)';
+            case [PVector4, [{expr: EConst(CFloat(x) | CInt(x))}, {expr: EConst(CFloat(y) | CInt(y))}, {expr: EConst(CFloat(z) | CInt(z))}, {expr: EConst(CFloat(w) | CInt(w))}]]:
+                'vmath.vector4($x, $y, $z, $w)';
+            case [PQuaternion, [{expr: EConst(CFloat(x) | CInt(x))}, {expr: EConst(CFloat(y) | CInt(y))}, {expr: EConst(CFloat(z) | CInt(z))}, {expr: EConst(CFloat(w) | CInt(w))}]]:
+                'vmath.quat($x, $y, $z, $w)';
+            default:
+                throw new Error('Invalid @property value for type ${type.getName().substr(1)}', pos);
+        }
     }
 }
 #end
