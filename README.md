@@ -1,6 +1,8 @@
-[![Build Status](https://travis-ci.org/hxdefold/hxdefold.svg?branch=master)](https://travis-ci.org/hxdefold/hxdefold)
+![image](https://cloud.githubusercontent.com/assets/576184/15849567/80f4ada8-2c93-11e6-8430-5b5dbe5e58a3.png)
 
 # Haxe/Lua externs for the Defold game engine
+
+[![Build Status](https://travis-ci.org/hxdefold/hxdefold.svg?branch=master)](https://travis-ci.org/hxdefold/hxdefold)
 
 **Status: PRE-ALPHA, very much work in progress, API may change. Currently requires latest Haxe [development builds](http://builds.haxe.org/).**
 
@@ -25,7 +27,7 @@ class Greeter extends defold.support.Script<GreeterData> {
 
 ## Documentation
 
-Required haxe compilation flags:
+Required Haxe compilation flags:
  * `-lib hxdefold` - use this library, obviously
  * `-lua something.lua` - the output lua module
  * `-D luajit` - compile for LuaJIT, because that's what Defold uses
