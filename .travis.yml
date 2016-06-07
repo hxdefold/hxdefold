@@ -21,10 +21,13 @@ script:
 - pushd hxdefold-example-platformer
 - haxe build.hxml
 - popd
+
 - pushd hxdefold-example-sidescroller
 - haxe build.hxml
 - popd
+
 - pushd hxdefold-example-frogrunner
 - haxe build.hxml
 - popd
+
 - bash doc-deploy.sh
