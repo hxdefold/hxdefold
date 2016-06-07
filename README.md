@@ -39,6 +39,7 @@ Here's some [generated Haxe API documentation](http://hxdefold.github.io/hxdefol
 
 And example Defold projects, ported from Lua:
  * https://github.com/hxdefold/hxdefold-example-sidescroller
+ * https://github.com/hxdefold/hxdefold-example-platformer
  * https://github.com/hxdefold/hxdefold-example-frogrunner
 
 ## How does it work?
