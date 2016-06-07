@@ -8,7 +8,7 @@ import defold.support.*;
 **/
 @:native("_G.go")
 extern class Go {
-    static function animate(url:HashOrStringOrUrl, property:HashOrString, playback:Playback, to:EitherType<Vector3,EitherType<Quaternion,Float>>, easing:EitherType<GoEasing,Vector3>, duration:Float, ?delay:Float, ?complete_function:Void->Void):Void;
+    static function animate(url:HashOrStringOrUrl, property:HashOrString, playback:GoPlayback, to:EitherType<Vector3,EitherType<Quaternion,Float>>, easing:EitherType<GoEasing,Vector3>, duration:Float, ?delay:Float, ?complete_function:Void->Void):Void;
     static function cancel_animations(url:HashOrStringOrUrl, property:HashOrString):Void;
 
     @:overload(function(id:HashOrStringOrUrl):Void {})
@@ -82,4 +82,14 @@ extern class Go {
     var EASING_OUTQUART;
     var EASING_OUTQUINT;
     var EASING_OUTSINE;
+}
+
+@:native("_G.go")
+@:enum extern abstract GoPlayback({}) {
+    var PLAYBACK_ONCE_FORWARD;
+    var PLAYBACK_ONCE_BACKWARD;
+    var PLAYBACK_ONCE_PINGPONG;
+    var PLAYBACK_LOOP_FORWARD;
+    var PLAYBACK_LOOP_BACKWARD;
+    var PLAYBACK_LOOP_PINGPONG;
 }

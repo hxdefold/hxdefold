@@ -1,5 +1,7 @@
 package defold;
 
+import defold.Go.GoPlayback;
+
 abstract Message<T>(haxe.extern.EitherType<Hash,String>) {
     public inline function new(s:String) this = Defold.hash(s);
 }
@@ -30,7 +32,7 @@ class DefoldMessages {
     static var TriggerResponse(default,never) = new Message<{other_id:Hash, enter:Bool, group:Hash}>("trigger_response");
 
     // spine
-    static var SpineAnimationDone(default,never) = new Message<{animation_id:Hash, playback:Playback}>("spine_animation_done");
+    static var SpineAnimationDone(default,never) = new Message<{animation_id:Hash, playback:GoPlayback}>("spine_animation_done");
     static var SpineEvent(default,never) = new Message<SpineEventData>("spine_event");
 
     // camera
