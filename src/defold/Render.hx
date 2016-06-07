@@ -41,6 +41,24 @@ extern class Render {
     static function set_viewport(x:Int, y:Int, width:Int, height:Int):Void;
 }
 
+class RenderMessages {
+    static var ClearColor(default,never) = new Message<{color:Vector4}>("clear_color");
+    static var DrawLine(default,never) = new Message<RenderMessageDrawLine>("draw_line");
+    static var DrawText(default,never) = new Message<RenderMessageDrawText>("draw_text");
+    static var WindowResized(default,never) = new Message<{width:Int, height:Int}>("window_resized");
+}
+
+typedef RenderMessageDrawLine = {
+    start_point:Vector3,
+    end_point:Vector3,
+    color:Vector4,
+}
+
+typedef RenderMessageDrawText = {
+    position:Vector3,
+    text:String,
+}
+
 @:native("_G.render")
 @:enum extern abstract RenderBufferType(Int) {
     var BUFFER_COLOR_BIT;

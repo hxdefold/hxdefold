@@ -39,6 +39,14 @@ extern class Go {
     static function set_scale(rotation:EitherType<Float,Vector3>, ?id:HashOrStringOrUrl):Void;
 }
 
+class GoMessages {
+    static var AcquireInputFocus(default,never) = new Message<Void>("acquire_input_focus");
+    static var Disable(default,never) = new Message<Void>("disable");
+    static var Enable(default,never) = new Message<Void>("enable");
+    static var ReleaseInputFocus(default,never) = new Message<Void>("release_input_focus");
+    static var SetParent(default,never) = new Message<{parent_id:Hash, ?keep_world_transform:Int}>("set_parent");
+}
+
 @:native("_G.go")
 @:enum extern abstract GoEasing({}) {
     var EASING_INBACK;

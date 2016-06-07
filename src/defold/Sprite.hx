@@ -10,3 +10,8 @@ extern class Sprite {
     static function set_hflip(url:UrlOrString, flip:Bool):Void;
     static function set_vflip(url:UrlOrString, flip:Bool):Void;
 }
+
+class SpriteMessages {
+    static var AnimationDone(default,never) = new Message<{current_tile:Int, id:Hash}>("animation_done");
+    static var PlayAnimation(default,never) = new Message<{id:Hash}>("play_animation");
+}

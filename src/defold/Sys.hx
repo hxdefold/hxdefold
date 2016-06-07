@@ -17,6 +17,30 @@ extern class Sys {
     static function set_error_handler(error_handler:String->String->String->Void):Void;
 }
 
+class SysMessages {
+    static var Exit(default,never) = new Message<{code:Int}>("exit");
+    static var Reboot(default,never) = new Message<SysMessageReboot>("reboot");
+    static var SetUpdateFrequency(default,never) = new Message<{frequency:Int}>("set_update_frequency");
+    static var StartRecord(default,never) = new Message<SysMessageStartRecord>("start_record");
+    static var StopRecord(default,never) = new Message<Void>("stop_record");
+    static var ToggleProfile(default,never) = new Message<Void>("toggle_profile");
+}
+
+typedef SysMessageReboot = {
+    ?arg1:String,
+    ?arg2:String,
+    ?arg3:String,
+    ?arg4:String,
+    ?arg5:String,
+    ?arg6:String,
+}
+
+typedef SysMessageStartRecord = {
+    file_name:String,
+    ?frame_period:Int,
+    ?fps:Int,
+}
+
 typedef SysApplicationInfo = {
     var installed:Bool;
 }

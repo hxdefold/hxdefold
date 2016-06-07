@@ -24,3 +24,16 @@ abstract TilemapBounds(lua.Table<Int,Int>) {
     inline function get_w() return this[3];
     inline function get_h() return this[4];
 }
+
+class TilemapMessages {
+    @:deprecated("Use defold.Tilemap.set_tile instead")
+    static var SetTile(default,never) = new Message<TilemapMessageSetTile>("set_tile");
+}
+
+typedef TilemapMessageSetTile = {
+    layer_id:Hash,
+    position:Vector3,
+    tile:Int,
+    dx:Int,
+    dy:Int,
+}
