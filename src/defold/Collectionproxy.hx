@@ -1,5 +1,10 @@
 package defold;
 
+/**
+    This module currently has no functions.
+
+    See `CollectionproxyMessages` for collection-proxy related messages.
+**/
 extern class Collectionproxy {}
 
 /**
