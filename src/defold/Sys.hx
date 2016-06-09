@@ -148,9 +148,25 @@ typedef SysMessageReboot = {
     Data for the `SysMessages.StartRecord` message.
 **/
 typedef SysMessageStartRecord = {
-    file_name:String,
-    ?frame_period:Int,
-    ?fps:Int,
+    /**
+        File name to write the video to.
+    **/
+    var file_name:String;
+
+    /**
+        Frame period to record, ie write every nth frame.
+        Default value is 2.
+    **/
+    @:optional var frame_period:Int;
+
+    /**
+        Frames per second. Playback speed for the video.
+        Default value is 30.
+
+        The fps value doens't affect the recording.
+        It's only meta-data in the written video file.
+    **/
+    @:optional var fps:Int;
 }
 
 /**
