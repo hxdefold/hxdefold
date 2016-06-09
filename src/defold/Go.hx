@@ -229,6 +229,11 @@ typedef GoMessageTransformResponse = {
 }
 
 /**
+    Possible types of a game object property.
+**/
+typedef GoProperty = EitherType<Float,EitherType<Hash,EitherType<Url,EitherType<Vector3,EitherType<Vector4,EitherType<Quaternion,Bool>>>>>>;
+
+/**
     Game object easing constants.
 **/
 @:native("_G.go")
