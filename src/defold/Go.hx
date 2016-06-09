@@ -5,6 +5,8 @@ import defold.support.*;
 
 /**
     Manipulation of game objects and core hooks for Lua script logic.
+
+    See `GoMessages` for standard game object messages.
 **/
 @:native("_G.go")
 extern class Go {

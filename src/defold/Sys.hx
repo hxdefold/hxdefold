@@ -2,6 +2,8 @@ package defold;
 
 /**
     System functions.
+
+    See `SysMessages` for standard system messages.
 **/
 @:native("_G.sys")
 extern class Sys {
