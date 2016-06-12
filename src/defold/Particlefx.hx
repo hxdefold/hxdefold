@@ -1,7 +1,6 @@
 package defold;
 
-import defold.support.HashOrString;
-import defold.support.UrlOrString;
+import defold.types.*;
 
 /**
     Functions for controlling particle effect components.

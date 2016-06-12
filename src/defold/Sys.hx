@@ -1,5 +1,7 @@
 package defold;
 
+import defold.types.*;
+
 /**
     System functions.
 

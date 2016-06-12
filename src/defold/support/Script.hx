@@ -1,5 +1,7 @@
 package defold.support;
 
+import defold.types.*;
+
 /**
     Base class for all scripts.
 

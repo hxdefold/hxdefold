@@ -1,4 +1,4 @@
-import defold.Hash;
+import defold.types.Hash;
 
 /**
     Built-in scripting functions.

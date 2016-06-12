@@ -1,5 +1,7 @@
 package defold;
 
+import defold.types.Message;
+
 /**
     This module currently has no functions.
 

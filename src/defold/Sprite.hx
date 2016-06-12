@@ -1,7 +1,6 @@
 package defold;
 
-import defold.support.UrlOrString;
-import defold.support.HashOrString;
+import defold.types.*;
 
 /**
     Functions, messages and properties used to manipulate sprite components.

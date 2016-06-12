@@ -1,7 +1,7 @@
 package defold;
 
 import haxe.extern.EitherType;
-import defold.support.HashOrString;
+import defold.types.*;
 
 @:native("_G.gui")
 extern class Gui {

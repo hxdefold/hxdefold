@@ -1,6 +1,7 @@
 package defold;
 
 import haxe.extern.EitherType;
+import defold.types.*;
 
 @:native("_G.render")
 extern class Render {

@@ -1,7 +1,7 @@
 package defold;
 
 import haxe.extern.EitherType;
-import defold.support.*;
+import defold.types.*;
 
 /**
     Manipulation of game objects and core hooks for Lua script logic.

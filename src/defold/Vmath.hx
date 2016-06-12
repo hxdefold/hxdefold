@@ -1,5 +1,7 @@
 package defold;
 
+import defold.types.*;
+
 /**
     Functions for mathematical operations on vectors, matrices and quaternions.
 **/

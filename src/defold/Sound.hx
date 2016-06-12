@@ -1,6 +1,6 @@
 package defold;
 
-import defold.support.HashOrString;
+import defold.types.*;
 
 /**
     Functions and messages for controlling sound components.

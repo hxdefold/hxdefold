@@ -1,8 +1,7 @@
 package defold;
 
 import haxe.extern.EitherType;
-import defold.support.HashOrString;
-import defold.support.HashOrStringOrUrl;
+import defold.types.*;
 
 /**
     Functions for passing messages and constructing URL objects.

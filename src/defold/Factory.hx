@@ -1,8 +1,8 @@
 package defold;
 
 import haxe.extern.EitherType;
-import defold.support.UrlOrString;
 import defold.Go.GoProperty;
+import defold.types.*;
 
 /**
     Functions for controlling factory components that are used to dynamically spawn game objects.

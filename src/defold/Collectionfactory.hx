@@ -1,6 +1,7 @@
 package defold;
 
 import defold.Go.GoProperty;
+import defold.types.*;
 
 /**
     Functions for controlling collection factories that are used to dynamically spawn collections.

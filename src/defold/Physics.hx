@@ -1,5 +1,7 @@
 package defold;
 
+import defold.types.*;
+
 /**
     Functions and messages for collision object physics interaction with other objects (collisions and ray-casting)
     and control of physical behaviors.

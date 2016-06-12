@@ -1,5 +1,8 @@
-package defold;
+package defold.types;
 
+/**
+    Vector4 type, can be created with `defold.Vmath.vector4`.
+**/
 @:forward
 extern abstract Vector4(Vector4Data) {
     @:op(a + b)

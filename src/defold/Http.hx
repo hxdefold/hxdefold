@@ -1,5 +1,7 @@
 package defold;
 
+import defold.types.Hash;
+
 /**
     Functions for performing HTTP requests.
 **/

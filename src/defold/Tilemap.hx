@@ -1,7 +1,6 @@
 package defold;
 
-import defold.support.UrlOrString;
-import defold.support.HashOrString;
+import defold.types.*;
 
 /**
     Functions for controlling tilemap components.

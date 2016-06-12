@@ -1,6 +1,7 @@
 package defold.support;
 
 import defold.support.Script.ScriptOnInputAction;
+import defold.types.*;
 
 class GuiScript<T:{}> {
     function new() {}

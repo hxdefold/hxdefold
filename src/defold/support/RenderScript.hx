@@ -1,5 +1,7 @@
 package defold.support;
 
+import defold.types.*;
+
 class RenderScript<T:{}> {
     function new() {}
     function init(self:T) {}
