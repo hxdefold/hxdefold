@@ -25,11 +25,26 @@ extern class Gui {
 
     /**
         Animates a node property.
+
+        This starts an animation of a node property according to the specified parameters.
+        If the node property is already being animated, that animation will be canceled and replaced by the new one.
+        Note however that several different node properties can be animated simultaneously.
+        Use `Gui.cancel_animation` to stop the animation before it has completed.
+
+        Composite properties of type `Vector3`, `Vector4` or `Quaternion` also expose their sub-components (x, y, z and w).
+        You can address the components individually by suffixing the name with a dot '.' and the name of the component.
+        For instance, "position.x" (the position x coordinate) or "color.w" (the color alpha value).
+
+        If a `complete_function` is specified, that function will be called when the animation has completed.
+        By starting a new animation in that function, several animations can be sequenced together.
     **/
     static function animate<T>(node:GuiNode, property:String, to:EitherType<Vector3,Vector4>, easing:EitherType<GuiEasing,EitherType<Vector3,Vector4>>, duration:Float, ?delay:Float, ?complete_function:T->GuiNode->Void, ?playback:GuiPlayback):Void;
 
     /**
         Cancels an ongoing animation.
+
+        If an animation of the specified node is currently running (started by `Gui.animate`),
+        it will immediately be canceled.
     **/
     static function cancel_animation(node:GuiNode, property:String):Void;
 
@@ -40,11 +55,15 @@ extern class Gui {
 
     /**
         Clone a node.
+
+        This does not include its children. Use `Gui.clone_tree` for that purpose.
     **/
     static function clone(node:GuiNode):GuiNode;
 
     /**
         Clone a node including its children.
+
+        Use `Gui.clone` to clone a node excluding its children.
     **/
     static function clone_tree(node:GuiNode):lua.Table<Hash,GuiNode>;
 
@@ -54,7 +73,7 @@ extern class Gui {
     static function delete_node(node:GuiNode):Void;
 
     /**
-        Delete texture.
+        Delete a dynamically created texture.
     **/
     static function delete_texture(texture:HashOrString):Void;
 
@@ -491,6 +510,12 @@ extern class GuiNode {}
 
 }
 
+/**
+    Enumeration of possible adjust modes of a gui node.
+
+    Adjust mode defines how the node will adjust itself
+    to a screen resolution which differs from the project settings.
+**/
 @:native("_G.gui")
 @:enum extern abstract GuiAdjustMode({}) {
     var ADJUST_FIT;
@@ -498,6 +523,11 @@ extern class GuiNode {}
     var ADJUST_STRETCH;
 }
 
+/**
+    Enumeration of possible blend modes of a gui node.
+
+    Blend mode defines how the node will be blended with the background.
+**/
 @:native("_G.gui")
 @:enum extern abstract GuiBlendMode({}) {
     var BLEND_ALPHA;
