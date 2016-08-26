@@ -7,4 +7,4 @@
 
 --next
 
--cmd haxelib run dox -o bin/api -i bin -in ^[Dd]efold.*$ -theme ./dox-theme -D source-path https://github.com/hxdefold/hxdefold/blob/master/src/
+-cmd haxelib run dox -o bin/api -i bin -in ^[Dd]efold.*$ -D source-path https://github.com/hxdefold/hxdefold/blob/master/src/ -D website https://github.com/hxdefold/hxdefold -D logo https://avatars0.githubusercontent.com/u/19779177?s=100 --title "hxdefold API documentation" -D description "Welcome to hxdefold API documentation!"
