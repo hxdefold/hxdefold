@@ -164,11 +164,33 @@ class GoMessages {
 
     /**
         Disables the receiving component.
+
+        This message disables the receiving component. All components are enabled by default, which means they will receive input, updates
+        and be a part of the simulation. A component is disabled when it receives the `Disable` message.
+        
+        **Note!** Components that currently supports this message are:
+         * Collection Proxy
+         * Collision Object
+         * Gui
+         * Spine Model
+         * Sprite
+         * Tile Grid
     **/
     static var Disable(default,never) = new Message<Void>("disable");
 
     /**
         Enables the receiving component.
+
+        This message enables the receiving component. All components are enabled by default, which means they will receive input, updates
+        and be a part of the simulation. A component is disabled when it receives the `Disable` message.
+
+        **Note!** Components that currently supports this message are:
+         * Collection Proxy
+         * Collision Object
+         * Gui
+         * Spine Model
+         * Sprite
+         * Tile Grid
     **/
     static var Enable(default,never) = new Message<Void>("enable");
 

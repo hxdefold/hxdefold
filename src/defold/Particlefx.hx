@@ -11,8 +11,11 @@ extern class Particlefx {
         Start playing a particle FX.
 
         Particle FX started this way need to be manually stopped through `Particlefx.stop`.
+
+        @param url the particle fx that should start playing
+        @param emitter_state_cb optional callback that will be called when an emitter attached to this particlefx changes state.
     **/
-    static function play(url:UrlOrString):Void;
+    static function play<T>(url:UrlOrString, ?emitter_state_cb:T->Hash->Hash->ParticlefxEmitterState->Void):Void;
 
     /**
         Reset a shader constant for a particle FX emitter.
@@ -37,4 +40,27 @@ extern class Particlefx {
         Stopping a particle FX does not remove the already spawned particles.
     **/
     static function stop(url:UrlOrString):Void;
+}
+
+@:native("_G.particlefx")
+@:enum extern abstract ParticlefxEmitterState({}) {
+    /**
+        postspawn state
+    **/
+    var EMITTER_STATE_POSTSPAWN;
+
+    /**
+        prespawn state
+    **/
+    var EMITTER_STATE_PRESPAWN;
+
+    /**
+        sleeping state
+    **/
+    var EMITTER_STATE_SLEEPING;
+
+    /**
+        spawning state
+    **/
+    var EMITTER_STATE_SPAWNING;
 }
