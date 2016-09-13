@@ -40,9 +40,7 @@ extern class Push {
     /**
         Schedule a local push notification to be triggered at a specific time in the future.
     **/
-    inline static function schedule(time:Float, title:String, alert:String, payload:String, notification_settings:PushNotificationSettings):PushScheduleResult {
-        return untyped __lua__("{{ {0}.schedule({1}, {2}, {3}, {4}, {5}) }}", Push, time, title, alert, payload, notification_settings);
-    }
+    static function schedule(time:Float, title:String, alert:String, payload:String, notification_settings:PushNotificationSettings):PushScheduleResult;
 
     /**
         Set the badge count for application icon.
@@ -122,23 +120,17 @@ typedef PushNotificationSettings = {
 
 /**
     A type for returning multiple values from the `Push.schedule` method.
-
-    Since Haxe doesn't currently supports Lua's multiple returns, we have
-    to box them in a table. This type provides a nice abstraction over that table.
 **/
-abstract PushScheduleResult(lua.Table<Int,Dynamic>) {
+@:multiReturn extern class PushScheduleResult {
     /**
         Created push notification identifier.
     **/
-    public var id(get,never):Int;
+    var id:Int;
 
     /**
         Error string if something went wrong, otherwise `null`.
     **/
-    public var error(get,never):Null<String>;
-
-    inline function get_id() return this[1];
-    inline function get_error() return this[2];
+    var error:Null<String>;
 }
 
 /**

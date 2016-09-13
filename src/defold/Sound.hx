@@ -34,9 +34,7 @@ extern class Sound {
         Note that the returned value might be an approximation and
         in particular the effective window might be larger than specified.
     **/
-    inline static function get_peak(group:HashOrString, window:Float):SoundLeftRight<Float> {
-        return untyped __lua__("{{ {0}.get_peak({1}, {2}) }}", Sound, group, window);
-    }
+    static function get_peak(group:HashOrString, window:Float):SoundLeftRight<Float>;
 
     /**
         Get RMS (Root Mean Square) value from mixer group.
@@ -44,9 +42,7 @@ extern class Sound {
         Note that the returned value might be an approximation and
         in particular the effective window might be larger than specified.
     **/
-    inline static function get_rms(group:HashOrString, window:Float):SoundLeftRight<Float> {
-        return untyped __lua__("{{ {0}.get_rms({1}, {2}) }}", Sound, group, window);
-    }
+    static function get_rms(group:HashOrString, window:Float):SoundLeftRight<Float>;
 
     /**
         Checks if background music is playing, e.g. from iTunesю
@@ -108,21 +104,15 @@ typedef SoundMessagePlaySound = {
 
 /**
     A type for returning multiple values from the sound component API.
-
-    Since Haxe doesn't currently supports Lua's multiple returns, we have
-    to box them in a table. This type provides a nice abstraction over that table.
 **/
-abstract SoundLeftRight<T>(lua.Table<Int,T>) {
+@:multiReturn extern class SoundLeftRight<T> {
     /**
         Left channel value.
     **/
-    public var left(get,never):T;
+    var left:T;
 
     /**
         Right channel value.
     **/
-    public var right(get,never):T;
-
-    inline function get_left() return this[1];
-    inline function get_right() return this[2];
+    var right:T;
 }

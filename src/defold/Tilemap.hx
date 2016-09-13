@@ -15,9 +15,7 @@ extern class Tilemap {
         The returned tile to set is identified by its index starting with 1 in the top left corner of the tile set.
         The coordinates of the tile is 1-indexed (see `Tilemap.set_tile`).
     **/
-    inline static function get_bounds(url:UrlOrString):TilemapBounds {
-        return untyped __lua__("{{ {0}.get_bounds({1}) }}", Tilemap, url);
-    }
+    static function get_bounds(url:UrlOrString):TilemapBounds;
 
     /**
         Get a tile from a tile map.
@@ -78,20 +76,12 @@ class TilemapMessages {
 
 /**
     Return value of `Tilemap.get_bounds` method.
-
-    Since Haxe doesn't currently supports Lua's multiple returns, we have to box them in a table.
-    This type provides a nice abstraction over that table.
 **/
-abstract TilemapBounds(lua.Table<Int,Int>) {
-    public var x(get,never):Int;
-    public var y(get,never):Int;
-    public var w(get,never):Int;
-    public var h(get,never):Int;
-
-    inline function get_x() return this[1];
-    inline function get_y() return this[2];
-    inline function get_w() return this[3];
-    inline function get_h() return this[4];
+@:multiReturn extern class TilemapBounds {
+    var x:Int;
+    var y:Int;
+    var w:Int;
+    var h:Int;
 }
 
 /**
