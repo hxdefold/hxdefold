@@ -8,7 +8,7 @@ import defold.types.Hash;
 @:native("_G.http")
 extern class Http {
     /**
-        Perform a HTTP request.
+        Perform a HTTP/HTTPS request.
     **/
     static function request<T>(url:String, method:String, callback:T->Hash->HttpResponse->Void, ?headers:lua.Table<String,String>, ?post_data:String, ?options:HttpOptions):Void;
 }

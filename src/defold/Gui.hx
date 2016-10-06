@@ -54,6 +54,13 @@ extern class Gui {
     static function cancel_flipbook(node:GuiNode):Void;
 
     /**
+        cancel a spine animation
+
+        @param node spine node that should cancel its animation
+    **/
+    static function cancel_spine(node:GuiNode):Void;
+
+    /**
         Clone a node.
 
         This does not include its children. Use `Gui.clone_tree` for that purpose.
@@ -233,6 +240,26 @@ extern class Gui {
     static function get_slice9(node:GuiNode):Vector4;
 
     /**
+        Retrieve the GUI node corresponding to a spine skeleton bone
+
+        The returned node can be used for parenting and transform queries.
+        This function has complexity O(n), where n is the number of bones in the spine model skeleton.
+
+        @param node spine node to query for bone node (node)
+        @param bone_id id of the corresponding bone (string|hash)
+    **/
+    static function get_spine_bone(node:GuiNode, bone_id:HashOrString):GuiNode;
+
+    /**
+        Gets the spine scene of a node
+
+        This is currently only useful for spine nodes. The spine scene must be mapped to the gui scene in the gui editor.
+
+        @param node node to get texture from (node)
+    **/
+    static function get_spine_scene(node:GuiNode):Hash;
+
+    /**
         Gets the node text.
     **/
     static function get_text(node:GuiNode):String;
@@ -303,6 +330,14 @@ extern class Gui {
     static function new_pie_node(pos:EitherType<Vector3,Vector4>, size:Vector3):GuiNode;
 
     /**
+        Creates a new spine node.
+
+        @param pos node position (vector3|vector4)
+        @param spine_scene spine scene id (string|hash)
+    **/
+    static function new_spine_node(pos:EitherType<Vector3,Vector4>, spine_scene:HashOrString):GuiNode;
+
+    /**
         Creates a new text node.
     **/
     static function new_text_node(pos:EitherType<Vector3,Vector4>, text:String):GuiNode;
@@ -320,7 +355,18 @@ extern class Gui {
     /**
         Play node flipbook animation.
     **/
-    static function play_flipbook(node:GuiNode, animation:HashOrString, complete_function:Void->Void):Void;
+    static function play_flipbook(node:GuiNode, animation:HashOrString, ?complete_function:Void->Void):Void;
+
+    /**
+        Play a spine animation.
+
+        @param node spine node that should play the animation (node)
+        @param animation_id id of the animation to play (string|hash)
+        @param playback playback mode (constant)
+        @param blend_duration duration of a linear blend between the current and new animations
+        @param complete_function function to call when the animation has completed (function)
+    **/
+    static function play_spine(node:GuiNode, animation_id:HashOrString, playback:GuiPlayback, blend_duration:Float, ?complete_function:Void->Void):Void;
 
     /**
         Reset on-display keyboard if available.
@@ -468,6 +514,16 @@ extern class Gui {
     static function set_slice9(node:GuiNode, params:Vector4):Void;
 
     /**
+        Sets the spine scene of a node.
+
+        Set the spine scene on a spine node. The spine scene must be mapped to the gui scene in the gui editor.
+
+        @param node node to set spine scene for (node)
+        @param spine_scene spine scene id (string|hash)
+    **/
+    static function set_spine_scene(node:GuiNode, spine_scene:HashOrString):Void;
+
+    /**
         Sets the node text.
     **/
     static function set_text(node:GuiNode, text:String):Void;
@@ -557,8 +613,19 @@ extern class GuiNode {}
 
 @:native("_G.gui")
 @:enum extern abstract GuiSizeMode({}) {
+    /**
+        Automatic size mode
+
+        The size of the node is determined by the currently assigned texture.
+    **/
+    var SIZE_MODE_AUTO;
+
+    /**
+        Manual size mode
+
+        The size of the node is determined by the size set in the editor, the constructor or by `Gui.set_size`.
+    **/
     var SIZE_MODE_MANUAL;
-    var SIZE_MODE_AUTOMATIC;
 }
 
 typedef GuiTextMetrics = {
