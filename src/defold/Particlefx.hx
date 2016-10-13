@@ -46,21 +46,30 @@ extern class Particlefx {
 @:enum extern abstract ParticlefxEmitterState({}) {
     /**
         postspawn state
+
+        The emitter is not spawning any particles, but has particles that are still alive.
     **/
     var EMITTER_STATE_POSTSPAWN;
 
     /**
         prespawn state
+
+        The emitter will be in this state when it has been started but before spawning any particles.
+        Normally the emitter is in this state for a short time, depending on if a start delay has been set for this emitter or not.
     **/
     var EMITTER_STATE_PRESPAWN;
 
     /**
         sleeping state
+
+        The emitter does not have any living particles and will not spawn any particles in this state.
     **/
     var EMITTER_STATE_SLEEPING;
 
     /**
         spawning state
+
+        The emitter is spawning particles.
     **/
     var EMITTER_STATE_SPAWNING;
 }
