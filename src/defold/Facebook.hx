@@ -4,13 +4,72 @@ import haxe.extern.EitherType;
 
 @:native("_G.facebook")
 extern class Facebook {
+    /**
+        Get the current Facebook access token.
+    **/
     static function access_token():String;
+
+    /**
+        Disable event usage with Facebook Analytics.
+
+        This function will disable event usage for Facebook Analytics which means
+        that Facebook won't be able to use event data for ad-tracking. Events will
+        still be sent to Facebook for insights.
+
+        <b>NOTE!</b> Event usage cannot be controlled and is always enabled for the
+        Facebook Canvas platform, therefore this function has no effect on Facebook
+        Canvas.
+    **/
     static function disable_event_usage():Void;
+
+    /**
+        Enable event usage with Facebook Analytics.
+
+        This function will enable event usage for Facebook Analytics which means
+        that Facebook will be able to use event data for ad-tracking.
+
+        <b>NOTE!</b> Event usage cannot be controlled and is always enabled for the
+        Facebook Canvas platform, therefore this function has no effect on Facebook
+        Canvas.
+    **/
     static function enable_event_usage():Void;
+
+    /**
+        Initiate a Facebook login.
+
+        This function opens a Facebook login dialog allowing the user to log into Facebook
+        with his/her account. This performs a login requesting read permission for:
+        <ul>
+          <li><code>"public_profile"</code></li>
+          <li><code>"email"</code></li>
+          <li><code>"user_friends"</code></li>
+        </ul>
+        The actual permission that the user grants can be retrieved with `permissions`.
+
+        @param callback callback function with parameters (self, status, error), when the login attempt is done.
+    **/
     static function login<T>(callback:T->FacebookState->Dynamic->Void):Void; // TODO: error type
+
+    /**
+        Logout from Facebook.
+    **/
     static function logout():Void;
+
+    /**
+        Return a table with "me" user data.
+
+        This function returns a table of user data as requested from the Facebook Graph API
+        "me" path. The user data is fetched during `login`.
+    **/
     static function me():FacebookUserData;
+
+    /**
+        Get the currently granted permissions.
+
+        This function returns a table with all the currently granted permission strings.
+    **/
     static function permissions():lua.Table<Int,String>;
+
     static function post_event(event:EitherType<String,FacebookEvent>, value_to_sum:Int, ?params:lua.Table<EitherType<FacebookParam,String>,Dynamic>):Void;
     static function request_publish_permissions<T>(permissions:lua.Table<Int,String>, audience:EitherType<Int,FacebookAudience>, callback:T->Bool->Void):Void;
     static function request_read_permissions<T>(permissions:lua.Table<Int,String>, callback:T->Bool->Void):Void;
