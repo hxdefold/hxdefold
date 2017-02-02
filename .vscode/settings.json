@@ -1,5 +1,5 @@
 {
     "haxe.displayConfigurations": [
-        ["-cp", "src", "-lua", "main.lua"]
+        ["build.hxml"]
     ]
 }

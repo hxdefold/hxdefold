@@ -1,0 +1,4 @@
+-cp src
+-lua main.lua
+--macro include('', true, null, ['src'])
+--no-output

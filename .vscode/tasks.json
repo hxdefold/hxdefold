@@ -1,7 +1,7 @@
 {
     "version": "0.1.0",
     "command": "haxe",
-    "args": ["-cp", "src", "-lua", "main.lua", "--no-output", "--macro", "include('', true, null, ['src'])"],
+    "args": ["build.hxml"],
     "problemMatcher": {
         "owner": "haxe",
         "pattern": {
