@@ -5,8 +5,6 @@ import defold.types.UrlOrString;
 
 /**
     Functions to manipulate a label component.
-
-    See `LabelProperties` for related properties.
 **/
 @:native("_G.label")
 extern class Label {
