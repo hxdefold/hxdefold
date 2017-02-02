@@ -12,6 +12,7 @@ extern class Defold {
         before it can be compared with an id.
 
         @param s string to hash
+        @return a hashed string
     **/
     static function hash(s:String):Hash;
 
@@ -21,6 +22,7 @@ extern class Defold {
         The returned string is always padded with leading zeros.
 
         @param h hash value to get hex string for
+        @return hex representation
     **/
     static function hash_to_hex(h:Hash):String;
 
@@ -29,5 +31,5 @@ extern class Defold {
 
         @param v value to print
     **/
-    static function pprint(v:Any):String;
+    static function pprint(v:Any):Void;
 }
