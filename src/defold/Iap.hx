@@ -1,42 +1,64 @@
 package defold;
 
 /**
-    Functions for interacting with Apple's In-app purchases and Google's In-app billing.
+    Functions and constants for interacting with Apple's In-app purchases
+    and Google's In-app billing.
 **/
 @:native("_G.iap")
 extern class Iap {
     /**
         Buy product.
+
+        Calling `Iap.finish` is required on a successful transaction if auto_finish_transactions is disabled in project settings.
+
+        @param id product to buy
+        @param options table of optional parameters as properties.
     **/
     static function buy(id:String, ?options:IapBuyOptions):Void;
 
     /**
         Finish buying product.
+
+        Explicitly finish a product transaction.
+
+        Calling `Iap.finish` is required on a successful transaction if auto_finish_transactions is disabled in project settings (otherwise ignored).
+        The `transaction.state` field must equal iap.TRANS_STATE_PURCHASED.
+
+        @param transaction transaction table parameter as supplied in listener callback
     **/
     static function finish(transaction:IapTransaction):Void;
 
     /**
         Get current provider id.
+
+        @return provider id.
     **/
     static function get_provider_id():IapProviderId;
 
     /**
         List in-app products.
+
+        @param ids table to get information about
+        @param callback result callback
     **/
     static function list<T>(ids:lua.Table<Int,String>, callback:T->lua.Table<String,IapProduct>->IapError->Void):IapProviderId;
 
     /**
         Restore products (non-consumable).
+
+        @return false if current store doesn't support handling restored transactions, otherwise true
     **/
     static function restore():Bool;
 
     /**
         Set transaction listener.
 
-        The listener callback has the following signature: function(self, transaction, error).
-        The error parameter is nil on success.
+        The listener callback has the following signature: function(self, transaction, error) where transaction is a table
+        describing the transaction and error is a table. The error parameter is nil on success.
+
+        @param listener listener function
     **/
-    static function set_listener<T>(listener:T->IapTransaction->IapError->Void):Void;
+    static function set_listener<T>(listener:T->IapTransaction->Null<IapError>->Void):Void;
 }
 
 /**
@@ -75,28 +97,28 @@ extern class IapTransaction {
 
         Only set when state == TRANS_STATE_RESTORED.
     **/
-    var original_trans:IapTransaction;
+    @:optional var original_trans:IapTransaction;
 
     /**
         Transaction identifier.
 
         Only available when state == TRANS_STATE_PURCHASED, TRANS_STATE_UNVERIFIED or TRANS_STATE_RESTORED.
     **/
-    var trans_ident:String;
+    @:optional var trans_ident:String;
 
     /**
         Transaction request id.
 
         Only if `receipt` is set and for Facebook IAP transactions when used in the `Iap.buy` call parameters.
     **/
-    var request_id:String;
+    @:optional var request_id:String;
 
     /**
         Receipt.
 
-        Only available when state == TRANS_STATE_PURCHASED or TRANS_STATE_UNVERIFIED.
+        Only set when state == TRANS_STATE_PURCHASED or TRANS_STATE_UNVERIFIED.
     **/
-    var receipt:String;
+    @:optional var receipt:String;
 
     /**
         Only available for Amazon IAP transactions.
@@ -108,7 +130,7 @@ extern class IapTransaction {
     Possible transaction states enumeration (used by `IapTransaction.state` field).
 **/
 @:native("_G.iap")
-@:enum extern abstract IapTransactionState({}) {
+@:enum extern abstract IapTransactionState(Int) {
     /**
         Transaction failed.
     **/
