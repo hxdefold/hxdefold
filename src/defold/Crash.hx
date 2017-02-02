@@ -9,6 +9,9 @@ extern class Crash {
         Read backtrace recorded in a loaded crash dump.
 
         A table is returned containing the addresses of the call stack.
+
+        @param handle crash dump handle
+        @return backtrace table containing the backtrace
     **/
     static function get_backtrace(handle:CrashHandle):lua.Table<Int,String>;
 
@@ -16,26 +19,46 @@ extern class Crash {
         Read text blob recorded in a crash dump.
 
         The format of read text blob is platform specific and not guaranteed but can be useful for manual inspection.
+
+        @param handle crash dump handle
+        @return blob string with the platform specific data
     **/
     static function get_extra_data(handle:CrashHandle):String;
 
     /**
         Get all loaded modules from when the crash occured.
+
+        The function returns a table containing entries with sub-tables that
+        have 'name' and 'address' set for all loaded modules.
+
+        @param handle crash dump handle
+        @return modules module table
     **/
     static function get_modules(handle:CrashHandle):lua.Table<Int, {name:String, address:String}>;
 
     /**
         Read signal number from a crash report.
+
+        @param handle crash dump handle
+        @return signal signal number
     **/
     static function get_signum(handle:CrashHandle):Int;
 
     /**
         Reads a system field from a loaded crash dump.
+
+        @param handle crash dump handle
+        @param index system field enum
+        @return value value recorded in the crash dump
     **/
     static function get_sys_field(handle:CrashHandle, index:CrashSysField):String;
 
     /**
         Reads user field from a loaded crash dump.
+
+        @param handle crash dump handle
+        @param index user data slot index
+        @return value user data value recorded in the crash dump
     **/
     static function get_user_field(handle:CrashHandle, index:Int):String;
 
@@ -43,11 +66,15 @@ extern class Crash {
         Loads a previously written crash dump.
 
         The crash dump will be removed from disk upon a successful load, so loading is one-shot.
+
+        @return handle handle to the loaded dump, or nil if no dump was found.
     **/
     static function load_previous():Null<CrashHandle>;
 
     /**
         Releases a previously loaded crash dump.
+
+        @param handle handle to loaded crash dump
     **/
     static function release(handle:CrashHandle):Void;
 
@@ -55,6 +82,8 @@ extern class Crash {
         Sets the file location for crash dumps.
 
         Crashes occuring before the path is set will be stored to a default engine location.
+
+        @param path file path to use
     **/
     static function set_file_path(path:String):Void;
 
@@ -65,6 +94,9 @@ extern class Crash {
         This can be user ids, breadcrumb data etc.
 
         There are 32 slots indexed from 0. Each slot stores at most 255 characters.
+
+        @param index slot index. 0-indexed.
+        @param value string value to store
     **/
     static function set_user_field(index:Int, value:String):Void;
 
@@ -75,7 +107,6 @@ extern class Crash {
         The generated dump can be read by `Crash.load_previous`.
     **/
     static function write_dump():Void;
-
 }
 
 /**
