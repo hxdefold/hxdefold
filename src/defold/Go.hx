@@ -4,45 +4,78 @@ import haxe.extern.EitherType;
 import defold.types.*;
 
 /**
-    Manipulation of game objects and core hooks for Lua script logic.
+    Functions, core hooks, messages and constants for manipulation of
+    game objects. The "go" namespace is accessible from game object script
+    files.
 
-    See `GoMessages` for standard game object messages.
+    See `GoProperties` for related properties.
+    See `GoMessages` for related messages.
 **/
 @:native("_G.go")
 extern class Go {
     /**
         Animates a named property of the specified game object or component.
 
-        This is only supported for numerical properties.
-        If the node property is already being animated, that animation will be canceled and replaced by the new one.
+        This is only supported for numerical properties. If the node property is already being
+        animated, that animation will be canceled and replaced by the new one.
+
+        If a `complete_function` (lua function) is specified, that function will be called when the animation has completed.
+        By starting a new animation in that function, several animations can be sequenced together. See the examples for more information.
+
+        *NOTE!* If you call `go.animate()` from a game object's `final()` function, any passed
+        `complete_function` will be ignored and never called upon animation completion.
+
+        See the <a href="/doc/properties">properties guide</a> for which properties can be animated and how.
+
+        @param url url of the game object or component having the property
+        @param property name of the property to animate
+        @param playback playback mode of the animation
+        @param to target property value
+        @param easing easing to use during animation. Either specify a constant, see the <a href="/doc/properties">properties guide</a> for a complete list, or a vmath.vector with a curve.
+        @param duration duration of the animation in seconds
+        @param delay delay before the animation starts in seconds
+        @param complete_function function with parameters (self, url, property) to call when the animation has completed
     **/
     // TODO: easing is actually not a Vector3 but any vector created by Vmath.vector and we don't have a type for it right now.
-    static function animate(url:HashOrStringOrUrl, property:HashOrString, playback:GoPlayback, to:EitherType<Vector3,EitherType<Quaternion,Float>>, easing:EitherType<GoEasing,Vector3>, duration:Float, ?delay:Float, ?complete_function:Void->Void):Void;
+    static function animate<T>(url:HashOrStringOrUrl, property:HashOrString, playback:GoPlayback, to:GoAnimatedProperty, easing:EitherType<GoEasing,Vector3>, duration:Float, ?delay:Float, ?complete_function:T->Url->GoAnimatedProperty->Void):Void;
 
     /**
         Cancels all animations of the named property of the specified game object or component.
 
         By calling this function, all stored animations of the given property will be canceled.
+
+        See the <a href="/doc/properties">properties guide</a> for which properties can be animated and how.
+
+        @param url url of the game object or component having the property
+        @param property name of the property to animate
     **/
     static function cancel_animations(url:HashOrStringOrUrl, property:HashOrString):Void;
 
     /**
         Deletes a game object instance.
 
-        If the `id` of the instance to delete is not specified, the instance of the calling script is deleted.
+        <div>Delete a game object identified by its id.</div>
+
+        @param id optional id of the instance to delete, the instance of the calling script is deleted by default
     **/
     static function delete(?id:HashOrStringOrUrl):Void;
 
     /**
         Deletes a set of game object instance.
 
-        Delete all game objects simultaneously as listed in table.
-        The table values (not keys) should be game object ids (hashes).
+        <div>Delete all game objects simultaneously as listed in table.
+        The table values (not keys) should be game object ids (hashes).</div>
+
+        @param ids table with values of instance ids (hashes) to be deleted
     **/
     static function delete_all(?ids:lua.Table<Int,Hash>):Void;
 
     /**
         Gets a named property of the specified game object or component.
+
+        @param url url of the game object or component having the property
+        @param id id of the property to retrieve
+        @return the value of the specified property
     **/
     static function get(url:HashOrStringOrUrl, id:HashOrString):GoProperty;
 
@@ -50,8 +83,11 @@ extern class Go {
         Gets the id of an instance.
 
         The instance id is a hash of the absolute path.
-        If path is specified, it can either be absolute or relative to the instance of the calling script.
-        If path is not specified, the id of the instance of the calling script will be returned.
+        If `path` is specified, it can either be absolute or relative to the instance of the calling script.
+        If `path` is not specified, the id of the instance of the calling script will be returned. See the examples below for more information.
+
+        @param path path of the instance for which to return the id
+        @return instance id
     **/
     static function get_id(?path:String):Hash;
 
@@ -60,6 +96,9 @@ extern class Go {
 
         The position is relative the parent (if any).
         Use `Go.get_world_position` to retrieve the global world position.
+
+        @param id optional id of the instance to get the position for, by default the instance of the calling script
+        @return instance position
     **/
     static function get_position(?id:HashOrStringOrUrl):Vector3;
 
@@ -68,6 +107,9 @@ extern class Go {
 
         The rotation is relative to the parent (if any).
         Use `Go.get_world_rotation` to retrieve the global world position.
+
+        @param id optional id of the instance to get the rotation for, by default the instance of the calling script
+        @return instance rotation
     **/
     static function get_rotation(?id:HashOrStringOrUrl):Quaternion;
 
@@ -76,6 +118,9 @@ extern class Go {
 
         The uniform scale is relative the parent (if any).
         Use `Go.get_world_scale` to retrieve the global world scale factor.
+
+        @param id optional id of the instance to get the scale for, by default the instance of the calling script
+        @return uniform instance scale factor
     **/
     static function get_scale(?id:HashOrStringOrUrl):Float;
 
@@ -84,6 +129,9 @@ extern class Go {
 
         The scale is relative the parent (if any).
         Use `Go.get_world_scale` to retrieve the global world scale factor.
+
+        @param id optional id of the instance to get the scale for, by default the instance of the calling script
+        @return scale factor
     **/
     static function get_scale_vector(?id:HashOrStringOrUrl):Vector3;
 
@@ -91,6 +139,9 @@ extern class Go {
         Gets the instance world position.
 
         Use `Go.get_position` to retrieve the position relative to the parent.
+
+        @param id optional id of the instance to get the world position for, by default the instance of the calling script
+        @return instance world position
     **/
     static function get_world_position(?id:HashOrStringOrUrl):Vector3;
 
@@ -98,6 +149,9 @@ extern class Go {
         Gets the instance world rotation.
 
         Use `Go.get_rotation` to retrieve the rotation relative to the parent.
+
+        @param id optional id of the instance to get the world rotation for, by default the instance of the calling script
+        @return instance world rotation
     **/
     static function get_world_rotation(?id:HashOrStringOrUrl):Quaternion;
 
@@ -105,24 +159,29 @@ extern class Go {
         Gets the instance world scale factor.
 
         Use `Go.get_scale` to retrieve the scale factor relative to the parent.
+
+        @param id optional id of the instance to get the world scale for, by default the instance of the calling script
+        @return uniform instance world scale factor
     **/
     static function get_world_scale(?id:HashOrStringOrUrl):Float;
 
     /**
-        Define a property to be used throughout the script.
+        Constructs a ray in world space from a position in screen space.
 
-        This function defines a property which can then be used in the script through the self-reference.
-        The properties defined this way are automatically exposed in the editor in game objects and collections which use the script.
-        Note that you can only use this function outside any callback-functions like init and update.
+        Do not use this function, WIP!
+
+        @param x x-coordinate of the screen space position
+        @param y y-coordinate of the screen space position
+        @return position and direction of the ray in world-space
     **/
-    // calling this function has no effect when called from inside a module,
-    // so there's no reason to expose this API, since it won't work
-    // as an alternative, ScriptMacro will generate `go.property` calls for script data fields
-    // having the `@property` meta
-    // static function property(name:String, def:GoProperty):Void;
+    static function screen_ray(x:Float, y:Float):GoScreenRay;
 
     /**
         Sets a named property of the specified game object or component.
+
+        @param url url of the game object or component having the property
+        @param id id of the property to set
+        @param value the value to set
     **/
     static function set(url:HashOrStringOrUrl, id:HashOrString, value:GoProperty):Void;
 
@@ -131,6 +190,9 @@ extern class Go {
 
         The position is relative to the parent (if any).
         The global world position cannot be manually set.
+
+        @param position position to set
+        @param id optional id of the instance to set the position for, by default the instance of the calling script
     **/
     static function set_position(position:Vector3, ?id:HashOrStringOrUrl):Void;
 
@@ -139,116 +201,187 @@ extern class Go {
 
         The rotation is relative to the parent (if any).
         The global world rotation cannot be manually set.
+
+        @param rotation rotation to set
+        @param id optional id of the instance to get the rotation for, by default the instance of the calling script
     **/
     static function set_rotation(rotation:Quaternion, ?id:HashOrStringOrUrl):Void;
 
     /**
         Sets the scale factor of the instance.
 
-        The scale factor is relative to the parent (if any).
-        The global world scale factor cannot be manually set.
-        NOTE! Physics are currently not affected when setting scale from this function.
+        The scale factor is relative to the parent (if any). The global world scale factor cannot be manually set.
+
+        *NOTE!* Physics are currently not affected when setting scale from this function.
+
+        @param scale vector or uniform scale factor, must be greater than 0
+        @param id optional id of the instance to get the scale for, by default the instance of the calling script
     **/
     static function set_scale(rotation:EitherType<Float,Vector3>, ?id:HashOrStringOrUrl):Void;
 }
 
 /**
-    Messages handled by game objects and components.
+    Return value of `Go.screen_ray`.
+**/
+@:multiReturn extern class GoScreenRay {
+    /**
+        Position of the ray in world-space.
+    **/
+    var position:Vector3;
+
+    /**
+        Direction of the ray in world-space.
+    **/
+    var direction:Vector3;
+}
+
+/**
+    Messages related to the `Go` module.
 **/
 @:publicFields
 class GoMessages {
     /**
         Acquires the user input focus.
+
+        Post this message to a game object instance to make that instance acquire the user input focus.
+
+        User input is distributed by the engine to every instance that has requested it. The last instance
+        to request focus will receive it first. This means that the scripts in the instance will have
+        first-hand-chance at reacting on user input, possibly consuming it so that no other instances
+        can react on it. The most common case is for a script to send this message to itself when it needs to
+        respond to user input.
+
+        A script belonging to an instance which has the user input focus will receive the input actions
+        in its `on_input` callback function. See `on_input` for more information on
+        how user input can be handled.
     **/
-    static var AcquireInputFocus(default,never) = new Message<Void>("acquire_input_focus");
+    static var acquire_input_focus(default, never) = new Message<Void>("acquire_input_focus");
 
     /**
         Disables the receiving component.
 
         This message disables the receiving component. All components are enabled by default, which means they will receive input, updates
-        and be a part of the simulation. A component is disabled when it receives the `Disable` message.
-        
-        **Note!** Components that currently supports this message are:
-         * Collection Proxy
-         * Collision Object
-         * Gui
-         * Spine Model
-         * Sprite
-         * Tile Grid
+        and be a part of the simulation. A component is disabled when it receives the `disable` message.
+
+        *Note!* Components that currently supports this message are:
+
+           * Collection Proxy
+           * Collision Object
+           * Gui
+           * Spine Model
+           * Sprite
+           * Tile Grid
     **/
-    static var Disable(default,never) = new Message<Void>("disable");
+    static var disable(default, never) = new Message<Void>("disable");
 
     /**
         Enables the receiving component.
 
         This message enables the receiving component. All components are enabled by default, which means they will receive input, updates
-        and be a part of the simulation. A component is disabled when it receives the `Disable` message.
+        and be a part of the simulation. A component is disabled when it receives the `disable` message.
 
-        **Note!** Components that currently supports this message are:
-         * Collection Proxy
-         * Collision Object
-         * Gui
-         * Spine Model
-         * Sprite
-         * Tile Grid
+        *Note!* Components that currently supports this message are:
+
+           * Collection Proxy
+           * Collision Object
+           * Gui
+           * Spine Model
+           * Sprite
+           * Tile Grid
     **/
-    static var Enable(default,never) = new Message<Void>("enable");
+    static var enable(default, never) = new Message<Void>("enable");
 
     /**
         Releases the user input focus.
+
+        Post this message to an instance to make that instance release the user input focus.
+        See `acquire_input_focus` for more information on how the user input handling
+        works.
     **/
-    static var ReleaseInputFocus(default,never) = new Message<Void>("release_input_focus");
+    static var release_input_focus(default, never) = new Message<Void>("release_input_focus");
 
     /**
-        Requests the transform from an instance.
+        (DEPRECATED) requests the transform from an instance.
 
-        DEPRECATED! See the functions `Go.get_position`, `Go.get_rotation`, etc.
-        for a simpler way to obtain the transform of another game object instance.
+        *DEPRECATED!* See the functions `go.get_position`, `go.get_rotation`, etc. for a simpler way to obtain the transform of another game object instance.
 
         Send this message to an instance to request its transform (position, rotation, scale).
-        The sending script will receive the answer as a `TransformResponse` message at a later time.
+        The sending script will receive the answer as a `transform_response`-message
+        at a later time.
     **/
-    @:deprecated("See the functions Go.get_position, Go.get_rotation, etc. for a simpler way to obtain the transform of another game object instance.")
-    static var RequestTransform(default,never) = new Message<Void>("request_transform");
+    @:deprecated("*DEPRECATED!* See the functions `go.get_position`, `go.get_rotation`, etc. for a simpler way to obtain the transform of another game object instance.")
+    static var request_transform(default, never) = new Message<Void>("request_transform");
 
     /**
         Sets the parent of the receiving instance.
 
-        When this message is sent to an instance, it sets the parent of that instance.
-        This means that the instance will exist in the geometrical space of its parent, like a basic transformation hierarchy or scene graph.
-
-        If no parent is specified, the instance will be detached from any parent and exist in world space.
-
-        A script can send this message to itself to set the parent of its instance.
+        When this message is sent to an instance, it sets the parent of that instance. This means that the instance will exist
+        in the geometrical space of its parent, like a basic transformation hierarchy or scene graph. If no parent is specified,
+        the instance will be detached from any parent and exist in world space. A script can send this message to itself to set
+        the parent of its instance.
     **/
-    static var SetParent(default,never) = new Message<{?parent_id:Hash, ?keep_world_transform:Int}>("set_parent");
+    static var set_parent(default, never) = new Message<GoMessageSetParent>("set_parent");
 
     /**
-        Reports back the transform of an instance.
+        (DEPRECATED) reports back the transform of an instance.
 
-        DEPRECATED! See the functions `Go.get_position`, `Go.get_rotation`, etc.
-        for a simpler way to obtain the transform of another game object instance.
-
-        The response a script receives after it has requested the transform from an instance using the `RequestTransform` message.
-        See the description of that message for a complete example on how to use it.
+        *DEPRECATED!* See the functions `go.get_position`, `go.get_rotation`, etc. for a simpler way to obtain the transform of another game object instance.
+        The response a script receives after it has requested the transform from an instance
+        using the `request_transform`-message. See the description of that message
+        for a complete example on how to use it.
     **/
-    @:deprecated("See the functions Go.get_position, Go.get_rotation, etc. for a simpler way to obtain the transform of another game object instance.")
-    static var TransformResponse(default,never) = new Message<GoMessageTransformResponse>("transform_response");
+    @:deprecated("*DEPRECATED!* See the functions `go.get_position`, `go.get_rotation`, etc. for a simpler way to obtain the transform of another game object instance.")
+    static var transform_response(default, never) = new Message<GoMessageTransformResponse>("transform_response");
 }
 
 /**
-    Data for the `GoMessages.TransformResponse` message.
-
-    DEPRECATED! See the functions `Go.get_position`, `Go.get_rotation`, etc.
-    for a simpler way to obtain the transform of another game object instance.
+    Data for the `GoMessages.set_parent` message.
 **/
-@:deprecated("See the functions Go.get_position, Go.get_rotation, etc. for a simpler way to obtain the transform of another game object instance.")
+typedef GoMessageSetParent = {
+    /**
+        the id of the new parent
+    **/
+    @:optional var parent_id:Hash;
+
+    /**
+        if the world transform of the instance should be preserved when changing spaces, 0 for false and 1 for true
+    **/
+    @:optional var keep_world_transform:Int;
+}
+
+/**
+    Data for the `GoMessages.transform_response` message.
+**/
+@:deprecated("*DEPRECATED!* See the functions `go.get_position`, `go.get_rotation`, etc. for a simpler way to obtain the transform of another game object instance.")
 typedef GoMessageTransformResponse = {
+    /**
+        local position of the instance
+    **/
     var position:Vector3;
+
+    /**
+        local rotation of the instance
+    **/
     var rotation:Quaternion;
+
+    /**
+        local scale of the instance
+    **/
     var scale:Float;
+
+    /**
+        world position of the instance
+    **/
     var world_position:Vector3;
+
+    /**
+        world rotation of the instancee
+    **/
     var world_rotation:Quaternion;
+
+    /**
+        world scale of the instance
+    **/
     var world_scale:Float;
 }
 
@@ -258,50 +391,218 @@ typedef GoMessageTransformResponse = {
 typedef GoProperty = EitherType<Float,EitherType<Hash,EitherType<Url,EitherType<Vector3,EitherType<Vector4,EitherType<Quaternion,Bool>>>>>>;
 
 /**
+    Possible types of game object property suitable for animation.
+**/
+typedef GoAnimatedProperty = EitherType<Vector3,EitherType<Vector4,EitherType<Quaternion,Float>>>;
+
+/**
     Game object easing constants.
 **/
 @:native("_G.go")
-@:enum extern abstract GoEasing({}) {
+@:enum extern abstract GoEasing(Int) {
+    /**
+        In-back.
+    **/
     var EASING_INBACK;
+
+    /**
+        In-bounce.
+    **/
     var EASING_INBOUNCE;
+
+    /**
+        In-circlic.
+    **/
     var EASING_INCIRC;
+
+    /**
+        In-cubic.
+    **/
     var EASING_INCUBIC;
+
+    /**
+        In-elastic.
+    **/
     var EASING_INELASTIC;
+
+    /**
+        In-exponential.
+    **/
     var EASING_INEXPO;
+
+    /**
+        In-out-back.
+    **/
     var EASING_INOUTBACK;
+
+    /**
+        In-out-bounce.
+    **/
     var EASING_INOUTBOUNCE;
+
+    /**
+        In-out-circlic.
+    **/
     var EASING_INOUTCIRC;
+
+    /**
+        In-out-cubic.
+    **/
     var EASING_INOUTCUBIC;
+
+    /**
+        In-out-elastic.
+    **/
     var EASING_INOUTELASTIC;
+
+    /**
+        In-out-exponential.
+    **/
     var EASING_INOUTEXPO;
+
+    /**
+        In-out-quadratic.
+    **/
     var EASING_INOUTQUAD;
+
+    /**
+        In-out-quartic.
+    **/
     var EASING_INOUTQUART;
+
+    /**
+        In-out-quintic.
+    **/
     var EASING_INOUTQUINT;
+
+    /**
+        In-out-sine.
+    **/
     var EASING_INOUTSINE;
+
+    /**
+        In-quadratic.
+    **/
     var EASING_INQUAD;
+
+    /**
+        In-quartic.
+    **/
     var EASING_INQUART;
+
+    /**
+        In-quintic.
+    **/
     var EASING_INQUINT;
+
+    /**
+        In-sine.
+    **/
     var EASING_INSINE;
+
+    /**
+        Linear interpolation.
+    **/
     var EASING_LINEAR;
+
+    /**
+        Out-back.
+    **/
     var EASING_OUTBACK;
+
+    /**
+        Out-bounce.
+    **/
     var EASING_OUTBOUNCE;
+
+    /**
+        Out-circlic.
+    **/
     var EASING_OUTCIRC;
+
+    /**
+        Out-cubic.
+    **/
     var EASING_OUTCUBIC;
+
+    /**
+        Out-elastic.
+    **/
     var EASING_OUTELASTIC;
+
+    /**
+        Out-exponential.
+    **/
     var EASING_OUTEXPO;
+
+    /**
+        Out-in-back.
+    **/
     var EASING_OUTINBACK;
+
+    /**
+        Out-in-bounce.
+    **/
     var EASING_OUTINBOUNCE;
+
+    /**
+        Out-in-circlic.
+    **/
     var EASING_OUTINCIRC;
+
+    /**
+        Out-in-cubic.
+    **/
     var EASING_OUTINCUBIC;
+
+    /**
+        Out-in-elastic.
+    **/
     var EASING_OUTINELASTIC;
+
+    /**
+        Out-in-exponential.
+    **/
     var EASING_OUTINEXPO;
+
+    /**
+        Out-in-quadratic.
+    **/
     var EASING_OUTINQUAD;
+
+    /**
+        Out-in-quartic.
+    **/
     var EASING_OUTINQUART;
+
+    /**
+        Out-in-quintic.
+    **/
     var EASING_OUTINQUINT;
+
+    /**
+        Out-in-sine.
+    **/
     var EASING_OUTINSINE;
+
+    /**
+        Out-quadratic.
+    **/
     var EASING_OUTQUAD;
+
+    /**
+        Out-quartic.
+    **/
     var EASING_OUTQUART;
+
+    /**
+        Out-quintic.
+    **/
     var EASING_OUTQUINT;
+
+    /**
+        Out-sine.
+    **/
     var EASING_OUTSINE;
 }
 
@@ -309,11 +610,39 @@ typedef GoProperty = EitherType<Float,EitherType<Hash,EitherType<Url,EitherType<
     Game object playback constants.
 **/
 @:native("_G.go")
-@:enum extern abstract GoPlayback({}) {
-    var PLAYBACK_ONCE_FORWARD;
-    var PLAYBACK_ONCE_BACKWARD;
-    var PLAYBACK_ONCE_PINGPONG;
-    var PLAYBACK_LOOP_FORWARD;
+@:enum extern abstract GoPlayback(Int) {
+    /**
+        Loop backward.
+    **/
     var PLAYBACK_LOOP_BACKWARD;
+
+    /**
+        Loop forward.
+    **/
+    var PLAYBACK_LOOP_FORWARD;
+
+    /**
+        Ping pong loop.
+    **/
     var PLAYBACK_LOOP_PINGPONG;
+
+    /**
+        No playback.
+    **/
+    var PLAYBACK_NONE;
+
+    /**
+        Once backward.
+    **/
+    var PLAYBACK_ONCE_BACKWARD;
+
+    /**
+        Once forward.
+    **/
+    var PLAYBACK_ONCE_FORWARD;
+
+    /**
+        Once ping pong.
+    **/
+    var PLAYBACK_ONCE_PINGPONG;
 }
