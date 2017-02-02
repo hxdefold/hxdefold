@@ -15,13 +15,20 @@ extern class Msg {
     static function post<T>(receiver:Null<HashOrStringOrUrl>, message_id:Message<T>, message:T):Void;
 
     /**
-        The format of the string must be "[socket:][path][#fragment]", which is similar to a http URL.
+        Creates a new URL.
 
-        When addressing instances, `socket` is the name of the collection.
-        `path` is the id of the instance, which can either be relative the instance of the calling script or global.
-        `fragment` would be the id of the desired component.
+        The format of the string must be `"[socket:][path][#fragment]"`, which is similar to a http URL.
+
+        When addressing instances, `socket` is the name of the collection. `path` is the id of the instance,
+        which can either be relative the instance of the calling script or global. `fragment` would be the id of the desired component.
 
         Calling without `urlstring` is equivalent to `Msg.url("")`.
+
+        @param urlstring string to create the url from
+        @param socket socket of the URL
+        @param path path of the URL
+        @param fragment fragment of the URL
+        @return a new URL
     **/
     @:overload(function():Url {})
     @:overload(function(socket:EitherType<String,Int>, path:HashOrString, fragment:HashOrString):Url {})
