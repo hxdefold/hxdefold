@@ -1,6 +1,6 @@
 package defold.support;
 
-#if macro
+#if (macro || doc_gen)
 import haxe.macro.Context;
 import haxe.macro.Expr;
 
@@ -27,7 +27,8 @@ import haxe.macro.Expr;
     This is handy for defining message enumerations that can later be used by pattern matching in `on_message` methods.
 **/
 class MessageBuilder {
-    static function build() {
+    public static function build():Array<Field> {
+        #if macro
         var fields = Context.getBuildFields();
         for (field in fields) {
             switch (field.kind) {
@@ -42,6 +43,9 @@ class MessageBuilder {
             }
         }
         return fields;
+        #else
+        return [];
+        #end
     }
 }
 #end
