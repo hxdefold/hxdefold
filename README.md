@@ -4,7 +4,7 @@
 
 [![Build Status](https://travis-ci.org/hxdefold/hxdefold.svg?branch=master)](https://travis-ci.org/hxdefold/hxdefold)
 
-**Status: PRE-ALPHA, very much work in progress, API may change. Currently requires latest Haxe [development builds](http://builds.haxe.org/).**
+**Defold API version: 1.2.96**
 
 ## Example
 
