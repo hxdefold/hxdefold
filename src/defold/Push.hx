@@ -1,15 +1,18 @@
 package defold;
 
 /**
-    Functions for interacting with local, as well as Apple's and Google's push notification services.
+    Functions and constants for interacting with local, as well as
+    Apple's and Google's push notification services.
 **/
 @:native("_G.push")
 extern class Push {
     /**
         Cancel a scheduled local push notification.
 
-        Use this function to cancel a previously scheduled local push notification.
-        The notification is identified by a numeric id as returned by `Push.schedule`.
+        Use this function to cancel a previously scheduled local push notification. The
+        notification is identified by a numeric id as returned by `Push.schedule`.
+
+        @param id the numeric id of the local push notification
     **/
     static function cancel(id:Int):Void;
 
@@ -17,8 +20,11 @@ extern class Push {
         Retrieve data on all scheduled local push notifications.
 
         Returns a table with all data associated with all scheduled local push notifications.
-        The table contains key, value pairs where the key is the push notification id
-        and the value is a table with the notification data, corresponding to the data given by `Push.get_scheduled`.
+        The table contains key, value pairs where the key is the push notification id and the
+        value is a table with the notification data, corresponding to the data given by
+        `Push.get_scheduled`.
+
+        @return data table with all data associated with all scheduled notifications
     **/
     static function get_all_scheduled():lua.Table<Int,PushData>;
 
@@ -27,35 +33,56 @@ extern class Push {
 
         Returns a table with all data associated with a specified local push notification.
         The notification is identified by a numeric id as returned by `Push.schedule`.
+
+        @param id the numeric id of the local push notification
+        @return data table with all data associated with the notification
     **/
     static function get_scheduled(id:Int):PushData;
 
     /**
         Register for push notifications.
 
-        Note that the `notifications` table parameter is iOS only and will be ignored on Android.
+        Send a request for push notifications. Note that the notifications table parameter
+        is iOS only and will be ignored on Android.
+
+        @param notifications the types of notifications to listen to. (iOS only)
+        @param callback register callback function (function)
     **/
     static function register<T>(notifications:Null<lua.Table<Int,PushNotificationType>>, callback:T->String->{error:String}->Void):Void;
 
     /**
         Schedule a local push notification to be triggered at a specific time in the future.
+
+        Local push notifications are scheduled with this function.
+        The returned `id` value is uniquely identifying the scheduled notification
+        and can be stored for later reference.
+
+        @param time number of seconds into the future until the notification should be triggered
+        @param title localized title to be displayed to the user if the application is not running
+        @param alert localized body message of the notification to be displayed to the user if the application is not running
+        @param payload JSON string to be passed to the registered listener function
+        @param notification_settings table with notification and platform specific fields
     **/
     static function schedule(time:Float, title:String, alert:String, payload:String, notification_settings:PushNotificationSettings):PushScheduleResult;
 
     /**
         Set the badge count for application icon.
-
         NOTE: This function is only available on iOS.
+
+        @param count badge count
     **/
     static function set_badge_count(count:Int):Void;
 
     /**
         Set push listener.
 
-        The `listener` callback has the following signature: function(self, payload, origin)
-        where `payload` is a table with the push payload.
+        The listener callback has the following signature: function(self, payload, origin, activated) where payload is a table
+        with the push payload, origin is either ORIGIN_LOCAL or ORIGIN_REMOTE, and activated is either true or false depending
+        on if the application was activated via the notification.
+
+        @param listener listener callback function
     **/
-    static function set_listener<T>(listener:T->String->PushOrigin->Void):Void;
+    static function set_listener<T>(listener:T->lua.Table<String,Dynamic>->PushOrigin->Bool->Void):Void;
 }
 
 /**
@@ -73,7 +100,7 @@ typedef PushData = {
     Possible values for elements of `notifications` argument of `Push.register` method (iOS only).
 **/
 @:native("_G.push")
-@:enum extern abstract PushNotificationType({}) {
+@:enum extern abstract PushNotificationType(Int) {
     /**
         Alert notification type.
     **/
@@ -123,7 +150,7 @@ typedef PushNotificationSettings = {
 **/
 @:multiReturn extern class PushScheduleResult {
     /**
-        Created push notification identifier.
+        Unique id that can be used to cancel or inspect the notification.
     **/
     var id:Int;
 
@@ -137,7 +164,7 @@ typedef PushNotificationSettings = {
     Push origin passed to the `Push.set_listener` callback.
 **/
 @:native("_G.push")
-@:enum extern abstract PushOrigin({}) {
+@:enum extern abstract PushOrigin(Int) {
     /**
         Local push origin.
     **/
