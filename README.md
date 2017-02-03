@@ -44,6 +44,7 @@ And example Defold projects, ported from Lua:
  * https://github.com/hxdefold/hxdefold-example-sidescroller
  * https://github.com/hxdefold/hxdefold-example-platformer
  * https://github.com/hxdefold/hxdefold-example-frogrunner
+ * https://github.com/hxdefold/hxdefold-example-magiclink
 
 ## How does it work?
 

@@ -16,6 +16,7 @@ install:
 - git clone https://github.com/hxdefold/hxdefold-example-platformer
 - git clone https://github.com/hxdefold/hxdefold-example-sidescroller
 - git clone https://github.com/hxdefold/hxdefold-example-frogrunner
+- git clone https://github.com/hxdefold/hxdefold-example-magiclink
 
 script:
 - pushd hxdefold-example-platformer
@@ -27,6 +28,10 @@ script:
 - popd
 
 - pushd hxdefold-example-frogrunner
+- haxe build.hxml
+- popd
+
+- pushd hxdefold-example-magiclink
 - haxe build.hxml
 - popd
 
