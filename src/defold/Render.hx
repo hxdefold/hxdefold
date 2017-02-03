@@ -4,9 +4,10 @@ import haxe.extern.EitherType;
 import defold.types.*;
 
 /**
-    Rendering functionality to be used from render scripts.
+    Rendering functions, messages and constants. The "render" namespace is
+    accessible only from render scripts.
 
-    See `RenderMessages` for messages related to render scripts.
+    See `RenderMessages` for related messages.
 **/
 @:native("_G.render")
 extern class Render {
@@ -14,60 +15,79 @@ extern class Render {
         Clears the active render target.
 
         Clear buffers in the currently enabled render target with specified value.
+
+        @param buffers Table with keys specifying which buffers to clear and values set to clear values.
     **/
     static function clear(buffers:lua.Table<RenderBufferType,EitherType<Vector4,Float>>):Void;
 
     /**
-        Create a new constant buffer.
+        Create a new constant buffer..
 
-        Constant buffers are used to set shader program variables
-        and are optionally passed to the `Render.draw` function.
+        Constant buffers are used to set shader program variables and are optionally passed to the `Render.draw`
+        function. The buffer's constant elements can be indexed like an ordinary Lua table, but you can't iterate
+        over them with pairs() or ipairs().
+
+        @return new constant buffer
     **/
     static function constant_buffer():RenderConstantBuffer;
 
     /**
         Deletes a render target.
+
+        @param render_target render target to delete
     **/
     static function delete_render_target(render_target:RenderTarget):Void;
 
     /**
         Disables the currently enabled material.
+
+        If a material is currently enabled, disable it.
     **/
     static function disable_material():Void;
 
     /**
         Disables a render target.
+
+        @param render_target render target to disable
     **/
     static function disable_render_target(render_target:RenderTarget):Void;
 
     /**
         Disables a render state.
+
+        @param state state to enable
     **/
     static function disable_state(state:RenderState):Void;
 
     /**
         Disables a texture for a render target.
+
+        @param unit texture unit to enable disable for
+        @param render_target render target for which to disable the specified texture unit
     **/
     static function disable_texture(unit:Int, render_target:RenderTarget):Void;
 
     /**
         Draws all objects matching a predicate.
 
-        An optional constants buffer can be provided to override the default constants.
-        If no constants buffer is provided, a default system constants buffer is used
-        containing constants as defined in materials and set through `*.set_constant()`
-        and `*.reset_constant()` on visual components.
+        Draws all objects that match a specified predicate. An optional constants buffer can be
+        provided to override the default constants. If no constants buffer is provided, a default
+        system constants buffer is used containing constants as defined in materials and set through
+        `*.set_constant()` and `*.reset_constant()` on visual components.
+
+        @param predicate predicate to draw for
+        @param constants optional constants to use while rendering
     **/
     static function draw(predicate:RenderPredicate, ?constants:RenderConstantBuffer):Void;
 
     /**
         Draws all 2d debug graphics (Deprecated).
     **/
-    @:deprecated
+    @:deprecated("Use `Render.draw_debug3d` to draw visual debug info.")
     static function draw_debug2d():Void;
 
     /**
-        Draws all 3d debug graphics.
+        Draws all 3d debug graphics such as lines drawn with "draw_line" messages and physics visualization.
     **/
     static function draw_debug3d():Void;
 
@@ -75,132 +95,203 @@ extern class Render {
         Enables a material.
 
         If another material was already enabled, it will be automatically disabled.
+
+        @param material_id material id to enable
     **/
     static function enable_material(material_id:String):Void;
 
     /**
         Enables a render target.
+
+        @param render_target render target to enable
     **/
     static function enable_render_target(render_target:RenderTarget):Void;
 
     /**
         Enables a render state.
+
+        @param state state to enable
     **/
     static function enable_state(state:RenderState):Void;
 
     /**
         Enables a texture for a render target.
+
+        @param unit texture unit to enable texture for
+        @param render_target render target from which to enable the specified texture unit
+        @param buffer_type buffer type from which to enable the texture
     **/
     static function enable_texture(unit:Int, render_target:RenderTarget, buffer_type:RenderBufferType):Void;
 
     /**
         Gets the window height, as specified for the project.
+
+        @return specified window height
     **/
     static function get_height():Int;
 
     /**
         Retrieve a buffer height from a render target.
+
+        @param render_target render target from which to retrieve the buffer height
+        @param buffer_type which type of buffer to retrieve the height from
+        @return the height of the render target buffer texture
     **/
     static function get_render_target_height(render_target:RenderTarget, buffer_type:RenderBufferType):Int;
 
     /**
         Retrieve a buffer width from a render target.
+
+        @param render_target render target from which to retrieve the buffer width
+        @param buffer_type which type of buffer to retrieve the width from
+        @return the width of the render target buffer texture
     **/
     static function get_render_target_width(render_target:RenderTarget, buffer_type:RenderBufferType):Int;
 
     /**
         Gets the window width, as specified for the project.
+
+        @return specified window width
     **/
     static function get_width():Int;
 
     /**
-        Gets the window height.
+        Gets the actual window height.
+
+        @return actual window height
     **/
     static function get_window_height():Int;
 
     /**
         Gets the actual window width.
+
+        @return actual window width
     **/
     static function get_window_width():Int;
 
     /**
         Creates a new render predicate.
+
+        @param predicates table of tags that the predicate should match (table).
+        @return new predicate
     **/
-    static function predicate(predicates:lua.Table<Int,String>):RenderPredicate;
+    static function predicate(predicates:lua.Table<Int,HashOrString>):RenderPredicate;
 
     /**
         Creates a new render target.
+
+        Creates a new render target according to the supplied specification table.
     **/
     static function render_target(name:String, parameters:RenderTargetParameters):RenderTarget;
 
     /**
         Sets the blending function.
+
+        @param source_factor source factor
+        @param destination_factor destination factor
     **/
     static function set_blend_func(source_factor:RenderBlendFactor, destination_factor:RenderBlendFactor):Void;
 
     /**
         Sets the color mask.
+
+        @param red red mask
+        @param green green mask
+        @param blue blue mask
+        @param alpha alpha mask
     **/
     static function set_color_mask(red:Bool, green:Bool, blue:Bool, alpha:Bool):Void;
 
     /**
         Sets the cull face.
+
+        @param face_type face type
     **/
-    static function set_cull_face(face_type:RenderFaceType):Void;
+    static function set_cull_face(face_type:RenderCullFaceType):Void;
 
     /**
         Sets the depth test function.
+
+        @param func depth test function
     **/
     static function set_depth_func(func:RenderCompareFunc):Void;
 
     /**
         Sets the depth mask.
+
+        @param depth depth mask
     **/
     static function set_depth_mask(depth:Bool):Void;
 
     /**
         Sets the polygon offset.
+
+        @param factor polygon offset factor
+        @param units polygon offset units
     **/
     static function set_polygon_offset(factor:Float, units:Float):Void;
 
     /**
-        Sets the projection matrix.
+        Sets the projection matrix to use when rendering.
+
+        @param matrix projection matrix
     **/
     static function set_projection(matrix:Matrix4):Void;
 
     /**
         Sets the render target size.
+
+        @param render_target render target to set size for
+        @param width new render target width
+        @param height new render target height
     **/
     static function set_render_target_size(render_target:RenderTarget, width:Int, height:Int):Void;
 
     /**
         Sets the stencil test function.
+
+        @param func stencil test function
+        @param ref reference value for the stencil test
+        @param mask mask that is ANDed with both the reference value and the stored stencil value when the test is done
     **/
     static function set_stencil_func(func:RenderCompareFunc, ref:Float, mask:Int):Void;
 
     /**
         Sets the stencil mask.
+
+        @param mask stencil mask (number)
     **/
     static function set_stencil_mask(mask:Int):Void;
 
     /**
         Sets the stencil operator.
+
+        @param sfail action to take when the stencil test fails
+        @param dpfail the stencil action when the stencil test passes
+        @param dppass the stencil action when both the stencil test and the depth test pass, or when the stencil test passes and either there is no depth buffer or depth testing is not enabled
     **/
     static function set_stencil_op(sfail:RenderStencilOp, dpfail:RenderStencilOp, dppass:RenderStencilOp):Void;
 
     /**
-        Sets the view matrix.
+        Sets the view matrix to use when rendering.
+
+        @param matrix view matrix to set
     **/
     static function set_view(matrix:Matrix4):Void;
 
     /**
         Sets the render viewport.
+
+        @param x left corner
+        @param y bottom corner
+        @param width viewport width
+        @param height viewport height
     **/
     static function set_viewport(x:Int, y:Int, width:Int, height:Int):Void;
 }
 
 /**
-    Messages related to render scripts.
+    Messages related to the `Render` module.
 **/
 @:publicFields
 class RenderMessages {
@@ -209,45 +300,75 @@ class RenderMessages {
 
         This is the color that appears on the screen where nothing is rendered, i.e. background.
     **/
-    static var ClearColor(default,never) = new Message<{color:Vector4}>("clear_color");
+    static var clear_color(default, never) = new Message<RenderMessageClearColor>("clear_color");
 
     /**
         Draw a line on the screen.
 
         This should mostly be used for debugging purposes.
     **/
-    static var DrawLine(default,never) = new Message<RenderMessageDrawLine>("draw_line");
+    static var draw_line(default, never) = new Message<RenderMessageDrawLine>("draw_line");
 
     /**
         Draw a text on the screen.
 
         This should mostly be used for debugging purposes.
     **/
-    static var DrawText(default,never) = new Message<RenderMessageDrawText>("draw_text");
+    static var draw_text(default, never) = new Message<RenderMessageDrawText>("draw_text");
 
     /**
-        Reports a change in window size.
+        Reports a window size change.
 
-        This is initiated on window resize on desktop or by orientation changes on mobile devices.
+        Reports a change in window size. This is initiated on window resize on desktop or by orientation changes
+        on mobile devices.
     **/
-    static var WindowResized(default,never) = new Message<{width:Int, height:Int}>("window_resized");
+    static var window_resized(default, never) = new Message<RenderMessageWindowResized>("window_resized");
 }
 
 /**
-    Data for the `RenderMessages.DrawLine` message.
+    Data for the `RenderMessages.clear_color` message.
+**/
+typedef RenderMessageClearColor = {
+    /**
+        color to use as clear color
+    **/
+    var color:Vector4;
+}
+
+
+/**
+    Data for the `RenderMessages.draw_line` message.
 **/
 typedef RenderMessageDrawLine = {
-    start_point:Vector3,
-    end_point:Vector3,
-    color:Vector4,
+    /**
+        Start point of the line
+    **/
+    var start_point:Vector3;
+
+    /**
+        End point of the line
+    **/
+    var end_point:Vector3;
+
+    /**
+        Color of the line
+    **/
+    var color:Vector4;
 }
 
 /**
-    Data for the `RenderMessages.DrawText` message.
+    Data for the `RenderMessages.draw_text` message.
 **/
 typedef RenderMessageDrawText = {
-    position:Vector3,
-    text:String,
+    /**
+        Position of the text
+    **/
+    var position:Vector3;
+
+    /**
+        The text to draw
+    **/
+    var text:String;
 }
 
 /**
@@ -258,6 +379,21 @@ typedef RenderMessageDrawText = {
     var BUFFER_COLOR_BIT;
     var BUFFER_DEPTH_BIT;
     var BUFFER_STENCIL_BIT;
+}
+
+/**
+    Data for the `RenderMessages.window_resized` message.
+**/
+typedef RenderMessageWindowResized = {
+    /**
+        the new window height
+    **/
+    var height:Int;
+
+    /**
+        the new window width
+    **/
+    var width:Int;
 }
 
 /**
@@ -366,7 +502,7 @@ extern class RenderPredicate {}
     Rendering cull face type enumeration (see `Render.set_cull_face`).
 **/
 @:native("_G.render")
-@:enum extern abstract RenderFaceType({}) {
+@:enum extern abstract RenderCullFaceType({}) {
     var FACE_FRONT;
     var FACE_BACK;
     var FACE_FRONT_AND_BACK;
