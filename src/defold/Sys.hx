@@ -3,7 +3,8 @@ package defold;
 import defold.types.*;
 
 /**
-    System functions.
+    Functions and messages for using system resources, controlling the engine
+    and for debugging.
 
     See `SysMessages` for standard system messages.
 **/
