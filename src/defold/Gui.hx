@@ -2,6 +2,7 @@ package defold;
 
 import haxe.extern.EitherType;
 import defold.types.*;
+import defold.Go.GoAnimatedProperty;
 
 /**
     GUI core hooks, functions, messages, properties and constants for
@@ -50,7 +51,7 @@ extern class Gui {
         @param complete_function function to call when the animation has completed
         @param playback playback mode
     **/
-    static function animate<T>(node:GuiNode, property:String, to:EitherType<Vector3,Vector4>, easing:EitherType<GuiEasing,EitherType<Vector3,Vector4>>, duration:Float, ?delay:Float, ?complete_function:T->GuiNode->Void, ?playback:GuiPlayback):Void;
+    static function animate<T>(node:GuiNode, property:String, to:GoAnimatedProperty, easing:EitherType<GuiEasing,EitherType<Vector3,Vector4>>, duration:Float, ?delay:Float, ?complete_function:T->GuiNode->Void, ?playback:GuiPlayback):Void;
 
     /**
         Cancels an ongoing animation.
