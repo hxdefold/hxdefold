@@ -5,7 +5,7 @@ import defold.types.*;
 /**
     Functions, messages and properties used to manipulate sprite components.
 
-    See `SpriteMessages` for standard sprite messages.
+    See `SpriteMessages` for related messages.
 **/
 @:native("_G.sprite")
 extern class Sprite {
@@ -14,6 +14,10 @@ extern class Sprite {
 
         The constant must be defined in the material assigned to the sprite.
         Resetting a constant through this function implies that the value defined in the material will be used.
+        Which sprite to reset a constant for is identified by the URL.
+
+        @param url the sprite that should have a constant reset
+        @param name of the constant
     **/
     static function reset_constant(url:UrlOrString, name:HashOrString):Void;
 
@@ -23,41 +27,89 @@ extern class Sprite {
         The constant must be defined in the material assigned to the sprite.
         Setting a constant through this function will override the value set for that constant in the material.
         The value will be overridden until `Sprite.reset_constant` is called.
+        Which sprite to set a constant for is identified by the URL.
+
+        @param url the sprite that should have a constant set
+        @param name of the constant
+        @param value of the constant
     **/
     static function set_constant(url:UrlOrString, name:HashOrString, value:Vector4):Void;
 
     /**
         Make a sprite flip the animations horizontally or not.
 
+        Which sprite to flip is identified by the URL.
         If the currently playing animation is flipped by default, flipping it again will make it appear like the original texture.
+
+        @param url the sprite that should flip its animations
+        @param flip if the sprite should flip its animations or not
     **/
     static function set_hflip(url:UrlOrString, flip:Bool):Void;
 
     /**
         Make a sprite flip the animations vertically or not.
 
+        Which sprite to flip is identified by the URL.
         If the currently playing animation is flipped by default, flipping it again will make it appear like the original texture.
+
+        @param url the sprite that should flip its animations
+        @param flip if the sprite should flip its animations or not
     **/
     static function set_vflip(url:UrlOrString, flip:Bool):Void;
 }
 
 /**
-    Messages related to sprite components.
+    Messages related to the `Sprite` module.
 **/
 @:publicFields
 class SpriteMessages {
     /**
         Reports that an animation has completed.
 
-        This message is sent to the sender of a `PlayAnimation` message when the animation has completed.
-        Note that only animations played either forward or backward once ever completes.
+        This message is sent to the sender of a `play_animation` message when the
+        animation has completed.
+
+        Note that this message is sent only for animations that play with the following
+        playback modes:
+
+         * Once Forward
+         * Once Backward
+         * Once Ping Pong
+
+        See `play_animation` for more information and examples of how to use
+        this message.
     **/
-    static var AnimationDone(default,never) = new Message<{current_tile:Int, id:Hash}>("animation_done");
+    static var animation_done(default, never) = new Message<SpriteMessageAnimationDone>("animation_done");
 
     /**
         Plays a sprite animation.
 
-        Post this message to a sprite component to make it play an animation from its tile set.
+        Post this message to a sprite-component to make it play an animation from its tile set.
     **/
-    static var PlayAnimation(default,never) = new Message<{id:Hash}>("play_animation");
+    static var play_animation(default, never) = new Message<SpriteMessagePlayAnimation>("play_animation");
+}
+
+/**
+    Data for the `SpriteMessages.animation_done` message.
+**/
+typedef SpriteMessageAnimationDone = {
+    /**
+        The current tile of the sprite.
+    **/
+    var current_tile:Int;
+
+    /**
+        Id of the animation that was completed.
+    **/
+    var id:Hash;
+}
+
+/**
+    Data for the `SpriteMessages.play_animation` message.
+**/
+typedef SpriteMessagePlayAnimation = {
+    /**
+        The id of the animation to play.
+    **/
+    var id:Hash;
 }
