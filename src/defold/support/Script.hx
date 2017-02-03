@@ -19,7 +19,7 @@ class Script<T:{}> {
 
         @param self reference to the script state to be used for storing data
     **/
-    function init(self:T):Void {}
+    @:dox(show) function init(self:T):Void {}
 
     /**
         Called when a script component is finalized.
@@ -30,7 +30,7 @@ class Script<T:{}> {
 
         @param self reference to the script state to be used for storing data
     **/
-    function final(self:T):Void  {}
+    @:dox(show) function final(self:T):Void  {}
 
     /**
         Called every frame to update the script component.
@@ -41,7 +41,7 @@ class Script<T:{}> {
         @param self reference to the script state to be used for storing data
         @param dt the time-step of the frame update
     **/
-    function update(self:T, dt:Float):Void {}
+    @:dox(show) function update(self:T, dt:Float):Void {}
 
     /**
         Called when a message has been sent to the script component.
@@ -57,7 +57,7 @@ class Script<T:{}> {
         @param message a table containing the message data
         @param sender address of the sender
     **/
-    function on_message<TMessage>(self:T, message_id:Message<TMessage>, message:TMessage, sender:Url):Void {}
+    @:dox(show) function on_message<TMessage>(self:T, message_id:Message<TMessage>, message:TMessage, sender:Url):Void {}
 
     /**
         Called when user input is received.
@@ -80,7 +80,7 @@ class Script<T:{}> {
         @param action a table containing the input data, see above for a description
         @return optional boolean to signal if the input should be consumed (not passed on to others) or not, default is false
     **/
-    function on_input(self:T, action_id:Hash, action:ScriptOnInputAction):Bool return false;
+    @:dox(show) function on_input(self:T, action_id:Hash, action:ScriptOnInputAction):Bool return false;
 
     /**
         Called when the script component is reloaded.
@@ -90,5 +90,5 @@ class Script<T:{}> {
 
         @param self reference to the script state to be used for storing data
     **/
-    function on_reload(self:T):Void {}
+    @:dox(show) function on_reload(self:T):Void {}
 }

@@ -19,7 +19,7 @@ class RenderScript<T:{}> {
 
         @param self reference to the script state to be used for storing data
     **/
-    function init(self:T) {}
+    @:dox(show) function init(self:T) {}
 
     /**
         Called every frame to update the script component.
@@ -30,7 +30,7 @@ class RenderScript<T:{}> {
         @param self reference to the script state to be used for storing data
         @param dt the time-step of the frame update
     **/
-    function update(self:T, dt:Float) {}
+    @:dox(show) function update(self:T, dt:Float) {}
 
     /**
         Called when a message has been sent to the script component.
@@ -46,5 +46,5 @@ class RenderScript<T:{}> {
         @param message a table containing the message data
         @param sender address of the sender
     **/
-    function on_message<TMessage>(self:T, message_id:Message<TMessage>, message:TMessage, sender:Url):Void {}
+    @:dox(show) function on_message<TMessage>(self:T, message_id:Message<TMessage>, message:TMessage, sender:Url):Void {}
 }

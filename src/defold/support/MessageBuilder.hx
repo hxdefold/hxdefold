@@ -24,7 +24,7 @@ import haxe.macro.Expr;
     }
     ```
 
-    This is handy for defining message enumerations that can later be used by pattern matching in `on_message` methods.
+    This is handy for defining message enumerations that can later be used by pattern matching in `Script.on_message` methods.
 **/
 class MessageBuilder {
     public static function build():Array<Field> {
