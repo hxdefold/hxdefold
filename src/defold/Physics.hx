@@ -3,10 +3,11 @@ package defold;
 import defold.types.*;
 
 /**
-    Functions and messages for collision object physics interaction with other objects (collisions and ray-casting)
-    and control of physical behaviors.
+    Functions and messages for collision object physics interaction
+    with other objects (collisions and ray-casting) and control of
+    physical behaviors.
 
-    See `PhysicsMessages` for physics-related messages.
+    See `PhysicsMessages` for related messages.
 **/
 @:native("_G.physics")
 extern class Physics {
@@ -14,17 +15,20 @@ extern class Physics {
         Requests a ray cast to be performed.
 
         Ray casts are used to test for intersections against collision objects in the physics world.
-        Which collision objects to hit is filtered by their collision groups and can be configured through groups.
-
+        Which collision objects to hit is filtered by their collision groups and can be configured through `groups`.
         The actual ray cast will be performed during the physics-update.
+        If an object is hit, the result will be reported via a `ray_cast_response` message.
 
-        If an object is hit, the result will be reported via a `PhysicsMessages.PhysicsMessageRayCastResponse` message.
+        @param from the world position of the start of the ray
+        @param to the world position of the end of the ray
+        @param groups a lua table containing the hashed groups for which to test collisions against
+        @param request_id a number between 0-255 that will be sent back in the response for identification, 0 by default
     **/
     static function ray_cast(from:Vector3, to:Vector3, groups:lua.Table<Int,Hash>, ?request_id:Int):Void;
 }
 
 /**
-    Messages related to collision object component.
+    Messages related to the `Physics` module.
 **/
 @:publicFields
 class PhysicsMessages {
@@ -34,67 +38,110 @@ class PhysicsMessages {
         Post this message to a collision-object-component to apply the specified force on the collision object.
         The collision object must be dynamic.
     **/
-    static var ApplyForce(default,never) = new Message<{force:Vector3, position:Vector3}>("apply_force");
+    static var apply_force(default, never) = new Message<PhysicsMessageApplyForce>("apply_force");
 
     /**
         Reports a collision between two collision objects.
 
-        This message is broadcasted to every component of an instance that has a collision object,
-        when the collision object collides with another collision object.
-        For a script to take action when such a collision happens, it should check for this message in its `on_message` callback function.
+        This message is broadcasted to every component of an instance that has a collision object, when the collision
+        object collides with another collision object. For a script to take action when such a collision happens, it
+        should check for this message in its `on_message` callback function.
 
         This message only reports that a collision actually happened and will only be sent once per colliding pair and frame.
-        To retrieve more detailed information, check for the `ContactPointResponse` instead.
+        To retrieve more detailed information, check for the `contact_point_response` instead.
     **/
-    static var CollisionResponse(default,never) = new Message<{other_id:Hash, other_position:Vector3, group:Hash}>("collision_response");
+    static var collision_response(default, never) = new Message<PhysicsMessageCollisionResponse>("collision_response");
 
     /**
         Reports a contact point between two collision objects.
 
-        This message is broadcasted to every component of an instance that has a collision object,
-        when the collision object has contact points with respect to another collision object.
-        For a script to take action when such contact points occur, it should check for this message in its `on_message` callback function.
+        This message is broadcasted to every component of an instance that has a collision object, when the collision
+        object has contact points with respect to another collision object. For a script to take action when
+        such contact points occur, it should check for this message in its `on_message` callback function.
 
-        Since multiple contact points can occur for two colliding objects, this message can be sent multiple times in the same frame for the same two colliding objects.
-        To only be notified once when the collision occurs, check for the `CollisionResponse` message instead.
+        Since multiple contact points can occur for two colliding objects, this message can be sent multiple times in
+        the same frame for the same two colliding objects. To only be notified once when the collision occurs, check
+        for the `collision_response` message instead.
     **/
-    static var ContactPointResponse(default,never) = new Message<PhysicsMessageContactPointResponse>("contact_point_response");
-
-    /**
-        Requests the velocity of a collision object.
-
-        DEPRECATED! Read properties `linear_velocity` and `angular_velocity` with `Go.get` instead.
-
-        Post this message to a collision-object-component to retrieve its velocity.
-    **/
-    @:deprecated("Read properties `linear_velocity` and `angular_velocity` with `Go.get` instead")
-    static var RequestVelocity(default,never) = new Message<{linear_velocity:Vector3, angular_velocity:Vector3}>("request_velocity");
+    static var contact_point_response(default, never) = new Message<PhysicsMessageContactPointResponse>("contact_point_response");
 
     /**
         Reports a ray cast hit.
 
-        This message is sent back to the sender of a `Physics.ray_cast`, if the ray hit a collision object.
+        This message is sent back to the sender of a `ray_cast_request`, if the ray hit a collision object.
+        See `request_ray_cast` for examples of how to use it.
     **/
-    static var RayCastResponse(default,never) = new Message<PhysicsMessageRayCastResponse>("ray_cast_response");
+    static var ray_cast_response(default, never) = new Message<PhysicsMessageRayCastResponse>("ray_cast_response");
+
+    /**
+        (DEPRECATED) requests the velocity of a collision object.
+
+        Post this message to a collision-object-component to retrieve its velocity.
+    **/
+    @:deprecated("Read properties `linear_velocity` and `angular_velocity` with `Go.get` instead.")
+    static var request_velocity(default, never) = new Message<Void>("request_velocity");
 
     /**
         Reports interaction (enter/exit) between a trigger collision object and another collision object.
+
+        This message is broadcasted to every component of an instance that has a collision object, when the collision
+        object interacts with another collision object and one of them is a trigger.
+        For a script to take action when such an interaction happens, it
+        should check for this message in its `on_message` callback function.
+
+        This message only reports that an interaction actually happened and will only be sent once per colliding pair and frame.
+        To retrieve more detailed information, check for the `contact_point_response` instead.
     **/
-    static var TriggerResponse(default,never) = new Message<{other_id:Hash, enter:Bool, group:Hash}>("trigger_response");
+    static var trigger_response(default, never) = new Message<PhysicsMessageTriggerResponse>("trigger_response");
 
     /**
-        Reports the velocity of a collision object.
+        (DEPRECATED) reports the velocity of a collision object.
 
-        DEPRECATED! Read properties `linear_velocity` and `angular_velocity` with `Go.get` instead.
+        See `request_velocity` for examples on how to use it.
 
-        This message is sent back to the sender of a `RequestVelocity` message.
+        This message is sent back to the sender of a `request_velocity` message.
     **/
-    @:deprecated("Read properties `linear_velocity` and `angular_velocity` with `Go.get` instead")
-    static var VelocityResponse(default,never) = new Message<PhysicsMessageContactPointResponse>("velocity_response");
+    @:deprecated("Read properties `linear_velocity` and `angular_velocity` with `Go.get` instead.")
+    static var velocity_response(default, never) = new Message<PhysicsMessageVelocityResponse>("velocity_response");
 }
 
 /**
-    Data for the `PhysicsMessages.ContactPointResponse` message.
+    Data for the `PhysicsMessages.apply_force` message.
+**/
+typedef PhysicsMessageApplyForce = {
+    /**
+        The force to be applied on the collision object, measured in Newton.
+    **/
+    var force:Vector3;
+
+    /**
+        The position where the force should be applied (vector3).
+    **/
+    var position:Vector3;
+}
+
+/**
+    Data for the `PhysicsMessages.collision_response` message.
+**/
+typedef PhysicsMessageCollisionResponse = {
+    /**
+        The id of the instance the collision object collided with.
+    **/
+    var other_id:Hash;
+
+    /**
+        The world position of the instance the collision object collided with.
+    **/
+    var other_position:Vector3;
+
+    /**
+        The collision group of the other collision object.
+    **/
+    var group:Hash;
+}
+
+/**
+    Data for the `PhysicsMessages.contact_point_response` message.
 **/
 typedef PhysicsMessageContactPointResponse = {
     /**
@@ -123,7 +170,7 @@ typedef PhysicsMessageContactPointResponse = {
     var applied_impulse:Float;
 
     /**
-        Life time of the contact (not currently used).
+        Life time of the contact, *not currently used*
     **/
     var life_time:Float;
 
@@ -153,8 +200,9 @@ typedef PhysicsMessageContactPointResponse = {
     var group:Hash;
 }
 
+
 /**
-    Data for the `PhysicsMessages.RayCastResponse` message.
+    Data for the `PhysicsMessages.ray_cast_response` message.
 **/
 typedef PhysicsMessageRayCastResponse = {
     /**
@@ -186,4 +234,42 @@ typedef PhysicsMessageRayCastResponse = {
         Id supplied when the ray cast was requested.
     **/
     var request_id:Int;
+}
+
+
+/**
+    Data for the `PhysicsMessages.trigger_response` message.
+**/
+typedef PhysicsMessageTriggerResponse = {
+    /**
+        The id of the instance the collision object collided with.
+    **/
+    var other_id:Hash;
+
+    /**
+        If the interaction was an entry or not (exit).
+    **/
+    var enter:Bool;
+
+    /**
+        The collision group of the triggering object as a hashed name.
+    **/
+    var group:Hash;
+}
+
+
+/**
+    Data for the `PhysicsMessages.velocity_response` message.
+**/
+typedef PhysicsMessageVelocityResponse = {
+    /**
+        The linear velocity, i.e. translation, of the collision object in units/s (pixels/s).
+    **/
+    var linear_velocity:Vector3;
+
+    /**
+        The angular velocity, i.e. rotation, of the collision object in radians/s.
+        The velocity is measured as a rotation around the vector with a speed equivalent to the vector length.
+    **/
+    var angular_velocity:Vector3;
 }
