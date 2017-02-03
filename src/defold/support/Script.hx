@@ -14,17 +14,21 @@ class Script<T:{}> {
     /**
         Called when a script component is initialized.
 
-        This is a callback-function, which is called by the engine when a script component is finalized (destroyed).
-        It can be used to e.g. take some last action, report the finalization to other game object instances,
-        delete spawned objects or release user input focus.
+        This is a callback-function, which is called by the engine when a script component is initialized. It can be used
+        to set the initial state of the script.
+
+        @param self reference to the script state to be used for storing data
     **/
     function init(self:T):Void {}
 
     /**
         Called when a script component is finalized.
 
-        This is a callback-function, which is called by the engine when a script component is initialized.
-        It can be used to set the initial state of the script.
+        This is a callback-function, which is called by the engine when a script component is finalized (destroyed). It can
+        be used to e.g. take some last action, report the finalization to other game object instances, delete spawned objects
+        or release user input focus (see `release_input_focus`).
+
+        @param self reference to the script state to be used for storing data
     **/
     function final(self:T):Void  {}
 
@@ -33,6 +37,9 @@ class Script<T:{}> {
 
         This is a callback-function, which is called by the engine every frame to update the state of a script component.
         It can be used to perform any kind of game related tasks, e.g. moving the game object instance.
+
+        @param self reference to the script state to be used for storing data
+        @param dt the time-step of the frame update
     **/
     function update(self:T, dt:Float):Void {}
 
@@ -41,6 +48,14 @@ class Script<T:{}> {
 
         This is a callback-function, which is called by the engine whenever a message has been sent to the script component.
         It can be used to take action on the message, e.g. send a response back to the sender of the message.
+
+        The `message` parameter is a table containing the message data. If the message is sent from the engine, the
+        documentation of the message specifies which data is supplied.
+
+        @param self reference to the script state to be used for storing data
+        @param message_id id of the received message
+        @param message a table containing the message data
+        @param sender address of the sender
     **/
     function on_message<TMessage>(self:T, message_id:Message<TMessage>, message:TMessage, sender:Url):Void {}
 
@@ -49,142 +64,31 @@ class Script<T:{}> {
 
         This is a callback-function, which is called by the engine when user input is sent to the game object instance of the script.
         It can be used to take action on the input, e.g. move the instance according to the input.
+
+        For an instance to obtain user input, it must first acquire input focuse through the message `acquire_input_focus`.
+        See the documentation of that message for more information.
+
+        The `action` parameter is a table containing data about the input mapped to the `action_id`.
+        For mapped actions it specifies the value of the input and if it was just pressed or released.
+        Actions are mapped to input in an input_binding-file.
+
+        Mouse movement is specifically handled and uses `nil` as its `action_id`.
+        The `action` only contains positional parameters in this case, such as x and y of the pointer.
+
+        @param self reference to the script state to be used for storing data
+        @param action_id id of the received input action, as mapped in the input_binding-file
+        @param action a table containing the input data, see above for a description
+        @return optional boolean to signal if the input should be consumed (not passed on to others) or not, default is false
     **/
     function on_input(self:T, action_id:Hash, action:ScriptOnInputAction):Bool return false;
 
     /**
         Called when the script component is reloaded.
+
+        This is a callback-function, which is called by the engine when the script component is reloaded, e.g. from the editor.
+        It can be used for live development, e.g. to tweak constants or set up the state properly for the instance.
+
+        @param self reference to the script state to be used for storing data
     **/
     function on_reload(self:T):Void {}
-}
-
-/**
-    Type of the `action` argument of the `Script.on_input` method.
-**/
-typedef ScriptOnInputAction = {
-    /**
-        The amount of input given by the user.
-        This is usually 1 for buttons and 0-1 for analogue inputs.
-        This is not present for mouse movement.
-    **/
-    var value:Float;
-
-    /**
-        If the input was pressed this frame.
-        This is not present for mouse movement.
-    **/
-    var pressed:Bool;
-
-    /**
-        If the input was released this frame.
-        This is not present for mouse movement.
-    **/
-    var released:Bool;
-
-    /**
-        If the input was repeated this frame.
-        This is similar to how a key on a keyboard is repeated when you hold it down.
-        This is not present for mouse movement.
-    **/
-    var repeated:Bool;
-
-    /**
-        The x value of a pointer device, if present.
-    **/
-    var x:Float;
-
-    /**
-        The y value of a pointer device, if present.
-    **/
-    var y:Float;
-
-    /**
-        The screen space x value of a pointer device, if present.
-    **/
-    var screen_x:Float;
-
-    /**
-        The screen space y value of a pointer device, if present.
-    **/
-    var screen_y:Float;
-
-    /**
-        The change in x value of a pointer device, if present.
-    **/
-    var dx:Float;
-
-    /**
-        The change in y value of a pointer device, if present.
-    **/
-    var dy:Float;
-
-    /**
-        The change in screen space x value of a pointer device, if present.
-    **/
-    var screen_dx:Float;
-
-    /**
-        The change in screen space y value of a pointer device, if present.
-    **/
-    var screen_dy:Float;
-
-    /**
-        List of touch input, one element per finger, if present.
-    **/
-    var touch:lua.Table<Int,ScriptOnInputActionTouch>;
-}
-
-/**
-    Type of the `ScriptOnInputAction.touch` field.
-**/
-typedef ScriptOnInputActionTouch = {
-    /**
-        True if the finger was pressed this frame.
-    **/
-    var pressed:Bool;
-
-    /**
-        True if the finger was released this frame.
-    **/
-    var released:Bool;
-
-    /**
-        Number of taps, one for single, two for double-tap, etc.
-    **/
-    var tap_count:Int;
-
-    /**
-        The x touch location.
-    **/
-    var x:Float;
-
-    /**
-        The y touch location.
-    **/
-    var y:Float;
-
-    /**
-        The change in x value.
-    **/
-    var dx:Float;
-
-    /**
-        The change in y value.
-    **/
-    var dy:Float;
-
-    /**
-        Accelerometer x value (if present).
-    **/
-    var acc_x:Float;
-
-    /**
-        Accelerometer y value (if present).
-    **/
-    var acc_y:Float;
-
-    /**
-        Accelerometer z value (if present).
-    **/
-    var acc_z:Float;
 }

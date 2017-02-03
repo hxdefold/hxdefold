@@ -14,25 +14,37 @@ class RenderScript<T:{}> {
     /**
         Called when a script component is initialized.
 
-        This is a callback-function, which is called by the engine when a render-script component is finalized (destroyed).
-        It can be used to e.g. take some last action, report the finalization to other game object instances,
-        delete spawned objects or release user input focus.
+        This is a callback-function, which is called by the engine when a script component is initialized. It can be used
+        to set the initial state of the script.
+
+        @param self reference to the script state to be used for storing data
     **/
     function init(self:T) {}
 
     /**
-        Called every frame to update the render-script component.
+        Called every frame to update the script component.
 
-        This is a callback-function, which is called by the engine every frame to update the state of a render-script component.
+        This is a callback-function, which is called by the engine every frame to update the state of a script component.
         It can be used to perform any kind of game related tasks, e.g. moving the game object instance.
+
+        @param self reference to the script state to be used for storing data
+        @param dt the time-step of the frame update
     **/
     function update(self:T, dt:Float) {}
 
     /**
-        Called when a message has been sent to the render-script component.
+        Called when a message has been sent to the script component.
 
-        This is a callback-function, which is called by the engine whenever a message has been sent to the render-script component.
+        This is a callback-function, which is called by the engine whenever a message has been sent to the script component.
         It can be used to take action on the message, e.g. send a response back to the sender of the message.
+
+        The `message` parameter is a table containing the message data. If the message is sent from the engine, the
+        documentation of the message specifies which data is supplied.
+
+        @param self reference to the script state to be used for storing data
+        @param message_id id of the received message
+        @param message a table containing the message data
+        @param sender address of the sender
     **/
     function on_message<TMessage>(self:T, message_id:Message<TMessage>, message:TMessage, sender:Url):Void {}
 }
