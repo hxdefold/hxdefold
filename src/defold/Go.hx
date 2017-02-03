@@ -388,12 +388,25 @@ typedef GoMessageTransformResponse = {
 /**
     Possible types of a game object property.
 **/
-typedef GoProperty = EitherType<Float,EitherType<Hash,EitherType<Url,EitherType<Vector3,EitherType<Vector4,EitherType<Quaternion,Bool>>>>>>;
+abstract GoProperty(Dynamic)
+    from Float to Float
+    from Hash to Hash
+    from Url to Url
+    from Vector3 to Vector3
+    from Vector4 to Vector4
+    from Quaternion to Quaternion
+    from Bool to Bool
+    {}
 
 /**
     Possible types of game object property suitable for animation.
 **/
-typedef GoAnimatedProperty = EitherType<Vector3,EitherType<Vector4,EitherType<Quaternion,Float>>>;
+abstract GoAnimatedProperty(Dynamic)
+    from Vector3 to Vector3
+    from Vector4 to Vector4
+    from Quaternion to Quaternion
+    from Float to Float
+    {}
 
 /**
     Game object easing constants.
