@@ -206,11 +206,11 @@ class ScriptMacro {
 
     static function getPropertyType(type:Type, pos:Position):PropertyType {
         return switch (type.follow()) {
-            case TInst(_.get() => {pack: ["defold"], name: "Hash"}, _): PHash;
-            case TInst(_.get() => {pack: ["defold"], name: "Url"}, _): PUrl;
-            case TAbstract(_.get() => {pack: ["defold"], name: "Vector3"}, _): PVector3;
-            case TAbstract(_.get() => {pack: ["defold"], name: "Vector4"}, _): PVector4;
-            case TInst(_.get() => {pack: ["defold"], name: "Quaternion"}, _): PQuaternion;
+            case TInst(_.get() => {pack: ["defold", "types"], name: "Hash"}, _): PHash;
+            case TInst(_.get() => {pack: ["defold", "types"], name: "Url"}, _): PUrl;
+            case TAbstract(_.get() => {pack: ["defold", "types"], name: "Vector3"}, _): PVector3;
+            case TAbstract(_.get() => {pack: ["defold", "types"], name: "Vector4"}, _): PVector4;
+            case TInst(_.get() => {pack: ["defold", "types"], name: "Quaternion"}, _): PQuaternion;
             case TAbstract(_.get() => {pack: [], name: "Int"}, _): PInt;
             case TAbstract(_.get() => {pack: [], name: "Float"}, _): PFloat;
             case TAbstract(_.get() => {pack: [], name: "Bool"}, _): PBool;
