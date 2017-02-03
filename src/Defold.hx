@@ -14,7 +14,7 @@ extern class Defold {
         @param s string to hash
         @return a hashed string
     **/
-    static function hash(s:String):Hash;
+    @:pure static function hash(s:String):Hash;
 
     /**
         Get hex representation of a hash value as a string.
@@ -24,7 +24,7 @@ extern class Defold {
         @param h hash value to get hex string for
         @return hex representation
     **/
-    static function hash_to_hex(h:Hash):String;
+    @:pure static function hash_to_hex(h:Hash):String;
 
     /**
         Pretty printing of lua values.
