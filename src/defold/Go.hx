@@ -2,6 +2,7 @@ package defold;
 
 import haxe.extern.EitherType;
 import defold.types.*;
+import defold.types.Property;
 
 /**
     Functions, core hooks, messages and constants for manipulation of
@@ -37,7 +38,7 @@ extern class Go {
         @param complete_function function with parameters (self, url, property) to call when the animation has completed
     **/
     // TODO: easing is actually not a Vector3 but any vector created by Vmath.vector and we don't have a type for it right now.
-    static function animate<T>(url:HashOrStringOrUrl, property:HashOrString, playback:GoPlayback, to:GoAnimatedProperty, easing:EitherType<GoEasing,Vector3>, duration:Float, ?delay:Float, ?complete_function:T->Url->GoAnimatedProperty->Void):Void;
+    static function animate<TSelf,TProperty>(url:HashOrStringOrUrl, property:Property<TProperty>, playback:GoPlayback, to:TProperty, easing:EitherType<GoEasing,Vector3>, duration:Float, ?delay:Float, ?complete_function:TSelf->Url->TProperty->Void):Void;
 
     /**
         Cancels all animations of the named property of the specified game object or component.
@@ -77,7 +78,7 @@ extern class Go {
         @param id id of the property to retrieve
         @return the value of the specified property
     **/
-    static function get(url:HashOrStringOrUrl, id:HashOrString):GoProperty;
+    static function get<T>(url:HashOrStringOrUrl, id:Property<T>):T;
 
     /**
         Gets the id of an instance.
@@ -183,7 +184,7 @@ extern class Go {
         @param id id of the property to set
         @param value the value to set
     **/
-    static function set(url:HashOrStringOrUrl, id:HashOrString, value:GoProperty):Void;
+    static function set<T>(url:HashOrStringOrUrl, id:Property<T>, value:T):Void;
 
     /**
         Sets the position of the instance.
@@ -658,4 +659,40 @@ abstract GoAnimatedProperty(Dynamic)
         Once ping pong.
     **/
     var PLAYBACK_ONCE_PINGPONG;
+}
+
+
+/**
+    Properties related to the `Go` module.
+**/
+@:publicFields
+class GoProperties {
+    /**
+        The rotation of the game object expressed in euler angles.
+        Euler angles are specified in degrees.
+    **/
+    static var euler(default, never) = new Vector3Property("euler");
+
+    /**
+        The position of the game object.
+    **/
+    static var position(default, never) = new Vector3Property("position");
+
+    /**
+        The rotation of the game object.
+    **/
+    static var rotation(default, never) = new QuaternionProperty("rotation");
+
+    /**
+        The non-uniform scale of the game object.
+    **/
+    static var scale(default, never) = new Vector3Property("scale");
+
+    /**
+        The uniform scale of the game object.
+
+        This is a the same "scale" property, but typed as Float, so one could
+        set/animate the uniform scale value.
+    **/
+    static var scale_uniform(default, never) = new Property<Float>("scale");
 }
