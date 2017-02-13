@@ -22,12 +22,15 @@ extern class Defold {
         The returned string is always padded with leading zeros.
 
         @param h hash value to get hex string for
-        @return hex representation
+        @return hex representation of the hash
     **/
     @:pure static function hash_to_hex(h:Hash):String;
 
     /**
-        Pretty printing of lua values.
+        Pretty printing of Lua values.
+        
+        This function prints Lua values in a manner similar to `lua.Lua.print`, but will also recurse into tables
+        and pretty print them. There is a limit to how deep the function will recurse.
 
         @param v value to print
     **/

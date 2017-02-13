@@ -4,8 +4,6 @@ import defold.types.*;
 
 /**
     Functions and messages used to manipulate tile map components.
-
-    See `TilemapMessages` for related messages.
 **/
 @:native("_G.tilemap")
 extern class Tilemap {
@@ -19,7 +17,7 @@ extern class Tilemap {
 
         @param url the tile map
     **/
-    static function get_bounds(url:UrlOrString):TilemapBounds;
+    static function get_bounds(url:HashOrStringOrUrl):TilemapBounds;
 
     /**
         Get the tile set at the specified position in the tilemap.
@@ -34,7 +32,7 @@ extern class Tilemap {
         @param y y coordinate of the tile
         @return index of the tile
     **/
-    static function get_tile(url:UrlOrString, name:HashOrString, x:Int, y:Int):Int;
+    static function get_tile(url:HashOrStringOrUrl, name:HashOrString, x:Int, y:Int):Int;
 
     /**
         Reset a shader constant for a tile map.
@@ -46,7 +44,7 @@ extern class Tilemap {
         @param url the tile map that should have a constant reset
         @param name of the constant
     **/
-    static function reset_constant(url:UrlOrString, name:HashOrString):Void;
+    static function reset_constant(url:HashOrStringOrUrl, name:HashOrString):Void;
 
     /**
         Set a shader constant for a tile map.
@@ -60,7 +58,7 @@ extern class Tilemap {
         @param name of the constant
         @param value of the constant
     **/
-    static function set_constant(url:UrlOrString, name:HashOrString, value:Vector4):Void;
+    static function set_constant(url:HashOrStringOrUrl, name:HashOrString, value:Vector4):Void;
 
     /**
         Set a tile in a tile map.
@@ -93,21 +91,7 @@ extern class Tilemap {
         @param h_flip if the tile should be horizontally flipped
         @param v_flip if the tile should be vertically flipped
     **/
-    static function set_tile(url:UrlOrString, name:HashOrString, x:Int, y:Int, new_tile:Int, ?h_flip:Bool, ?v_flip:Bool):Void;
-}
-
-/**
-    Messages related to the `Tilemap` module.
-**/
-@:publicFields
-class TilemapMessages {
-    /**
-        (DEPRECATED) changes a tile in a tile map.
-
-        Send this message to a tile map component to change the tile in one of its cells.
-    **/
-    @:deprecated("Use `Tilemap.set_tile` instead.")
-    static var set_tile(default, never) = new Message<TilemapMessageSetTile>("set_tile");
+    static function set_tile(url:HashOrStringOrUrl, name:HashOrString, x:Int, y:Int, new_tile:Int, ?h_flip:Bool, ?v_flip:Bool):Void;
 }
 
 /**
@@ -133,35 +117,4 @@ class TilemapMessages {
         number of rows in the tile map
     **/
     var h:Int;
-}
-
-/**
-    Data for the `TilemapMessages.set_tile` message.
-**/
-@:deprecated("Use Tilemap.set_tile instead")
-typedef TilemapMessageSetTile = {
-    /**
-        Id of the layer for which to change a tile
-    **/
-    var layer_id:Hash;
-
-    /**
-        The position of the cell for which to change the tile (world space).
-    **/
-    var position:Vector3;
-
-    /**
-        Index of the tile to change to in the tile set, 1 for the first tile and 0 to clear the tile (0 by default).
-    **/
-    @:optional var tile:Int;
-
-    /**
-        Horizontal offset from the supplied position to the requested cell (grid space, 0 by default).
-    **/
-    @:optional var dx:Int;
-
-    /**
-        Vertical offset from the supplied position to the requested cell (grid space, 0 by default).
-    **/
-    @:optional var dy:Int;
 }

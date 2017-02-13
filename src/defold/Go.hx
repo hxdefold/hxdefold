@@ -166,17 +166,6 @@ extern class Go {
     static function get_world_scale(?id:HashOrStringOrUrl):Float;
 
     /**
-        Constructs a ray in world space from a position in screen space.
-
-        Do not use this function, WIP!
-
-        @param x x-coordinate of the screen space position
-        @param y y-coordinate of the screen space position
-        @return position and direction of the ray in world-space
-    **/
-    static function screen_ray(x:Float, y:Float):GoScreenRay;
-
-    /**
         Sets a named property of the specified game object or component.
 
         @param url url of the game object or component having the property
@@ -218,21 +207,6 @@ extern class Go {
         @param id optional id of the instance to get the scale for, by default the instance of the calling script
     **/
     static function set_scale(rotation:EitherType<Float,Vector3>, ?id:HashOrStringOrUrl):Void;
-}
-
-/**
-    Return value of `Go.screen_ray`.
-**/
-@:multiReturn extern class GoScreenRay {
-    /**
-        Position of the ray in world-space.
-    **/
-    var position:Vector3;
-
-    /**
-        Direction of the ray in world-space.
-    **/
-    var direction:Vector3;
 }
 
 /**
@@ -301,18 +275,6 @@ class GoMessages {
     static var release_input_focus(default, never) = new Message<Void>("release_input_focus");
 
     /**
-        (DEPRECATED) requests the transform from an instance.
-
-        *DEPRECATED!* See the functions `go.get_position`, `go.get_rotation`, etc. for a simpler way to obtain the transform of another game object instance.
-
-        Send this message to an instance to request its transform (position, rotation, scale).
-        The sending script will receive the answer as a `transform_response`-message
-        at a later time.
-    **/
-    @:deprecated("*DEPRECATED!* See the functions `go.get_position`, `go.get_rotation`, etc. for a simpler way to obtain the transform of another game object instance.")
-    static var request_transform(default, never) = new Message<Void>("request_transform");
-
-    /**
         Sets the parent of the receiving instance.
 
         When this message is sent to an instance, it sets the parent of that instance. This means that the instance will exist
@@ -321,17 +283,6 @@ class GoMessages {
         the parent of its instance.
     **/
     static var set_parent(default, never) = new Message<GoMessageSetParent>("set_parent");
-
-    /**
-        (DEPRECATED) reports back the transform of an instance.
-
-        *DEPRECATED!* See the functions `go.get_position`, `go.get_rotation`, etc. for a simpler way to obtain the transform of another game object instance.
-        The response a script receives after it has requested the transform from an instance
-        using the `request_transform`-message. See the description of that message
-        for a complete example on how to use it.
-    **/
-    @:deprecated("*DEPRECATED!* See the functions `go.get_position`, `go.get_rotation`, etc. for a simpler way to obtain the transform of another game object instance.")
-    static var transform_response(default, never) = new Message<GoMessageTransformResponse>("transform_response");
 }
 
 /**
@@ -347,42 +298,6 @@ typedef GoMessageSetParent = {
         if the world transform of the instance should be preserved when changing spaces, 0 for false and 1 for true
     **/
     @:optional var keep_world_transform:Int;
-}
-
-/**
-    Data for the `GoMessages.transform_response` message.
-**/
-@:deprecated("*DEPRECATED!* See the functions `go.get_position`, `go.get_rotation`, etc. for a simpler way to obtain the transform of another game object instance.")
-typedef GoMessageTransformResponse = {
-    /**
-        local position of the instance
-    **/
-    var position:Vector3;
-
-    /**
-        local rotation of the instance
-    **/
-    var rotation:Quaternion;
-
-    /**
-        local scale of the instance
-    **/
-    var scale:Float;
-
-    /**
-        world position of the instance
-    **/
-    var world_position:Vector3;
-
-    /**
-        world rotation of the instancee
-    **/
-    var world_rotation:Quaternion;
-
-    /**
-        world scale of the instance
-    **/
-    var world_scale:Float;
 }
 
 /**

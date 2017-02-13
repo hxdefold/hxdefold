@@ -14,10 +14,10 @@ extern class Vmath {
 
         `q* = [w, -v]`
 
-        @param q quaternion of which to calculate the conjugate
+        @param q1 quaternion of which to calculate the conjugate
         @return the conjugate
     **/
-    static function conj(q:Quaternion):Quaternion;
+    static function conj(q1:Quaternion):Quaternion;
 
     /**
         Calculates the cross-product of two vectors.
@@ -66,10 +66,10 @@ extern class Vmath {
         The specialized inverse for ortho-normalized matrices is much faster
         than the general inverse.
 
-        @param m matrix to invert
+        @param m1 matrix to invert
         @return inverse of the supplied matrix
     **/
-    static function inv(m:Matrix4):Matrix4;
+    static function inv(m1:Matrix4):Matrix4;
 
     /**
         Calculates the vector length.
@@ -132,10 +132,10 @@ extern class Vmath {
         corresponding values from the supplied matrix. I.e.
         the function creates a copy of the given matrix.
 
-        @param m existing matrix
+        @param m1 existing matrix
         @return identity or copy matrix
     **/
-    static function matrix4(?m:Matrix4):Matrix4;
+    static function matrix4(?m1:Matrix4):Matrix4;
 
     /**
         Creates a matrix from an axis and an angle.
@@ -257,11 +257,11 @@ extern class Vmath {
         The length of the vector must be above 0, otherwise a
         division-by-zero will occur.
 
-        @param v vector to normalize
+        @param v1 vector to normalize
         @return new normalized vector
     **/
-    @:overload(function(v:Vector4):Vector4 {})
-    static function normalize(v:Vector3):Vector3;
+    @:overload(function(v1:Vector4):Vector4 {})
+    static function normalize(v1:Vector3):Vector3;
 
     /**
         Calculates the inverse of an ortho-normal matrix..
@@ -273,10 +273,10 @@ extern class Vmath {
         For matrices that are not ortho-normal
         use the general inverse `Vmath.inv` instead.
 
-        @param m ortho-normalized matrix to invert
+        @param m1 ortho-normalized matrix to invert
         @return inverse of the supplied matrix
     **/
-    static function ortho_inv(m:Matrix4):Matrix4;
+    static function ortho_inv(m1:Matrix4):Matrix4;
 
     /**
         Projects a vector onto another vector.
@@ -306,14 +306,14 @@ extern class Vmath {
         @param z z coordinate
         @param w w coordinate
     **/
-    @:overload(function(?q:Quaternion):Quaternion {})
+    @:overload(function(?q1:Quaternion):Quaternion {})
     static function quat(x:Float, y:Float, z:Float, w:Float):Quaternion;
 
     /**
-        Creates a quaternion to rotate around a unit-length vector.
+        Creates a quaternion to rotate around a unit vector.
 
         The resulting quaternion describes a rotation of `angle`
-        radians around the axis described by the unit length vector `v`.
+        radians around the axis described by the unit vector `v`.
 
         @param v axis
         @param angle angle
@@ -322,11 +322,11 @@ extern class Vmath {
     static function quat_axis_angle(v:Vector3, angle:Float):Quaternion;
 
     /**
-        Creates a quaternion from three base unit length vectors.
+        Creates a quaternion from three base unit vectors.
 
         The resulting quaternion describes the rotation from the
         identity quaternion (no rotation) to the coordinate system
-        as described by the given x, y and z base unit length vectors.
+        as described by the given x, y and z base unit vectors.
 
         @param x x base vector
         @param y y base vector
@@ -336,7 +336,7 @@ extern class Vmath {
     static function quat_basis(x:Vector3, y:Vector3, z:Vector3):Quaternion;
 
     /**
-        Creates a quaternion to rotate between two unit length vectors.
+        Creates a quaternion to rotate between two unit vectors.
 
         The resulting quaternion describes the rotation that,
         if applied to the first vector, would rotate the first

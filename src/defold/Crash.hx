@@ -29,7 +29,7 @@ extern class Crash {
         Get all loaded modules from when the crash occured.
 
         The function returns a table containing entries with sub-tables that
-        have 'name' and 'address' set for all loaded modules.
+        have fields 'name' and 'address' set for all loaded modules.
 
         @param handle crash dump handle
         @return modules module table

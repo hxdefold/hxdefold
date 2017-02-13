@@ -26,5 +26,5 @@ extern class Factory {
         @param scale the scale of the new game object (must be greater than 0), the scale of the game object containing the factory is used by default
         @return the global id of the spawned game object
     **/
-    static function create(url:UrlOrString, ?position:Vector3, ?rotation:Quaternion, ?properties:lua.Table<Hash,GoProperty>, ?scale:EitherType<Float,Vector3>):Hash;
+    static function create(url:HashOrStringOrUrl, ?position:Vector3, ?rotation:Quaternion, ?properties:lua.Table<Hash,GoProperty>, ?scale:EitherType<Float,Vector3>):Hash;
 }

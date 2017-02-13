@@ -10,9 +10,13 @@ extern class Facebook {
     /**
         Get the current Facebook access token.
 
-        @return the access token
+        This function returns the currently stored access token after a previous
+        sucessful login. If it returns null no access token exists and you need
+        to perform a login to get the wanted permissions.
+
+        @return the access token or null if the user is not logged in
     **/
-    static function access_token():String;
+    static function access_token():Null<String>;
 
     /**
         Disable event usage with Facebook Analytics.
@@ -47,7 +51,7 @@ extern class Facebook {
 
         *NOTE* that this function cannot be used to request read permissions.
         If the application requires both publish and read permissions, individual
-        calls to both login_with_publish_permissions and login_with_read_permissions
+        calls to both `login_with_publish_permissions` and `login_with_read_permissions`
         has to be made.
 
         A comprehensive list of permissions can be found in the <a href="https://developers.facebook.com/docs/facebook-login/permissions">Facebook documentation</a>,
@@ -98,9 +102,8 @@ extern class Facebook {
         This function will post an event to Facebook Analytics where it can be used
         in the Facebook Insights system.
 
-        @param event An event can either be one of the predefined
-        constants below or a text which can be used to define a custom event that is
-        registered with Facebook Analytics.
+        @param event An event can either be one of the predefined constants
+        or a text which can be used to define a custom event that is registered with Facebook Analytics.
         @param value_to_sum A numeric value for the event. This should
         represent the value of the event, such as the level achieved, price for an
         item or number of orcs killed.
@@ -125,7 +128,7 @@ extern class Facebook {
     static function show_dialog<T,TParam,TResult>(dialog:FacebookDialogType<TParam,TResult>, param:TParam, callback:T->TResult->Bool->Void):Void; // TODO: callback types
 }
 
-// these are most probably messed up...
+// these are most probably messed up..
 @:enum abstract FacebookDialogType<TParam,TResult>(String) {
     /**
         Shows a Game Request dialog. Game Requests allows players to invite their friends to play a game.
@@ -219,7 +222,7 @@ typedef FacebookLoginData = {
 @:native("_G.facebook")
 @:enum extern abstract FacebookEvent(String) {
     /**
-        Log this event when the user has entered their payment info..
+        Log this event when the user has entered their payment info.
     **/
     var EVENT_ADDED_PAYMENT_INFO;
 
@@ -238,12 +241,12 @@ typedef FacebookLoginData = {
     var EVENT_ADDED_TO_WISHLIST;
 
     /**
-        Log this event when a user has completed registration with the app..
+        Log this event when a user has completed registration with the app.
     **/
     var EVENT_COMPLETED_REGISTRATION;
 
     /**
-        Log this event when the user has completed a tutorial in the app..
+        Log this event when the user has completed a tutorial in the app.
     **/
     var EVENT_COMPLETED_TUTORIAL;
 
@@ -256,26 +259,26 @@ typedef FacebookLoginData = {
     var EVENT_INITIATED_CHECKOUT;
 
     /**
-        Log this event when the user has completed a purchase..
+        Log this event when the user has completed a purchase.
     **/
     var EVENT_PURCHASED;
 
     /**
-        Log this event when the user has rated an item in the app. The.
+        Log this event when the user has rated an item in the app.
 
-        value_to_sum  passed to facebook.post_event should be the numeric rating.
+        The value_to_sum  passed to facebook.post_event should be the numeric rating.
     **/
     var EVENT_RATED;
 
     /**
-        Log this event when a user has performed a search within the app..
+        Log this event when a user has performed a search within the app.
     **/
     var EVENT_SEARCHED;
 
     /**
-        Log this event when the user has spent app credits. The value_to_sum.
-
-        passed to facebook.post_event should be the number of credits spent.
+        Log this event when the user has spent app credits.
+        
+        The value_to_sum passed to facebook.post_event should be the number of credits spent.
 
         *NOTE!* This event is currently an undocumented event in the Facebook
         SDK.
@@ -283,17 +286,17 @@ typedef FacebookLoginData = {
     var EVENT_SPENT_CREDITS;
 
     /**
-        Log this event when measuring the time between user sessions..
+        Log this event when measuring the time between user sessions.
     **/
     var EVENT_TIME_BETWEEN_SESSIONS;
 
     /**
-        Log this event when the user has unlocked an achievement in the app..
+        Log this event when the user has unlocked an achievement in the app.
     **/
     var EVENT_UNLOCKED_ACHIEVEMENT;
 
     /**
-        Log this event when a user has viewed a form of content in the app..
+        Log this event when a user has viewed a form of content in the app.
     **/
     var EVENT_VIEWED_CONTENT;
 
@@ -310,84 +313,91 @@ typedef FacebookLoginData = {
 @:native("_G.facebook")
 @:enum extern abstract FacebookParam(String) {
     /**
-        Parameter key used to specify an ID for the specific piece of content.
+        Parameter key used to specify an ID for the content being logged about.
 
-        being logged about. Could be an EAN, article identifier, etc., depending
-         on the nature of the app.
+        The parameter key could be an EAN, article identifier, etc., depending
+        on the nature of the app.
     **/
     var PARAM_CONTENT_ID;
 
     /**
-        Parameter key used to specify a generic content type/family for the logged.
+        Parameter key used to specify a generic content type/family for the logged event.
 
-        event, e.g. "music", "photo", "video". Options to use will vary based upon
-         what the app is all about.
+        The key is an arbitrary type/family (e.g. "music", "photo", "video") depending
+        on the nature of the app.
     **/
     var PARAM_CONTENT_TYPE;
 
     /**
-        Parameter key used to specify currency used with logged event. E.g. "USD",.
+        Parameter key used to specify currency used with logged event.
 
-        "EUR", "GBP". See ISO-4217 for specific values.
+        Use a currency value key, e.g. "USD", "EUR", "GBP" etc.
+        See ISO-4217 for specific values.
     **/
     var PARAM_CURRENCY;
 
     /**
-        Parameter key used to specify a description appropriate to the event being.
-
-        logged. E.g., the name of the achievement unlocked in the
-         facebook.EVENT_UNLOCKED_ACHIEVEMENT event.
+        Parameter key used to specify a description appropriate to the event being logged.
+        
+        Use this for app specific event description, for instance the name of the achievement
+        unlocked in the facebook.EVENT_UNLOCKED_ACHIEVEMENT event.
     **/
     var PARAM_DESCRIPTION;
 
     /**
-        Parameter key used to specify the level achieved..
+        Parameter key used to specify the level achieved.
     **/
     var PARAM_LEVEL;
 
     /**
-        Parameter key used to specify the maximum rating available for the.
+        Parameter key used to specify the maximum rating available.
 
-        facebook.EVENT_RATED event. E.g., "5" or "10".
+        Set to specify the max rating available for the facebook.EVENT_RATED event.
+        E.g., "5" or "10".
     **/
     var PARAM_MAX_RATING_VALUE;
 
     /**
-        Parameter key used to specify how many items are being processed for an.
+        Parameter key used to specify how many items are being processed.
 
+        Set to specify the number of items being processed for an
         facebook.EVENT_INITIATED_CHECKOUT or facebook.EVENT_PURCHASED event.
     **/
     var PARAM_NUM_ITEMS;
 
     /**
-        Parameter key used to specify whether payment info is available for the.
+        Parameter key used to specify whether payment info is available.
 
+        Set to specify if payment info is available for the
         facebook.EVENT_INITIATED_CHECKOUT event.
     **/
     var PARAM_PAYMENT_INFO_AVAILABLE;
 
     /**
-        Parameter key used to specify method user has used to register for the.
+        Parameter key used to specify method user has used to register for the app.
 
-        app, e.g., "Facebook", "email", "Twitter", etc.
+        Set to specify what registation method a user used for the app, e.g.
+        "Facebook", "email", "Twitter", etc.
     **/
     var PARAM_REGISTRATION_METHOD;
 
     /**
-        Parameter key used to specify the string provided by the user for a search.
+        Parameter key used to specify user search string.
 
+        Set this to the the string that the user provided for a search
         operation.
     **/
     var PARAM_SEARCH_STRING;
 
     /**
-        Parameter key used to specify source application package..
+        Parameter key used to specify source application package.
     **/
     var PARAM_SOURCE_APPLICATION;
 
     /**
-        Parameter key used to specify whether the activity being logged about was.
+        Parameter key used to specify activity success.
 
+        Set this key to indicate whether the activity being logged about was
         successful or not.
     **/
     var PARAM_SUCCESS;
@@ -399,29 +409,29 @@ typedef FacebookLoginData = {
 @:native("_G.facebook")
 @:enum extern abstract FacebookAudience(Int) {
     /**
-        Publish permission to reach everyone..
+        Publish permission to reach everyone.
     **/
     var AUDIENCE_EVERYONE;
 
     /**
-        Publish permission to reach user friends..
+        Publish permission to reach user friends.
     **/
     var AUDIENCE_FRIENDS;
 
     /**
-        Publish permission to reach no audience..
+        Publish permission to reach no audience.
     **/
     var AUDIENCE_NONE;
 
     /**
-        Publish permission to reach only me (private to current user)..
+        Publish permission to reach only me (private to current user).
     **/
     var AUDIENCE_ONLYME;
 }
 
 
 @:native("_G.facebook")
-@:enum extern abstract FacebookApprequestActionType(String) {
+@:enum extern abstract FacebookApprequestActionType(Int) {
     /**
         Game Request action type "askfor" for "apprequests" dialog.
     **/

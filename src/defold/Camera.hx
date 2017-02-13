@@ -54,7 +54,7 @@ typedef CameraMessageSetCamera = {
     var aspect_ratio:Float;
 
     /**
-        Field of view of the lens, measured as the angle between the right and left edge (radians)
+        Field of view of the lens, measured as the angle in radians between the right and left edge
     **/
     var fov:Float;
 

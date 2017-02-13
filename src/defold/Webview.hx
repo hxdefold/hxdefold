@@ -7,9 +7,13 @@ package defold;
 @:native("_G.webview")
 extern class Webview {
     /**
-        Creates a webview instance. It that can show html pages as well as evaluate javascript. It remains hidden until the first call.
+        Creates a webview instance.
 
-        On iOS, the callback will never get a `Webview.CALLBACK_RESULT_EVAL_ERROR`, due to the iOS SDK implementation
+        It can show HTML pages as well as evaluate Javascript.
+        The view remains hidden until the first call.
+
+        On iOS, the callback will never get a webview.CALLBACK_RESULT_EVAL_ERROR,
+        due to the iOS SDK implementation.
 
         @param callback A callback which receives info about finished requests taking the following parameters
          * `self` - the calling script
