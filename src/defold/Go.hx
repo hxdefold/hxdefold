@@ -68,6 +68,7 @@ extern class Go {
 
         @param ids table with values of instance ids (hashes) to be deleted
     **/
+    @:overload(function(?ids:lua.Table<Hash,Hash>):Void {})
     static function delete_all(?ids:lua.Table<Int,Hash>):Void;
 
     /**
@@ -206,7 +207,7 @@ extern class Go {
         @param scale vector or uniform scale factor, must be greater than 0
         @param id optional id of the instance to get the scale for, by default the instance of the calling script
     **/
-    static function set_scale(rotation:EitherType<Float,Vector3>, ?id:HashOrStringOrUrl):Void;
+    static function set_scale(scale:EitherType<Float,Vector3>, ?id:HashOrStringOrUrl):Void;
 }
 
 /**
