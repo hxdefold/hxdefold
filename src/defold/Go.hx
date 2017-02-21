@@ -243,6 +243,7 @@ class GoMessages {
            * Collection Proxy
            * Collision Object
            * Gui
+           * Label
            * Spine Model
            * Sprite
            * Tile Grid
