@@ -54,7 +54,7 @@ extern class Webview {
     static function is_visible(webview_id:WebviewId):Int;
 
     /**
-        Open a page uring an url.
+        Open a page using an url.
 
         Opens a web page in the webview, using an url.
         Once the request is done, the callback (registered in `Webview.create`) is invoked.

@@ -81,11 +81,11 @@ extern class Go {
     static function get(url:HashOrStringOrUrl, id:HashOrString):GoProperty;
 
     /**
-        Gets the id of an instance.
+        Returns or constructs a game object instance identifier. The instance id is a hash
+        of the absolute path to the instance.
 
-        The instance id is a hash of the absolute path.
         If `path` is specified, it can either be absolute or relative to the instance of the calling script.
-        If `path` is not specified, the id of the instance of the calling script will be returned. See the examples below for more information.
+        If `path` is not specified, the id of the instance the script is attached to will be returned.
 
         @param path path of the instance for which to return the id
         @return instance id
@@ -115,26 +115,26 @@ extern class Go {
     static function get_rotation(?id:HashOrStringOrUrl):Quaternion;
 
     /**
-        Gets the uniform scale factor of the instance.
-
-        The uniform scale is relative the parent (if any).
-        Use `Go.get_world_scale` to retrieve the global world scale factor.
-
-        @param id optional id of the instance to get the scale for, by default the instance of the calling script
-        @return uniform instance scale factor
-    **/
-    static function get_scale(?id:HashOrStringOrUrl):Float;
-
-    /**
         Gets the 3D scale factor of the instance.
 
         The scale is relative the parent (if any).
-        Use `Go.get_world_scale` to retrieve the global world scale factor.
+        Use `Go.get_world_scale` to retrieve the global world 3D scale factor.
 
         @param id optional id of the instance to get the scale for, by default the instance of the calling script
-        @return scale factor
+        @return instance scale factor
     **/
-    static function get_scale_vector(?id:HashOrStringOrUrl):Vector3;
+    static function get_scale(?id:HashOrStringOrUrl):Vector3;
+
+    /**
+        Gets the uniform scale factor of the instance.
+
+        The uniform scale is relative the parent (if any).
+        If the underlying scale vector is non-uniform the min element of the vector is returned as the uniform scale factor.
+
+        @param id optional id of the instance to get the uniform scale for, by default the instance of the calling script
+        @return uniform instance scale factor
+    **/
+    static function get_scale_uniform(?id:HashOrStringOrUrl):Float;
 
     /**
         Gets the instance world position.
@@ -157,14 +157,26 @@ extern class Go {
     static function get_world_rotation(?id:HashOrStringOrUrl):Quaternion;
 
     /**
-        Gets the instance world scale factor.
+        Gets the instance world 3D scale factor.
 
-        Use `Go.get_scale` to retrieve the scale factor relative to the parent.
+        Use `Go.get_scale` to retrieve the 3D scale factor relative to the parent.
+        This vector is derived by decomposing the transformation matrix and should be used with care.
+        For most cases it should be fine to use `Go.get_world_scale_uniform` instead.
 
         @param id optional id of the instance to get the world scale for, by default the instance of the calling script
         @return uniform instance world scale factor
     **/
-    static function get_world_scale(?id:HashOrStringOrUrl):Float;
+    static function get_world_scale(?id:HashOrStringOrUrl):Vector3;
+
+    /**
+        Gets the instance world scale factor.
+
+        Use `go.get_scale_uniform` to retrieve the scale factor relative to the parent.
+
+        @param id optional id of the instance to get the world scale for, by default the instance of the calling script
+        @return instance world scale factor
+    **/
+    static function get_world_scale_uniform(?id:HashOrStringOrUrl):Float;
 
     /**
         Sets a named property of the specified game object or component.

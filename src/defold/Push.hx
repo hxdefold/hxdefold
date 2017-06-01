@@ -142,7 +142,7 @@ typedef PushNotificationSettings = {
         There are five priority levels, from -2 to 2 where -1 is the lowest priority and 2 the highest.
         Unless specified, a default priority level of 2 is used.
     **/
-    @:optional var priority:Int;
+    @:optional var priority:PushPriority;
 }
 
 /**
@@ -174,4 +174,40 @@ typedef PushNotificationSettings = {
         Remote push origin.
     **/
     var ORIGIN_REMOTE;
+}
+
+/**
+    Push priority used in `PushNotificationSettings.priority` field (Android only).
+**/
+@:native("_G.push")
+@:enum extern abstract PushPriority(Int) from Int to Int {
+    /**
+        The default notification priority.
+        Only available on Android.
+    **/
+    var PRIORITY_DEFAULT;
+
+    /**
+        Priority for more important notifications or alerts.
+        Only available on Android.
+    **/
+    var PRIORITY_HIGH;
+
+    /**
+        Priority for items that are less important.
+        Only available on Android.
+    **/
+    var PRIORITY_LOW;
+
+    /**
+        Set this priority for your application's most important items that require the user's prompt attention or input.
+        Only available on Android.
+    **/
+    var PRIORITY_MAX;
+
+    /**
+        This priority is for items might not be shown to the user except under special circumstances, such as detailed notification logs.
+        Only available on Android.
+    **/
+    var PRIORITY_MIN;
 }

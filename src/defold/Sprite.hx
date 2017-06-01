@@ -36,7 +36,7 @@ extern class Sprite {
     static function set_constant(url:UrlOrString, name:HashOrString, value:Vector4):Void;
 
     /**
-        Make a sprite flip the animations horizontally or not.
+        Sets horizontal flipping of the provided sprite's animations.
 
         Which sprite to flip is identified by the URL.
         If the currently playing animation is flipped by default, flipping it again will make it appear like the original texture.
@@ -47,7 +47,7 @@ extern class Sprite {
     static function set_hflip(url:UrlOrString, flip:Bool):Void;
 
     /**
-        Make a sprite flip the animations vertically or not.
+        Sets vertical flipping of the provided sprite's animations.
 
         Which sprite to flip is identified by the URL.
         If the currently playing animation is flipped by default, flipping it again will make it appear like the original texture.

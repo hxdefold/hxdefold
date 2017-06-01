@@ -46,8 +46,8 @@ extern class Gui {
         @param property property to animate (one of PROP_* constant)
         @param to target property value
         @param easing easing to use during animation.
-        @param duration duration of the animation
-        @param delay delay before the animation starts
+        @param duration duration of the animation in seconds.
+        @param delay delay before the animation starts in seconds.
         @param complete_function function to call when the animation has completed
         @param playback playback mode
     **/
@@ -101,6 +101,9 @@ extern class Gui {
 
     /**
         Deletes a node.
+
+        Deletes the specified node. Any child nodes of the specified node will be
+        recursively deleted.
 
         @param node node to delete
     **/
@@ -215,8 +218,8 @@ extern class Gui {
     /**
         Gets the index of the specified node.
 
-        The index defines the order in which a node appear in a gui scene.
-        Higher index means the node is drawn above lower indexed nodes.
+        The index defines the order in which a node appear in a GUI scene.
+        Higher index means the node is drawn on top of lower indexed nodes.
 
         @param node node to retrieve the id from
         @return id of the node
@@ -731,6 +734,13 @@ extern class Gui {
     /**
         Sets the id of the specified node.
 
+        Nodes created with the `Gui.new_*_node()` functions get
+        an empty id. This function allows you to give dynamically
+        created nodes an id.
+
+        No checking is done on the uniqueness of supplied ids.
+        It is up to you to make sure you use unique ids.
+
         @param node node to set the id for
         @param id id to set
     **/
@@ -988,10 +998,12 @@ extern class Gui {
     static function set_yanchor(node:GuiNode, anchor:GuiYAnchor):Void;
 
     /**
-        Display on-display keyboard if available.
+        Shows the on-display keyboard if available.
 
         The specified type of keyboard is displayed, if it is available on
         the device.
+
+        This function is only available on iOS and Android.
 
         @param type keyboard type
         @param autoclose close keyboard automatically when clicking outside

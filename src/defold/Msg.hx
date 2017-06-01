@@ -31,6 +31,6 @@ extern class Msg {
         @return a new URL
     **/
     @:overload(function():Url {})
-    @:overload(function(socket:EitherType<String,Int>, path:HashOrString, fragment:HashOrString):Url {})
+    @:overload(function(socket:HashOrString, path:HashOrString, fragment:HashOrString):Url {})
     static function url(urlstring:String):Url;
 }

@@ -3,8 +3,8 @@ package defold;
 import defold.types.*;
 
 /**
-    Functions and messages for using system resources, controlling the engine
-    and for debugging.
+    Functions and messages for using system resources, controlling the engine,
+    error handling and debugging.
 
     See `SysMessages` for standard system messages.
 **/
@@ -152,6 +152,11 @@ class SysMessages {
 
         Arguments will be translated into command line arguments. Sending the reboot
         command is equivalent to starting the engine with the same arguments.
+
+        On startup the engine reads configuration from "game.project" in the
+        project root.
+
+        This message can only be sent to the designated `@system` socket.
     **/
     static var reboot(default, never) = new Message<SysMessageReboot>("reboot");
 

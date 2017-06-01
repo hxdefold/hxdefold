@@ -10,18 +10,18 @@ import defold.types.HashOrString;
 extern class Resource {
     /**
         Return a reference to the Manifest that is currently loaded.
-        
+
         This reference should be passed on to the `verify_resource` function when
         downloading content that was selected for LiveUpdate during the build
         process.
-        
+
         @return reference to the Manifest that is currently loaded
     **/
     static function get_current_manifest():ResourceManifestReference;
 
     /**
         Loads the resource data for a specific resource.
-        
+
         @param path The path to the resource
         @return the buffer stored on disc
     **/
@@ -29,7 +29,7 @@ extern class Resource {
 
     /**
         Sets the resource data for a specific resource
-        
+
         @param path The path to the resource
         @param The buffer of precreated data, suitable for the intended resource type
     **/
@@ -37,21 +37,21 @@ extern class Resource {
 
     /**
         Sets the pixel data for a specific texture.
-        
+
         @param path The path to the resource
         @param table A table containing info about the texture
         @param buffer The buffer of precreated pixel data
-        
+
         *NOTE* Currently, only 1 mipmap is generated.
     **/
     static function set_texture(path:HashOrString, table:ResourceTextureInfo, buffer:Buffer):Void;
 
     /**
         Add a resource to the data archive and runtime index.
-        
-        The resource that is added must already exist in the manifest, and can be verified using
+
+        The resource that is added must already exist in the manifest and can be verified using
         verify_resource. The resource will also be verified internally before being added to the data archive.
-        
+
         @param manifest_reference The manifest to check against.
         @param data The resource data that should be stored.
         @param hexdigest The expected hash for the resource, retrieved through collectionproxy.missing_resources.
