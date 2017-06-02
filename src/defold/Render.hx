@@ -18,7 +18,7 @@ extern class Render {
 
         @param buffers Table with keys specifying which buffers to clear and values set to clear values.
     **/
-    static function clear(buffers:lua.Table<RenderBufferType,EitherType<Vector4,Float>>):Void;
+    static function clear(buffers:RenderClearBuffers):Void;
 
     /**
         Create a new constant buffer..
@@ -291,6 +291,11 @@ extern class Render {
 }
 
 /**
+    Table type for the `Render.clear` argument.
+**/
+typedef RenderClearBuffers = lua.Table<RenderBufferType,EitherType<Vector4,Float>>;
+
+/**
     Messages related to the `Render` module.
 **/
 @:publicFields
@@ -323,6 +328,18 @@ class RenderMessages {
         on mobile devices.
     **/
     static var window_resized(default, never) = new Message<RenderMessageWindowResized>("window_resized");
+
+    /**
+        The camera component that has camera focus will sent set_view_projection messages to the @render socket.
+    **/
+    static var set_view_projection(default, never) = new Message<RenderMessageSetViewProjection>("set_view_projection");
+}
+
+/**
+    Data for the `RenderMessages.set_view_projection` message.
+**/
+typedef RenderMessageSetViewProjection = {
+    var view:Matrix4;
 }
 
 /**

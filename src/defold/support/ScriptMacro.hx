@@ -105,6 +105,7 @@ class ScriptMacro {
 
                 // get data properties for generating `go.property` calls, which should be in the genrated script
                 var props = getProperties(script.data, cl.pos);
+                props.sort(function(a,b) return a.order - b.order);
 
                 // generate the script...
                 var b = new StringBuf();
@@ -181,7 +182,7 @@ class ScriptMacro {
         }
     }
 
-    static function getProperties(type:Type, pos:Position):Array<{name:String, value:String}> {
+    static function getProperties(type:Type, pos:Position):Array<{name:String, value:String, order:Int}> {
         var result = [];
         switch (type.follow()) {
             case TAnonymous(_.get() => anon):
@@ -193,7 +194,8 @@ class ScriptMacro {
                         case [prop]:
                             var type = getPropertyType(field.type, field.pos);
                             var value = if (prop.params.length == 0) getDefaultValue(type) else parsePropertyExpr(type, prop.params, prop.pos);
-                            result.push({name: field.name, value: value});
+                            var order = Context.getPosInfos(field.pos).min;
+                            result.push({name: field.name, value: value, order: order});
                         default:
                             throw new Error("Only single @property metadata is allowed", field.pos);
                     }
