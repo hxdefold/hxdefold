@@ -4,7 +4,7 @@
 
 [![Build Status](https://travis-ci.org/hxdefold/hxdefold.svg?branch=master)](https://travis-ci.org/hxdefold/hxdefold)
 
-**Defold API version: 1.2.105**
+**Defold API version: 1.2.106**
 
 ## Example
 

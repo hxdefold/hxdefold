@@ -16,12 +16,20 @@ extern class Profiler {
 
         @return number of CPU used by the application
     **/
-    static function cpu_usage():Float;
+    static function get_cpu_usage():Float;
 
     /**
         Get the amount of memory used (resident/working set) by the application in bytes, as reported by the OS. (Not available on HTML5.)
 
+        The values are gathered from internal OS functions which correspond to the following;
+
+        OS                          | Value
+        ----------------------------|------------------
+        iOS, OSX, Android and Linux | Resident memory
+        Windows                     | Working set
+        HTML5                       | Not available
+
         @return bytes used by the application
     **/
-    static function memory_usage():Int;
+    static function get_memory_usage():Int;
 }
