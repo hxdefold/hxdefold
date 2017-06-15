@@ -11,7 +11,7 @@ env:
   - secure: zvnIkWb6wx85kKBFD4THslUtBAQrn7Dt//W35yPh75AISQuT1rbqj65PW8lmzkeU2igBDeDTl+kjPFGPeA6AmvLsiiBqSaPmWsmboUNkx6D/kewZ9CwUscX7XPhg7XThGCp6ZxDYe0PraWVJ28i5kFKmoR10WvBIDPFygkl+yrPF9MDHBHlaN6gNWvEQFLTTNDbVj2Se3Kgzu5ExQMobbjCQPWX14aerPIC+19ieFqUk8JHRQHrGHJAEH2j7Ya/AAj+uM9asBLn16E2Kk/JQM5sZICEpOOXgf0gFfWqsBq3iRwhOqlLqh3m1cII4ZeCkCbXA3I4ocd2z2ckyL++5C77+sAR0ruk9Mw5aZz8urvZyj1k5tzrPXB+w/VbOstOTxT3GBoRfo4TlBeNeEhPor4AZ6O+lVo9qxvDs6JKP07BYXDkRceJCT6QbwsKIiSADCsnRb79UMoF0r+9xGV5NaLjhGRR74+yW0E+QTjIgBBoxSDS1jxilrnPxGF9IAxf61r3by2jj3/Ts7LwKlOMVRZWD2/AYF4B7wYqNjeaZWnBz6La8zHJnG7lQM3FW7HLFGN9n4KDQI3Tgs0OauBOehtqCF0hBstxAtjq4N4bPR84PzuUWT4uMesDxD7W+2sx8dekQbumkg9Ze47fZE8ythu2WTAHmH038DCvVNEsZUp0=
 
 install:
-- haxelib git dox https://github.com/HaxeFoundation/dox
+- haxelib install dox
 - haxelib dev hxdefold .
 - git clone https://github.com/hxdefold/hxdefold-example-platformer
 - git clone https://github.com/hxdefold/hxdefold-example-sidescroller
