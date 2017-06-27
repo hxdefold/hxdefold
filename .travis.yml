@@ -3,6 +3,7 @@ language: haxe
 sudo: false
 
 haxe:
+- 3.4.2
 - development
 
 env:
