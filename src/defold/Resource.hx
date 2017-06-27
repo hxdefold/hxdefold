@@ -11,10 +11,6 @@ extern class Resource {
     /**
         Return a reference to the Manifest that is currently loaded.
 
-        This reference should be passed on to the `verify_resource` function when
-        downloading content that was selected for LiveUpdate during the build
-        process.
-
         @return reference to the Manifest that is currently loaded
     **/
     static function get_current_manifest():ResourceManifestReference;
@@ -49,8 +45,7 @@ extern class Resource {
     /**
         Add a resource to the data archive and runtime index.
 
-        The resource that is added must already exist in the manifest and can be verified using
-        verify_resource. The resource will also be verified internally before being added to the data archive.
+        The resource will be verified internally before being added to the data archive.
 
         @param manifest_reference The manifest to check against.
         @param data The resource data that should be stored.
@@ -99,6 +94,9 @@ typedef ResourceTextureInfo = {
 **/
 @:native("_G.resource")
 @:enum extern abstract ResourceTextureType(Int) {
+    /**
+        2D texture type.
+    **/
     var TEXTURE_TYPE_2D;
 }
 
@@ -107,6 +105,18 @@ typedef ResourceTextureInfo = {
 **/
 @:native("_G.resource")
 @:enum extern abstract ResourceTextureFormat(Int) {
+    /**
+        Luminance type texture format.
+    **/
+    var TEXTURE_FORMAT_LUMINANCE;
+
+    /**
+        RGB type texture format.
+    **/
     var TEXTURE_FORMAT_RGB;
+
+    /**
+        RGBA type texture format.
+    **/
     var TEXTURE_FORMAT_RGBA;
 }

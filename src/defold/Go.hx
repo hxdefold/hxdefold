@@ -259,6 +259,7 @@ class GoMessages {
            * Spine Model
            * Sprite
            * Tile Grid
+           * Model
     **/
     static var disable(default, never) = new Message<Void>("disable");
 
@@ -276,6 +277,7 @@ class GoMessages {
            * Spine Model
            * Sprite
            * Tile Grid
+           * Model
     **/
     static var enable(default, never) = new Message<Void>("enable");
 

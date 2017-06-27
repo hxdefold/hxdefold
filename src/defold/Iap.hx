@@ -7,7 +7,7 @@ package defold;
 @:native("_G.iap")
 extern class Iap {
     /**
-        Buy product.
+        Perform a product purchase.
 
         Calling `Iap.finish` is required on a successful transaction if auto_finish_transactions is disabled in project settings.
 
@@ -167,9 +167,24 @@ extern class IapTransaction {
 **/
 @:native("_G.iap")
 @:enum extern abstract IapProviderId({}) {
+    /**
+        Iap provider id for Google.
+    **/
     var PROVIDER_ID_GOOGLE;
+
+    /**
+        Provider id for Amazon.
+    **/
     var PROVIDER_ID_AMAZON;
+
+    /**
+        Provider id for Apple.
+    **/
     var PROVIDER_ID_APPLE;
+
+    /**
+        Provider id for Facebook.
+    **/
     var PROVIDER_ID_FACEBOOK;
 }
 

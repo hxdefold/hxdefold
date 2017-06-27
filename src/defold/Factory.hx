@@ -19,10 +19,10 @@ extern class Factory {
 
         Properties defined in scripts in the created game object can be overridden through the properties-parameter below.
 
-        @param url the factory that should create a game object
-        @param position the position of the new game object, the position of the game object containing the factory is used by default
-        @param rotation the rotation of the new game object, the rotation of the game object containing the factory is used by default
-        @param properties the properties defined in a script attached to the new game object
+        @param url the factory that should create a game object.
+        @param position the position of the new game object, the position of the game object calling `factory.create()` is used by default.
+        @param rotation the rotation of the new game object, the rotation of the game object calling `factory.create()` is is used by default.
+        @param properties the properties defined in a script attached to the new game object.
         @param scale the scale of the new game object (must be greater than 0), the scale of the game object containing the factory is used by default
         @return the global id of the spawned game object
     **/

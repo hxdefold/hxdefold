@@ -7,7 +7,9 @@ package defold;
 @:native("_G.profiler")
 extern class Profiler {
     /**
-        Get the percent of CPU usage by the application, as reported by the OS. (Not available on HTML5.)
+        Get the percent of CPU usage by the application, as reported by the OS.
+
+        This function is not available on HTML5.
 
         For some platforms (Android, Linux and Windows), this information is only available
         by default in the debug version of the engine. It can be enabled in release version as well
@@ -19,7 +21,9 @@ extern class Profiler {
     static function get_cpu_usage():Float;
 
     /**
-        Get the amount of memory used (resident/working set) by the application in bytes, as reported by the OS. (Not available on HTML5.)
+        Get the amount of memory used (resident/working set) by the application in bytes, as reported by the OS.
+
+        This function is not available on HTML5.
 
         The values are gathered from internal OS functions which correspond to the following;
 
