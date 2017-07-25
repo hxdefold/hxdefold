@@ -28,7 +28,9 @@ extern class Sys {
     static function get_config(key:String):Null<String>;
 
     /**
-        Get current network connectivity status.
+        Returns the current network connectivity status on mobile platforms.
+
+        On desktop, this function always return `NETWORK_CONNECTED`.
     **/
     static function get_connectivity():SysConnectivity;
 
@@ -282,7 +284,7 @@ typedef SysApplicationInfo = {
     var NETWORK_CONNECTED_CELLULAR;
 
     /**
-        Connected not through a cellular connection.
+        Connected not through a cellular connection (Wifi).
     **/
     var NETWORK_CONNECTED;
 }
@@ -292,7 +294,7 @@ typedef SysApplicationInfo = {
 **/
 typedef SysEngineInfo = {
     var version:String;
-    var version_sha1:String; // docs say "engine_sha1", but in fact it's "version_sha1"
+    var version_sha1:String;
 }
 
 /**

@@ -4,6 +4,15 @@ import defold.types.*;
 
 /**
     Functions for mathematical operations on vectors, matrices and quaternions.
+
+    * The vector types (`Vector3` and `Vector4`) supports addition, subtraction,
+      negation and multiplication with numbers and other vectors of the same type.
+
+    * The quaternion type (`Quaternion`) supports multiplication with other quaternions.
+
+    * The matrix type (`Matrix4`) can be multiplied with numbers, other matrices and `Vector4` values.
+
+    * All types performs equality comparison by each component value.
 **/
 @:native("_G.vmath")
 extern class Vmath {

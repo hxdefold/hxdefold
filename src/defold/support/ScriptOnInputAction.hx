@@ -81,6 +81,11 @@ typedef ScriptOnInputAction = {
 **/
 typedef ScriptOnInputActionTouch = {
     /**
+        A number identifying the touch input during its duration.
+    **/
+    var id:Int;
+
+    /**
         True if the finger was pressed this frame.
     **/
     var pressed:Bool;

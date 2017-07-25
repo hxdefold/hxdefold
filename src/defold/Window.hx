@@ -7,19 +7,23 @@ package defold;
 @:native("_G.window")
 extern class Window {
     /**
-        Get the mode for screen dimming.
+        Returns the current dimming mode set on a mobile device.
 
         The dimming mode specifies whether or not a mobile device should dim the screen after a period without user interaction.
+
+        On platforms that does not support dimming, `DIMMING_UNKNOWN` is always returned.
 
         @return mode The mode for screen dimming
     **/
     static function get_dim_mode():WindowDimmingMode;
 
     /**
-        Set the mode for screen dimming.
+        Sets the dimming mode on a mobile device.
 
         The dimming mode specifies whether or not a mobile device should dim the screen after a period without user interaction.
         The dimming mode will only affect the mobile device while the game is in focus on the device, but not when the game is running in the background.
+
+        This function has no effect on platforms that does not support dimming.
 
         @param mode The mode for screen dimming
     **/
@@ -63,8 +67,28 @@ extern class Window {
 **/
 @:native("_G.window")
 @:enum extern abstract WindowEvent({}) {
-    var WINDOW_EVENT_FOCUS_LOST;
+    /**
+        Focus gained window event.
+
+        This event is sent to a window event listener when the game window or app screen has
+        gained focus.
+        This event is also sent at game startup and the engine gives focus to the game.
+    **/
     var WINDOW_EVENT_FOCUS_GAINED;
+
+    /**
+        Focus lost window event.
+
+        This event is sent to a window event listener when the game window or app screen has lost focus.
+    **/
+    var WINDOW_EVENT_FOCUS_LOST;
+
+    /**
+        Resized window event.
+
+        This event is sent to a window event listener when the game window or app screen is resized.
+        The new size is passed along in the data field to the event listener.
+    **/
     var WINDOW_EVENT_RESIZED;
 }
 

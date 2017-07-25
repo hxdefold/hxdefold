@@ -304,6 +304,14 @@ extern class Gui {
     static function get_parent(node:GuiNode):Null<GuiNode>;
 
     /**
+        Get the paricle fx for a gui node
+
+        @param node node to get particle fx for
+        @return particle fx id
+    **/
+    static function get_particlefx(node:GuiNode):Hash;
+
+    /**
         Gets the number of generarted vertices around the perimeter.
 
         @return vertex count
@@ -555,6 +563,15 @@ extern class Gui {
     static function new_box_node(pos:EitherType<Vector3,Vector4>, size:Vector3):GuiNode;
 
     /**
+        Dynamically create a particle fx node.
+
+        @param pos node position
+        @param particlefx particle fx resource name
+        @return new particle fx node
+    **/
+    static function new_particlefx_node(pos:EitherType<Vector4,Vector3>, particlefx:HashOrString):GuiNode;
+
+    /**
         Creates a new pie node.
 
         @param pos node position
@@ -619,6 +636,19 @@ extern class Gui {
         @param complete_function function to call when the animation has completed
     **/
     static function play_flipbook(node:GuiNode, animation:HashOrString, ?complete_function:Void->Void):Void;
+
+    /**
+        Plays the paricle fx for a gui node
+
+        @param node node to play particle fx for
+        @param emitter_state_function optional callback function that will be called when an emitter attached to this particlefx changes state.
+                                      callback arguments:
+                                       * self The current object
+                                       * id The id of the particle fx component
+                                       * emitter The id of the emitter
+                                       * state the new state of the emitter
+    **/
+    static function play_particlefx<T>(node:GuiNode, ?emitter_state_function:T->Hash->Hash->GuiEmitterState->Void):Void;
 
     /**
         Play a spine animation.
@@ -805,6 +835,14 @@ extern class Gui {
         @param parent parent node to set
     **/
     static function set_parent(node:GuiNode, parent:GuiNode):Void;
+
+    /**
+        Set the paricle fx for a gui node
+
+        @param node node to set particle fx for
+        @param particlefx particle fx id
+    **/
+    static function set_particlefx(node:GuiNode, particlefx:HashOrString):Void;
 
     /**
         Sets the number of generarted vertices around the perimeter.
@@ -1009,6 +1047,13 @@ extern class Gui {
         @param autoclose close keyboard automatically when clicking outside
     **/
     static function show_keyboard(type:GuiKeyboardType, autoclose:Bool):Void;
+
+    /**
+        Stops the paricle fx for a gui node
+
+        @param node node to stop particle fx for
+    **/
+    static function stop_particlefx(node:GuiNode):Void;
 }
 
 /**
@@ -1376,4 +1421,12 @@ typedef GuiPlaySpineProperties = {
         The rate with which the animation will be played. Must be positive.
     **/
     var playback_rate:Float;
+}
+
+@:native("_G.gui")
+@:enum extern abstract GuiEmitterState(Int) {
+    var EMITTER_STATE_SLEEPING;
+    var EMITTER_STATE_PRESPAWN;
+    var EMITTER_STATE_SPAWNING;
+    var EMITTER_STATE_POSTSPAWN;
 }
