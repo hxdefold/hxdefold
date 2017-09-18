@@ -70,7 +70,7 @@ extern class Render {
     /**
         Draws all objects matching a predicate.
 
-        Draws all objects that match a specified predicate. An optional constants buffer can be
+        Draws all objects that match a specified predicate. An optional constant buffer can be
         provided to override the default constants. If no constants buffer is provided, a default
         system constants buffer is used containing constants as defined in materials and set through
         `*.set_constant()` and `*.reset_constant()` on visual components.

@@ -1,6 +1,5 @@
 package defold;
 
-import haxe.extern.EitherType;
 import defold.types.*;
 
 /**
@@ -9,7 +8,20 @@ import defold.types.*;
 @:native("_G.msg")
 extern class Msg {
     /**
-        Posts a message to a receiving URL.
+        Post a message to a receiving URL. The most common case is to send messages
+        to a component. If the component part of the receiver is omitted, the message
+        is broadcast to all components in the game object.
+
+        The following receiver shorthands are available:
+
+         * `"."` the current game object
+         * `"#"` the current component
+
+        NOTE: There is a 2 kilobyte limit to the message parameter table size.
+
+        @param receiver The receiver must be a string in URL-format, a URL object, a hashed string or `nil`.
+        @param message_id The id must be a string or a hashed string.
+        @param message a lua table with message parameters to send.
     **/
     @:overload(function(receiver:Null<HashOrStringOrUrl>, message_id:Message<Void>):Void {})
     static function post<T>(receiver:Null<HashOrStringOrUrl>, message_id:Message<T>, message:T):Void;
