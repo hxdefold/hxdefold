@@ -60,7 +60,21 @@ extern class Sound {
     static function get_rms(group:HashOrString, window:Float):SoundLeftRight<Float>;
 
     /**
-        Checks if background music is playing, e.g. from iTunes
+        Checks if background music is playing, e.g. from iTunes.
+
+        On non mobile platforms, this function always return `false`.
+
+        On Android you can only get a correct reading of this state if your game is not playing any sounds itself.
+        This is a limitation in the Android SDK. If your game is playing any sounds, even with a gain of zero, this
+        function will return `false`.
+
+        The best time to call this function is:
+
+         * In the `init` function of your main collection script before any sounds are triggered
+         * In a window listener callback when the window.WINDOW_EVENT_FOCUS_GAINED event is received
+
+        Both those times will give you a correct reading of the state even when your application is
+        swapped out and in while playing sounds and it works equally well on Android and iOS.
 
         @return true if music is playing
     **/
@@ -75,6 +89,32 @@ extern class Sound {
     static function is_phone_call_active():Bool;
 
     /**
+        Plays a sound.
+
+        Make the sound component play its sound. Multiple voices is supported. The limit is set to 32 voices per sound component.
+
+        Note that gain is in linear scale, between 0 and 1.
+        To get the dB value from the gain, use the formula `20 * log(gain)`.
+        Inversely, to find the linear value from a dB value, use the formula `10<sup>db/20</sup>`.
+
+        @param url the sound that should play
+        @param play_properties optional table with properties
+    **/
+    static function play(url:HashOrStringOrUrl, ?play_properties:SoundMessagePlaySound):Void;
+
+    /**
+        Set gain on all active playing voices of a sound.
+
+        Note that gain is in linear scale, between 0 and 1.
+        To get the dB value from the gain, use the formula `20 * log(gain)`.
+        Inversely, to find the linear value from a dB value, use the formula `10<sup>db/20</sup>`.
+
+        @param url the sound to set the gain of
+        @param gain sound gain between 0 and 1. The final gain of the sound will be a combination of this gain, the group gain and the master gain.
+    **/
+    static function set_gain(url:HashOrStringOrUrl, ?gain:Float):Void;
+
+    /**
         Set mixer group gain
 
         Note that gain is in linear scale.
@@ -83,6 +123,15 @@ extern class Sound {
         @param gain gain in linear scale
     **/
     static function set_group_gain(group:HashOrString, gain:Float):Bool;
+
+    /**
+        Stop a playing a sound(s).
+
+        Stop playing all active voices
+
+        @param url the sound that should stop
+    **/
+    static function stop(url:HashOrStringOrUrl):Void;
 }
 
 /**
@@ -113,7 +162,7 @@ class SoundMessages {
 }
 
 /**
-    Data for the `SoundMessages.play_sound` message.
+    Data for the `SoundMessages.play_sound` message and `Sound.play` method.
 **/
 typedef SoundMessagePlaySound = {
     /**
@@ -123,6 +172,8 @@ typedef SoundMessagePlaySound = {
 
     /**
         Sound gain between 0 and 1, default is 1.
+
+        The final gain of the sound will be a combination of this gain, the group gain and the master gain.
     **/
     @:optional var gain:Float;
 }

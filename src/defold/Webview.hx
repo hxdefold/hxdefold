@@ -1,8 +1,11 @@
 package defold;
 
 /**
-    Functions and for creating and controlling webviews to show html pages
-    or evaluate javascript.
+    Functions for creating and controlling webviews to show HTML pages or evaluate JavaScript. These API:s only exist on mobile platforms.
+
+    To use this library in your Defold project, add the following URL to your game.project dependencies:
+
+        https://github.com/defold/extension-webview/archive/master.zip
 **/
 @:native("_G.webview")
 extern class Webview {
@@ -86,6 +89,17 @@ extern class Webview {
         @param visible If 0, hides the webview. If non zero, shows the view.
     **/
     static function set_visible(webview_id:WebviewId, visible:Int):Void;
+
+    /**
+        Sets the position and size of the webview.
+
+        @param webview_id The webview id
+        @param x The x position of the webview
+        @param y The y position of the webview
+        @param width The width of the webview (-1 to match screen width)
+        @param height The height of the webview (-1 to match screen height)
+    **/
+    static function set_position(webview_id:WebviewId, x:Int, y:Int, width:Int, height:Int):Void;
 }
 
 /**
@@ -105,6 +119,7 @@ typedef WebviewRequestId = Int;
 @:enum extern abstract WebviewCallbackType(Int) {
     var CALLBACK_RESULT_URL_OK;
     var CALLBACK_RESULT_URL_ERROR;
+    var CALLBACK_RESULT_URL_LOADING;
     var CALLBACK_RESULT_EVAL_OK;
     var CALLBACK_RESULT_EVAL_ERROR;
 }

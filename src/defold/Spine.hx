@@ -2,6 +2,7 @@ package defold;
 
 import defold.types.*;
 import defold.Go.GoPlayback;
+import defold.Gui.GuiNode;
 
 /**
     Functions and messages for interacting with the 'Spine' 2D bone animation system.
@@ -13,7 +14,7 @@ extern class Spine {
     /**
         Cancel all animation on a spine model.
     **/
-    static function cancel(url:UrlOrString):Void;
+    static function cancel(url:HashOrStringOrUrl):Void;
 
     /**
         Retrieve the game object corresponding to a spine model skeleton bone.
@@ -22,12 +23,12 @@ extern class Spine {
         This function has complexity O(n), where n is the number of bones in the spine model skeleton.
         Game objects corresponding to a spine model skeleton bone can not be individually deleted.
     **/
-    static function get_go(url:UrlOrString, bone_id:HashOrString):Hash;
+    static function get_go(url:HashOrStringOrUrl, bone_id:HashOrString):Hash;
 
     /**
         Play an animation on a spine model.
     **/
-    static function play(url:UrlOrString, animation_id:HashOrString, playback:GoPlayback, blend_duration:Float, ?complete_function:Void->Void):Void;
+    static function play(url:HashOrStringOrUrl, animation_id:HashOrString, playback:GoPlayback, blend_duration:Float, ?complete_function:Void->Void):Void;
 
     /**
         Reset a shader constant for a spine model.
@@ -35,7 +36,18 @@ extern class Spine {
         The constant must be defined in the material assigned to the spine model.
         Resetting a constant through this function implies that the value defined in the material will be used.
     **/
-    static function reset_constant(url:UrlOrString, name:HashOrString):Void;
+    static function reset_constant(url:HashOrStringOrUrl, name:HashOrString):Void;
+
+    /**
+        Reset the IK constraint target position to default of a spinemodel.
+
+        Resets any previously set IK target of a spine model, the position will be reset
+        to the original position from the spine scene.
+
+        @param url the spine model containing the object
+        @param ik_constraint_id id of the corresponding IK constraint object
+    **/
+    static function reset_ik_target(url:HashOrStringOrUrl, ik_constraint_id:HashOrString):Void;
 
     /**
         Set a shader constant for a spine model.
@@ -44,17 +56,26 @@ extern class Spine {
         Setting a constant through this function will override the value set for that constant in the material.
         The value will be overridden until `Spine.reset_constant` is called.
     **/
-    static function set_constant(url:UrlOrString, name:HashOrString, value:Vector4):Void;
+    static function set_constant(url:HashOrStringOrUrl, name:HashOrString, value:Vector4):Void;
 
     /**
         Set the IK constraint object target position to follow position of a game object.
     **/
-    static function set_ik_target(url:UrlOrString, ik_constraint_id:HashOrString, target_url:UrlOrString):Void;
+    static function set_ik_target(url:HashOrStringOrUrl, ik_constraint_id:HashOrString, target_url:UrlOrString):Void;
 
     /**
         Set the target position of an IK constraint object.
     **/
-    static function set_ik_target_position(url:UrlOrString, ik_constraint_id:HashOrString, position:Vector3):Void;
+    static function set_ik_target_position(url:HashOrStringOrUrl, ik_constraint_id:HashOrString, position:Vector3):Void;
+
+    /**
+        Sets the spine skin on a spine model.
+
+        @param url the spine model for which to set skin
+        @param spine_skin spine skin id
+        @param spine_slot optional slot id to only change a specific slot
+    **/
+    static function set_skin(url:HashOrStringOrUrl, spine_skin:HashOrString, ?spine_slot:HashOrString):Void;
 }
 
 /**
@@ -121,4 +142,9 @@ typedef SpineMessageSpineEvent = {
         User defined string value for the event.
     **/
     var string:Hash;
+
+    /**
+        the source spine gui node if the event originated from gui, otherwise nil
+    **/
+    var node:Null<GuiNode>;
 }

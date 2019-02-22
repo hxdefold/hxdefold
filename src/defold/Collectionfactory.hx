@@ -29,6 +29,9 @@ extern class Collectionfactory {
         corresponding spawned instance id (hash) as value with a unique path
         prefix added to each instance.
 
+        Calling `Collectionfactory.create` create on a collection factory that is marked as dynamic without having loaded resources
+        using `Collectionfactory.load` will synchronously load and create resources which may affect application performance.
+
         @param url the collection factory component to be used
         @param position position to assign to the newly spawned collection
         @param rotation rotation to assign to the newly spawned collection
@@ -37,4 +40,49 @@ extern class Collectionfactory {
         @return a table mapping the id:s from the collection to the new instance id:s
     **/
     static function create(url:HashOrStringOrUrl, ?position:Vector3, ?rotation:Quaternion, ?properties:lua.Table<Hash,lua.Table<Hash,GoProperty>>, ?scale:Float):lua.Table<Hash,Hash>;
+
+    /**
+        Get collection factory status.
+        
+        This returns status of the collection factory.
+        
+        Calling this function when the factory is not marked as dynamic loading always returns `CollectionfactoryStatus.STATUS_LOADED`.
+        
+        @param url the collection factory component to get status from
+        @return status of the collection factory component
+    **/
+    static function get_status(?url:HashOrStringOrUrl):CollectionfactoryStatus;
+
+    /**
+        Load resources of a collection factory prototype.
+        
+        Resources loaded are referenced by the collection factory component until the existing (parent) collection is destroyed or `Collectionfactory.unload` is called.
+        
+        Calling this function when the factory is not marked as dynamic loading does nothing.
+        
+        @param url the collection factory component to load
+        @param complete_function function to call when resources are loaded.
+    **/
+    static function load<T>(?url:HashOrStringOrUrl, ?complete_function:#if haxe4 (self:T, url:Url, result:Bool)->Void #else T->Url->Bool->Void #end):Void;
+
+    /**
+        Unload resources previously loaded using `Collectionfactory.load`.
+        
+        This decreases the reference count for each resource loaded with collectionfactory.load. If reference is zero, the resource is destroyed.
+        
+        Calling this function when the factory is not marked as dynamic loading does nothing.
+        
+        @param url the collection factory component to unload
+    **/
+    static function unload(?url:HashOrStringOrUrl):Void;
+}
+
+/**
+    Possible values for the `Collectionfactory.get_status` return value.
+**/
+@:native("_G.collectionfactory")
+@:enum extern abstract CollectionfactoryStatus({}) {
+    var STATUS_UNLOADED;
+    var STATUS_LOADING;
+    var STATUS_LOADED;
 }

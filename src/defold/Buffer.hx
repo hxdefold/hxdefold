@@ -25,14 +25,14 @@ extern class Buffer {
     /**
         Copy a specified amount of data from one stream to another.
 
-        The value type must match between source and destination streams.
+        The value type and size must match between source and destination streams.
         The source and destination streams can be the same.
 
         @param dst the destination stream
-        @param dstoffset the offset to start copying data to
+        @param dstoffset the offset to start copying data to (measured in value type)
         @param src the source data stream
-        @param srcoffset the offset to start copying data from
-        @param count the number of values to copy
+        @param srcoffset the offset to start copying data from (measured in value type)
+        @param count the number of values to copy (measured in value type)
     **/
     static function copy_stream(dst:BufferStream, dstoffset:Int, src:BufferStream, srcoffset:Int, count:Int):Void;
 
@@ -48,7 +48,7 @@ extern class Buffer {
     @:pure static function create(element_count:Int, declaration:lua.Table<Int,BufferStreamDeclaration>):Buffer;
 
     /**
-        Get all the bytes from a specified stream as a Lua string.
+        Get a copy of all the bytes from a specified stream as a Lua string.
 
         @param buffer the source buffer
         @param stream_name the name of the stream
@@ -97,11 +97,6 @@ typedef BufferStreamDeclaration = {
         Float, single precision, 4 bytes
     **/
     var VALUE_TYPE_FLOAT32;
-
-    /**
-        Float, double precision, 8 bytes
-    **/
-    var VALUE_TYPE_FLOAT64;
 
     /**
         Signed integer, 2 bytes

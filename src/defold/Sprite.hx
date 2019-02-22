@@ -10,6 +10,21 @@ import defold.types.*;
 @:native("_G.sprite")
 extern class Sprite {
     /**
+        Play an animation on a sprite component from its tile set
+
+        An optional completion callback function can be provided that will be called when
+        the animation has completed playing. If no function is provided,
+        a `animation_done` message is sent to the script that started the animation.
+
+        @param url the sprite that should play the animation
+        @param id name hash of the animation to play
+        @param complete_function function to call when the animation has completed.
+    **/
+    static function play_flipbook<T>(url:HashOrString, id:Hash,
+        ?complete_function: #if haxe4 (self:T, message_id:Message<SpriteMessageAnimationDone>, message:SpriteMessageAnimationDone, sender:Url)->Void #else T->Message<SpriteMessageAnimationDone>->SpriteMessageAnimationDone->Url->Void #end
+    ):Void;
+
+    /**
         Reset a shader constant for a sprite.
 
         The constant must be defined in the material assigned to the sprite.

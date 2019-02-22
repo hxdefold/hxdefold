@@ -2,6 +2,9 @@ package defold.types;
 
 /**
     Matrix4 type, can be created with `defold.Vmath.matrix4`.
+
+    The first number is the row (starting from 0) and the second number is the column.
+    Columns can be accessed with c0 to c3, returning a vector4. Example: m.m21 which is equal to m.c1.z
 **/
 @:forward
 extern abstract Matrix4(Matrix4Data) {
@@ -21,4 +24,29 @@ extern abstract Matrix4(Matrix4Data) {
     }
 }
 
-extern class Matrix4Data {}
+typedef Matrix4Data = {
+    var m00:Float;
+    var m01:Float;
+    var m02:Float;
+    var m03:Float;
+
+    var m10:Float;
+    var m11:Float;
+    var m12:Float;
+    var m13:Float;
+
+    var m20:Float;
+    var m21:Float;
+    var m22:Float;
+    var m23:Float;
+
+    var m30:Float;
+    var m31:Float;
+    var m32:Float;
+    var m33:Float;
+
+    var c0:Vector4;
+    var c1:Vector4;
+    var c2:Vector4;
+    var c3:Vector4;
+}

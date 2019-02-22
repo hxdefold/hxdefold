@@ -5,8 +5,9 @@ import defold.types.*;
 /**
     Functions for mathematical operations on vectors, matrices and quaternions.
 
-    * The vector types (`Vector3` and `Vector4`) supports addition, subtraction,
-      negation and multiplication with numbers and other vectors of the same type.
+    * The vector types (`Vector3` and `Vector4`) supports addition and subtraction
+      with vectors of the same type. Vectors can be negated and multiplied with numbers
+      (scaled).
 
     * The quaternion type (`Quaternion`) supports multiplication with other quaternions.
 
@@ -81,24 +82,28 @@ extern class Vmath {
     static function inv(m1:Matrix4):Matrix4;
 
     /**
-        Calculates the vector length.
+        Returns the length of the supplied vector or quaternion.
 
-        Returns the length of the supplied vector.
+        If you are comparing the lengths of vectors or quaternions, you should compare
+        the length squared instead as it is slightly more efficient to calculate
+        (it eliminates a square root calculation).
 
-        @param v vector of which to calculate the length
-        @return vector length
+        @param v value of which to calculate the length
+        @return length
     **/
+    @:overload(function(v:Quaternion):Float {})
     @:overload(function(v:Vector4):Float {})
     static function length(v:Vector3):Float;
 
     /**
-        Calculates the squared vector length.
+        Calculates the squared length of a vector or quaternion.
 
-        Returns the squared length of the supplied vector.
+        Returns the squared length of the supplied vector or quaternion.
 
         @param v vector of which to calculate the squared length
         @return squared vector length
     **/
+    @:overload(function(v:Quaternion):Float {})
     @:overload(function(v:Vector4):Float {})
     static function length_sqr(v:Vector3):Float;
 
@@ -260,6 +265,19 @@ extern class Vmath {
     static function matrix4_rotation_z(angle:Float):Matrix4;
 
     /**
+        Performs an element wise multiplication between two vectors of the same type
+        The returned value is a vector defined as (e.g. for a vector3):
+
+        `v = vmath.mul_per_elem(a, b) = vmath.vector3(a.x * b.x, a.y * b.y, a.z * b.z)`
+
+        @param v1 first vector
+        @param v2 second vector
+        @return multiplied vector
+    **/
+    @:overload(function(v1:Vector3, v2:Vector3):Vector3 {})
+    static function mul_per_elem(v1:Vector4, v2:Vector4):Vector4;
+
+    /**
         Normalizes a vector, i.e. returns a new vector with the same
         direction as the input vector, but with length 1.
 
@@ -269,6 +287,7 @@ extern class Vmath {
         @param v1 vector to normalize
         @return new normalized vector
     **/
+    @:overload(function(v1:Quaternion):Quaternion {})
     @:overload(function(v1:Vector4):Vector4 {})
     static function normalize(v1:Vector3):Vector3;
 

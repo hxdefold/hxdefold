@@ -216,6 +216,13 @@ extern class Gui {
     static function get_id(node:GuiNode):Hash;
 
     /**
+        Gets the node inherit alpha state.
+
+        @param node node from which to get the inherit alpha state
+    **/
+    static function get_inherit_alpha(node:GuiNode):Bool;
+
+    /**
         Gets the index of the specified node.
 
         The index defines the order in which a node appear in a GUI scene.
@@ -265,7 +272,7 @@ extern class Gui {
         This is only useful for text nodes.
 
         @param node node from which to get the line-break for
-        @return line-break
+        @return line_break
     **/
     static function get_line_break(node:GuiNode):Bool;
 
@@ -312,7 +319,7 @@ extern class Gui {
     static function get_particlefx(node:GuiNode):Hash;
 
     /**
-        Gets the number of generarted vertices around the perimeter.
+        Gets the number of generated vertices around the perimeter.
 
         @return vertex count
     **/
@@ -353,7 +360,9 @@ extern class Gui {
     static function get_scale(node:GuiNode):Vector3;
 
     /**
-        Gets the node screen position.
+        Returns the screen position of the supplied node. This function returns the
+        calculated transformed position of the node, taking into account any parent node
+        transforms.
 
         @param node node to get the screen position from
         @return node screen position
@@ -393,6 +402,14 @@ extern class Gui {
         @return configuration values
     **/
     static function get_slice9(node:GuiNode):Vector4;
+
+    /**
+        Gets the playing animation on a spine node.
+
+        @param node node to get spine skin from
+        @return id spine animation id, 0 if no animation is playing
+    **/
+    static function get_spine_animation(node:GuiNode):Hash;
 
     /**
         Retrieve the GUI node corresponding to a spine skeleton bone.
@@ -460,11 +477,11 @@ extern class Gui {
         @param font font id
         @param text text to measure
         @param width max-width. use for line-breaks (default=FLT_MAX)
-        @param line_breaks true to break lines accordingly to width (default=false)
+        @param line_break true to break lines accordingly to width (default=false)
         @param leading scale value for line spacing (default=1)
         @param tracking scale value for letter spacing (default=0)
     **/
-    static function get_text_metrics(font:HashOrString, text:String, ?width:Float, ?line_breaks:Bool, ?leading:Float, ?tracking:Float):GuiTextMetrics;
+    static function get_text_metrics(font:HashOrString, text:String, ?width:Float, ?line_break:Bool, ?leading:Float, ?tracking:Float):GuiTextMetrics;
 
     /**
         Get text metrics from node.
@@ -777,6 +794,14 @@ extern class Gui {
     static function set_id(node:GuiNode, id:HashOrString):Void;
 
     /**
+        Sets the node inherit alpha state.
+
+        @param node node from which to set the inherit alpha state
+        @param inherit_alpha true or false
+    **/
+    static function set_inherit_alpha(node:GuiNode, inherit_alpha:Bool):Void;
+
+    /**
         Sets the pie inner radius (defined along the x dimension).
 
         @param node node to set the inner radius for
@@ -808,9 +833,9 @@ extern class Gui {
         This is only useful for text nodes.
 
         @param node node to set line-break for
-        @param text text to set
+        @param line_break true or false
     **/
-    static function set_line_break(node:GuiNode, text:String):Void;
+    static function set_line_break(node:GuiNode, line_break:Bool):Void;
 
     /**
         Sets the pie outer bounds mode.
@@ -833,8 +858,9 @@ extern class Gui {
 
         @param node node for which to set its parent
         @param parent parent node to set
+        @param keep_scene_transform optional flag to make the scene position being perserved
     **/
-    static function set_parent(node:GuiNode, parent:GuiNode):Void;
+    static function set_parent(node:GuiNode, parent:GuiNode, ?keep_scene_transform:Bool):Void;
 
     /**
         Set the paricle fx for a gui node
@@ -966,8 +992,9 @@ extern class Gui {
 
         @param node node to set the spine skin on
         @param spine_skin spine skin id
+        @param spine_slot optional slot id to only change a specific slot
     **/
-    static function set_spine_skin(node:GuiNode, spine_skin:HashOrString):Void;
+    static function set_spine_skin(node:GuiNode, spine_skin:HashOrString, ?spine_slot:HashOrString):Void;
 
     /**
         Sets the node text.
@@ -1049,7 +1076,7 @@ extern class Gui {
     static function show_keyboard(type:GuiKeyboardType, autoclose:Bool):Void;
 
     /**
-        Stops the paricle fx for a gui node
+        Stops the particle fx for a gui node
 
         @param node node to stop particle fx for
     **/

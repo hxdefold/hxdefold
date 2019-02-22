@@ -15,9 +15,13 @@ extern class Physics {
         Requests a ray cast to be performed.
 
         Ray casts are used to test for intersections against collision objects in the physics world.
+        Collision objects of types kinematic, dynamic and static are tested against. Trigger objects
+        do not intersect with ray casts.
         Which collision objects to hit is filtered by their collision groups and can be configured through `groups`.
         The actual ray cast will be performed during the physics-update.
-        If an object is hit, the result will be reported via a `ray_cast_response` message.
+
+         * If an object is hit, the result will be reported via a `ray_cast_response` message.
+         * If there is no object hit, the result will be reported via a `ray_cast_missed` message.
 
         @param from the world position of the start of the ray
         @param to the world position of the end of the ray
@@ -64,6 +68,14 @@ class PhysicsMessages {
         for the `collision_response` message instead.
     **/
     static var contact_point_response(default, never) = new Message<PhysicsMessageContactPointResponse>("contact_point_response");
+
+    /**
+        Reports a ray cast miss.
+
+        This message is sent back to the sender of a `ray_cast_request`, if the ray didn't hit any
+        collision object. See `Physics.ray_cast` for examples of how to use it.
+    **/
+    static var ray_cast_missed(default, never) = new Message<PhysicsMessageRayCastMissed>("ray_cast_missed");
 
     /**
         Reports a ray cast hit.
@@ -137,7 +149,12 @@ typedef PhysicsMessageCollisionResponse = {
     /**
         The collision group of the other collision object.
     **/
-    var group:Hash;
+    var other_group:Hash;
+
+    /**
+        The collision group of the own collision object.
+    **/
+    var own_group:Hash;
 }
 
 /**
@@ -197,9 +214,23 @@ typedef PhysicsMessageContactPointResponse = {
     /**
         The collision group of the other collision object.
     **/
-    var group:Hash;
+    var other_group:Hash;
+
+    /**
+        The collision group of the own collision object.
+    **/
+    var own_group:Hash;
 }
 
+/**
+    Data for the `PhysicsMessages.ray_cast_missed` message.
+**/
+typedef PhysicsMessageRayCastMissed = {
+    /**
+        Id supplied when the ray cast was requested.
+    **/
+    var request_id:Float;
+}
 
 /**
     Data for the `PhysicsMessages.ray_cast_response` message.
@@ -252,9 +283,14 @@ typedef PhysicsMessageTriggerResponse = {
     var enter:Bool;
 
     /**
-        The collision group of the triggering object as a hashed name.
+        The collision group of the triggering collision object.
     **/
-    var group:Hash;
+    var other_group:Hash;
+
+    /**
+        The collision group of the own collision object.
+    **/
+    var own_group:Hash;
 }
 
 

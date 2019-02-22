@@ -6,6 +6,21 @@ package defold;
 @:native("_G.crash")
 extern class Crash {
     /**
+        The max number of user fields.
+    **/
+    static var USERFIELD_MAX(default,never):Int;
+
+    /**
+        The max size of a single user field.
+    **/
+    static var USERFIELD_SIZE(default,never):Int;
+
+    /**
+        The max number of sysfields.
+    **/
+    static var SYSFIELD_MAX(default,never):Int;
+
+    /**
         Read backtrace recorded in a loaded crash dump.
 
         A table is returned containing the addresses of the call stack.
@@ -48,17 +63,17 @@ extern class Crash {
         Reads a system field from a loaded crash dump.
 
         @param handle crash dump handle
-        @param index system field enum
-        @return value value recorded in the crash dump
+        @param index system field enum. Must be less than `Crash.SYSFIELD_MAX`
+        @return value recorded in the crash dump, or nil if it didn't exist
     **/
-    static function get_sys_field(handle:CrashHandle, index:CrashSysField):String;
+    static function get_sys_field(handle:CrashHandle, index:CrashSysField):Null<String>;
 
     /**
         Reads user field from a loaded crash dump.
 
         @param handle crash dump handle
         @param index user data slot index
-        @return value user data value recorded in the crash dump
+        @return user data value recorded in the crash dump
     **/
     static function get_user_field(handle:CrashHandle, index:Int):String;
 
@@ -132,7 +147,7 @@ typedef CrashHandle = Int;
     /**
         Device manufacturer as reported by `Sys.get_sys_info`.
     **/
-    var SYSFIELD_DEVICE_MANUFACTURER;
+    var SYSFIELD_MANUFACTURER;
 
     /**
         Device model as reported by `Sys.get_sys_info`.

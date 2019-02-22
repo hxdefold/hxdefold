@@ -46,13 +46,6 @@ extern class Render {
     static function disable_material():Void;
 
     /**
-        Disables a render target.
-
-        @param render_target render target to disable
-    **/
-    static function disable_render_target(render_target:RenderTarget):Void;
-
-    /**
         Disables a render state.
 
         @param state state to enable
@@ -63,9 +56,8 @@ extern class Render {
         Disables a texture for a render target.
 
         @param unit texture unit to enable disable for
-        @param render_target render target for which to disable the specified texture unit
     **/
-    static function disable_texture(unit:Int, render_target:RenderTarget):Void;
+    static function disable_texture(unit:Int):Void;
 
     /**
         Draws all objects matching a predicate.
@@ -99,13 +91,6 @@ extern class Render {
         @param material_id material id to enable
     **/
     static function enable_material(material_id:String):Void;
-
-    /**
-        Enables a render target.
-
-        @param render_target render target to enable
-    **/
-    static function enable_render_target(render_target:RenderTarget):Void;
 
     /**
         Enables a render state.
@@ -172,6 +157,13 @@ extern class Render {
     /**
         Creates a new render predicate.
 
+        This function returns a new render predicate for objects with materials matching
+        the provided material tags. The provided tags are combined into a bit mask
+        for the predicate. If multiple tags are provided, the predicate matches materials
+        with all tags ANDed together.
+
+        The current limit to the number of tags that can be defined is `64`.
+
         @param predicates table of tags that the predicate should match (table).
         @return new predicate
     **/
@@ -237,6 +229,17 @@ extern class Render {
         @param matrix projection matrix
     **/
     static function set_projection(matrix:Matrix4):Void;
+
+    static var RENDER_TARGET_DEFAULT(default,never):RenderTarget;
+
+    /**
+        Sets a render target. Subsequent draw operations will be to the
+        render target until it is replaced by a subsequent call to set_render_target.
+
+        @param render_target render target to set. `Render.RENDER_TARGET_DEFAULT` to set the default render target
+        @param options optional table with behaviour parameters
+    **/
+    static function set_render_target(render_target:RenderTarget, ?options:SetRenderTargetOptions):Void;
 
     /**
         Sets the render target size.
@@ -392,7 +395,7 @@ typedef RenderMessageDrawText = {
     Render buffer types.
 **/
 @:native("_G.render")
-@:enum extern abstract RenderBufferType(Int) {
+@:enum extern abstract RenderBufferType(Int) to Int {
     var BUFFER_COLOR_BIT;
     var BUFFER_DEPTH_BIT;
     var BUFFER_STENCIL_BIT;
@@ -553,4 +556,16 @@ extern class RenderPredicate {}
     var STENCIL_OP_DECR;
     var STENCIL_OP_DECR_WRAP;
     var STENCIL_OP_INVERT;
+}
+
+/**
+    Options for the `Render.set_render_target`.
+**/
+typedef SetRenderTargetOptions = {
+    /**
+        Transient frame buffer types are only valid while the render target is active, i.e becomes undefined when a new target is set by a subsequent call to `Render.set_render_target`.
+        Default is all non-transient. Be aware that some hardware uses a combined depth stencil buffer and when this is the case both are considered non-transient if exclusively selected!
+        A buffer type defined that doesn't exist in the render target is silently ignored
+    **/
+    var transient:Int;
 }

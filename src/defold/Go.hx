@@ -52,7 +52,10 @@ extern class Go {
     static function cancel_animations(url:HashOrStringOrUrl, property:HashOrString):Void;
 
     /**
-        Delete one or more game objects identified by id.
+        Delete one or more game objects identified by id. Deletion is asynchronous meaning that
+        the game object(s) are scheduled for deletion which will happen at the end of the current
+        frame. Note that game objects scheduled for deletion will be counted against
+        `max_instances` in "game.project" until they are actually removed.
 
         @param id optional id or table of id's of the instance(s) to delete, the instance of the calling script is deleted by default
         @param recursive optional boolean, set to true to recursively delete child hiearchy in child to parent order
@@ -70,11 +73,11 @@ extern class Go {
     static function get(url:HashOrStringOrUrl, id:HashOrString):GoProperty;
 
     /**
-        Returns or constructs a game object instance identifier. The instance id is a hash
+        Returns or constructs an instance identifier. The instance id is a hash
         of the absolute path to the instance.
 
         If `path` is specified, it can either be absolute or relative to the instance of the calling script.
-        If `path` is not specified, the id of the instance the script is attached to will be returned.
+        If `path` is not specified, the id of the game object instance the script is attached to will be returned.
 
         @param path path of the instance for which to return the id
         @return instance id
@@ -82,87 +85,87 @@ extern class Go {
     static function get_id(?path:String):Hash;
 
     /**
-        Gets the position of the instance.
+        Gets the position of a game object instance.
 
         The position is relative the parent (if any).
         Use `Go.get_world_position` to retrieve the global world position.
 
-        @param id optional id of the instance to get the position for, by default the instance of the calling script
+        @param id optional id of the game object instance to get the position for, by default the instance of the calling script
         @return instance position
     **/
     static function get_position(?id:HashOrStringOrUrl):Vector3;
 
     /**
-        Gets the rotation of the instance.
+        Gets the rotation of the game object instance.
 
         The rotation is relative to the parent (if any).
         Use `Go.get_world_rotation` to retrieve the global world position.
 
-        @param id optional id of the instance to get the rotation for, by default the instance of the calling script
+        @param id optional id of the game object instance to get the rotation for, by default the instance of the calling script
         @return instance rotation
     **/
     static function get_rotation(?id:HashOrStringOrUrl):Quaternion;
 
     /**
-        Gets the 3D scale factor of the instance.
+        Gets the 3D scale factor of the game object instance.
 
         The scale is relative the parent (if any).
         Use `Go.get_world_scale` to retrieve the global world 3D scale factor.
 
-        @param id optional id of the instance to get the scale for, by default the instance of the calling script
+        @param id optional id of the game object instance to get the scale for, by default the instance of the calling script
         @return instance scale factor
     **/
     static function get_scale(?id:HashOrStringOrUrl):Vector3;
 
     /**
-        Gets the uniform scale factor of the instance.
+        Gets the uniform scale factor of the game object instance.
 
         The uniform scale is relative the parent (if any).
         If the underlying scale vector is non-uniform the min element of the vector is returned as the uniform scale factor.
 
-        @param id optional id of the instance to get the uniform scale for, by default the instance of the calling script
+        @param id optional id of the game object instance to get the uniform scale for, by default the instance of the calling script
         @return uniform instance scale factor
     **/
     static function get_scale_uniform(?id:HashOrStringOrUrl):Float;
 
     /**
-        Gets the instance world position.
+        Gets the game object instance world position.
 
         Use `Go.get_position` to retrieve the position relative to the parent.
 
-        @param id optional id of the instance to get the world position for, by default the instance of the calling script
+        @param id optional id of the game object instance to get the world position for, by default the instance of the calling script
         @return instance world position
     **/
     static function get_world_position(?id:HashOrStringOrUrl):Vector3;
 
     /**
-        Gets the instance world rotation.
+        Gets the game object instance world rotation.
 
         Use `Go.get_rotation` to retrieve the rotation relative to the parent.
 
-        @param id optional id of the instance to get the world rotation for, by default the instance of the calling script
+        @param id optional id of the game object instance to get the world rotation for, by default the instance of the calling script
         @return instance world rotation
     **/
     static function get_world_rotation(?id:HashOrStringOrUrl):Quaternion;
 
     /**
-        Gets the instance world 3D scale factor.
+        Gets the game object instance world 3D scale factor.
 
         Use `Go.get_scale` to retrieve the 3D scale factor relative to the parent.
         This vector is derived by decomposing the transformation matrix and should be used with care.
         For most cases it should be fine to use `Go.get_world_scale_uniform` instead.
 
-        @param id optional id of the instance to get the world scale for, by default the instance of the calling script
+        @param id optional id of the game object instance to get the world scale for, by default the instance of the calling script
         @return uniform instance world scale factor
     **/
     static function get_world_scale(?id:HashOrStringOrUrl):Vector3;
 
     /**
-        Gets the instance world scale factor.
+        Gets the uniform game object instance world scale factor.
 
         Use `go.get_scale_uniform` to retrieve the scale factor relative to the parent.
 
-        @param id optional id of the instance to get the world scale for, by default the instance of the calling script
+        @param id optional id of the game object instance to get the world scale for, by default the instance of the calling script
         @return instance world scale factor
     **/
     static function get_world_scale_uniform(?id:HashOrStringOrUrl):Float;
@@ -177,36 +180,36 @@ extern class Go {
     static function set(url:HashOrStringOrUrl, id:HashOrString, value:GoProperty):Void;
 
     /**
-        Sets the position of the instance.
+        Sets the position of the game object instance.
 
         The position is relative to the parent (if any).
         The global world position cannot be manually set.
 
         @param position position to set
-        @param id optional id of the instance to set the position for, by default the instance of the calling script
+        @param id optional id of the game object instance to set the position for, by default the instance of the calling script
     **/
     static function set_position(position:Vector3, ?id:HashOrStringOrUrl):Void;
 
     /**
-        Sets the rotation of the instance.
+        Sets the rotation of the game object instance.
 
         The rotation is relative to the parent (if any).
         The global world rotation cannot be manually set.
 
         @param rotation rotation to set
-        @param id optional id of the instance to get the rotation for, by default the instance of the calling script
+        @param id optional id of the game object instance to get the rotation for, by default the instance of the calling script
     **/
     static function set_rotation(rotation:Quaternion, ?id:HashOrStringOrUrl):Void;
 
     /**
-        Sets the scale factor of the instance.
+        Sets the scale factor of the game object instance.
 
         The scale factor is relative to the parent (if any). The global world scale factor cannot be manually set.
 
         *NOTE!* Physics are currently not affected when setting scale from this function.
 
         @param scale vector or uniform scale factor, must be greater than 0
-        @param id optional id of the instance to get the scale for, by default the instance of the calling script
+        @param id optional id of the game object instance to get the scale for, by default the instance of the calling script
     **/
     static function set_scale(scale:EitherType<Float,Vector3>, ?id:HashOrStringOrUrl):Void;
 }
@@ -300,7 +303,7 @@ typedef GoMessageSetParent = {
     @:optional var parent_id:Hash;
 
     /**
-        if the world transform of the instance should be preserved when changing spaces, 0 for false and 1 for true
+        if the world transform of the instance should be preserved when changing spaces, 0 for false and 1 for true. The default value is 1.
     **/
     @:optional var keep_world_transform:Int;
 }

@@ -21,7 +21,7 @@ extern class Resource {
         @param path The path to the resource
         @return the buffer stored on disc
     **/
-    static function load(path:HashOrString):Buffer;
+    static function load(path:String):Buffer;
 
     /**
         Sets the resource data for a specific resource
@@ -41,6 +41,23 @@ extern class Resource {
         *NOTE* Currently, only 1 mipmap is generated.
     **/
     static function set_texture(path:HashOrString, table:ResourceTextureInfo, buffer:Buffer):Void;
+
+    /**
+        Create, verify, and store a manifest to device.
+
+        Create a new manifest from a buffer. The created manifest is verified
+        by ensuring that the manifest was signed using the bundled public/private
+        key-pair during the bundle process and that the manifest supports the current
+        running engine version. Once the manifest is verified it is stored on device.
+        The next time the engine starts (or is rebooted) it will look for the stored
+        manifest before loading resources. Storing a new manifest allows the
+        developer to update the game, modify existing resources, or add new
+        resources to the game through LiveUpdate.
+
+        @param manifest_buffer the binary data that represents the manifest
+        @param callback the callback function executed once the engine has attempted to store the manifest.
+    **/
+    static function store_manifest<T>(manifest_buffer:String, callback:#if haxe4 (self:T, status:ResourceLiveUpdateStatus)->Void #else T->ResourceLiveUpdateStatus->Void #end):Void;
 
     /**
         Add a resource to the data archive and runtime index.
@@ -119,4 +136,48 @@ typedef ResourceTextureInfo = {
         RGBA type texture format.
     **/
     var TEXTURE_FORMAT_RGBA;
+}
+
+@:native("_G.resource")
+@:enum extern abstract ResourceLiveUpdateStatus({}) {
+    /**
+        Mismatch between between expected bundled resources and actual bundled resources.
+        The manifest expects a resource to be in the bundle, but it was not found in the bundle.
+        This is typically the case when a non-excluded resource was modified between publishing the bundle and publishing the manifest.
+    **/
+    var LIVEUPDATE_BUNDLED_RESOURCE_MISMATCH;
+
+    /**
+        Mismatch between running engine version and engine versions supported by manifest.
+    **/
+    var LIVEUPDATE_ENGINE_VERSION_MISMATCH;
+
+    /**
+        Failed to parse manifest data buffer. The manifest was probably produced by a different engine version.
+    **/
+    var LIVEUPDATE_FORMAT_ERROR;
+
+    /**
+        The handled resource is invalid.
+    **/
+    var LIVEUPDATE_INVALID_RESOURCE;
+
+    var LIVEUPDATE_OK;
+
+    /**
+        Mismatch between scheme used to load resources.
+        Resources are loaded with a different scheme than from manifest, for example over HTTP or directly from file.
+        This is typically the case when running the game directly from the editor instead of from a bundle.
+    **/
+    var LIVEUPDATE_SCHEME_MISMATCH;
+
+    /**
+        Mismatch between manifest expected signature and actual signature.
+    **/
+    var LIVEUPDATE_SIGNATURE_MISMATCH;
+
+    /**
+        Mismatch between manifest expected version and actual version.
+    **/
+    var LIVEUPDATE_VERSION_MISMATCH;
 }

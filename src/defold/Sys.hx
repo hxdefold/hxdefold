@@ -20,6 +20,9 @@ extern class Sys {
     /**
         Get config value from the game.project configuration file.
 
+        In addition to the project file, configuration values can also be passed
+        to the runtime as command line arguments with the `--config` argument.
+
         @param key key to get value for. The syntax is SECTION.KEY
         @param default_value default value to return if the value does not exist
         @return config value as a string. nil or default_value if the config key doesn't exists
@@ -80,21 +83,21 @@ extern class Sys {
         Loads resource from game data.
 
         Loads a custom resource. Specify the full filename of the resource that you want
-        to load. When loaded, it is returned as a string.
+        to load. When loaded, the file data is returned as a string.
+        If loading fails, the function returns nil.
 
         In order for the engine to include custom resources in the build process, you need
-        to specify them in the "game.project" settings file:
-        ```
-        [project]
-        title = My project
-        version = 0.1
-        custom_resources = main/data/,assets/level_data.json
-        ```
+        to specify them in the "custom_resources" key in your "game.project" settings file.
+        You can specify single resource files or directories. If a directory is included
+        in the resource list, all files and directories in that directory is recursively
+        included:
+
+        For example "main/data/,assets/level_data.json".
 
         @param filename resource to load, full path
         @return loaded data, which is empty if the file could not be found
     **/
-    static function load_resource(filename:String):String;
+    static function load_resource(filename:String):Null<String>;
 
     /**
         Open url in default application.
@@ -111,9 +114,12 @@ extern class Sys {
 
         The table can later be loaded by `sys.load`.
         Use `sys.get_save_file` to obtain a valid location for the file.
-        Internally, this function uses a workspace buffer sized output file sized 128kb. This size reflects the output file size which must not exceed this limit.
-        Additionally, the total number of rows that any one table may contain is limited to 65536 (i.e. a 16 bit range). When tables are used to represent arrays, the values of
-        keys are permitted to fall within a 32 bit range, supporting sparse arrays, however the limit on the total number of rows remains in effect.
+        Internally, this function uses a workspace buffer sized output file sized 512kb.
+        This size reflects the output file size which must not exceed this limit.
+        Additionally, the total number of rows that any one table may contain is limited to 65536
+        (i.e. a 16 bit range). When tables are used to represent arrays, the values of
+        keys are permitted to fall within a 32 bit range, supporting sparse arrays, however
+        the limit on the total number of rows remains in effect.
 
         @param filename file to write to
         @param table lua table to save
@@ -165,10 +171,32 @@ class SysMessages {
     /**
         Set update frequency.
 
-        Set game update-frequency. This option is equivalent to display.update_frequency but
-        set in run-time
+        Set game update-frequency (frame cap). This option is equivalent to `display.update_frequency` in
+        the "game.project" settings but set in run-time. If `Vsync` checked in "game.project", the rate will
+        be clamped to a swap interval that matches any detected main monitor refresh rate. If `Vsync` is
+        unchecked the engine will try to respect the rate in software using timers. There is no
+        guarantee that the frame cap will be achieved depending on platform specifics and hardware settings.
     **/
     static var set_update_frequency(default, never) = new Message<SysMessageSetUpdateFrequency>("set_update_frequency");
+
+    /**
+        Set vsync swap interval.
+
+        Set the vsync swap interval. The interval with which to swap the front and back buffers
+        in sync with vertical blanks (v-blank), the hardware event where the screen image is updated
+        with data from the front buffer. A value of 1 swaps the buffers at every v-blank, a value of
+        2 swaps the buffers every other v-blank and so on. A value of 0 disables waiting for v-blank
+        before swapping the buffers. Default value is 1.
+
+        When setting the swap interval to 0 and having `vsync` disabled in
+        "game.project", the engine will try to respect the set frame cap value from
+        "game.project" in software instead.
+
+        This setting may be overridden by driver settings.
+
+        This message can only be sent to the designated `@system` socket.
+    **/
+    static var set_vsync(default, never) = new Message<SysMessageSetVsync>("set_vsync");
 
     /**
         Starts video recording.
@@ -176,14 +204,17 @@ class SysMessages {
         Starts video recording of the game frame-buffer to file. Current video format is the
         open vp8 codec in the ivf container. It's possible to upload this format directly
         to YouTube. The VLC video player has native support but with the known issue that
-        not the entirely files is played back. It's probably an issue with VLC.
+        not the entire file is played back. It's probably an issue with VLC.
         The Miro Video Converter has support for vp8/ivf.
+        Video recording is only supported on desktop platforms.
         NOTE: Audio is currently not supported
     **/
     static var start_record(default, never) = new Message<SysMessageStartRecord>("start_record");
 
     /**
-        Stop current video recording.
+        Stops the currently active video recording.
+
+        Video recording is only supported on desktop platforms.
     **/
     static var stop_record(default, never) = new Message<Void>("stop_record");
 
@@ -232,6 +263,16 @@ typedef SysMessageSetUpdateFrequency = {
         target frequency. 60 for 60 fps
     **/
     var frequency:Int;
+}
+
+/**
+    Data for the `SysMessages.set_vsync` message.
+**/
+typedef SysMessageSetVsync = {
+    /**
+        Target swap interval.
+    **/
+    var swap_interval:Int;
 }
 
 /**
@@ -293,8 +334,20 @@ typedef SysApplicationInfo = {
     Return value for `Sys.get_engine_info`.
 **/
 typedef SysEngineInfo = {
+    /**
+        The current Defold engine version, i.e. "1.2.96"
+    **/
     var version:String;
+
+    /**
+        The SHA1 for the current engine build, i.e. "0060183cce2e29dbd09c85ece83cbb72068ee050"
+    **/
     var version_sha1:String;
+
+    /**
+        If the engine is a debug or release version
+    **/
+    var is_debug:Bool;
 }
 
 /**
@@ -331,28 +384,39 @@ typedef SysSysInfo = {
     **/
     var manufacturer:String;
 
+    /**
+        The system OS name: "Darwin", "Linux", "Windows", "HTML5", "Android" or "iPhone OS"
+    **/
     var system_name:String;
+
+    /**
+        The system OS version.
+    **/
     var system_version:String;
+
+    /**
+        The API version on the system.
+    **/
     var api_version:String;
 
     /**
-        ISO-639 format (two characters).
+        Two character ISO-639 format, i.e. "en".
     **/
     var language:String;
 
     /**
-        Reflects device preferred language.
-        ISO-639 format (two characters) and if applicable by a dash (-) and an ISO 15924 script code.
+        Two character ISO-639 format (i.e. "sr") and, if applicable, followed by a dash (-) and an ISO 15924 script code (i.e. "sr-Cyrl" or "sr-Latn").
+        Reflects the device preferred language.
     **/
     var device_language:String;
 
     /**
-        ISO-3166 format (two characters).
+        Two character ISO-3166 format, i.e. "US".
     **/
     var territory:String;
 
     /**
-        GMT offset in minutes.
+        The current offset from GMT (Greenwich Mean Time), in minutes.
     **/
     var gmt_offset:Int;
 
@@ -366,6 +430,13 @@ typedef SysSysInfo = {
     **/
     var ad_ident:String;
 
+    /**
+         true if ad tracking is enabled, false otherwise.
+    **/
     var ad_tracking_enabled:Bool;
+
+    /**
+        The HTTP user agent, i.e. "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/602.4.8 (KHTML, like Gecko) Version/10.0.3 Safari/602.4.8"
+    **/
     var user_agent:String;
 }
