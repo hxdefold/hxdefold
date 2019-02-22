@@ -61,7 +61,7 @@ class CollectionproxyMessages {
 
         Post this message to a collection-proxy-component to finalize the referenced collection, which in turn finalizes the contained game objects and components.
     **/
-    static var final(default, never) = new Message<Void>("final");
+    static var final_(default, never) = new Message<Void>("final");
 
     /**
         Tells a collection proxy to initialize the loaded collection.
