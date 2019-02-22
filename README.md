@@ -47,6 +47,7 @@ And example Defold projects, ported from Lua:
  * https://github.com/hxdefold/hxdefold-example-frogrunner
  * https://github.com/hxdefold/hxdefold-example-magiclink
  * https://github.com/hxdefold/hxdefold-example-throwacrow
+ * https://github.com/hxdefold/hxdefold-example-warbattles
 
 ## How does it work?
 
