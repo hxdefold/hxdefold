@@ -30,6 +30,7 @@ class Greeter extends defold.support.Script<GreeterData> {
 Required Haxe compilation flags:
  * `-lib hxdefold` - use this library, obviously
  * `-lua something.lua` - the output lua module
+ * `-D lua-vanilla` - (for Haxe 4) don't use "unusual" third-party libs neede for full Haxe spec compliance (e.g. lua-utf8 not available in Defold)
  * `--macro defold.support.ScriptMacro.use(".")` - generate glue `.script` files for script classes, first argument is the path to Defold project root folder
 
 Recommended additional Haxe compilation flags:
