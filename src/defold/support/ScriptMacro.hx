@@ -148,7 +148,16 @@ class ScriptMacro {
                 // generate callback fields
                 for (field in cl.fields.get()) {
                     // this is a callback field, if it's overriden from the base Script class
-                    if (baseMethods.exists(field.name)) {
+                    var fieldName = field.name;
+                    if (baseMethods.exists(fieldName)) {
+
+                        // in haxe 4, final is a keyword, so we need to handle this here
+                        // we could do it more elaborately via metadata or something, but oh well :)
+                        var callbackFieldName = switch fieldName {
+                            case "final_": "final";
+                            case _: fieldName;
+                        };
+
                         // generate arguments
                         var args = switch (field.type) {
                             case TFun(args, _):
@@ -157,7 +166,7 @@ class ScriptMacro {
                                 throw new Error("Overriden class field is not a method. This can't happen! :)", field.pos);
                         }
                         // generate callback function definition
-                        b.add('function ${field.name}($args)\n\tscript:${field.name}($args)\nend\n\n');
+                        b.add('function $callbackFieldName($args)\n\tscript:$fieldName($args)\nend\n\n');
                     }
                 }
 

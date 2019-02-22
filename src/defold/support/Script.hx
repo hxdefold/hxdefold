@@ -30,7 +30,7 @@ class Script<T:{}> {
 
         @param self reference to the script state to be used for storing data
     **/
-    @:dox(show) function final(self:T):Void  {}
+    @:dox(show) function final_(self:T):Void  {}
 
     /**
         Called every frame to update the script component.
