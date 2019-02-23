@@ -41,6 +41,12 @@ script:
 - haxe build.hxml
 - popd
 
+- mkdir sample
+- pushd sample
+- haxelib run hxdefold init
+- haxe build.hxml
+- popd
+
 - haxe doc.hxml
 
 deploy:

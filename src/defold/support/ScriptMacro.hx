@@ -27,13 +27,35 @@ enum PropertyType {
 }
 
 class ScriptMacro {
-    static function use(defoldRoot:String, outDir = "scripts") {
-        var defoldRoot = sys.FileSystem.fullPath(defoldRoot).replace("\\", "/");
+    static function build() {
+        var cls = Context.getLocalClass().get();
+        if (!cls.meta.has(":keep")) {
+            // keep the script, so it's not ever DCEd
+            cls.meta.add(":keep", [], cls.pos);
+        }
+        if (!cls.meta.has(":expose")) {
+            // expose the script, so it's visible to generated script
+            cls.meta.add(":expose", [], cls.pos);
+        }
+        return null;
+    }
+
+    static function use() {
+        if (Context.defined("eval")) return; // run through `-lib hxdefold` for `haxelib run hxdefold`
+
+        var defoldRoot = Context.definedValue("hxdefold-projectroot");
+        if (defoldRoot == null) defoldRoot = ".";
+
+        var outDir = Context.definedValue("hxdefold-scriptdir");
+        if (outDir == null) outDir = "scripts";
+
+        defoldRoot = sys.FileSystem.fullPath(defoldRoot).replace("\\", "/");
         if (!defoldRoot.endsWith("/"))
             defoldRoot += "/";
         var outFile = sys.FileSystem.fullPath(Compiler.getOutput()).replace("\\", "/");
-        if (!StringTools.startsWith(outFile, defoldRoot))
-            throw "Haxe/Lua output file should be within defold project root: " + defoldRoot;
+        if (!StringTools.startsWith(outFile, defoldRoot)) {
+            throw new Error("Haxe/Lua output file should be within specified defold project root: " + defoldRoot + ". Check -lua argument in your build hxml file.", Context.currentPos());
+        }
 
         outDir = Path.join([defoldRoot, outDir]);
 
@@ -99,9 +121,6 @@ class ScriptMacro {
             // generate scripts for our classes
             for (script in scriptClasses) {
                 var cl = script.cls;
-
-                // expose the script, so it's visible to generated script
-                cl.meta.add(":expose", [], cl.pos);
 
                 // get data properties for generating `go.property` calls, which should be in the genrated script
                 var props = getProperties(script.data, cl.pos);

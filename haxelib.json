@@ -7,5 +7,6 @@
     "classPath": "src",
     "releasenote": "Initial release",
     "contributors": ["nadako"],
+    "main": "defold.support.Run",
     "tags": ["game", "lua", "defold", "extern"]
 }

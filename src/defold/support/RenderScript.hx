@@ -8,6 +8,7 @@ import defold.types.*;
     Subclasses of this class will be available as .render_script files in the Defold project.
     See `ScriptMacro` for more details.
 **/
+@:autoBuild(defold.support.ScriptMacro.build())
 class RenderScript<T:{}> {
     function new() {}
 
