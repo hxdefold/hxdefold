@@ -1,7 +1,7 @@
 package defold.support;
 
 // this is the init script executed by `haxelib run hxdefold`
-#if eval
+#if (interp || eval)
 import haxe.io.Path;
 
 class Run {
