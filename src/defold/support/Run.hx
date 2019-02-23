@@ -65,7 +65,7 @@ class Hello extends defold.support.Script<HelloData> {
 		var srcPath = Path.join([dir, "src"]);
 		sys.FileSystem.createDirectory(srcPath);
 
-		var samplePath = Path.join([srcPath, "Sample.hx"]);
+		var samplePath = Path.join([srcPath, "Hello.hx"]);
 		sys.io.File.saveContent(samplePath, sample);
 	}
 }
