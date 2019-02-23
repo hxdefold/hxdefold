@@ -7,6 +7,7 @@ import defold.Gui.GuiNode;
 /**
     Functions and messages for interacting with the 'Spine' 2D bone animation system.
 
+    See `SpineProperties` for related properties.
     See `SpineMessages` for messages related to spine component.
 **/
 @:native("_G.spine")
@@ -76,6 +77,41 @@ extern class Spine {
         @param spine_slot optional slot id to only change a specific slot
     **/
     static function set_skin(url:HashOrStringOrUrl, spine_skin:HashOrString, ?spine_slot:HashOrString):Void;
+}
+
+
+/**
+    Properties related to the `Spine` module.
+**/
+@:publicFields
+class SpineProperties {
+    /**
+        spine animation.
+
+        (READ ONLY) The current animation set on the component.
+    **/
+    static var animation(default, never) = new Property<Hash>("animation");
+
+    /**
+        The normalized animation cursor.
+
+        Please note that spine events may not fire as expected when the cursor is manipulated directly.
+    **/
+    static var cursor(default, never) = new Property<Float>("cursor");
+
+    /**
+        The animation playback rate. A multiplier to the animation playback rate.
+
+        The playback_rate is a non-negative number, a negative value will be clamped to 0.
+    **/
+    static var playback_rate(default, never) = new Property<Float>("playback_rate");
+
+    /**
+        The current skin on the component.
+        If setting the skin property the skin must be present on the spine
+        model or a runtime error is signalled.
+    **/
+    static var skin(default, never) = new Property<Hash>("skin");
 }
 
 /**

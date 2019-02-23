@@ -70,6 +70,7 @@ extern class Go {
         @param id id of the property to retrieve
         @return the value of the specified property
     **/
+    @:overload(function<T>(url:HashOrStringOrUrl, id:Property<T>):T {})
     static function get(url:HashOrStringOrUrl, id:HashOrString):GoProperty;
 
     /**
@@ -212,6 +213,33 @@ extern class Go {
         @param id optional id of the game object instance to get the scale for, by default the instance of the calling script
     **/
     static function set_scale(scale:EitherType<Float,Vector3>, ?id:HashOrStringOrUrl):Void;
+}
+
+/**
+    Properties related to the `Go` module.
+**/
+@:publicFields
+class GoProperties {
+    /**
+        The rotation of the game object expressed in Euler angles.
+        Euler angles are specified in degrees in the interval (-360, 360).
+    **/
+    static var euler(default, never) = new Property<Vector3>("euler");
+
+    /**
+        The position of the game object.
+    **/
+    static var position(default, never) = new Property<Vector3>("position");
+
+    /**
+        The rotation of the game object.
+    **/
+    static var rotation(default, never) = new Property<Quaternion>("rotation");
+
+    /**
+        The uniform scale of the game object.
+    **/
+    static var scale(default, never) = new Property<Float>("scale");
 }
 
 /**

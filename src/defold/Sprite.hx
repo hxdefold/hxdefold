@@ -5,6 +5,7 @@ import defold.types.*;
 /**
     Functions, messages and properties used to manipulate sprite components.
 
+    See `SpriteProperties` for related properties.
     See `SpriteMessages` for related messages.
 **/
 @:native("_G.sprite")
@@ -71,6 +72,27 @@ extern class Sprite {
         @param flip if the sprite should flip its animations or not
     **/
     static function set_vflip(url:UrlOrString, flip:Bool):Void;
+}
+
+/**
+    Properties related to the `Sprite` module.
+**/
+@:publicFields
+class SpriteProperties {
+    /**
+        The non-uniform scale of the sprite.
+    **/
+    static var scale(default, never) = new Property<Vector3>("scale");
+
+    /**
+        (READ ONLY) Returns the size of the sprite, not allowing for any additional scaling that may be applied.
+    **/
+    static var size(default, never) = new Property<Vector3>("size");
+
+    /**
+        (READ ONLY) Returns the texture path hash of the sprite. Used for getting/setting resource data
+    **/
+    static var texture0(default, never) = new Property<Hash>("texture0");
 }
 
 /**

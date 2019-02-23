@@ -7,6 +7,7 @@ import defold.types.*;
     with other objects (collisions and ray-casting) and control of
     physical behaviors.
 
+    See `PhysicsProperties` for related properties.
     See `PhysicsMessages` for related messages.
 **/
 @:native("_G.physics")
@@ -29,6 +30,50 @@ extern class Physics {
         @param request_id a number between 0-255 that will be sent back in the response for identification, 0 by default
     **/
     static function ray_cast(from:Vector3, to:Vector3, groups:lua.Table<Int,Hash>, ?request_id:Int):Void;
+}
+
+/**
+    Properties related to the `Physics` module.
+**/
+@:publicFields
+class PhysicsProperties {
+    /**
+        collision object angular damping.
+
+        The angular damping value for the collision object. Setting this value alters the damping of
+        angular motion of the object (rotation). Valid values are between 0 (no damping) and 1 (full damping).
+    **/
+    static var angular_damping(default, never) = new Property<Float>("angular_damping");
+
+    /**
+        collision object angular velocity.
+
+        (READ ONLY) Returns the current angular velocity of the collision object component as a `Vector3`.
+        The velocity is measured as a rotation around the vector with a speed equivalent to the vector length
+        in radians/s.
+    **/
+    static var angular_velocity(default, never) = new Property<Vector3>("angular_velocity");
+
+    /**
+        The linear damping value for the collision object. Setting this value alters the damping of
+        linear motion of the object. Valid values are between 0 (no damping) and 1 (full damping).
+    **/
+    static var linear_damping(default, never) = new Property<Float>("linear_damping");
+
+    /**
+        collision object linear velocity.
+
+        (READ ONLY) Returns the current linear velocity of the collision object component as a vector3.
+        The velocity is measured in units/s (pixels/s).
+    **/
+    static var linear_velocity(default, never) = new Property<Vector3>("linear_velocity");
+
+    /**
+        collision object mass.
+
+        (READ ONLY) Returns the defined physical mass of the collision object component as a number.
+    **/
+    static var mass(default, never) = new Property<Float>("mass");
 }
 
 /**

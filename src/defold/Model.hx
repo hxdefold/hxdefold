@@ -5,6 +5,9 @@ import defold.Go.GoPlayback;
 
 /**
     Functions and messages for interacting with model components.
+
+    See `ModelProperties` for related properties.
+    See `ModelMessages` for related messages.
 **/
 @:native("_G.model")
 extern class Model {
@@ -85,4 +88,70 @@ typedef ModelPlayAnimProperties = {
         Must be positive.
     **/
     @:optional var playback_rate:Float;
+}
+
+/**
+    Messages related to the `Model` module.
+**/
+@:publicFields
+class ModelMessages {
+    /**
+        Reports the completion of a Model animation.
+
+        This message is sent when a Model animation has finished playing back to the script
+        that started the animation.
+
+        No message is sent if a completion callback function was supplied
+        when the animation was started. No message is sent if the animation is cancelled with
+        `Model.cancel`. This message is sent only for animations that play with
+        the following playback modes:
+
+         * `GoPlayback.PLAYBACK_ONCE_FORWARD`
+         * `GoPlayback.PLAYBACK_ONCE_BACKWARD`
+         * `GoPlayback.PLAYBACK_ONCE_PINGPONG`
+    **/
+    static var model_animation_done(default, never) = new Message<ModelMessageModelAnimationDone>("model_animation_done");
+}
+
+/**
+    Data for the `ModelMessages.model_animation_done` message.
+**/
+typedef ModelMessageModelAnimationDone = {
+    /**
+        The id of the completed animation.
+    **/
+    var animation_id:Hash;
+
+    /**
+        The playback mode of the completed animation.
+    **/
+    var playback:GoPlayback;
+}
+
+/**
+    Properties related to the `Model` module.
+**/
+@:publicFields
+class ModelProperties {
+    /**
+        The current animation set on the component.
+    **/
+    static var animation(default, never) = new Property<Hash>("animation");
+
+    /**
+        The normalized animation cursor.
+
+        Please note that model events may not fire as expected when the cursor is manipulated directly.
+    **/
+    static var cursor(default, never) = new Property<Float>("cursor");
+
+    /**
+        The animation playback rate. A multiplier to the animation playback rate.
+    **/
+    static var playback_rate(default, never) = new Property<Float>("playback_rate");
+
+    /**
+        (READ ONLY) Returns the texture path hash of the model. Used for getting/setting resource data
+    **/
+    static var texture0(default, never) = new Property<Hash>("texture0");
 }
