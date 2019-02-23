@@ -54,7 +54,7 @@ class ScriptMacro {
             defoldRoot += "/";
         var outFile = sys.FileSystem.absolutePath(Compiler.getOutput()).replace("\\", "/");
         if (!StringTools.startsWith(outFile, defoldRoot)) {
-            throw new Error("Haxe/Lua output file should be within specified defold project root: " + defoldRoot + ". Check -lua argument in your build hxml file.", Context.currentPos());
+            throw new Error("Haxe/Lua output file should be within specified defold project root (" + defoldRoot + "), but is " + outFile + ". Check -lua argument in your build hxml file.", Context.currentPos());
         }
 
         outDir = Path.join([defoldRoot, outDir]);
