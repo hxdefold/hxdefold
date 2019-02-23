@@ -49,10 +49,10 @@ class ScriptMacro {
         var outDir = Context.definedValue("hxdefold-scriptdir");
         if (outDir == null) outDir = "scripts";
 
-        defoldRoot = sys.FileSystem.absolutePath(defoldRoot).replace("\\", "/");
+        defoldRoot = absolutePath(defoldRoot);
         if (!defoldRoot.endsWith("/"))
             defoldRoot += "/";
-        var outFile = sys.FileSystem.absolutePath(Compiler.getOutput()).replace("\\", "/");
+        var outFile = absolutePath(Compiler.getOutput());
         if (!StringTools.startsWith(outFile, defoldRoot)) {
             throw new Error("Haxe/Lua output file should be within specified defold project root (" + defoldRoot + "), but is " + outFile + ". Check -lua argument in your build hxml file.", Context.currentPos());
         }
@@ -195,6 +195,12 @@ class ScriptMacro {
                 sys.io.File.saveContent('$scriptDir/${cl.name}.$ext', b.toString());
             }
         });
+    }
+
+    // sys.FileSystem.absolutePath is broken on Haxe 4, so we use the old method
+    static function absolutePath(relPath:String):String {
+        if (haxe.io.Path.isAbsolute(relPath)) return relPath;
+        return haxe.io.Path.join([std.Sys.getCwd(), relPath]);
     }
 
     // this should be in the standard library
