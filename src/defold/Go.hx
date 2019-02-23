@@ -70,8 +70,8 @@ extern class Go {
         @param id id of the property to retrieve
         @return the value of the specified property
     **/
-    @:overload(function<T>(url:HashOrStringOrUrl, id:Property<T>):T {})
-    static function get(url:HashOrStringOrUrl, id:HashOrString):GoProperty;
+    @:overload(function(url:HashOrStringOrUrl, id:HashOrString):GoProperty {})
+    static function get<T>(url:HashOrStringOrUrl, id:Property<T>):T;
 
     /**
         Returns or constructs an instance identifier. The instance id is a hash
@@ -178,7 +178,8 @@ extern class Go {
         @param id id of the property to set
         @param value the value to set
     **/
-    static function set(url:HashOrStringOrUrl, id:HashOrString, value:GoProperty):Void;
+    @:overload(function(url:HashOrStringOrUrl, id:HashOrString, value:GoProperty):Void {})
+    static function set<T>(url:HashOrStringOrUrl, id:Property<T>, value:T):Void;
 
     /**
         Sets the position of the game object instance.
