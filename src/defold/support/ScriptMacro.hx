@@ -41,7 +41,7 @@ class ScriptMacro {
     }
 
     static function use() {
-        if (Context.defined("eval")) return; // run through `-lib hxdefold` for `haxelib run hxdefold`
+        if (!Context.defined("lua")) return; // run through `-lib hxdefold` for `haxelib run hxdefold`
 
         var defoldRoot = Context.definedValue("hxdefold-projectroot");
         if (defoldRoot == null) defoldRoot = ".";
