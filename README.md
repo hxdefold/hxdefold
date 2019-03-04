@@ -78,3 +78,7 @@ end
 ```
 
 You can then add this script to the game objects in the Defold Editor.
+
+## Logo
+
+Made by the awesome [**@markknol**](https://github.com/markknol). Check out [his website](https://blog.stroep.nl/) for more art&code!
