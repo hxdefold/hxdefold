@@ -178,6 +178,7 @@ private class Glue {
 
             var tp = {
                 var parts = cl.module.split(".");
+                parts.unshift("std"); // because the init class is generated inside `defold.support`, we want to avoid Haxe to resolve package-less names to some defold.* type, so we append a magic `std` package
                 var name = parts.pop();
                 {pack: parts, name: name, sub: cl.name};
             }
