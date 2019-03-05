@@ -9,13 +9,13 @@ import haxe.macro.Type;
 using StringTools;
 using haxe.macro.Tools;
 
-enum ScriptType {
+private enum ScriptType {
     SCode;
     SGui;
     SRender;
 }
 
-enum PropertyType {
+private enum PropertyType {
     PBool;
     PInt;
     PFloat;
@@ -26,184 +26,230 @@ enum PropertyType {
     PQuaternion;
 }
 
-class ScriptMacro {
-    static function build() {
-        var cls = Context.getLocalClass().get();
-        if (!cls.meta.has(":keep")) {
-            // keep the script, so it's not ever DCEd
-            cls.meta.add(":keep", [], cls.pos);
-        }
-        if (!cls.meta.has(":expose")) {
-            // expose the script, so it's visible to generated script
-            cls.meta.add(":expose", [], cls.pos);
-        }
-        return null;
+private typedef ScriptExport = {
+    var dir:String;
+    var name:String;
+    var position:String;
+    var properties:Array<{name:String, value:String}>;
+    var callbacks:Array<{name:String, method:String, args:Array<String>, isVoid:Bool}>;
+}
+
+private class Glue {
+    static inline var EXPORT_TABLE = "_hxdefold_";
+
+    var outDir:String;
+    var requireModule:String;
+    var scripts = new Array<ScriptExport>();
+
+    // these will contain a map of callback method names
+    var baseScriptMethods = new Map();
+    var baseGuiScriptMethods = new Map();
+    var baseRenderScriptMethods = new Map();
+
+    public function new(outDir, requireModule) {
+        this.outDir = outDir;
+        this.requireModule = requireModule;
     }
 
-    static function use() {
-        if (!Context.defined("lua")) return; // run through `-lib hxdefold` for `haxelib run hxdefold`
+    public function process(types:Array<ModuleType>) {
+        // collect script classes
+        var scriptClasses = [];
 
-        var defoldRoot = Context.definedValue("hxdefold-projectroot");
-        if (defoldRoot == null) defoldRoot = ".";
+        for (type in types) {
+            switch (type) {
+                case TClassDecl(_.get() => cl):
+                    switch (cl) {
+                        case {pack: ["defold", "support"], name: "Script"}:
+                            for (field in cl.fields.get())
+                                baseScriptMethods[field.name] = true;
 
-        var outDir = Context.definedValue("hxdefold-scriptdir");
-        if (outDir == null) outDir = "scripts";
+                        case {pack: ["defold", "support"], name: "GuiScript"}:
+                            for (field in cl.fields.get())
+                                baseGuiScriptMethods[field.name] = true;
 
-        defoldRoot = absolutePath(defoldRoot);
-        if (!defoldRoot.endsWith("/"))
-            defoldRoot += "/";
-        var outFile = absolutePath(Compiler.getOutput());
-        if (!StringTools.startsWith(outFile, defoldRoot)) {
-            throw new Error("Haxe/Lua output file should be within specified defold project root (" + defoldRoot + "), but is " + outFile + ". Check -lua argument in your build hxml file.", Context.currentPos());
-        }
+                        case {pack: ["defold", "support"], name: "RenderScript"}:
+                            for (field in cl.fields.get())
+                                baseRenderScriptMethods[field.name] = true;
 
-        outDir = Path.join([defoldRoot, outDir]);
+                        case {superClass: {t: _.get() => {pack: ["defold", "support"], name: "Script"}, params: [tData]}}:
+                            scriptClasses.push({cls: cl, data: tData, type: SCode});
 
-        // determine the the module name for the "require" statement,
-        // based on main lua file path relative to defold project root
-        var parts = outFile.substring(defoldRoot.length).split("/");
-        var last = parts.length - 1;
-        parts[last] = Path.withoutExtension(parts[last]);
-        var requireModule = parts.join(".");
+                        case {superClass: {t: _.get() => {pack: ["defold", "support"], name: "GuiScript"}, params: [tData]}}:
+                            scriptClasses.push({cls: cl, data: tData, type: SGui});
 
-        Context.onGenerate(function(types) {
-            // clear the scripts output directory
-            deleteRec(outDir);
-            sys.FileSystem.createDirectory(outDir);
+                        case {superClass: {t: _.get() => {pack: ["defold", "support"], name: "RenderScript"}, params: [tData]}}:
+                            scriptClasses.push({cls: cl, data: tData, type: SRender});
 
-            // collect script classes
-            var scriptClasses = [];
-
-            // these will contain a map of callback method names
-            var baseScriptMethods = new Map();
-            var baseGuiScriptMethods = new Map();
-            var baseRenderScriptMethods = new Map();
-
-            for (type in types) {
-                switch (type) {
-                    case TInst(_.get() => cl, _):
-                        switch (cl) {
-                            case {pack: ["defold", "support"], name: "Script"}:
-                                for (field in cl.fields.get())
-                                    baseScriptMethods[field.name] = true;
-
-                            case {pack: ["defold", "support"], name: "GuiScript"}:
-                                for (field in cl.fields.get())
-                                    baseGuiScriptMethods[field.name] = true;
-
-                            case {pack: ["defold", "support"], name: "RenderScript"}:
-                                for (field in cl.fields.get())
-                                    baseRenderScriptMethods[field.name] = true;
-
-                            case {superClass: {t: _.get() => {pack: ["defold", "support"], name: "Script"}, params: [tData]}}:
-                                scriptClasses.push({cls: cl, data: tData, type: SCode});
-
-                            case {superClass: {t: _.get() => {pack: ["defold", "support"], name: "GuiScript"}, params: [tData]}}:
-                                scriptClasses.push({cls: cl, data: tData, type: SGui});
-
-                            case {superClass: {t: _.get() => {pack: ["defold", "support"], name: "RenderScript"}, params: [tData]}}:
-                                scriptClasses.push({cls: cl, data: tData, type: SRender});
-
-                            default:
-                        }
-                    default:
-                }
-            }
-
-            // no script classes? nothing to do
-            if (scriptClasses.length == 0)
-                return;
-
-            // this shouldn't happen at all
-            if (baseScriptMethods == null)
-                throw "No base Script class found!";
-
-            // generate scripts for our classes
-            for (script in scriptClasses) {
-                var cl = script.cls;
-
-                // get data properties for generating `go.property` calls, which should be in the genrated script
-                var props = getProperties(script.data, cl.pos);
-                props.sort(function(a,b) return a.order - b.order);
-
-                // generate the script...
-                var b = new StringBuf();
-
-                // add a nice header
-                var posStr = Std.string(cl.pos);
-                posStr = posStr.substring(5, posStr.length - 1);
-                b.add('-- Generated by Haxe, DO NOT EDIT (original source: $posStr)\n\n');
-
-                var dotPath = haxe.macro.MacroStringTools.toDotPath(cl.pack, cl.name);
-
-                // require the main generated lua file
-                b.add('local m = require "$requireModule"\n\n');
-
-                // if we have data properties, generate go.property calls for them
-                // TODO: more work should be done to support all types of default values
-                if (props.length > 0) {
-                    for (prop in props)
-                        b.add('go.property("${prop.name}", ${prop.value})\n');
-                    b.add("\n");
-                }
-
-                // make an instance of script
-                b.add('local script = m.$dotPath.new()\n\n');
-
-                var baseMethods;
-                var ext;
-                switch (script.type) {
-                    case SCode:
-                        baseMethods = baseScriptMethods;
-                        ext = "script";
-                    case SGui:
-                        baseMethods = baseGuiScriptMethods;
-                        ext = "gui_script";
-                    case SRender:
-                        baseMethods = baseRenderScriptMethods;
-                        ext = "render_script";
-                }
-
-                // generate callback fields
-                for (field in cl.fields.get()) {
-                    // this is a callback field, if it's overriden from the base Script class
-                    var fieldName = field.name;
-                    if (baseMethods.exists(fieldName)) {
-
-                        // in haxe 4, final is a keyword, so we need to handle this here
-                        // we could do it more elaborately via metadata or something, but oh well :)
-                        var callbackFieldName = switch fieldName {
-                            case "final_": "final";
-                            case _: fieldName;
-                        };
-
-                        // generate arguments
-                        var args = switch (field.type) {
-                            case TFun(args, _):
-                                [for (arg in args) arg.name].join(", ");
-                            default:
-                                throw new Error("Overriden class field is not a method. This can't happen! :)", field.pos);
-                        }
-                        // generate callback function definition
-                        b.add('function $callbackFieldName($args)\n\tscript:$fieldName($args)\nend\n\n');
+                        default:
                     }
-                }
-
-                // finally, save the generated script file, using the name of the class
-                var scriptDir = Path.join([outDir].concat(cl.pack));
-                sys.FileSystem.createDirectory(scriptDir);
-                sys.io.File.saveContent('$scriptDir/${cl.name}.$ext', b.toString());
+                default:
             }
-        });
+        }
+
+        // no script classes? nothing to do
+        if (scriptClasses.length == 0)
+            return;
+
+        // this shouldn't happen at all
+        if (baseScriptMethods == null)
+            throw "No base Script class found!";
+
+        // generate exports for our classes
+        var initExprs = [];
+
+        for (script in scriptClasses) {
+            var cl = script.cls;
+
+            // get data properties for generating `go.property` calls, which should be in the genrated script
+            var props = getProperties(script.data, cl.pos);
+            props.sort(function(a,b) return a.order - b.order);
+
+            var baseMethods, ext;
+            switch (script.type) {
+                case SCode:
+                    baseMethods = baseScriptMethods;
+                    ext = "script";
+                case SGui:
+                    baseMethods = baseGuiScriptMethods;
+                    ext = "gui_script";
+                case SRender:
+                    baseMethods = baseRenderScriptMethods;
+                    ext = "render_script";
+            }
+
+            var exportExprs = [];
+            var exportPrefix = (if (cl.pack.length == 0) cl.name else cl.pack.join("_") + "_" + cl.name) + "_";
+            var callbacks = [];
+
+            // generate callback fields
+            for (field in cl.fields.get()) {
+                // this is a callback field, if it's overriden from the base Script class
+                var fieldName = field.name;
+                if (baseMethods.exists(fieldName)) {
+                    // in haxe 4, final is a keyword, so we need to handle this here
+                    // we could do it more elaborately via metadata or something, but oh well :)
+                    var callbackName = switch fieldName {
+                        case "final_": "final";
+                        case _: fieldName;
+                    };
+
+                    // generate arguments
+                    var argNames = [], funExpr, isVoid;
+                    switch (field.type) {
+                        case TFun(args, ret):
+                            var argDefs = new Array<FunctionArg>();
+                            var argExprs = [];
+
+                            for (arg in args) {
+                                argNames.push(arg.name);
+                                argDefs.push({name: arg.name, type: null});
+                                argExprs.push(macro $i{arg.name});
+                            }
+
+                            isVoid = ret.toString() == "Void";
+
+                            var expr = macro script.$fieldName($a{argExprs});
+                            if (!isVoid) expr = macro return $expr;
+
+                            funExpr = {
+                                pos: field.pos,
+                                expr: EFunction(null, {
+                                    args: argDefs,
+                                    ret: null,
+                                    expr: expr
+                                })
+                            };
+                        default:
+                            throw new Error("Overriden class field is not a method. This can't happen! :)", field.pos);
+                    }
+
+                    var exportName = exportPrefix + fieldName;
+                    exportExprs.push(macro exports.$exportName = $funExpr);
+
+                    // generate callback function definition
+                    callbacks.push({
+                        name: callbackName,
+                        method: exportName,
+                        args: argNames,
+                        isVoid: isVoid,
+                    });
+                }
+            }
+
+            var tp = {
+                var parts = cl.module.split(".");
+                var name = parts.pop();
+                {pack: parts, name: name, sub: cl.name};
+            }
+
+            initExprs.push(macro @:privateAccess {
+                var script = new $tp();
+                $b{exportExprs};
+            });
+
+            // finally, save the generated script file, using the name of the class
+            var scriptDir = Path.join([outDir].concat(cl.pack));
+            var fileName = cl.name + "." + ext;
+
+            scripts.push({
+                properties: props,
+                callbacks: callbacks,
+                dir: scriptDir,
+                name: fileName,
+                position: {
+                    var posStr = Std.string(cl.pos);
+                    posStr.substring(5, posStr.length - 1);
+                },
+            });
+        }
+
+        if (initExprs.length > 0) {
+            var td = macro class Init {
+                static function init(exports:Dynamic) $b{initExprs};
+                static function __init__() {
+                    untyped __lua__($v{EXPORT_TABLE + " = " + EXPORT_TABLE + " or {}"});
+                    init(untyped $i{EXPORT_TABLE});
+                }
+            };
+            td.meta.push({name: ":keepInit", pos: td.pos});
+            td.pack = ["defold", "support"];
+            Context.defineType(td);
+        }
     }
 
-    // sys.FileSystem.absolutePath is broken on Haxe 4, so we use the old method
-    static function absolutePath(relPath:String):String {
-        if (haxe.io.Path.isAbsolute(relPath)) return relPath;
-        return haxe.io.Path.join([std.Sys.getCwd(), relPath]);
+    public function generate() {
+        // clear the scripts output directory
+        deleteRec(outDir);
+        sys.FileSystem.createDirectory(outDir);
+        for (script in scripts) {
+            var b = new StringBuf();
+
+            // add a nice header
+            b.add('-- Generated by Haxe, DO NOT EDIT (original source: ${script.position})\n\n');
+
+            // if we have data properties, generate go.property calls for them
+            // TODO: more work should be done to support all types of default values
+            if (script.properties.length > 0) {
+                for (prop in script.properties) {
+                    b.add('go.property("${prop.name}", ${prop.value})\n');
+                }
+                b.add("\n");
+            }
+
+            // require the main generated lua file
+            b.add('require "$requireModule"\n\n');
+
+            for (cb in script.callbacks) {
+                var args = cb.args.join(", ");
+                b.add('function ${cb.name}($args)\n\t${if (cb.isVoid) "" else "return "}$EXPORT_TABLE.${cb.method}($args)\nend\n\n');
+            }
+
+            sys.FileSystem.createDirectory(script.dir);
+            sys.io.File.saveContent('${script.dir}/${script.name}', b.toString());
+        }
     }
 
-    // this should be in the standard library
+    // this should really be in the standard library
     static function deleteRec(path:String) {
         if (!sys.FileSystem.exists(path))
             return;
@@ -288,6 +334,52 @@ class ScriptMacro {
             default:
                 throw new Error('Invalid @property value for type ${type.getName().substr(1)}', pos);
         }
+    }
+}
+
+class ScriptMacro {
+    static function use() {
+        if (!Context.defined("lua")) return; // run through `-lib hxdefold` for `haxelib run hxdefold`
+
+        var defoldRoot = Context.definedValue("hxdefold-projectroot");
+        if (defoldRoot == null) defoldRoot = ".";
+
+        var outDir = Context.definedValue("hxdefold-scriptdir");
+        if (outDir == null) outDir = "scripts";
+
+        defoldRoot = absolutePath(defoldRoot);
+        if (!defoldRoot.endsWith("/"))
+            defoldRoot += "/";
+        var outFile = absolutePath(Compiler.getOutput());
+        if (!StringTools.startsWith(outFile, defoldRoot)) {
+            throw new Error("Haxe/Lua output file should be within specified defold project root (" + defoldRoot + "), but is " + outFile + ". Check -lua argument in your build hxml file.", Context.currentPos());
+        }
+
+        outDir = Path.join([defoldRoot, outDir]);
+
+        // determine the the module name for the "require" statement,
+        // based on main lua file path relative to defold project root
+        var parts = outFile.substring(defoldRoot.length).split("/");
+        var last = parts.length - 1;
+        parts[last] = Path.withoutExtension(parts[last]);
+        var requireModule = parts.join(".");
+
+        var glue = new Glue(outDir, requireModule);
+
+        var afterTypingCalled = false;
+        Context.onAfterTyping(function(types) {
+            if (afterTypingCalled) return;
+            afterTypingCalled = true;
+            glue.process(types);
+        });
+
+        Context.onAfterGenerate(glue.generate);
+    }
+
+    // sys.FileSystem.absolutePath is broken on Haxe 4, so we use the old method
+    static function absolutePath(relPath:String):String {
+        if (haxe.io.Path.isAbsolute(relPath)) return relPath;
+        return haxe.io.Path.join([std.Sys.getCwd(), relPath]);
     }
 }
 #end
