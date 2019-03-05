@@ -142,7 +142,7 @@ private class Glue {
 
                             for (arg in args) {
                                 argNames.push(arg.name);
-                                argDefs.push({name: arg.name, type: null});
+                                argDefs.push({name: arg.name, type: macro : Dynamic});
                                 argExprs.push(macro $i{arg.name});
                             }
 
