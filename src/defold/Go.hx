@@ -182,6 +182,16 @@ extern class Go {
     static function set<T>(url:HashOrStringOrUrl, id:Property<T>, value:T):Void;
 
     /**
+        Sets the parent for a game object instance. This means that the instance will exist in the geometrical space of its parent,
+        like a basic transformation hierarchy or scene graph. If no parent is specified, the instance will be detached from any parent and exist in world space.
+
+        @param id optional id of the game object instance to set parent for, defaults to the instance containing the calling script
+        @param parent_id optional id of the new parent game object, defaults to detaching game object from its parent
+        @param keep_world_transform optional boolean, set to true to maintain the world transform when changing spaces. Defaults to false.
+    **/
+    static function set_parent(?id:HashOrStringOrUrl, ?parent_id:HashOrStringOrUrl, ?keep_world_transform:Bool):Void;
+
+    /**
         Sets the position of the game object instance.
 
         The position is relative to the parent (if any).
