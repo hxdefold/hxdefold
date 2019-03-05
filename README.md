@@ -9,7 +9,7 @@ This library allows writing beautiful [Haxe](https://haxe.org/) code for KING's 
 ## Features
  - Fully typed Defold API with proper compile-time errors and IDE services.
  - Type-safe game object messages and properties with zero overhead.
- - Strengths of Haxe without compromises: powerful type system, meta-programming, static optimizations and cross-target code sharing.
+ - Strengths of Haxe without compromises: powerful type system, meta-programming, static optimizations, dead code elimination and cross-target code sharing.
  - Defold hot reloading is now supported!
 
 ## Quick start
