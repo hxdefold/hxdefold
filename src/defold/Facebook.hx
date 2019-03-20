@@ -222,6 +222,11 @@ typedef FacebookLoginData = {
 @:native("_G.facebook")
 @:enum extern abstract FacebookEvent(String) {
     /**
+        Log this event when a person achieves specific levels you define within your application, business, or organization.
+    **/
+    var EVENT_ACHIEVED_LEVEL;
+    
+    /**
         Log this event when the user has entered their payment info.
     **/
     var EVENT_ADDED_PAYMENT_INFO;
@@ -299,12 +304,6 @@ typedef FacebookLoginData = {
         Log this event when a user has viewed a form of content in the app.
     **/
     var EVENT_VIEWED_CONTENT;
-
-    // these are mentioned but undocumented in the Defold API
-    var EVENT_ACHIEVED_LEVEL;
-    var EVENT_ACTIVATED_APP;
-    var EVENT_DEACTIVATED_APP;
-    var EVENT_SESSION_INTERRUPTIONS;
 }
 
 /**

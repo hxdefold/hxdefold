@@ -3,6 +3,7 @@ package defold;
 import haxe.extern.EitherType;
 import defold.types.*;
 import defold.Go.GoAnimatedProperty;
+import defold.Particlefx.ParticlefxEmitterState;
 
 /**
     GUI core hooks, functions, messages, properties and constants for
@@ -665,7 +666,7 @@ extern class Gui {
                                        * emitter The id of the emitter
                                        * state the new state of the emitter
     **/
-    static function play_particlefx<T>(node:GuiNode, ?emitter_state_function:T->Hash->Hash->GuiEmitterState->Void):Void;
+    static function play_particlefx<T>(node:GuiNode, ?emitter_state_function:T->Hash->Hash->ParticlefxEmitterState->Void):Void;
 
     /**
         Play a spine animation.
@@ -1448,12 +1449,4 @@ typedef GuiPlaySpineProperties = {
         The rate with which the animation will be played. Must be positive.
     **/
     var playback_rate:Float;
-}
-
-@:native("_G.gui")
-@:enum extern abstract GuiEmitterState(Int) {
-    var EMITTER_STATE_SLEEPING;
-    var EMITTER_STATE_PRESPAWN;
-    var EMITTER_STATE_SPAWNING;
-    var EMITTER_STATE_POSTSPAWN;
 }

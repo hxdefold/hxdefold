@@ -3,7 +3,7 @@
     "url": "https://github.com/nadako/hxdefold",
     "description": "Defold game engine externs",
     "license": "MIT",
-    "version": "1.2.148",
+    "version": "1.2.149",
     "classPath": "src",
     "releasenote": "Initial release",
     "contributors": ["nadako"],
