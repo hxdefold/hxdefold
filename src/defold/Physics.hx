@@ -18,6 +18,22 @@ extern class Physics {
         Ray casts are used to test for intersections against collision objects in the physics world.
         Collision objects of types kinematic, dynamic and static are tested against. Trigger objects
         do not intersect with ray casts.
+        Which collision objects to hit is filtered by their collision groups and can be configured
+        through `groups`.
+        The actual ray cast will be performed during the physics-update.
+
+        @param from the world position of the start of the ray
+        @param to the world position of the end of the ray
+        @param groups a lua table containing the hashed groups for which to test collisions against
+    **/
+    static function raycast(from:Vector3, to:Vector3, groups:lua.Table<Int,Hash>):PhysicsMessageRayCastResponse;
+
+    /**
+        Requests a ray cast to be performed.
+
+        Ray casts are used to test for intersections against collision objects in the physics world.
+        Collision objects of types kinematic, dynamic and static are tested against. Trigger objects
+        do not intersect with ray casts.
         Which collision objects to hit is filtered by their collision groups and can be configured through `groups`.
         The actual ray cast will be performed during the physics-update.
 
@@ -27,8 +43,11 @@ extern class Physics {
         @param from the world position of the start of the ray
         @param to the world position of the end of the ray
         @param groups a lua table containing the hashed groups for which to test collisions against
-        @param request_id a number between 0-255 that will be sent back in the response for identification, 0 by default
+        @param request_id a number between [0,-255]. It will be sent back in the response for identification, 0 by default
     **/
+    static function raycast_async(from:Vector3, to:Vector3, groups:lua.Table<Int,Hash>, ?request_id:Int):Void;
+
+    @:deprecated
     static function ray_cast(from:Vector3, to:Vector3, groups:lua.Table<Int,Hash>, ?request_id:Int):Void;
 }
 
@@ -118,7 +137,7 @@ class PhysicsMessages {
         Reports a ray cast miss.
 
         This message is sent back to the sender of a `ray_cast_request`, if the ray didn't hit any
-        collision object. See `Physics.ray_cast` for examples of how to use it.
+        collision object. See `Physics.raycast_async` for examples of how to use it.
     **/
     static var ray_cast_missed(default, never) = new Message<PhysicsMessageRayCastMissed>("ray_cast_missed");
 
@@ -126,7 +145,7 @@ class PhysicsMessages {
         Reports a ray cast hit.
 
         This message is sent back to the sender of a `ray_cast_request`, if the ray hit a collision object.
-        See `request_ray_cast` for examples of how to use it.
+        See `Physics.raycast_async` for examples of how to use it.
     **/
     static var ray_cast_response(default, never) = new Message<PhysicsMessageRayCastResponse>("ray_cast_response");
 

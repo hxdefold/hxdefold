@@ -126,24 +126,24 @@ typedef ProfilerViewRecordedFrame = {
 @:native("_G.profiler")
 @:enum extern abstract ProfilerMode({}) {
     /**
-        This is default mode that continously shows the last frame
-    **/
-    var MODE_RUN;
-
-    /**
         Pauses on the currently displayed frame
     **/
     var MODE_PAUSE;
 
     /**
-        Pauses on the currently displayed frame but shows a new frame if that frame is slower
-    **/
-    var MODE_SHOW_PEAK_FRAME;
-
-    /**
         Records all incoming frames to the recording buffer
     **/
     var MODE_RECORD;
+
+    /**
+        This is default mode that continously shows the last frame
+    **/
+    var MODE_RUN;
+
+    /**
+        Pauses on the currently displayed frame but shows a new frame if that frame is slower
+    **/
+    var MODE_SHOW_PEAK_FRAME;
 }
 
 /**
