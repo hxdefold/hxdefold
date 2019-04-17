@@ -20,9 +20,11 @@ extern class Sprite {
         @param url the sprite that should play the animation
         @param id name hash of the animation to play
         @param complete_function function to call when the animation has completed.
+        @param play_properties optional table with properties
     **/
     static function play_flipbook<T>(url:HashOrString, id:Hash,
-        ?complete_function: #if haxe4 (self:T, message_id:Message<SpriteMessageAnimationDone>, message:SpriteMessageAnimationDone, sender:Url)->Void #else T->Message<SpriteMessageAnimationDone>->SpriteMessageAnimationDone->Url->Void #end
+        ?complete_function: #if haxe4 (self:T, message_id:Message<SpriteMessageAnimationDone>, message:SpriteMessageAnimationDone, sender:Url)->Void #else T->Message<SpriteMessageAnimationDone>->SpriteMessageAnimationDone->Url->Void #end,
+        ?play_properties:SpritePlayFlipbookProperties
     ):Void;
 
     /**
@@ -93,6 +95,18 @@ class SpriteProperties {
         (READ ONLY) Returns the texture path hash of the sprite. Used for getting/setting resource data
     **/
     static var texture0(default, never) = new Property<Hash>("texture0");
+
+    /**
+        The normalized animation cursor.
+    **/
+    static var cursor(default, never) = new Property<Float>("cursor");
+
+    /**
+        The animation playback rate. A multiplier to the animation playback rate.
+
+        The playback_rate is a non-negative number, a negative value will be clamped to 0.
+    **/
+    static var playback_rate(default, never) = new Property<Float>("playback_rate");
 }
 
 /**
@@ -149,4 +163,19 @@ typedef SpriteMessagePlayAnimation = {
         The id of the animation to play.
     **/
     var id:Hash;
+}
+
+/**
+    Data for the `play_properties` argument of `Sprite.play_flipbook` method.
+**/
+typedef SpritePlayFlipbookProperties = {
+    /**
+        the normalized initial value of the animation cursor when the animation starts playing.
+    **/
+    var offset:Float;
+
+    /**
+        the rate with which the animation will be played. Must be positive.
+    **/
+    var playback_rate:Float;
 }

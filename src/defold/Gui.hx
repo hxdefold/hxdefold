@@ -192,6 +192,26 @@ extern class Gui {
     static function get_flipbook(node:GuiNode):Hash;
 
     /**
+        Gets the normalized cursor of the animation on a node with flipbook animation.
+
+        This is only useful nodes with flipbook animations. Gets the normalized cursor of the flipbook animation on a node.
+
+        @param node node to get the cursor for
+        @return cursor value
+    **/
+    static function get_flipbook_cursor(node:GuiNode):Float;
+
+    /**
+        Gets the playback rate of the flipbook animation on a node.
+
+        This is only useful nodes with flipbook animations. Gets the playback rate of the flipbook animation on a node.
+
+        @param node node to set the cursor for
+        @return playback rate
+    **/
+    static function get_flipbook_playback_rate(node:GuiNode):Float;
+
+    /**
         Gets the node font.
 
         This is only useful for text nodes. The font must be mapped to the gui scene in the gui editor.
@@ -429,7 +449,7 @@ extern class Gui {
 
         This is only useful for spine nodes. Gets the normalized cursor of the animation on a spine node.
 
-        @param node spine node to set the cursor for
+        @param node spine node to get the cursor for
         @return cursor value
     **/
     static function get_spine_cursor(node:GuiNode):Float;
@@ -652,8 +672,9 @@ extern class Gui {
         @param node node to set animation for
         @param animation animation id
         @param complete_function function to call when the animation has completed
+        @param play_properties optional table with properties
     **/
-    static function play_flipbook(node:GuiNode, animation:HashOrString, ?complete_function:Void->Void):Void;
+    static function play_flipbook(node:GuiNode, animation:HashOrString, ?complete_function:Void->Void, ?play_properties:GuiPlayFlipbookProperties):Void;
 
     /**
         Plays the paricle fx for a gui node
@@ -768,6 +789,26 @@ extern class Gui {
         @param sector angle
     **/
     static function set_fill_angle(node:GuiNode, angle:Float):Void;
+
+    /**
+        Sets the normalized cursor of the animation on a node with flipbook animation.
+
+        This is only useful nodes with flipbook animations. The cursor is normalized.
+
+        @param node node to set the cursor for
+        @param cursor cursor value
+    **/
+    static function set_flipbook_cursor(node:GuiNode, cursor:Float):Void;
+
+    /**
+        Sets the playback rate of the flipbook animation on a node.
+
+        This is only useful nodes with flipbook animations. Sets the playback rate of the flipbook animation on a node. Must be positive.
+
+        @param node node to set the cursor for
+        @param playback_rate playback rate
+    **/
+    static function set_flipbook_playback_rate(node:GuiNode, playback_rate:Float):Void;
 
     /**
         Sets the node font.
@@ -1432,7 +1473,7 @@ typedef GuiTextMetrics = {
 }
 
 /**
-    Data for the `properties` argument of `Gui.play_spine_anim` method.
+    Data for the `play_properties` argument of `Gui.play_spine_anim` method.
 **/
 typedef GuiPlaySpineProperties = {
     /**
@@ -1442,6 +1483,21 @@ typedef GuiPlaySpineProperties = {
 
     /**
         The normalized initial value of the animation cursor when the animation starts playing.
+    **/
+    var offset:Float;
+
+    /**
+        The rate with which the animation will be played. Must be positive.
+    **/
+    var playback_rate:Float;
+}
+
+/**
+    Data for the `play_properties` argument of `Gui.play_flipbook` method.
+**/
+typedef GuiPlayFlipbookProperties = {
+    /**
+        The normalized initial value of the animation cursor when the animation starts playing
     **/
     var offset:Float;
 

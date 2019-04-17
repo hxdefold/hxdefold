@@ -2,8 +2,8 @@ package defold;
 
 /**
     Functions for getting profiling data in runtime.
-    More detailed profiling and debugging information can be found under the <a href="http://www.defold.com/manuals/debugging/">Debugging</a> section in the manuals.
-**/
+    More detailed <a href="https://www.defold.com/manuals/profiling/">profiling</a> and <a href="http://www.defold.com/manuals/debugging/">debugging</a> information available in the manuals.</p>
+ **/
 @:native("_G.profiler")
 extern class Profiler {
     /**
