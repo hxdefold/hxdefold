@@ -49,6 +49,25 @@ extern class Physics {
 
     @:deprecated
     static function ray_cast(from:Vector3, to:Vector3, groups:lua.Table<Int,Hash>, ?request_id:Int):Void;
+    
+    /**
+        Get the gravity in runtime. The gravity returned is not global,
+        it will return the gravity for the collection that the function is called from.
+
+        Note: For 2D physics the z component will always be zero.
+    **/
+    static function get_gravity():Vector3;
+
+    /**
+        physics.set_gravity(gravity)
+
+        Set the gravity in runtime. The gravity change is not global,
+        it will only affect the collection that the function is called from.
+
+        Note: For 2D physics the z component of the gravity vector will be ignored.
+        @param gravity the new gravity vector
+    **/
+    static function set_gravity(gravity:Vector3):Void;
 }
 
 /**
