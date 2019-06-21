@@ -88,7 +88,8 @@ extern class Physics {
         position_a:Vector3, collisionobject_b:HashOrStringOrUrl, position_b:Vector3, ?properties:PhysicsSliderJoint):Void {})
     @:overload(function(joint_type:PhysicsJointType, collisionobject_a:HashOrStringOrUrl, joint_id:HashOrString,
         position_a:Vector3, collisionobject_b:HashOrStringOrUrl, position_b:Vector3, ?properties:PhysicsSpringJoint):Void {})
-    static function create_joint(joint_type:PhysicsJointType, collisionobject_a:HashOrStringOrUrl, joint_id:HashOrString, position_a:Vector3, collisionobject_b:HashOrStringOrUrl, position_b:Vector3, ?properties:PhysicsFixedJoint):Void;
+    static function create_joint(joint_type:PhysicsJointType, collisionobject_a:HashOrStringOrUrl, joint_id:HashOrString,
+        position_a:Vector3, collisionobject_b:HashOrStringOrUrl, position_b:Vector3, ?properties:PhysicsFixedJoint):Void;
 
     /**
         Destroy an already physics joint. The joint has to be created before a destroy can be issued.
