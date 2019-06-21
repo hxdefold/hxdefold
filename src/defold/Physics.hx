@@ -1,6 +1,7 @@
 package defold;
 
 import defold.types.*;
+import haxe.extern.EitherType;
 
 /**
     Functions and messages for collision object physics interaction
@@ -68,6 +69,80 @@ extern class Physics {
         @param gravity the new gravity vector
     **/
     static function set_gravity(gravity:Vector3):Void;
+
+    /**
+        Create a physics joint between two collision object components.
+
+        Note: Currently only supported in 2D physics.
+        @param joint_type the joint type
+        @param collisionobject_a first collision object
+        @param joint_id id of the joint
+        @param position_a local position where to attach the joint on the first collision object
+        @param collisionobject_b second collision object
+        @param position_b local position where to attach the joint on the second collision object
+        @param properties optional joint specific properties table See each joint type for possible properties field.
+    **/
+    @:overload(function(joint_type:PhysicsJointType, collisionobject_a:HashOrStringOrUrl, joint_id:HashOrString,
+        position_a:Vector3, collisionobject_b:HashOrStringOrUrl, position_b:Vector3, ?properties:PhysicsHingeJoint):Void {})
+    @:overload(function(joint_type:PhysicsJointType, collisionobject_a:HashOrStringOrUrl, joint_id:HashOrString,
+        position_a:Vector3, collisionobject_b:HashOrStringOrUrl, position_b:Vector3, ?properties:PhysicsSliderJoint):Void {})
+    @:overload(function(joint_type:PhysicsJointType, collisionobject_a:HashOrStringOrUrl, joint_id:HashOrString,
+        position_a:Vector3, collisionobject_b:HashOrStringOrUrl, position_b:Vector3, ?properties:PhysicsSpringJoint):Void {})
+    static function create_joint(joint_type:PhysicsJointType, collisionobject_a:HashOrStringOrUrl, joint_id:HashOrString, position_a:Vector3, collisionobject_b:HashOrStringOrUrl, position_b:Vector3, ?properties:PhysicsFixedJoint):Void;
+
+    /**
+        Destroy an already physics joint. The joint has to be created before a destroy can be issued.
+
+        Note: Currently only supported in 2D physics.
+        @param collisionobject collision object where the joint exist
+        @param joint_id id of the joint
+    **/
+    static function destroy_joint(collisionobject:HashOrStringOrUrl, joint_id:HashOrString):Void;
+
+    /**
+        Get a table for properties for a connected joint. The joint has to be created before properties can be retrieved.
+
+        Note: Currently only supported in 2D physics.
+        @param collisionobject collision object where the joint exist
+        @param joint_id id of the joint
+        @return properties table. See the joint types for what fields are available
+    **/
+    static function get_joint_properties(collisionobject:HashOrStringOrUrl, joint_id:HashOrString):EitherType<PhysicsFixedJoint,
+        EitherType<PhysicsHingeJoint, EitherType<PhysicsSliderJoint, PhysicsSpringJoint>>>;
+
+    /**
+        Get the reaction force for a joint. The joint has to be created before the reaction force can be calculated.
+
+        Note: Currently only supported in 2D physics.
+        @param collisionobject collision object where the joint exist
+        @param joint_id id of the joint
+        @return reaction force for the joint
+    **/
+    static function get_joint_reaction_force(collisionobject:HashOrStringOrUrl, joint_id:HashOrString):Vector3;
+
+    /**
+        Get the reaction torque for a joint. The joint has to be created before the reaction torque can be calculated.
+
+        Note: Currently only supported in 2D physics.
+        @param collisionobject collision object where the joint exist
+        @param joint_id id of the joint
+        @return the reaction torque on bodyB in N*m.
+    **/
+    static function get_joint_reaction_torque(collisionobject:HashOrStringOrUrl, joint_id:HashOrString):Float;
+
+    /**
+        Updates the properties for an already connected joint. The joint has to be created before properties can be changed.
+
+        Note: Currently only supported in 2D physics.
+        @param collisionobject collision object where the joint exist
+        @param joint_id id of the joint
+        @param properties joint specific properties table
+        Note: The collide_connected field cannot be updated/changed after a connection has been made.
+    **/
+    @:overload(function(collisionobject:HashOrStringOrUrl, joint_id:HashOrString, properties:PhysicsHingeJoint):Void {})
+    @:overload(function(collisionobject:HashOrStringOrUrl, joint_id:HashOrString, properties:PhysicsSliderJoint):Void {})
+    @:overload(function(collisionobject:HashOrStringOrUrl, joint_id:HashOrString, properties:PhysicsSpringJoint):Void {})
+    static function set_joint_properties(collisionobject:HashOrStringOrUrl, joint_id:HashOrString, properties:PhysicsFixedJoint):Void;
 }
 
 /**
@@ -350,7 +425,6 @@ typedef PhysicsMessageRayCastResponse = {
     var request_id:Int;
 }
 
-
 /**
     Data for the `PhysicsMessages.trigger_response` message.
 **/
@@ -376,7 +450,6 @@ typedef PhysicsMessageTriggerResponse = {
     var own_group:Hash;
 }
 
-
 /**
     Data for the `PhysicsMessages.velocity_response` message.
 **/
@@ -391,4 +464,181 @@ typedef PhysicsMessageVelocityResponse = {
         The velocity is measured as a rotation around the vector with a speed equivalent to the vector length.
     **/
     var angular_velocity:Vector3;
+}
+
+/**
+    Physics fixed joint type.
+**/
+typedef PhysicsFixedJoint = {
+    /**
+        Set this flag to true if the attached bodies should collide.
+    **/
+    @:optional var collide_connected:Bool;
+
+    /**
+        The maximum length of the rope.
+    **/
+    @:optional var max_length:Float;
+}
+
+/**
+    Physics hinge joint type.
+**/
+typedef PhysicsHingeJoint = {
+    /**
+        Set this flag to true if the attached bodies should collide.
+    **/
+    @:optional var collide_connected:Bool;
+
+    /**
+        The bodyB angle minus bodyA angle in the reference state (radians).
+    **/
+    @:optional var reference_angle:Float;
+
+    /**
+        The lower angle for the joint limit (radians).
+    **/
+    @:optional var lower_angle:Float;
+
+    /**
+        The upper angle for the joint limit (radians)
+    **/
+    @:optional var upper_angle:Float;
+
+    /**
+        The maximum motor torque used to achieve the desired motor speed. Usually in N-m.
+    **/
+    @:optional var max_motor_torque:Float;
+
+    /**
+        The desired motor speed. Usually in radians per second.
+    **/
+    @:optional var motor_speed:Float;
+
+    /**
+        A flag to enable joint limits
+    **/
+    @:optional var enable_limit:Bool;
+
+    /**
+         A flag to enable the joint motor.
+    **/
+    @:optional var enable_motor:Bool;
+
+    /**
+        Read only fields, available from physics.get_joint_properties().
+    **/
+    
+    /**
+        Current joint angle in radians
+    **/
+    @:optional var joint_angle(default, null):Float;
+
+    /**
+        Current joint angle speed in radians per second.
+    **/
+    @:optional var joint_speed(default, null):Float;
+}
+
+/**
+    Physics slider joint type.
+**/
+typedef PhysicsSliderJoint = {
+    /**
+        Set this flag to true if the attached bodies should collide.
+    **/
+    @:optional var collide_connected:Bool;
+
+    /**
+        The local translation unit axis in bodyA
+    **/
+    @:optional var local_axis_a:Vector3;
+
+    /**
+        The constrained angle between the bodies: bodyB_angle - bodyA_angle.
+    **/
+    @:optional var reference_angle:Float;
+
+    /**
+        Enable/disable the joint limit.
+    **/
+    @:optional var  enable_limit:Bool;
+
+    /**
+        The lower translation limit, usually in meters.
+    **/
+    @:optional var lower_translation:Float;
+    
+    /**
+        The upper translation limit, usually in meters.
+    **/
+    @:optional var upper_translation:Float;
+
+    /**
+        Enable/disable the joint motor.
+    **/
+    @:optional var enable_motor:Bool;
+
+    /**
+        The maximum motor torque, usually in N-m.
+    **/
+    @:optional var max_motor_force:Float;
+
+    /**
+        The desired motor speed in radians per second.
+    **/
+    @:optional var motor_speed:Float;
+
+    /**
+        Read only fields, available from physics.get_joint_properties().
+    **/
+
+    /**
+        Current joint translation, usually in meters
+    **/
+    @:optional var joint_translation(default, null):Float;
+
+    /**
+        Current joint translation speed, usually in meters per second.
+    **/
+    @:optional var joint_speed(default, null):Float;
+}
+
+/**
+    Physics spring joint type.
+**/
+typedef PhysicsSpringJoint = {
+    /**
+        Set this flag to true if the attached bodies should collide.
+    **/
+    @:optional var collide_connected:Bool;
+
+    /**
+        The natural length between the anchor points.
+    **/
+    @:optional var length:Float;
+
+    /**
+        The mass-spring-damper frequency in Hertz. A value of 0 disables softness.
+    **/
+    @:optional var frequency:Float;
+
+    /**
+        The damping ratio. 0 = no damping, 1 = critical damping.
+    **/
+    @:optional var damping:Float;
+}
+
+/**
+    Types of physics joint available. 
+**/
+@:native("_G.physics")
+@:enum extern abstract PhysicsJointType({}) {
+    var JOINT_TYPE_FIXED;
+
+    var JOINT_TYPE_HINGE;
+
+    var JOINT_TYPE_SLIDER;
+
+    var JOINT_TYPE_SPRING;
 }
