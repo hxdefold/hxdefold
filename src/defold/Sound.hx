@@ -91,7 +91,7 @@ extern class Sound {
     /**
         Plays a sound.
 
-        Make the sound component play its sound. Multiple voices is supported. The limit is set to 32 voices per sound component.
+        Make the sound component play its sound. Multiple voices are supported. The limit is set to 32 voices per sound component.
 
         Note that gain is in linear scale, between 0 and 1.
         To get the dB value from the gain, use the formula `20 * log(gain)`.
@@ -142,7 +142,7 @@ class SoundMessages {
     /**
         Plays a sound.
 
-        Post this message to a sound-component to make it play its sound. Multiple voices is support. The limit is set to 32 voices per sound component.
+        Post this message to a sound-component to make it play its sound. Multiple voices is supported. The limit is set to 32 voices per sound component.
     **/
     static var play_sound(default, never) = new Message<SoundMessagePlaySound>("play_sound");
 

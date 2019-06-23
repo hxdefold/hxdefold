@@ -589,5 +589,5 @@ typedef SetRenderTargetOptions = {
         Default is all non-transient. Be aware that some hardware uses a combined depth stencil buffer and when this is the case both are considered non-transient if exclusively selected!
         A buffer type defined that doesn't exist in the render target is silently ignored
     **/
-    var transient:Int;
+    var transient:lua.Table<Int,RenderBufferType>;
 }
