@@ -22,7 +22,7 @@ extern class Sprite {
         @param complete_function function to call when the animation has completed.
         @param play_properties optional table with properties
     **/
-    static function play_flipbook<T>(url:HashOrString, id:Hash,
+    static function play_flipbook<T>(url:HashOrStringOrUrl, id:Hash,
         ?complete_function: #if haxe4 (self:T, message_id:Message<SpriteMessageAnimationDone>, message:SpriteMessageAnimationDone, sender:Url)->Void #else T->Message<SpriteMessageAnimationDone>->SpriteMessageAnimationDone->Url->Void #end,
         ?play_properties:SpritePlayFlipbookProperties
     ):Void;
