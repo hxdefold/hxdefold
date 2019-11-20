@@ -37,6 +37,10 @@ class Run {
 		"#-D hxdefold-projectroot=.",
 		"# override to specify another output directory for generated script files (relative to the project root)",
 		"#-D hxdefold-scriptdir=scripts",
+		"# specify a package in your source which contains all of your scripts",
+		"# only scripts under that package will be included in the output",
+		"# they will then appear starting at the top of the scripts dir without extra folders for intermediate packages",
+		"#-D hxdefold-rootpackage=mygame.scripts",
 	].join("\n");
 
 	static var sample =

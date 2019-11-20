@@ -188,9 +188,32 @@ private class Glue {
                 $b{exportExprs};
             });
 
+            var scriptPackage = cl.pack;
+
+            // Strip the root package from the beginning of the path.
+            var rootPackage = Context.definedValue("hxdefold-rootpackage");
+            if (rootPackage != null)
+            {
+                var rootPackageParts = rootPackage.split('.');
+
+                for (i in 0...rootPackageParts.length)
+                {
+                    if (rootPackageParts[i] == scriptPackage[0])
+                    {
+                        scriptPackage = scriptPackage.slice(1);
+                    }
+                    else
+                    {
+                        // Script is not under the root package, exclude it.
+                        continue;
+                    }
+                }
+            }
+
             // finally, save the generated script file, using the name of the class
-            var scriptDir = Path.join([outDir].concat(cl.pack));
+            var scriptDir = Path.join([outDir].concat(scriptPackage));
             var fileName = cl.name + "." + ext;
+
 
             scripts.push({
                 properties: props,
