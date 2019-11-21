@@ -219,7 +219,6 @@ private class Glue {
             var scriptDir = Path.join([outDir].concat(scriptDirParts));
             var fileName = cl.name + "." + ext;
 
-
             scripts.push({
                 properties: props,
                 callbacks: callbacks,
