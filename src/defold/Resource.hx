@@ -18,7 +18,7 @@ extern class Resource {
 
         **Note:** This function can only be called within `@property()`.
     **/
-    static function atlas(path:Hash):ResourceReference;
+    static function atlas(path:String):ResourceReference;
 
     /**
         Constructor-like function with two purposes:
@@ -28,7 +28,7 @@ extern class Resource {
 
         **Note:** This function can only be called within `@property()`.
     **/
-    static function font(path:Hash):ResourceReference;
+    static function font(path:String):ResourceReference;
 
     /**
         Return a reference to the Manifest that is currently loaded.
@@ -115,7 +115,7 @@ extern class Resource {
 
         **Note:** This function can only be called within `@property()`.
     **/
-    static function texture(path:Hash):ResourceReference;
+    static function texture(path:String):ResourceReference;
 
     /**
         Constructor-like function with two purposes:
@@ -125,7 +125,7 @@ extern class Resource {
 
         **Note:** This function can only be called within `@property()`.
     **/
-    static function tile_source(path:Hash):ResourceReference;
+    static function tile_source(path:String):ResourceReference;
 }
 
 /**
