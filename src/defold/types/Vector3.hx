@@ -25,7 +25,7 @@ extern abstract Vector3(Vector3Data) {
         return untyped __lua__("({0}) * ({1})", a, b);
     }
 
-    @:op(a / b) @:commutative
+    @:op(a / b)
     private static inline function divScalar(a:Vector3, b:Float):Vector3 {
         return untyped __lua__("({0}) / ({1})", a, b);
     }
