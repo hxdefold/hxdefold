@@ -9,6 +9,14 @@ import defold.types.*;
 **/
 @:native("_G.label")
 extern class Label {
+
+    /**
+        Gets the text from a label component
+
+        @return the label text
+    **/
+    static function get_text(url:HashOrStringOrUrl): String;
+
     /**
         Gets the text metrics from a label component
 

@@ -1,13 +1,35 @@
 package defold;
 
+import defold.types.Hash;
 import defold.types.Buffer;
 import defold.types.HashOrString;
+import defold.types.ResourceReference;
 
 /**
     Functions and constants to access resources.
 **/
 @:native("_G.resource")
 extern class Resource {
+    /**
+        Constructor-like function with two purposes:
+
+        - Load the specified resource as part of loading the script
+        - Return a hash to the run-time version of the resource
+
+        **Note:** This function can only be called within `@property()`.
+    **/
+    static function atlas(path:Hash):ResourceReference;
+
+    /**
+        Constructor-like function with two purposes:
+
+        - Load the specified resource as part of loading the script
+        - Return a hash to the run-time version of the resource
+
+        **Note:** This function can only be called within `@property()`.
+    **/
+    static function font(path:Hash):ResourceReference;
+
     /**
         Return a reference to the Manifest that is currently loaded.
 
@@ -22,6 +44,16 @@ extern class Resource {
         @return the buffer stored on disc
     **/
     static function load(path:String):Buffer;
+
+    /**
+        Constructor-like function with two purposes:
+
+        - Load the specified resource as part of loading the script
+        - Return a hash to the run-time version of the resource
+
+        **Note:** This function can only be called within `@property()`.
+    **/
+    static function material():ResourceReference;
 
     /**
         Sets the resource data for a specific resource
@@ -74,6 +106,26 @@ extern class Resource {
          * `status` Whether or not the resource was successfully stored.
     **/
     static function store_resource<T>(manifest_reference:ResourceManifestReference, data:String, hexdigest:String, callback:T->String->Bool->Void):Void;
+
+    /**
+        Constructor-like function with two purposes:
+
+        - Load the specified resource as part of loading the script
+        - Return a hash to the run-time version of the resource
+
+        **Note:** This function can only be called within `@property()`.
+    **/
+    static function texture(path:Hash):ResourceReference;
+
+    /**
+        Constructor-like function with two purposes:
+
+        - Load the specified resource as part of loading the script
+        - Return a hash to the run-time version of the resource
+
+        **Note:** This function can only be called within `@property()`.
+    **/
+    static function tile_source(path:Hash):ResourceReference;
 }
 
 /**
