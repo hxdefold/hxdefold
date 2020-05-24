@@ -71,6 +71,13 @@ extern class Sys {
     static function get_application_info(_:String):SysApplicationInfo; // TODO: wtf is this string arg?
 
     /**
+        The path from which the application is run.
+
+        @return path to application executable
+    **/
+    static function get_application_path(): String;
+
+    /**
         Get config value from the game.project configuration file.
 
         In addition to the project file, configuration values can also be passed
@@ -150,7 +157,7 @@ extern class Sys {
         @param filename resource to load, full path
         @return loaded data, which is empty if the file could not be found
     **/
-    static function load_resource(filename:String):Null<String>;
+    static function load_resource(filename:String):SysResource;
 
     /**
         Open url in default application.
@@ -418,7 +425,7 @@ typedef SysIfaddr = {
     /**
         Hardware address, colon separated string (null if not available).
     **/
-    var mac:Null<String>;
+    var mac:String;
     var up:Bool;
     var running:Bool;
 }
@@ -480,17 +487,22 @@ typedef SysSysInfo = {
     var device_ident:String;
 
     /**
-        "advertisingIdentifier" on iOS, advertising ID provided by Google Play on Android.
-    **/
-    var ad_ident:String;
-
-    /**
-         true if ad tracking is enabled, false otherwise.
-    **/
-    var ad_tracking_enabled:Bool;
-
-    /**
         The HTTP user agent, i.e. "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/602.4.8 (KHTML, like Gecko) Version/10.0.3 Safari/602.4.8"
     **/
     var user_agent:String;
+}
+
+/**
+    The returned value of `Sys.load_resource()`.
+**/
+@:multiReturn extern class SysResource {
+    /**
+        Loaded data, or `null` if the resource could not be loaded.
+    **/
+    var data: String;
+
+    /**
+        The error message, or `null` if no error occurred.
+    **/
+    var error: String;
 }

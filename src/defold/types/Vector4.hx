@@ -25,6 +25,11 @@ extern abstract Vector4(Vector4Data) {
         return untyped __lua__("({0}) * ({1})", a, b);
     }
 
+    @:op(a / b)
+    private static inline function divScalar(a:Vector4, b:Float):Vector4 {
+        return untyped __lua__("({0}) / ({1})", a, b);
+    }
+
     @:op(a * b)
     private static inline function mul(a:Vector4, b:Vector4):Vector4 {
         return untyped __lua__("({0}) * ({1})", a, b);

@@ -100,7 +100,7 @@ extern class Sound {
         @param url the sound that should play
         @param play_properties optional table with properties
     **/
-    static function play(url:HashOrStringOrUrl, ?play_properties:SoundMessagePlaySound):Void;
+    static function play<T>(url:HashOrStringOrUrl, ?play_properties:SoundMessagePlaySound, ?complete_function:T->Hash->SoundMessageSoundDone->Url->Void):Void;
 
     /**
         Set gain on all active playing voices of a sound.
@@ -123,6 +123,16 @@ extern class Sound {
         @param gain gain in linear scale
     **/
     static function set_group_gain(group:HashOrString, gain:Float):Bool;
+
+    /**
+        Set panning on all active playing voices of a sound.
+
+        The valid range is from `-1.0` to `1.0`, representing `-45` degrees left, to `+45` degrees right.
+
+        @param url the sound to set the panning value to
+        @param pan sound panning between `-1.0` and `1.0`
+    **/
+    static function set_pan(url:HashOrStringOrUrl, pan:Float):Void;
 
     /**
         Stop a playing a sound(s).
@@ -159,6 +169,11 @@ class SoundMessages {
         Post this message to a sound-component to make it stop playing all active voices
     **/
     static var stop_sound(default, never) = new Message<Void>("stop_sound");
+
+    /**
+        Callback message indicating that a sound has finished playing.
+    **/
+    static var sound_done(default, never) = new Message<Void>("sound_done");
 }
 
 /**
@@ -186,6 +201,16 @@ typedef SoundMessageSetGain = {
         Sound gain between 0 and 1, default is 1.
     **/
     @:optional var gain:Float;
+}
+
+/**
+    Data for the `SoundMessages.sound_done` message.
+**/
+typedef SoundMessageSoundDone = {
+    /**
+        The sequential play identifier that was given by the sound.play function.
+    **/
+    @:optional var play_id: Int;
 }
 
 /**

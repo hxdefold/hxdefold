@@ -92,6 +92,15 @@ extern class Tilemap {
         @param v_flip if the tile should be vertically flipped
     **/
     static function set_tile(url:HashOrStringOrUrl, name:HashOrString, x:Int, y:Int, new_tile:Int, ?h_flip:Bool, ?v_flip:Bool):Void;
+
+    /**
+        Sets the visibility of the tilemap layer.
+
+        @param url the tile map
+        @param layer name of the layer
+        @param visible should the layer be visible
+    **/
+    static function set_visible(url:HashOrStringOrUrl, layer:HashOrString, visible: Bool):Void;
 }
 
 /**
