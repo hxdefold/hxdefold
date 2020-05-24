@@ -3,7 +3,11 @@ package defold;
 import defold.types.Hash;
 import defold.types.Buffer;
 import defold.types.HashOrString;
-import defold.types.ResourceReference;
+import defold.types.AtlasResourceReference;
+import defold.types.FontResourceReference;
+import defold.types.MaterialResourceReference;
+import defold.types.TextureResourceReference;
+import defold.types.TileSourceResourceReference;
 
 /**
     Functions and constants to access resources.
@@ -18,7 +22,7 @@ extern class Resource {
 
         **Note:** This function can only be called within `@property()`.
     **/
-    static function atlas(path:String):ResourceReference;
+    static function atlas(path:String):AtlasResourceReference;
 
     /**
         Constructor-like function with two purposes:
@@ -28,7 +32,7 @@ extern class Resource {
 
         **Note:** This function can only be called within `@property()`.
     **/
-    static function font(path:String):ResourceReference;
+    static function font(path:String):FontResourceReference;
 
     /**
         Return a reference to the Manifest that is currently loaded.
@@ -53,7 +57,7 @@ extern class Resource {
 
         **Note:** This function can only be called within `@property()`.
     **/
-    static function material():ResourceReference;
+    static function material():MaterialResourceReference;
 
     /**
         Sets the resource data for a specific resource
@@ -115,7 +119,7 @@ extern class Resource {
 
         **Note:** This function can only be called within `@property()`.
     **/
-    static function texture(path:String):ResourceReference;
+    static function texture(path:String):TextureResourceReference;
 
     /**
         Constructor-like function with two purposes:
@@ -125,7 +129,7 @@ extern class Resource {
 
         **Note:** This function can only be called within `@property()`.
     **/
-    static function tile_source(path:String):ResourceReference;
+    static function tile_source(path:String):TileSourceResourceReference;
 }
 
 /**
