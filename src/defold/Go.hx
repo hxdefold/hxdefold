@@ -366,7 +366,11 @@ abstract GoProperty(Dynamic)
     from Vector4 to Vector4
     from Quaternion to Quaternion
     from Bool to Bool
-    from ResourceReference to ResourceReference
+    from AtlasResourceReference to AtlasResourceReference
+    from FontResourceReference to FontResourceReference
+    from MaterialResourceReference to MaterialResourceReference
+    from TextureResourceReference to TextureResourceReference
+    from TileSourceResourceReference to TileSourceResourceReference
     {}
 
 /**
