@@ -71,6 +71,22 @@ extern class Physics {
     static function set_gravity(gravity:Vector3):Void;
 
     /**
+        Flips the collision shapes horizontally for a collision object
+
+        @param url the collision object that should flip its shapes
+        @param flip `true` if the collision object should flip its shapes, `false` if not
+    **/
+    static function set_hflip(url:HashOrStringOrUrl, flip:Bool):Void;
+
+    /**
+        Flips the collision shapes vertically for a collision object
+
+        @param url the collision object that should flip its shapes
+        @param flip `true` if the collision object should flip its shapes, `false` if not
+    **/
+    static function set_vflip(url:HashOrStringOrUrl, flip:Bool):Void;
+
+    /**
         Create a physics joint between two collision object components.
 
         Note: Currently only supported in 2D physics.

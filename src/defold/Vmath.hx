@@ -1,5 +1,7 @@
 package defold;
 
+import haxe.extern.EitherType;
+
 import defold.types.*;
 
 /**
@@ -263,6 +265,14 @@ extern class Vmath {
         @return matrix from rotation around z-axis
     **/
     static function matrix4_rotation_z(angle:Float):Matrix4;
+
+    /**
+        The resulting matrix describes a translation of a point in euclidean space.
+
+        @param position position vector to create matrix from
+        @return matrix from the supplied position vector
+    **/
+    static function matrix4_translation(position:EitherType<Vector3,Vector4>): Matrix4;
 
     /**
         Performs an element wise multiplication between two vectors of the same type

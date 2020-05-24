@@ -172,6 +172,14 @@ extern class Go {
     static function get_world_scale_uniform(?id:HashOrStringOrUrl):Float;
 
     /**
+        Gets the world transform of a game object instance.
+
+        @param id optional id of the game object instance to get the world transform for, by default the instance of the calling script
+        @return instance world transform
+    **/
+    static function get_world_transform(?id:HashOrStringOrUrl):Matrix4;
+
+    /**
         Sets a named property of the specified game object or component.
 
         @param url url of the game object or component having the property
@@ -358,6 +366,11 @@ abstract GoProperty(Dynamic)
     from Vector4 to Vector4
     from Quaternion to Quaternion
     from Bool to Bool
+    from AtlasResourceReference to AtlasResourceReference
+    from FontResourceReference to FontResourceReference
+    from MaterialResourceReference to MaterialResourceReference
+    from TextureResourceReference to TextureResourceReference
+    from TileSourceResourceReference to TileSourceResourceReference
     {}
 
 /**
