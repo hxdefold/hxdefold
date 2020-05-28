@@ -8,8 +8,10 @@ import haxe.macro.Context;
 import haxe.macro.Type;
 using StringTools;
 using haxe.macro.Tools;
+using haxe.macro.TypeTools;
 
 private enum ScriptType {
+    SNone;
     SCode;
     SGui;
     SRender;
@@ -76,16 +78,21 @@ private class Glue {
                             for (field in cl.fields.get())
                                 baseRenderScriptMethods[field.name] = true;
 
-                        case {superClass: {t: _.get() => {pack: ["defold", "support"], name: "Script"}, params: [tData]}}:
-                            scriptClasses.push({cls: cl, data: tData, type: SCode});
-
-                        case {superClass: {t: _.get() => {pack: ["defold", "support"], name: "GuiScript"}, params: [tData]}}:
-                            scriptClasses.push({cls: cl, data: tData, type: SGui});
-
-                        case {superClass: {t: _.get() => {pack: ["defold", "support"], name: "RenderScript"}, params: [tData]}}:
-                            scriptClasses.push({cls: cl, data: tData, type: SRender});
+                        case {params: [tData]}: // Generic type in file, do nothing.
 
                         default:
+                            switch getScriptType(cl) {
+                                case SCode:
+                                    scriptClasses.push({cls: cl, data: getScriptPropertiesType(cl), type: SCode});
+
+                                case SGui:
+                                    scriptClasses.push({cls: cl, data: getScriptPropertiesType(cl), type: SGui});
+
+                                case SRender:
+                                    scriptClasses.push({cls: cl, data: getScriptPropertiesType(cl), type: SRender});
+
+                                default:
+                            }
                     }
                 default:
             }
@@ -120,6 +127,8 @@ private class Glue {
                 case SRender:
                     baseMethods = baseRenderScriptMethods;
                     ext = "render_script";
+                case SNone:
+                    continue;
             }
 
             var exportExprs = [];
@@ -360,6 +369,44 @@ private class Glue {
 
             default:
                 throw new Error('Invalid @property value for type ${type.getName().substr(1)}', pos);
+        }
+    }
+
+    /**
+        Checks the given class type `cl`, and its super classes recursively, to check if it is initially
+        based on one of the `Script`, `GuiScript` or `RenderScript` types.
+
+        @param cl The class type to check.
+        @return The script type `cl` is extending, or `SNone` if it is not a script type.
+    **/
+    static function getScriptType(cl:ClassType):ScriptType {
+        return switch (cl) {
+            // Check if the base class is a type of script.
+            case {superClass: {t: _.get() => {pack: ["defold", "support"], name: "Script"}}}:       SCode;
+            case {superClass: {t: _.get() => {pack: ["defold", "support"], name: "GuiScript"}}}:    SGui;
+            case {superClass: {t: _.get() => {pack: ["defold", "support"], name: "RenderScript"}}}: SRender;
+
+            // If not, and it has a baseclass, check it recursively.
+            case _ if (cl.superClass != null): getScriptType(cl.superClass.t.get());
+
+            // Otherwise it's definitely not a script.
+            default: SNone;
+        }
+    }
+
+    /**
+
+    **/
+    static function getScriptPropertiesType(cl:ClassType):Type {
+        return switch (cl) {
+            // Check if the base class is a type of script.
+            case {superClass: {params: [tData]}}: tData;
+
+            // If not, and it has a baseclass, check it recursively.
+            case _ if (cl.superClass != null): getScriptPropertiesType(cl.superClass.t.get());
+
+            // Otherwise it's definitely not s cript.
+            default: throw new Error('getScriptPropertiesType() called for a type that is not a script.', Context.currentPos());
         }
     }
 }
