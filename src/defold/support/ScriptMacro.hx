@@ -41,6 +41,13 @@ private typedef ScriptExport = {
     var callbacks:Array<{name:String, method:String, args:Array<String>, isVoid:Bool}>;
 }
 
+private typedef Callback = {
+    var name: String;
+    var method: String;
+    var args: Array<String>;
+    var isVoid: Bool;
+}
+
 private class Glue {
     static inline var EXPORT_TABLE = "_hxdefold_";
 
@@ -133,62 +140,8 @@ private class Glue {
 
             var exportExprs = [];
             var exportPrefix = (if (cl.pack.length == 0) cl.name else cl.pack.join("_") + "_" + cl.name) + "_";
-            var callbacks = [];
+            var callbacks = generateCallbacksRecursive(cl, exportExprs, exportPrefix, baseMethods);
 
-            // generate callback fields
-            for (field in cl.fields.get()) {
-                // this is a callback field, if it's overriden from the base Script class
-                var fieldName = field.name;
-                if (baseMethods.exists(fieldName)) {
-                    // in haxe 4, final is a keyword, so we need to handle this here
-                    // we could do it more elaborately via metadata or something, but oh well :)
-                    var callbackName = switch fieldName {
-                        case "final_": "final";
-                        case _: fieldName;
-                    };
-
-                    // generate arguments
-                    var argNames = [], funExpr, isVoid;
-                    switch (field.type) {
-                        case TFun(args, ret):
-                            var argDefs = new Array<FunctionArg>();
-                            var argExprs = [];
-
-                            for (arg in args) {
-                                argNames.push(arg.name);
-                                argDefs.push({name: arg.name, type: macro : Dynamic});
-                                argExprs.push(macro $i{arg.name});
-                            }
-
-                            isVoid = ret.toString() == "Void";
-
-                            var expr = macro script.$fieldName($a{argExprs});
-                            if (!isVoid) expr = macro return $expr;
-
-                            funExpr = {
-                                pos: field.pos,
-                                expr: EFunction(null, {
-                                    args: argDefs,
-                                    ret: null,
-                                    expr: expr
-                                })
-                            };
-                        default:
-                            throw new Error("Overriden class field is not a method. This can't happen! :)", field.pos);
-                    }
-
-                    var exportName = exportPrefix + fieldName;
-                    exportExprs.push(macro exports.$exportName = $funExpr);
-
-                    // generate callback function definition
-                    callbacks.push({
-                        name: callbackName,
-                        method: exportName,
-                        args: argNames,
-                        isVoid: isVoid,
-                    });
-                }
-            }
 
             var tp = {
                 var parts = cl.module.split(".");
@@ -262,6 +215,92 @@ private class Glue {
             sys.FileSystem.createDirectory(script.dir);
             sys.io.File.saveContent('${script.dir}/${script.name}', b.toString());
         }
+    }
+
+
+    function generateCallbacksRecursive(cl:ClassType, exportExprs:Array<Expr>, exportPrefix:String, baseMethods:Map<String,Bool>, callbackNames:Array<String> = null):Array<Callback>
+    {
+        if (isBaseScriptType(cl)) {
+            // Reached the base script type, stop here.
+            return [];
+        }
+
+        var callbacks:Array<Callback> = [];
+        if (callbackNames == null) {
+            callbackNames = [];
+        }
+
+        // generate callback fields
+        for (field in cl.fields.get()) {
+            // this is a callback field, if it's overriden from the base Script class
+            var fieldName = field.name;
+            if (!baseMethods.exists(fieldName)) {
+                continue;
+            }
+
+            // in haxe 4, final is a keyword, so we need to handle this here
+            // we could do it more elaborately via metadata or something, but oh well :)
+            var callbackName = switch fieldName {
+                case "final_": "final";
+                case _: fieldName;
+            };
+
+            if (callbackNames.indexOf(callbackName) > -1) {
+                // This callback has already been defined by a previous call in the recursion.
+                // i.e a type which extends cl has redefined this method.
+                continue;
+            }
+
+            // generate arguments
+            var argNames = [], funExpr, isVoid;
+            switch (field.type) {
+                case TFun(args, ret):
+                    var argDefs = new Array<FunctionArg>();
+                    var argExprs = [];
+
+                    for (arg in args) {
+                        argNames.push(arg.name);
+                        argDefs.push({name: arg.name, type: macro : Dynamic});
+                        argExprs.push(macro $i{arg.name});
+                    }
+
+                    isVoid = ret.toString() == "Void";
+
+                    var expr = macro script.$fieldName($a{argExprs});
+                    if (!isVoid) expr = macro return $expr;
+
+                    funExpr = {
+                        pos: field.pos,
+                        expr: EFunction(null, {
+                            args: argDefs,
+                            ret: null,
+                            expr: expr
+                        })
+                    };
+                default:
+                    throw new Error("Overriden class field is not a method. This can't happen! :)", field.pos);
+            }
+
+            var exportName = exportPrefix + fieldName;
+            exportExprs.push(macro exports.$exportName = $funExpr);
+
+            callbackNames.push(callbackName);
+
+            // generate callback function definition
+            callbacks.push({
+                name: callbackName,
+                method: exportName,
+                args: argNames,
+                isVoid: isVoid,
+            });
+        }
+
+        if (cl.superClass != null)
+        {
+            callbacks = callbacks.concat(generateCallbacksRecursive(cl.superClass.t.get(), exportExprs, exportPrefix, baseMethods, callbackNames));
+        }
+
+        return callbacks;
     }
 
     // this should really be in the standard library
@@ -395,7 +434,14 @@ private class Glue {
     }
 
     /**
+        Checks the given class type `cl`, and its super classes recursively, and returns the
+        first generic parameter to be defined on a superclass, which is presumably the anonymous
+        type which will act as the script's properties.
 
+        **Note:** The type `cl` needs to have already been confirmed to be a script type, using `getScriptType()`.
+
+        @param cl The class type to check.
+        @return The type, which if followed should lead to an anonymous structure which is the script's properties.
     **/
     static function getScriptPropertiesType(cl:ClassType):Type {
         return switch (cl) {
@@ -408,6 +454,16 @@ private class Glue {
             // Otherwise it's definitely not s cript.
             default: throw new Error('getScriptPropertiesType() called for a type that is not a script.', Context.currentPos());
         }
+    }
+
+    /**
+        Returns `true`, if the given class type `cl` is one of the base types `Script`, `GuiScript` or `RenderScript`.
+    **/
+    static function isBaseScriptType(cl:ClassType):Bool {
+        return cl.pack.length == 2
+            && cl.pack[0] == "defold"
+            && cl.pack[1] == "support"
+            && ["Script", "GuiScript", "RenderScript"].indexOf(cl.name) > -1;
     }
 }
 
