@@ -218,8 +218,7 @@ private class Glue {
     }
 
 
-    function generateCallbacksRecursive(cl:ClassType, exportExprs:Array<Expr>, exportPrefix:String, baseMethods:Map<String,Bool>, callbackNames:Array<String> = null):Array<Callback>
-    {
+    function generateCallbacksRecursive(cl:ClassType, exportExprs:Array<Expr>, exportPrefix:String, baseMethods:Map<String,Bool>, callbackNames:Array<String> = null):Array<Callback> {
         if (isBaseScriptType(cl)) {
             // Reached the base script type, stop here.
             return [];
