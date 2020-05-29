@@ -444,13 +444,13 @@ private class Glue {
     **/
     static function getScriptPropertiesType(cl:ClassType):Type {
         return switch (cl) {
-            // Check if the base class is a type of script.
+            // Check if there is a super class with a type parameter.
             case {superClass: {params: [tData]}}: tData;
 
-            // If not, and it has a baseclass, check it recursively.
+            // If there is a super class, but without a type parameter, check it recursively.
             case _ if (cl.superClass != null): getScriptPropertiesType(cl.superClass.t.get());
 
-            // Otherwise it's definitely not s cript.
+            // Otherwise it's definitely not a script.
             default: throw new Error('getScriptPropertiesType() called for a type that is not a script.', Context.currentPos());
         }
     }
