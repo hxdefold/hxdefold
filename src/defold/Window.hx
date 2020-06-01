@@ -13,9 +13,16 @@ extern class Window {
 
         On platforms that does not support dimming, `DIMMING_UNKNOWN` is always returned.
 
-        @return mode The mode for screen dimming
+        @return The mode for screen dimming
     **/
     static function get_dim_mode():WindowDimmingMode;
+
+    /**
+        This returns the current window size (width and height).
+
+        @return The size of the window.
+    **/
+    static function get_size():WindowSize;
 
     /**
         Sets the dimming mode on a mobile device.
@@ -106,4 +113,19 @@ typedef WindowEventData = {
         The height of a resize event. null otherwise.
     **/
     @:optional var height:Int;
+}
+
+/**
+    Window size data, returned from `Window.get_size()`.
+**/
+@:multiReturn extern class WindowSize {
+    /**
+        The window width.
+    **/
+    var width:Int;
+
+    /**
+        The window height.
+    **/
+    var height:Int;
 }
