@@ -75,6 +75,22 @@ extern class Window {
 @:native("_G.window")
 @:enum extern abstract WindowEvent({}) {
     /**
+        Deiconified window event.
+
+        This event is sent to a window event listener when the game window or app screen
+        is restored after being iconified.
+    **/
+    var WINDOW_EVENT_DEICONIFIED;
+
+    /**
+        Iconify window event.
+
+        This event is sent to a window event listener when the game window or app screen
+        is iconified (reduced to an application icon in a toolbar, application tray or similar).
+    **/
+    var WINDOW_EVENT_ICONFIED;
+
+    /**
         Focus gained window event.
 
         This event is sent to a window event listener when the game window or app screen has

@@ -89,6 +89,14 @@ extern class Sound {
     static function is_phone_call_active():Bool;
 
     /**
+        Pause all active voices.
+
+        @param url the sound that should pause
+        @param pause true if the sound should pause
+    **/
+    static function pause(url:HashOrStringOrUrl, pause:Bool):Void;
+
+    /**
         Plays a sound.
 
         Make the sound component play its sound. Multiple voices are supported. The limit is set to 32 voices per sound component.
@@ -96,6 +104,8 @@ extern class Sound {
         Note that gain is in linear scale, between 0 and 1.
         To get the dB value from the gain, use the formula `20 * log(gain)`.
         Inversely, to find the linear value from a dB value, use the formula `10<sup>db/20</sup>`.
+
+        A sound will continue to play even if the game object the sound component belonged to is deleted. You can send a stop_sound to stop the sound.
 
         @param url the sound that should play
         @param play_properties optional table with properties
@@ -191,6 +201,11 @@ typedef SoundMessagePlaySound = {
         The final gain of the sound will be a combination of this gain, the group gain and the master gain.
     **/
     @:optional var gain:Float;
+
+    /**
+        The identifier of the sound, can be used to distinguish between consecutive plays from the same component.
+    **/
+    @:optional var play_id:Int;
 }
 
 /**

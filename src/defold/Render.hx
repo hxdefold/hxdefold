@@ -311,6 +311,13 @@ class RenderMessages {
     static var clear_color(default, never) = new Message<RenderMessageClearColor>("clear_color");
 
     /**
+        Draw a text on the screen.
+
+        Draw a text on the screen. This should be used for debugging purposes only.
+    **/
+    static var draw_debug_text(default, never) = new Message<RenderMessageDrawDebugText>("draw_debug_text");
+
+    /**
         Draw a line on the screen.
 
         This should mostly be used for debugging purposes.
@@ -362,6 +369,23 @@ typedef RenderMessageClearColor = {
     var color:Vector4;
 }
 
+/**
+    Data for the `RenderMessages.draw_debug_text` message.
+**/
+typedef RenderMessageDrawDebugText = {
+    /**
+        position of the text
+    **/
+    var position:Vector3;
+    /**
+        the text to draw
+    **/
+    var text:String;
+    /**
+        color of the text
+    **/
+    var color:Vector4;
+}
 
 /**
     Data for the `RenderMessages.draw_line` message.
