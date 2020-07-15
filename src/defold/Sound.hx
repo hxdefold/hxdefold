@@ -109,8 +109,9 @@ extern class Sound {
 
         @param url the sound that should play
         @param play_properties optional table with properties
+        @return The `play_id` of the sound that was played.
     **/
-    static function play<T>(url:HashOrStringOrUrl, ?play_properties:SoundMessagePlaySound, ?complete_function:T->Hash->SoundMessageSoundDone->Url->Void):Void;
+    static function play<T>(url:HashOrStringOrUrl, ?play_properties:SoundMessagePlaySound, ?complete_function:T->Hash->SoundMessageSoundDone->Url->Void):Int;
 
     /**
         Set gain on all active playing voices of a sound.
