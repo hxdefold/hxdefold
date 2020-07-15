@@ -6,7 +6,7 @@
     "version": "1.2.169",
     "classPath": "src",
     "releasenote": "Initial release",
-    "contributors": ["nadako"],
+    "contributors": ["nadako", "Haath"],
     "main": "defold.support.Run",
     "tags": ["game", "lua", "defold", "extern"]
 }
