@@ -74,6 +74,17 @@ typedef ScriptOnInputAction = {
         List of touch input, one element per finger, if present.
     **/
     @:optional var touch:lua.Table<Int,ScriptOnInputActionTouch>;
+
+    /**
+        The index of the gamepad device that provided the input.
+    **/
+    @:optional var gamepad:Int;
+
+    /**
+        The name of the gamepad that was connected.
+        Available on the `gamepad_connected` input event.
+    **/
+    @:optional var gamepad_name:String;
 }
 
 /**
