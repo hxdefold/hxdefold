@@ -122,6 +122,16 @@ typedef ScriptOnInputActionTouch = {
     var y:Float;
 
     /**
+        The screen space x value of a touch.
+    **/
+    var screen_x:Float;
+
+    /**
+        The screen space y value of a touch.
+    **/
+    var screen_y:Float;
+
+    /**
         The change in x value.
     **/
     var dx:Float;
@@ -130,6 +140,16 @@ typedef ScriptOnInputActionTouch = {
         The change in y value.
     **/
     var dy:Float;
+
+    /**
+        The change in screen space x value of a touch.
+    **/
+    var screen_dx:Float;
+
+    /**
+        The change in screen space y value of a touch.
+    **/
+    var screen_dy:Float;
 
     /**
         Accelerometer x value (if present).
