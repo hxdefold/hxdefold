@@ -20,7 +20,7 @@ extern class Buffer {
         @param srcoffset the offset to start copying data from
         @param count the number of elements to copy
     **/
-    static function copy_buffer(dst:Buffer, dstoffset:Int, src:Buffer, srcoffset:Int, count:Int):Void;
+    static function copy_buffer(dst:defold.types.Buffer, dstoffset:Int, src:defold.types.Buffer, srcoffset:Int, count:Int):Void;
 
     /**
         Copy a specified amount of data from one stream to another.
@@ -45,7 +45,7 @@ extern class Buffer {
         @param element_count The number of elements the buffer should hold
         @param declaration A table where each entry (table) describes a stream
     **/
-    @:pure static function create(element_count:Int, declaration:lua.Table<Int,BufferStreamDeclaration>):Buffer;
+    @:pure static function create(element_count:Int, declaration:lua.Table<Int,BufferStreamDeclaration>):defold.types.Buffer;
 
     /**
         Get a copy of all the bytes from a specified stream as a Lua string.
@@ -54,7 +54,7 @@ extern class Buffer {
         @param stream_name the name of the stream
         @return the buffer data as a Lua string
     **/
-    @:pure static function get_bytes(buffer:Buffer, stream_name:HashOrString):String;
+    @:pure static function get_bytes(buffer:defold.types.Buffer, stream_name:HashOrString):String;
 
     /**
         Get a specified stream from a buffer.
@@ -63,17 +63,18 @@ extern class Buffer {
         @param stream_name the stream name
         @return the data stream
     **/
-    @:pure static function get_stream(buffer:Buffer, stream_name:HashOrString):BufferStream;
+    @:pure static function get_stream(buffer:defold.types.Buffer, stream_name:HashOrString):BufferStream;
 }
 
 /**
     A buffer stream handle returned by `Buffer.get_stream`.
 **/
-extern class BufferStream {}
+extern class BufferStream extends lua.Table.AnyTable {}
 
 /**
     Structure for buffer stream declaration used in `Buffer.create`.
 **/
+@:pure
 typedef BufferStreamDeclaration = {
     /**
         The name of the stream.
