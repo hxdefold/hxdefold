@@ -3,9 +3,10 @@ package defold.support;
 #if macro
 import haxe.io.Path;
 import haxe.macro.Compiler;
-import haxe.macro.Expr;
 import haxe.macro.Context;
+import haxe.macro.Expr;
 import haxe.macro.Type;
+
 using StringTools;
 using haxe.macro.Tools;
 using haxe.macro.TypeTools;
@@ -355,7 +356,7 @@ private class Glue {
             case TAbstract(_.get() => {pack: ["defold", "types"], name: "MaterialResourceReference"}, _): PMaterialResourceReference;
             case TAbstract(_.get() => {pack: ["defold", "types"], name: "TextureResourceReference"}, _): PTextureResourceReference;
             case TAbstract(_.get() => {pack: ["defold", "types"], name: "TileSourceResourceReference"}, _): PTileSourceResourceReference;
-            case TInst(_.get() => {pack: ["defold", "types"], name: "BufferResourceReference"}, _): PBufferResourceReference;
+            case TAbstract(_.get() => {pack: ["defold", "types"], name: "BufferResourceReference"}, _): PBufferResourceReference;
             default: throw new Error('Unsupported type for script property: ${type.toString()}', pos);
         }
     }
@@ -370,12 +371,12 @@ private class Glue {
             case PInt: '0';
             case PFloat: '0.0';
             case PQuaternion: 'vmath.quat()';
-			case PBufferResourceReference: 'resource.buffer()';
-			case PAtlasResourceReference: 'resource.atlas()';
-			case PFontResourceReference: 'resource.font()';
-			case PMaterialResourceReference: 'resource.material()';
-			case PTextureResourceReference: 'resource.texture()';
-			case PTileSourceResourceReference: 'resource.tile_source()';
+            case PAtlasResourceReference: 'resource.atlas()';
+            case PFontResourceReference: 'resource.font()';
+            case PMaterialResourceReference: 'resource.material()';
+            case PTextureResourceReference: 'resource.texture()';
+            case PTileSourceResourceReference: 'resource.tile_source()';
+            case PBufferResourceReference: 'resource.buffer()';
         }
     }
 
@@ -396,9 +397,7 @@ private class Glue {
             case [PVector4, [{expr: EConst(CFloat(x) | CInt(x))}, {expr: EConst(CFloat(y) | CInt(y))}, {expr: EConst(CFloat(z) | CInt(z))}, {expr: EConst(CFloat(w) | CInt(w))}]]:
                 'vmath.vector4($x, $y, $z, $w)';
             case [PQuaternion, [{expr: EConst(CFloat(x) | CInt(x))}, {expr: EConst(CFloat(y) | CInt(y))}, {expr: EConst(CFloat(z) | CInt(z))}, {expr: EConst(CFloat(w) | CInt(w))}]]:
-				'vmath.quat($x, $y, $z, $w)';
-			case [PBufferResourceReference, [{expr: EConst(CString(s))}]]:
-				'resource.buffer(${haxe.Json.stringify(s)})';
+                'vmath.quat($x, $y, $z, $w)';
             case [PAtlasResourceReference, [{expr: EConst(CString(s))}]]:
                 'resource.atlas(${haxe.Json.stringify(s)})';
             case [PFontResourceReference, [{expr: EConst(CString(s))}]]:
@@ -409,6 +408,8 @@ private class Glue {
                 'resource.texture(${haxe.Json.stringify(s)})';
             case [PTileSourceResourceReference, [{expr: EConst(CString(s))}]]:
                 'resource.tile_source(${haxe.Json.stringify(s)})';
+            case [PBufferResourceReference, [{expr: EConst(CString(s))}]]:
+                'resource.buffer(${haxe.Json.stringify(s)})';
 
             default:
                 throw new Error('Invalid @property value for type ${type.getName().substr(1)}', pos);

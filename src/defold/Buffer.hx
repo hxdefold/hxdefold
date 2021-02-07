@@ -74,7 +74,6 @@ extern class BufferStream extends lua.Table.AnyTable {}
 /**
     Structure for buffer stream declaration used in `Buffer.create`.
 **/
-@:pure
 typedef BufferStreamDeclaration = {
     /**
         The name of the stream.
