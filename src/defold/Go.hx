@@ -371,6 +371,7 @@ abstract GoProperty(Dynamic)
     from MaterialResourceReference to MaterialResourceReference
     from TextureResourceReference to TextureResourceReference
     from TileSourceResourceReference to TileSourceResourceReference
+    from BufferResourceReference to BufferResourceReference
     {}
 
 /**

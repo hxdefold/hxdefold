@@ -3,9 +3,10 @@ package defold.support;
 #if macro
 import haxe.io.Path;
 import haxe.macro.Compiler;
-import haxe.macro.Expr;
 import haxe.macro.Context;
+import haxe.macro.Expr;
 import haxe.macro.Type;
+
 using StringTools;
 using haxe.macro.Tools;
 using haxe.macro.TypeTools;
@@ -31,6 +32,7 @@ private enum PropertyType {
     PMaterialResourceReference;
     PTextureResourceReference;
     PTileSourceResourceReference;
+    PBufferResourceReference;
 }
 
 private typedef ScriptExport = {
@@ -354,6 +356,7 @@ private class Glue {
             case TAbstract(_.get() => {pack: ["defold", "types"], name: "MaterialResourceReference"}, _): PMaterialResourceReference;
             case TAbstract(_.get() => {pack: ["defold", "types"], name: "TextureResourceReference"}, _): PTextureResourceReference;
             case TAbstract(_.get() => {pack: ["defold", "types"], name: "TileSourceResourceReference"}, _): PTileSourceResourceReference;
+            case TAbstract(_.get() => {pack: ["defold", "types"], name: "BufferResourceReference"}, _): PBufferResourceReference;
             default: throw new Error('Unsupported type for script property: ${type.toString()}', pos);
         }
     }
@@ -368,11 +371,12 @@ private class Glue {
             case PInt: '0';
             case PFloat: '0.0';
             case PQuaternion: 'vmath.quat()';
-            case PAtlasResourceReference
-                | PFontResourceReference
-                | PMaterialResourceReference
-                | PTextureResourceReference
-                | PTileSourceResourceReference: throw new Error('Property of type ${Std.string(type).substr(1)} cannot have an empty value.', Context.currentPos());
+            case PAtlasResourceReference: 'resource.atlas()';
+            case PFontResourceReference: 'resource.font()';
+            case PMaterialResourceReference: 'resource.material()';
+            case PTextureResourceReference: 'resource.texture()';
+            case PTileSourceResourceReference: 'resource.tile_source()';
+            case PBufferResourceReference: 'resource.buffer()';
         }
     }
 
@@ -404,6 +408,8 @@ private class Glue {
                 'resource.texture(${haxe.Json.stringify(s)})';
             case [PTileSourceResourceReference, [{expr: EConst(CString(s))}]]:
                 'resource.tile_source(${haxe.Json.stringify(s)})';
+            case [PBufferResourceReference, [{expr: EConst(CString(s))}]]:
+                'resource.buffer(${haxe.Json.stringify(s)})';
 
             default:
                 throw new Error('Invalid @property value for type ${type.getName().substr(1)}', pos);

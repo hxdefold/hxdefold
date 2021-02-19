@@ -79,6 +79,22 @@ extern class Resource {
     static function set_texture(path:HashOrString, table:ResourceTextureInfo, buffer:Buffer):Void;
 
     /**
+        Gets the buffer from a resource
+
+        @param path The path to the resource
+        @return The resource buffer
+    **/
+    static function get_buffer(path:HashOrString):Buffer;
+
+    /**
+        Sets the buffer of a resource
+
+        @param path The path to the resource
+        @param buffer The resource buffer
+    **/
+    static function set_buffer(path:HashOrString, buffer:Buffer):Void;
+
+    /**
         Create, verify, and store a manifest to device.
 
         Create a new manifest from a buffer. The created manifest is verified
