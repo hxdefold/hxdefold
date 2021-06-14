@@ -38,7 +38,7 @@ extern class Timer {
         @param callback timer callback function
         @return identifier for the create timer, returns `Timer.INVALID_TIMER_HANDLE` if the timer can not be created
     **/
-    static function delay<T>(delay:Float, repeat:Bool, callback:#if haxe4 (self:T, handle:TimerHandle, time_elapsed:Float)->Void #else T->TimerHandle->Float->Void #end):TimerHandle;
+    static function delay<T>(delay:Float, repeat:Bool, callback:(self:T, handle:TimerHandle, time_elapsed:Float)->Void):TimerHandle;
 
     /**
         Indicates an invalid timer handle.

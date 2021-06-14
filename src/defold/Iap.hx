@@ -58,7 +58,7 @@ extern class Iap {
 
         @param callbackresult callback
     **/
-    static function has_premium<T>(callback:#if haxe4 (self:T, has_premium:Bool)->Void #else T->Bool->Void #end):Void;
+    static function has_premium<T>(callback:(self:T, has_premium:Bool)->Void):Void;
 
     /**
         List in-app products.
@@ -69,7 +69,7 @@ extern class Iap {
         @param ids table to get information about
         @param callback result callback
     **/
-    static function list<T>(ids:lua.Table<Int,String>, callback:#if haxe4 (self:T, products:lua.Table<String,IapProduct>, error:Null<IapError>)->Void #else T->lua.Table<String,IapProduct>->Null<IapError>->Void #end):Void;
+    static function list<T>(ids:lua.Table<Int,String>, callback:(self:T, products:lua.Table<String,IapProduct>, error:Null<IapError>)->Void):Void;
 
     /**
         Restore products (non-consumable).
@@ -86,7 +86,7 @@ extern class Iap {
 
         @param listener listener function
     **/
-    static function set_listener<T>(listener:#if haxe4 (self:T, transaction:IapTransaction, error:Null<IapError>)->Void #else T->IapTransaction->Null<IapError>->Void #end):Void;
+    static function set_listener<T>(listener:(self:T, transaction:IapTransaction, error:Null<IapError>)->Void):Void;
 }
 
 /**

@@ -54,7 +54,7 @@ extern class Factory {
         @param url the factory component to load
         @param complete_function function to call when resources are loaded.
     **/
-    static function load<T>(?url:HashOrStringOrUrl, ?complete_function:#if haxe4 (self:T, url:Url, result:Bool)->Void #else T->Url->Bool->Void #end):Void;
+    static function load<T>(?url:HashOrStringOrUrl, ?complete_function:(self:T, url:Url, result:Bool)->Void):Void;
 
     /**
         Unload resources previously loaded using `Factory.load`.

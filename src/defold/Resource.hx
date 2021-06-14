@@ -109,7 +109,22 @@ extern class Resource {
         @param manifest_buffer the binary data that represents the manifest
         @param callback the callback function executed once the engine has attempted to store the manifest.
     **/
-    static function store_manifest<T>(manifest_buffer:String, callback:#if haxe4 (self:T, status:ResourceLiveUpdateStatus)->Void #else T->ResourceLiveUpdateStatus->Void #end):Void;
+    static function store_manifest<T>(manifest_buffer:String, callback:(self:T, status:ResourceLiveUpdateStatus)->Void):Void;
+
+    /**
+        Stores a zip file and uses it for live update content. The path is renamed and stored in the (internal) live update location.
+
+        @param path the path to the original file on disc
+        @param callback the callback function executed after the storage has completed
+    **/
+    static function store_archive<T>(path:String, callback:(self:T, status:ResourceLiveUpdateStatus)->Void):Void;
+
+    /**
+        Is any liveupdate data mounted and currently in use? This can be used to determine if a new manifest or zip file should be downloaded.
+
+        @return true if a liveupdate archive (any format) has been loaded
+    **/
+    static function is_using_liveupdate_data():Bool;
 
     /**
         Add a resource to the data archive and runtime index.

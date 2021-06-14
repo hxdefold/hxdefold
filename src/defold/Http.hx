@@ -58,4 +58,15 @@ typedef HttpOptions = {
         Request timeout in seconds
     **/
     @:optional var timeout:Float;
+
+    /**
+        Path on disc where to download the file.
+        Only overwrites the path if status is 200
+    **/
+    @:optional var path:String;
+
+    /**
+        Don't return cached data if we get a 304
+    **/
+    @:optional var ignore_cache:Bool;
 }

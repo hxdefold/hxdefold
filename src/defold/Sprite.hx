@@ -23,7 +23,7 @@ extern class Sprite {
         @param play_properties optional table with properties
     **/
     static function play_flipbook<T>(url:HashOrStringOrUrl, id:Hash,
-        ?complete_function: #if haxe4 (self:T, message_id:Message<SpriteMessageAnimationDone>, message:SpriteMessageAnimationDone, sender:Url)->Void #else T->Message<SpriteMessageAnimationDone>->SpriteMessageAnimationDone->Url->Void #end,
+        ?complete_function:(self:T, message_id:Message<SpriteMessageAnimationDone>, message:SpriteMessageAnimationDone, sender:Url)->Void,
         ?play_properties:SpritePlayFlipbookProperties
     ):Void;
 

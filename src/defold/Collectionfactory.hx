@@ -43,11 +43,11 @@ extern class Collectionfactory {
 
     /**
         Get collection factory status.
-        
+
         This returns status of the collection factory.
-        
+
         Calling this function when the factory is not marked as dynamic loading always returns `CollectionfactoryStatus.STATUS_LOADED`.
-        
+
         @param url the collection factory component to get status from
         @return status of the collection factory component
     **/
@@ -55,23 +55,23 @@ extern class Collectionfactory {
 
     /**
         Load resources of a collection factory prototype.
-        
+
         Resources loaded are referenced by the collection factory component until the existing (parent) collection is destroyed or `Collectionfactory.unload` is called.
-        
+
         Calling this function when the factory is not marked as dynamic loading does nothing.
-        
+
         @param url the collection factory component to load
         @param complete_function function to call when resources are loaded.
     **/
-    static function load<T>(?url:HashOrStringOrUrl, ?complete_function:#if haxe4 (self:T, url:Url, result:Bool)->Void #else T->Url->Bool->Void #end):Void;
+    static function load<T>(?url:HashOrStringOrUrl, ?complete_function:(self:T, url:Url, result:Bool)->Void):Void;
 
     /**
         Unload resources previously loaded using `Collectionfactory.load`.
-        
+
         This decreases the reference count for each resource loaded with collectionfactory.load. If reference is zero, the resource is destroyed.
-        
+
         Calling this function when the factory is not marked as dynamic loading does nothing.
-        
+
         @param url the collection factory component to unload
     **/
     static function unload(?url:HashOrStringOrUrl):Void;
