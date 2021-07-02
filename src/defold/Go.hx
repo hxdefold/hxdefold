@@ -130,6 +130,14 @@ extern class Go {
     static function get_scale_uniform(?id:HashOrStringOrUrl):Float;
 
     /**
+        Get the parent for a game object instance.
+
+        @param id optional id of the game object instance to get parent for, defaults to the instance containing the calling script
+        @param parent instance or nil
+    **/
+    static function get_parent(?id:HashOrStringOrUrl):Hash;
+
+    /**
         Gets the game object instance world position.
 
         Use `Go.get_position` to retrieve the position relative to the parent.

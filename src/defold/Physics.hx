@@ -50,7 +50,7 @@ extern class Physics {
 
     @:deprecated
     static function ray_cast(from:Vector3, to:Vector3, groups:lua.Table<Int,Hash>, ?request_id:Int):Void;
-    
+
     /**
         Get the gravity in runtime. The gravity returned is not global,
         it will return the gravity for the collection that the function is called from.
@@ -545,7 +545,7 @@ typedef PhysicsHingeJoint = {
     /**
         Read only fields, available from physics.get_joint_properties().
     **/
-    
+
     /**
         Current joint angle in radians
     **/
@@ -585,7 +585,7 @@ typedef PhysicsSliderJoint = {
         The lower translation limit, usually in meters.
     **/
     @:optional var lower_translation:Float;
-    
+
     /**
         The upper translation limit, usually in meters.
     **/
@@ -647,7 +647,7 @@ typedef PhysicsSpringJoint = {
 }
 
 /**
-    Types of physics joint available. 
+    Types of physics joint available.
 **/
 @:native("_G.physics")
 @:enum extern abstract PhysicsJointType({}) {
