@@ -87,6 +87,13 @@ extern class Physics {
     static function set_vflip(url:HashOrStringOrUrl, flip:Bool):Void;
 
     /**
+        Collision objects tend to fall asleep when inactive for a small period of time for efficiency reasons. This function wakes them up.
+
+        @param url the collision object that should wake up
+    **/
+    static function wakeup(url:HashOrStringOrUrl):Void;
+
+    /**
         Create a physics joint between two collision object components.
 
         Note: Currently only supported in 2D physics.
