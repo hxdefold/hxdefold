@@ -652,7 +652,7 @@ extern class Gui {
         @param flip flip texture vertically
         @return texture creation was successful
     **/
-    static function new_texture(texture:HashOrString, width:Float, height:Float, type:String, buffer:String, ?flip:Bool):Bool;
+    static function new_texture(texture:HashOrString, width:Float, height:Float, type:String, buffer:String, ?flip:Bool):GuiNewTextureResult;
 
     /**
         Determines if the node is pickable by the supplied coordinates.
@@ -1472,6 +1472,22 @@ typedef GuiTextMetrics = {
     var EASING_OUTSINE;
 }
 
+@:native("_G.gui")
+@:enum extern abstract GuiNewTextureResultCode({}) {
+    /**
+        The texture id already exists when trying to use `gui.new_texture()`.
+    **/
+    var RESULT_TEXTURE_ALREADY_EXISTS;
+    /**
+        The system is out of resources, for instance when trying to create a new texture using `gui.new_texture()`.
+    **/
+    var RESULT_OUT_OF_RESOURCES;
+    /**
+        The provided data is not in the expected format or is in some other way incorrect, for instance the image data provided to `gui.new_texture()`.
+    **/
+    var RESULT_DATA_ERROR;
+}
+
 /**
     Data for the `play_properties` argument of `Gui.play_spine_anim` method.
 **/
@@ -1505,4 +1521,19 @@ typedef GuiPlayFlipbookProperties = {
         The rate with which the animation will be played. Must be positive.
     **/
     var playback_rate:Float;
+}
+
+/**
+    A type for returning multiple values from the `Gui.new_texture` method.
+**/
+@:multiReturn extern class GuiNewTextureResult {
+    /**
+        texture creation was successful
+    **/
+    var success:Bool;
+
+    /**
+        one of the `GuiNewTextureResultCode` codes if unsuccessful
+    **/
+    var code:GuiNewTextureResultCode;
 }
