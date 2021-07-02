@@ -85,13 +85,13 @@ extern class Tilemap {
 
         @param url the tile map
         @param name name of the layer
-        @param x x coordinate of the tile
-        @param y y coordinate of the tile
-        @param new_tile tile to set
-        @param h_flip if the tile should be horizontally flipped
-        @param v_flip if the tile should be vertically flipped
+        @param x x-coordinate of the tile
+        @param y y-coordinate of the tile
+        @param tile index of new tile to set. 0 resets the cell
+        @param h_flipped if the tile should be horizontally flipped
+        @param v_flipped if the tile should be vertically flipped
     **/
-    static function set_tile(url:HashOrStringOrUrl, name:HashOrString, x:Int, y:Int, new_tile:Int, ?h_flip:Bool, ?v_flip:Bool):Void;
+    static function set_tile(url:HashOrStringOrUrl, name:HashOrString, x:Int, y:Int, tile:Int, ?h_flipped:Bool, ?v_flipped:Bool):Void;
 
     /**
         Sets the visibility of the tilemap layer.
