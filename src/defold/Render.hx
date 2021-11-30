@@ -350,6 +350,26 @@ class RenderMessages {
         The camera component that has camera focus will sent set_view_projection messages to the @render socket.
     **/
     static var set_view_projection(default, never) = new Message<RenderMessageSetViewProjection>("set_view_projection");
+
+    /**
+        The stretch projection stretches the view when the window resizes.
+    **/
+    static var use_stretch_projection(default, never) = new Message<RenderMessageUseStretchProjection>("use_stretch_projection");
+
+    /**
+        The fixed fit projection keeps the aspect ratio and shows more of the game when the window resizes.
+    **/
+    static var use_fixed_fit_projection(default, never) = new Message<RenderMessageUseFixedFitProjection>("use_fixed_fit_projection");
+
+    /**
+        The fixed projection keeps the aspect ratio and has a zoom to show more or less of the game.
+    **/
+    static var use_fixed_projection(default, never) = new Message<RenderMessageUseFixedProjection>("use_fixed_projection");
+    
+    /**
+        Suitable for 3D games. Enables the perspective projection provided from a camera component .
+    **/
+    static var use_camera_projection(default, never) = new Message<Void>("use_camera_projection");
 }
 
 /**
@@ -357,6 +377,52 @@ class RenderMessages {
 **/
 typedef RenderMessageSetViewProjection = {
     var view:Matrix4;
+}
+
+/**
+    Data for the `RenderMessages.use_stretch_projection` message.
+**/
+typedef RenderMessageUseStretchProjection = {
+  /**
+      near clipping plane
+  **/
+  var near:Float;
+  /**
+      far clipping plane
+  **/
+  var far:Float;
+}
+
+/**
+    Data for the `RenderMessages.use_fixed_fit_projection` message.
+**/
+typedef RenderMessageUseFixedFitProjection = {
+  /**
+      near clipping plane
+  **/
+  var near:Float;
+  /**
+      far clipping plane
+  **/
+  var far:Float;
+}
+
+/**
+    Data for the `RenderMessages.use_fixed_projection` message.
+**/
+typedef RenderMessageUseFixedProjection = {
+  /**
+      near clipping plane
+  **/
+  var near:Float;
+  /**
+      far clipping plane
+  **/
+  var far:Float;
+  /**
+      view zoom
+  **/
+  var zoom:Float;
 }
 
 /**
