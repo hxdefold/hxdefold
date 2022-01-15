@@ -255,6 +255,22 @@ extern class Gui {
     static function get_index(node:GuiNode):Float;
 
     /**
+        Gets the node alpha.
+
+        @param node node from which to get alpha
+        @return 0..1 alpha color
+    **/
+    static function get_alpha(node:GuiNode):Float;
+
+    /**
+        Sets the node alpha.
+
+        @param node node on which to set alpha
+        @param alpha 0..1 alpha color
+    **/
+    static function set_alpha(node:GuiNode, alpha:Float):Void;
+
+    /**
         Gets the pie inner radius (defined along the x dimension).
 
         @param node node from where to get the inner radius

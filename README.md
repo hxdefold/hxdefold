@@ -16,7 +16,9 @@ This library allows writing beautiful [Haxe](https://haxe.org/) code for the [De
 
 (assuming you already [installed Haxe](https://haxe.org/download/)😊)
 
- - Install this library (from this repo): `haxelib git hxdefold https://github.com/hxdefold/hxdefold`
+ - Install this library:
+	- From this repo: `haxelib git hxdefold https://github.com/hxdefold/hxdefold`
+	- Or from [lib.haxe.org](https://lib.haxe.org/): `haxelib install hxdefold`
  - Run `haxelib run hxdefold init` inside your Defold project. It will create a sample `Hello.hx` script component class and a `build.hxml` for building it.
  - Read the comments in these files to quickly get some idea.
  - Build with `haxe build.hxml` to get the lua output.
@@ -77,14 +79,6 @@ end
 ```
 
 You can then add this script to the game objects in the Defold Editor.
-
-## Issues
-
-If you're getting an error like `attempt to call global '_hx_e' (a nil value)` at run-time, that means you're compiling the project using the Haxe compilation server,
-which is happening by default when building through [Visual Studio Code Haxe extension](https://marketplace.visualstudio.com/items?itemName=nadako.vshaxe).
-You can disable the usage if the compilation server for building by setting `"haxe.enableCompilationServer": false` in your workspaces `settings.json`.
-Alternatively you can grab a [nightly](http://build.haxe.org/builds/haxe/) of the Haxe compiler version, because the bug was already fixed there.
-See more info [here](https://github.com/HaxeFoundation/haxe/issues/7851) and [here](https://github.com/HaxeFoundation/haxe/commit/436ef40d274fdf01757edc92856a4c0cba11c8e1) if you're curious. :-)
 
 ## Logo
 
