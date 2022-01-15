@@ -68,10 +68,11 @@ extern class Go {
 
         @param url url of the game object or component having the property
         @param id id of the property to retrieve
+        @param options (optional) options table - index integer index into array property (1 based) - key hash name of internal property
         @return the value of the specified property
     **/
-    @:overload(function(url:HashOrStringOrUrl, id:HashOrString):GoProperty {})
-    static function get<T>(url:HashOrStringOrUrl, id:Property<T>):T;
+    @:overload(function(url:HashOrStringOrUrl, id:HashOrString, ?options:lua.Table.AnyTable):GoProperty {})
+    static function get<T>(url:HashOrStringOrUrl, id:Property<T>, ?options:lua.Table.AnyTable):T;
 
     /**
         Returns or constructs an instance identifier. The instance id is a hash
@@ -192,10 +193,11 @@ extern class Go {
 
         @param url url of the game object or component having the property
         @param id id of the property to set
+        @param options (optional) options table - index integer index into array property (1 based) - key hash name of internal property
         @param value the value to set
     **/
-    @:overload(function(url:HashOrStringOrUrl, id:HashOrString, value:GoProperty):Void {})
-    static function set<T>(url:HashOrStringOrUrl, id:Property<T>, value:T):Void;
+    @:overload(function(url:HashOrStringOrUrl, id:HashOrString, value:GoProperty, ?options:lua.Table.AnyTable):Void {})
+    static function set<T>(url:HashOrStringOrUrl, id:Property<T>, value:T, ?options:lua.Table.AnyTable):Void;
 
     /**
         Sets the parent for a game object instance. This means that the instance will exist in the geometrical space of its parent,

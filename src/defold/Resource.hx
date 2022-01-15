@@ -95,6 +95,15 @@ extern class Resource {
     static function set_buffer(path:HashOrString, buffer:Buffer):Void;
 
     /**
+        Gets the text metrics from a font.
+
+        @param url The font to get the (unscaled) metrics from
+        @param text Text to measure
+        @param options (optional) A table containing parameters for the text.
+    **/
+    static function get_text_metrics(url:Hash, text:String, ?options:ResourceGetTextMetricsOptions):ResourceTextMetrics;
+
+    /**
         Create, verify, and store a manifest to device.
 
         Create a new manifest from a buffer. The created manifest is verified
@@ -191,6 +200,51 @@ typedef ResourceTextureInfo = {
         The texture format
     **/
     var format:ResourceTextureFormat;
+}
+
+/**
+    Options used by the `Resource.get_text_metrics` method.
+**/
+typedef ResourceGetTextMetricsOptions =
+{
+    /**
+        The width of the text field. Not used if `line_break` is false.
+    **/
+    var ?width:Int;
+
+    /**
+        The leading (default `1.0`)
+    **/
+    var ?leading:Float;
+
+    /**
+        The tracking (default `1.0`)
+    **/
+    var ?tracking:Float;
+
+    /**
+        If the calculation should consider line breaks (default `false`).
+    **/
+    var ?line_break:Bool;
+}
+
+/**
+    Text metrics returned by the `Resource.get_text_metrics` method.
+**/
+typedef ResourceTextMetrics =
+{
+    /**
+        The width of the text.
+    **/
+    var width:Float;
+
+    /**
+        The height of the text.
+    **/
+    var height:Float;
+
+    var max_ascent:Float;
+    var max_descent:Float;
 }
 
 /**
