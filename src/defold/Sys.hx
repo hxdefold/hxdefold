@@ -12,20 +12,20 @@ import defold.types.*;
 extern class Sys {
     /**
         Exits application.
-        
+
         Terminates the game application and reports the specified `code` to the OS.
-        
+
         @param code exit code to report to the OS, 0 means clean exit
     **/
     static function exit(code:Int):Void;
 
     /**
         Reboot engine with arguments.
-        
+
         Reboots the game engine with a specified set of arguments.
         Arguments will be translated into command line arguments. Calling reboot
         function is equivalent to starting the engine with the same arguments.
-        
+
         On startup the engine reads configuration from "game.project" in the
         project root.
     **/
@@ -33,32 +33,32 @@ extern class Sys {
 
     /**
         Set update frequency.
-        
+
         Set game update-frequency (frame cap). This option is equivalent to `display.update_frequency` in
         the "game.project" settings but set in run-time. If `Vsync` checked in "game.project", the rate will
         be clamped to a swap interval that matches any detected main monitor refresh rate. If `Vsync` is
         unchecked the engine will try to respect the rate in software using timers. There is no
         guarantee that the frame cap will be achieved depending on platform specifics and hardware settings.
-        
+
         @param frequency target frequency. 60 for 60 fps
     **/
     static function set_update_frequency(frequency:Int):Void;
 
     /**
         Set vsync swap interval.
-        
+
         Set the vsync swap interval. The interval with which to swap the front and back buffers
         in sync with vertical blanks (v-blank), the hardware event where the screen image is updated
         with data from the front buffer. A value of 1 swaps the buffers at every v-blank, a value of
         2 swaps the buffers every other v-blank and so on. A value of 0 disables waiting for v-blank
         before swapping the buffers. Default value is 1.
-        
+
         When setting the swap interval to 0 and having `vsync` disabled in
         "game.project", the engine will try to respect the set frame cap value from
         "game.project" in software instead.
-        
+
         This setting may be overridden by driver settings.
-        
+
         @param swap_interval target swap interval.
     **/
     static function set_vsync_swap_interval(swap_interval:Int):Void;
@@ -200,6 +200,24 @@ extern class Sys {
         @param error_handler the function to be called on error (arguments: source, message, traceback)
     **/
     static function set_error_handler(error_handler:String->String->String->Void):Void;
+
+
+    /**
+        The buffer can later deserialized by `sys.deserialize()`. This method has all the same limitations as `sys.save()`.
+
+        @param buffer lua table to serialize
+        @return serialized data buffer
+    **/
+    static function serialize(buffer:lua.Table.AnyTable):String;
+
+
+    /**
+        Deserializes buffer into a lua table.
+
+        @param buffer buffer to deserialize from
+        @return lua table with deserialized data
+    **/
+    static function deserialize(buffer:String):lua.Table.AnyTable;
 }
 
 /**
