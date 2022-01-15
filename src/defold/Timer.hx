@@ -41,6 +41,14 @@ extern class Timer {
     static function delay<T>(delay:Float, repeat:Bool, callback:(self:T, handle:TimerHandle, time_elapsed:Float)->Void):TimerHandle;
 
     /**
+        Manual triggering a callback for a timer.
+
+        @param handle the timer handle returned by `timer.delay()`
+        @return `true` if the timer was active, `false` if the timer is already cancelled / complete
+    **/
+    static function trigger(handle:TimerHandle):Bool;
+
+    /**
         Indicates an invalid timer handle.
     **/
     static var INVALID_TIMER_HANDLE(default, never):TimerHandle;
