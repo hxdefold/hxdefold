@@ -94,6 +94,41 @@ extern class Physics {
     static function wakeup(url:HashOrStringOrUrl):Void;
 
     /**
+        Updates the group property of a collision object to the specified string value.
+        The group name should exist i.e. have been used in a collision object in the editor.
+
+        @param url the collision object affected
+        @param group the new group name to be assigned
+    **/
+    static function set_group(url:HashOrStringOrUrl, group: String):Void;
+
+    /**
+        Returns the group name of a collision object as a hash.
+
+        @param url the collision object to return the group of
+        @return hash value of the group
+    **/
+    static function get_group(url:HashOrStringOrUrl):Hash;
+
+    /**
+        Sets or clears the masking of a group (maskbit) in a collision object.
+
+        @param url the collision object to change the mask of
+        @param group the name of the group (maskbit) to modify in the mask
+        @param maskbit boolean value of the new maskbit. `true` to enable, `false` to disable
+    **/
+    static function set_maskbit(url:HashOrStringOrUrl, group:String, maskbit:Bool):Void;
+
+    /**
+        Returns `true` if the specified group is set in the mask of a collision object, `false` otherwise
+
+        @param url the collision object to check the mask of
+        @param group the name of the group to check for
+        @return boolean value of the maskbit. `true` if present, `false` otherwise
+    **/
+    static function get_maskbit(url:HashOrString, group:String):Bool;
+
+    /**
         Create a physics joint between two collision object components.
 
         Note: Currently only supported in 2D physics.
