@@ -51,7 +51,6 @@ class HashBuilder {
 							var hashExpr = macro Defold.hash($v{field.name});
 
 							if (expr != null) {
-								// hashExpr = Context.parse('Defold.hash(${expr.toString()});', Context.currentPos)
 								hashExpr = macro Defold.hash(${expr});
 							}
 

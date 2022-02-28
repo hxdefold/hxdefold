@@ -407,6 +407,23 @@ extern class Gui {
     static function get_screen_position(node:GuiNode):Vector3;
 
     /**
+        Set the screen position to the supplied node.
+
+        @param node node to set the screen position to
+        @return screen position
+    **/
+    static function set_screen_position(node:GuiNode, screen_position:Vector3):Void;
+
+    /**
+        Convert the screen position to the local position of supplied node.
+
+        @param node node used for getting local transformation matrix
+        @param screen_position screen position
+        @return local position
+    **/
+    static function screen_to_local(node:GuiNode, screen_position:Vector3):Vector3;
+
+    /**
         Gets the node shadow color.
 
         @param node node to get the shadow color from
@@ -439,64 +456,6 @@ extern class Gui {
         @return configuration values
     **/
     static function get_slice9(node:GuiNode):Vector4;
-
-    /**
-        Gets the playing animation on a spine node.
-
-        @param node node to get spine skin from
-        @return id spine animation id, 0 if no animation is playing
-    **/
-    static function get_spine_animation(node:GuiNode):Hash;
-
-    /**
-        Retrieve the GUI node corresponding to a spine skeleton bone.
-
-        The returned node can be used for parenting and transform queries.
-        This function has complexity O(n), where n is the number of bones in the spine model skeleton.
-
-        @param node spine node to query for bone node
-        @param bone_id id of the corresponding bone
-        @return node corresponding to the spine bone
-    **/
-    static function get_spine_bone(node:GuiNode, bone_id:HashOrString):GuiNode;
-
-    /**
-        Gets the normalized cursor of the animation on a spine node.
-
-        This is only useful for spine nodes. Gets the normalized cursor of the animation on a spine node.
-
-        @param node spine node to get the cursor for
-        @return cursor value
-    **/
-    static function get_spine_cursor(node:GuiNode):Float;
-
-    /**
-        Gets the playback rate of the animation on a spine node.
-
-        This is only useful for spine nodes. Gets the playback rate of the animation on a spine node.
-
-        @param node spine node to set the cursor for
-        @return playack rate
-    **/
-    static function get_spine_playback_rate(node:GuiNode):Float;
-
-    /**
-        Gets the spine scene of a node.
-
-        This is currently only useful for spine nodes. The spine scene must be mapped to the gui scene in the gui editor.
-
-        @param node node to get spine scene from
-        @return spine scene id
-    **/
-    static function get_spine_scene(node:GuiNode):Hash;
-
-    /**
-        Gets the spine skin of a spine node.
-
-        @param node node to get spine skin from
-        @return spine skin id, 0 if no explicit skin is set
-    **/
-    static function get_spine_skin(node:GuiNode):Hash;
 
     /**
         Gets the node text.
