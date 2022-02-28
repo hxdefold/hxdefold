@@ -5,10 +5,10 @@ import haxe.macro.Context;
 import haxe.macro.Expr;
 
 /**
-    This is a helper build macro for easy building classes with typed message constants.
+    This is a helper build macro for easily building classes with typed message constants.
 
     For example we can define a class like this:
-    ```
+    ```haxe
     @:build(defold.support.MessageBuilder.build())
     class MyMessages {
         var restart_game; // message with no params
@@ -17,10 +17,10 @@ import haxe.macro.Expr;
     ```
 
     It will be modified by this macro to this:
-    ```
+    ```haxe
     class MyMessages {
-        public static var restart_game(default,never) = new Message<Void>("restart_game");
-        public static var set_counter(default,never) = new Message<{counter:Int}>("set_counter");
+        public static final restart_game(default,never) = new Message<Void>("restart_game");
+        public static final set_counter(default,never) = new Message<{counter:Int}>("set_counter");
     }
     ```
 
@@ -37,6 +37,7 @@ class MessageBuilder {
                     var messageCT = macro : defold.types.Message<$t>;
                     var messageExpr = macro new defold.types.Message<$t>($v{field.name});
                     field.kind = FProp("default", "never", messageCT, messageExpr);
+                    field.access.push(AFinal);
                     field.access.push(APublic);
                     field.access.push(AStatic);
                 default:
