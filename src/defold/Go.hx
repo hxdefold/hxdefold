@@ -42,14 +42,14 @@ extern class Go {
     /**
         Cancels all animations of the named property of the specified game object or component.
 
-        By calling this function, all stored animations of the given property will be canceled.
-
-        See the <a href="/doc/properties">properties guide</a> for which properties can be animated and how.
+        By calling this function, all or specified stored property animations of the game object or component will be canceled.
+        See the [properties guide](https://defold.com/manuals/properties/) for which properties can be animated and
+        the [animation guide](https://defold.com/manuals/animation/) for how to animate them..
 
         @param url url of the game object or component having the property
-        @param property name of the property to animate
+        @param property optional id of the property to cancel
     **/
-    static function cancel_animations(url:HashOrStringOrUrl, property:HashOrString):Void;
+    static function cancel_animations(url:HashOrStringOrUrl, ?property:HashOrString):Void;
 
     /**
         Delete one or more game objects identified by id. Deletion is asynchronous meaning that

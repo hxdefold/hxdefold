@@ -125,8 +125,9 @@ extern class Resource {
 
         @param path the path to the original file on disc
         @param callback the callback function executed after the storage has completed
+        @param options optional table with extra parameters
     **/
-    static function store_archive<T>(path:String, callback:(self:T, status:ResourceLiveUpdateStatus)->Void):Void;
+    static function store_archive<T>(path:String, callback:(self:T, status:ResourceLiveUpdateStatus)->Void, ?options:ResourceStoreArchiveOptions):Void;
 
     /**
         Is any liveupdate data mounted and currently in use? This can be used to determine if a new manifest or zip file should be downloaded.
@@ -321,4 +322,15 @@ typedef ResourceTextMetrics =
         Mismatch between manifest expected version and actual version.
     **/
     var LIVEUPDATE_VERSION_MISMATCH;
+}
+
+/**
+    Options used by the `Resource.store_archive` method.
+**/
+typedef ResourceStoreArchiveOptions =
+{
+    /**
+        If archive should be verified as well as stored (defaults to `true`).
+    **/
+    var ?verify:Bool;
 }
