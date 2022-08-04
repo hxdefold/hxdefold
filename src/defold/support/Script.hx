@@ -44,6 +44,18 @@ class Script<T:{}> {
     @:dox(show) function update(self:T, dt:Float):Void {}
 
     /**
+        Called every frame to update the script component.
+
+        Frame-rate independent update. dt contains the delta time since the last update.
+        Useful when you wish to manipulate physics objects at regular intervals to achieve a stable physics simulation.
+        Requires that `physics.use_fixed_timestep` is enabled in game.project.
+
+        @param self reference to the script state to be used for storing data
+        @param dt the time-step of the frame update
+    **/
+    @:dox(show) function fixed_update(self:T, dt:Float):Void {}
+
+    /**
         Called when a message has been sent to the script component.
 
         This is a callback-function, which is called by the engine whenever a message has been sent to the script component.

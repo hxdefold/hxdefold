@@ -365,7 +365,7 @@ class RenderMessages {
         The fixed projection keeps the aspect ratio and has a zoom to show more or less of the game.
     **/
     static var use_fixed_projection(default, never) = new Message<RenderMessageUseFixedProjection>("use_fixed_projection");
-    
+
     /**
         Suitable for 3D games. Enables the perspective projection provided from a camera component .
     **/
@@ -568,6 +568,13 @@ typedef RenderTargetParameters = {
     var FORMAT_RGBA_DXT5;
     var FORMAT_DEPTH;
     var FORMAT_STENCIL;
+    var FORMAT_RGB32F;
+    var FORMAT_RGBA16F;
+    var FORMAT_RGBA32F;
+    var FORMAT_R16F;
+    var FORMAT_RG16F;
+    var FORMAT_R32F;
+    var FORMAT_RG32F;
 }
 
 /**
