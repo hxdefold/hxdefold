@@ -118,6 +118,22 @@ extern class Gui {
     static function delete_texture(texture:HashOrString):Void;
 
     /**
+        Returns true if a node is visible and false if it's not. Invisible nodes are not rendered.
+
+        @param node node to query
+        @return whether the node is visible
+    **/
+    static function get_visible(node:GuiNode):Bool;
+
+    /**
+        Set if a node should be visible or not. Only visible nodes are rendered.
+
+        @param node node to be visible or no
+        @param visible whether the node should be visible or not
+    **/
+    static function set_visible(node:GuiNode, visible:Bool):Void;
+
+    /**
         Gets the node adjust mode.
 
         Adjust mode defines how the node will adjust itself to a screen resolution which differs from the project settings.

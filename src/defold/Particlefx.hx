@@ -55,8 +55,9 @@ extern class Particlefx {
         Which particle fx to stop is identified by the URL.
 
         @param url the particle fx that should stop playing
+        @param options options when stopping the particle fx
     **/
-    static function stop(url:UrlOrString):Void;
+    static function stop(url:UrlOrString, options:ParticleFxStopOptions):Void;
 }
 
 @:native("_G.particlefx")
@@ -89,4 +90,14 @@ extern class Particlefx {
         The emitter is not spawning any particles, but has particles that are still alive.
     **/
     var EMITTER_STATE_POSTSPAWN;
+}
+
+/**
+    Options provided to the `stop()` method.
+**/
+typedef ParticleFxStopOptions = {
+    /**
+        instantly clear spawned particles
+    **/
+    var clear:Bool;
 }

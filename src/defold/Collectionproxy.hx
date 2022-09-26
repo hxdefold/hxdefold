@@ -24,6 +24,16 @@ extern class Collectionproxy {
         @return the missing resources
     **/
     static function missing_resources(collectionproxy:Url):lua.Table<Int,String>;
+
+    /**
+        Returns a list of all the resources that the collection proxy is dependent on.
+
+        Note: this method is currently undocumented, so it may be wrong here.
+
+        @param collectionproxy the collectionproxy to check
+        @return the necessary resources
+    **/
+    static function get_resources(collectionproxy:Url):lua.Table<Int,String>;
 }
 
 /**
