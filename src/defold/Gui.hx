@@ -14,21 +14,6 @@ import defold.Particlefx.ParticlefxEmitterState;
 **/
 @:native("_G.gui")
 extern class Gui {
-    static var PROP_POSITION(default,null):String;
-    static var PROP_ROTATION(default,null):String;
-    static var PROP_SCALE(default,null):String;
-    static var PROP_COLOR(default,null):String;
-    static var PROP_OUTLINE(default,null):String;
-    static var PROP_SHADOW(default,null):String;
-    static var PROP_SIZE(default,null):String;
-    static var PROP_FILL_ANGLE(default,null):String;
-    static var PROP_INNER_RADIUS(default,null):String;
-    static var PROP_SLICE9(default,null):String;
-
-    static var RGB(default,null):String;
-    static var RGBA(default,null):String;
-    static var LUMINANCE(default,null):String;
-
     /**
         Animates a node property.
 
@@ -52,7 +37,7 @@ extern class Gui {
         @param complete_function function to call when the animation has completed
         @param playback playback mode
     **/
-    static function animate<T>(node:GuiNode, property:String, to:GoAnimatedProperty, easing:EitherType<GuiEasing,EitherType<Vector3,Vector4>>, duration:Float, ?delay:Float, ?complete_function:T->GuiNode->Void, ?playback:GuiPlayback):Void;
+    static function animate<T>(node:GuiNode, property:GuiAnimateProprty, to:GoAnimatedProperty, easing:EitherType<GuiEasing,EitherType<Vector3,Vector4>>, duration:Float, ?delay:Float, ?complete_function:T->GuiNode->Void, ?playback:GuiPlayback):Void;
 
     /**
         Cancels an ongoing animation.
@@ -643,7 +628,7 @@ extern class Gui {
         @param flip flip texture vertically
         @return texture creation was successful
     **/
-    static function new_texture(texture:HashOrString, width:Float, height:Float, type:String, buffer:String, ?flip:Bool):GuiNewTextureResult;
+    static function new_texture(texture:HashOrString, width:Float, height:Float, type:GuiNewTextureType, buffer:String, ?flip:Bool):GuiNewTextureResult;
 
     /**
         Determines if the node is pickable by the supplied coordinates.
@@ -1477,6 +1462,57 @@ typedef GuiTextMetrics = {
         The provided data is not in the expected format or is in some other way incorrect, for instance the image data provided to `gui.new_texture()`.
     **/
     var RESULT_DATA_ERROR;
+}
+
+@:native("_G.gui")
+@:enum extern abstract GuiAnimateProprty({}) {
+    /**
+        position property
+    **/
+    var PROP_POSITION;
+    /**
+        rotation property
+    **/
+    var PROP_ROTATION;
+    /**
+        scale property
+    **/
+    var PROP_SCALE;
+    /**
+        color property
+    **/
+    var PROP_COLOR;
+    /**
+        outline property
+    **/
+    var PROP_OUTLINE;
+    /**
+        shadow color property
+    **/
+    var PROP_SHADOW;
+    /**
+        size property
+    **/
+    var PROP_SIZE;
+    /**
+        fill_angle property
+    **/
+    var PROP_FILL_ANGLE;
+    /**
+        inner_radius property
+    **/
+    var PROP_INNER_RADIUS;
+    /**
+        slice9 property
+    **/
+    var PROP_SLICE9;
+}
+
+@:native("_G.gui")
+@:enum extern abstract GuiNewTextureType({}) {
+    var RGB;
+    var RGBA;
+    var LUMINANCE;
 }
 
 /**
