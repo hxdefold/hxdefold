@@ -125,9 +125,10 @@ extern class Sys {
     /**
         Get system information.
 
+        @param options table
         @return table with system information
     **/
-    static function get_sys_info():SysSysInfo;
+    static function get_sys_info(?options:GetSysInfoOptions):SysSysInfo;
 
     /**
         Loads a lua table from a file on disk.
@@ -508,6 +509,13 @@ typedef SysSysInfo = {
         The HTTP user agent, i.e. "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/602.4.8 (KHTML, like Gecko) Version/10.0.3 Safari/602.4.8"
     **/
     var user_agent:String;
+}
+
+typedef GetSysInfoOptions = {
+    /**
+        this flag ignores values might be secured by OS e.g. `device_ident`
+    **/
+    var ignore_secure:Bool;
 }
 
 /**
