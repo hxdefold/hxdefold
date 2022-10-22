@@ -18,4 +18,12 @@ extern class Html5 {
         @return result as string
     **/
     static function run(code:String):String;
+
+    /**
+        Set a JavaScript interaction listener callaback from lua that will be invoked when a user interacts with the web page by clicking, touching or typing.
+        The callback can then call DOM restricted actions like requesting a pointer lock, or start playing sounds the first time the callback is invoked.
+
+        @param callback The interaction callback. Pass an empty function or nil if you no longer wish to receive callbacks.
+    **/
+    static function set_interaction_listener<T>(callback:(self:T)->Void):Void;
 }

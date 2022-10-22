@@ -1,5 +1,7 @@
 package defold;
 
+import lua.Table;
+
 /**
     Manipulation of JSON data strings.
 **/
@@ -12,5 +14,13 @@ extern class Json {
         @param json json data
         @return decoded json
     **/
-    static function decode(json:String):lua.Table<String,Dynamic>;
+    static function decode(json:String):Table<String,Dynamic>;
+
+    /**
+        Encode a lua table to a JSON string. A Lua error is raised for syntax errors.
+
+        @param tbl lua table to encode
+        @return encoded json
+    **/
+    static function encode(tbl:Table<String,Dynamic>):String;
 }

@@ -42,6 +42,22 @@ extern class Window {
         @param callback A callback which receives info about window events. Can be null.
     **/
     static function set_listener<T>(callback:T->WindowEvent->WindowEventData->Void):Void;
+
+    /**
+        Set the locking state for current mouse cursor on a PC platform.
+        This function locks or unlocks the mouse cursor to the center point of the window.
+        While the cursor is locked, mouse position updates will still be sent to the scripts as usual.
+
+        @param flag The lock state for the mouse cursor
+    **/
+    static function set_mouse_lock(flag:Bool):Void;
+
+    /**
+        This returns the current lock state of the mouse cursor.
+
+        @return The lock state
+    **/
+    static function get_mouse_lock():Bool;
 }
 
 
