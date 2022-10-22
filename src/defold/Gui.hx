@@ -1,5 +1,6 @@
 package defold;
 
+import defold.Image.ImageType;
 import haxe.extern.EitherType;
 import defold.types.*;
 import defold.Go.GoAnimatedProperty;
@@ -628,7 +629,7 @@ extern class Gui {
         @param flip flip texture vertically
         @return texture creation was successful
     **/
-    static function new_texture(texture:HashOrString, width:Float, height:Float, type:GuiNewTextureType, buffer:String, ?flip:Bool):GuiNewTextureResult;
+    static function new_texture(texture:HashOrString, width:Float, height:Float, type:ImageType, buffer:BufferData, ?flip:Bool):GuiNewTextureResult;
 
     /**
         Determines if the node is pickable by the supplied coordinates.
@@ -1050,7 +1051,7 @@ extern class Gui {
         @param flip flip texture vertically
         @return setting the data was successful
     **/
-    static function set_texture_data(texture:HashOrString, width:Float, height:Float, type:String, buffer:String, ?flip:Bool):Bool;
+    static function set_texture_data(texture:HashOrString, width:Float, height:Float, type:ImageType, buffer:BufferData, ?flip:Bool):Bool;
 
     /**
         Sets the tracking of the text node.
@@ -1506,13 +1507,6 @@ typedef GuiTextMetrics = {
         slice9 property
     **/
     var PROP_SLICE9;
-}
-
-@:native("_G.gui")
-@:enum extern abstract GuiNewTextureType({}) {
-    var RGB;
-    var RGBA;
-    var LUMINANCE;
 }
 
 /**

@@ -1,5 +1,7 @@
 package defold;
 
+import defold.types.BufferData;
+
 /**
     Functions for creating image objects.
 **/
@@ -22,7 +24,7 @@ typedef ImageLoadResult = {
     var width:Int;
     var height:Int;
     var type:ImageType;
-    var buffer:String;
+    var buffer:BufferData;
 }
 
 /**

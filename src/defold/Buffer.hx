@@ -1,5 +1,7 @@
 package defold;
 
+import defold.types.BufferData;
+import defold.types.BufferStream;
 import defold.types.HashOrString;
 
 /**
@@ -54,7 +56,7 @@ extern class Buffer {
         @param stream_name the name of the stream
         @return the buffer data as a Lua string
     **/
-    @:pure static function get_bytes(buffer:defold.types.Buffer, stream_name:HashOrString):String;
+    @:pure static function get_bytes(buffer:defold.types.Buffer, stream_name:HashOrString):BufferData;
 
     /**
         Get a specified stream from a buffer.
@@ -65,11 +67,6 @@ extern class Buffer {
     **/
     @:pure static function get_stream(buffer:defold.types.Buffer, stream_name:HashOrString):BufferStream;
 }
-
-/**
-    A buffer stream handle returned by `Buffer.get_stream`.
-**/
-extern class BufferStream extends lua.Table.AnyTable {}
 
 /**
     Structure for buffer stream declaration used in `Buffer.create`.
