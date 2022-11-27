@@ -26,8 +26,9 @@ extern class Physics {
         @param from the world position of the start of the ray
         @param to the world position of the end of the ray
         @param groups a lua table containing the hashed groups for which to test collisions against
+        @param options a lua table containing options for the raycast
     **/
-    static function raycast(from:Vector3, to:Vector3, groups:lua.Table<Int,Hash>):PhysicsMessageRayCastResponse;
+    static function raycast(from:Vector3, to:Vector3, groups:lua.Table<Int,Hash>, ?options:PhysicsRaycastOptions):lua.Table<Int,PhysicsMessageRayCastResponse>;
 
     /**
         Requests a ray cast to be performed.
@@ -686,6 +687,16 @@ typedef PhysicsSpringJoint = {
         The damping ratio. 0 = no damping, 1 = critical damping.
     **/
     @:optional var damping:Float;
+}
+
+/**
+    A lua table containing options for the raycast.
+**/
+typedef PhysicsRaycastOptions = {
+    /**
+        Set to `true` to return all ray cast hits. If `false`, it will only return the closest hit.
+    **/
+    var all:Bool;
 }
 
 /**
