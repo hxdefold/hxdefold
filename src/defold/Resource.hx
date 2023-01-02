@@ -201,6 +201,21 @@ typedef ResourceTextureInfo = {
         The texture format
     **/
     var format:ResourceTextureFormat;
+
+    /**
+        Optional x offset of the texture (in pixels)
+    **/
+    var ?x:Int;
+
+    /**
+        Optional y offset of the texture (in pixels)
+    **/
+    var ?y:Int;
+
+    /**
+        Optional mipmap to upload the data to
+    **/
+    var ?mipmap:Int;
 }
 
 /**
