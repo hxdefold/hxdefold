@@ -369,6 +369,7 @@ typedef GoMessageSetParent = {
     Possible types of a game object property.
 **/
 abstract GoProperty(Dynamic)
+    from Int to Int
     from Float to Float
     from Hash to Hash
     from Url to Url
