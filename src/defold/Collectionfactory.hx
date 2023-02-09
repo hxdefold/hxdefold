@@ -39,7 +39,7 @@ extern class Collectionfactory {
         @param scale uniform scaling to apply to the newly spawned collection (must be greater than 0)
         @return a table mapping the id:s from the collection to the new instance id:s
     **/
-    static function create(url:HashOrStringOrUrl, ?position:Vector3, ?rotation:Quaternion, ?properties:lua.Table<Hash,lua.Table<Hash,GoProperty>>, ?scale:Float):lua.Table<Hash,Hash>;
+    static function create(url:HashOrStringOrUrl, ?position:Vector3, ?rotation:Quaternion, ?properties:lua.Table<Hash,lua.Table<String,GoProperty>>, ?scale:Float):lua.Table<Hash,Hash>;
 
     /**
         Get collection factory status.
