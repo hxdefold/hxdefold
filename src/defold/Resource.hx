@@ -1,5 +1,6 @@
 package defold;
 
+import defold.Go.GoPlayback;
 import defold.types.Hash;
 import defold.types.Buffer;
 import defold.types.HashOrString;
@@ -77,6 +78,21 @@ extern class Resource {
         *NOTE* Currently, only 1 mipmap is generated.
     **/
     static function set_texture(path:HashOrString, table:ResourceTextureInfo, buffer:Buffer):Void;
+
+    /**
+        This function creates a new atlas resource that can be used in the same way as any atlas created during build time.
+        The path used for creating the atlas must be unique, trying to create a resource at a path that is already registered will trigger an error.
+        If the intention is to instead modify an existing atlas, use the resource.set_atlas function.
+        Also note that the path to the new atlas resource must have a '.texturesetc' extension, meaning "/path/my_atlas" is not a valid path but "/path/my_atlas.texturesetc" is.
+        When creating the atlas, at least one geometry and one animation is required, and an error will be raised if these requirements are not met.
+        A reference to the resource will be held by the collection that created the resource and will automatically be released when that collection is destroyed.
+        Note that releasing a resource essentially means decreasing the reference count of that resource, and not necessarily that it will be deleted.
+
+        @param path The path to the resource
+        @param table A table containing info about how to create the texture
+        @return Returns the atlas resource path
+    **/
+    static function create_atlas(path:String, table:ResourceAtlasInfo):Hash;
 
     /**
         Gets the buffer from a resource
@@ -216,6 +232,104 @@ typedef ResourceTextureInfo = {
         Optional mipmap to upload the data to
     **/
     var ?mipmap:Int;
+
+    /**
+        Specify the compression type for the data in the buffer object that holds the texture data. Defaults to `COMPRESSION_TYPE_DEFAULT`, i.e no compression.
+    **/
+    var ?compression_type:ResourceTextureCompressionType;
+}
+
+/**
+    Atlas info used by the `Resource.create_atlas` method.
+**/
+typedef ResourceAtlasInfo =
+{
+    /**
+        The path to the texture resource, e.g "/main/my_texture.texturec"
+    **/
+    var texture:HashOrString;
+
+    /**
+        A list of the animations in the atlas.
+    **/
+    var animations:Array<ResourceAtlasAnimationInfo>;
+
+    /**
+        A list of the geometries that should map to the texture data.
+    **/
+    var geometries:Array<ResourceAtlasGeometriesInfo>;
+}
+
+/**
+    Atlas animation info used by the `Resource.create_atlas` method.
+**/
+typedef ResourceAtlasAnimationInfo =
+{
+    /**
+        The id of the animation, used in e.g `Sprite.play_animation`.
+    **/
+    var id:String;
+
+    /**
+        The width of the animation.
+    **/
+    var width:Int;
+
+    /**
+        The height of the animation.
+    **/
+    var height:Int;
+
+    /**
+        Index to the first geometry of the animation. Indices are lua based and must be in the range of 1 .. in atlas.
+    **/
+    var frame_start:Int;
+
+    /**
+        Index to the last geometry of the animation. Indices are lua based and must be in the range of 1 .. in atlas.
+    **/
+    var frame_end:Int;
+
+    /**
+        Playback mode of the animation, the default value is `PLAYBACK_ONCE_FORWARD`.
+    **/
+    var ?playback:GoPlayback;
+
+    /**
+        FPS of the animation, the default value is `30`.
+    **/
+    var ?fps:Int;
+
+    /**
+        Flip the animation vertically, the default value is `false`.
+    **/
+    var ?flip_vertical:Bool;
+
+    /**
+        Flip the animation horizontally, the default value is `false`.
+    **/
+    var ?flip_horizontal:Bool;
+}
+
+/**
+    Atlas geometries used by the `Resource.create_atlas` method.
+**/
+typedef ResourceAtlasGeometriesInfo =
+{
+    /**
+        A list of the vertices in texture space of the geometry in the form {px0, py0, px1, py1, ..., pxn, pyn}.
+    **/
+    var vertices:Array<Int>;
+
+    /**
+        A list of the uv coordinates in texture space of the geometry in the form of {u0, v0, u1, v1, ..., un, vn}
+    **/
+    var uvs:Array<Int>;
+
+    /**
+        A list of the indices of the geometry in the form {i0, i1, i2, ..., in}. Each tripe in the list represents a triangle.
+    **/
+    var indices:Array<Int>;
 }
 
 /**
@@ -337,6 +451,19 @@ typedef ResourceTextMetrics =
         Mismatch between manifest expected version and actual version.
     **/
     var LIVEUPDATE_VERSION_MISMATCH;
+}
+
+@:native("_G.resource")
+@:enum extern abstract ResourceTextureCompressionType({}) {
+    /**
+        No compression.
+    **/
+    var COMPRESSION_TYPE_DEFAULT;
+
+    /**
+        Compression with basic UASTC.
+    **/
+    var COMPRESSION_TYPE_BASIS_UASTC;
 }
 
 /**
