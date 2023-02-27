@@ -49,9 +49,29 @@ extern class Timer {
     static function trigger(handle:TimerHandle):Bool;
 
     /**
+        Get information about timer.
+
+        @param handle the timer handle returned by `timer.delay()`
+        @return the timer info, or `null` if timer is cancelled/completed
+     */
+    static function get_info(handle:TimerHandle):TimerInfo;
+
+    /**
         Indicates an invalid timer handle.
     **/
     static var INVALID_TIMER_HANDLE(default, never):TimerHandle;
 }
 
 extern class TimerHandle {}
+
+/**
+    Timer information returned by the `get_info()` method.
+**/
+extern class TimerInfo {
+    /** Time remaining until the next time a timer.delay() fires. */
+    var time_remaining:Float;
+    /** Time interval. */
+    var delay: Float;
+    /** `true` = repeat timer until cancel, `false` = one-shot timer. */
+    var repeat: Bool;
+}
