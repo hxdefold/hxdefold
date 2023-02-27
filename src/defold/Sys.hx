@@ -78,7 +78,7 @@ extern class Sys {
     static function get_application_path(): String;
 
     /**
-        Get config value from the game.project configuration file.
+        Get string config value from the game.project configuration file.
 
         In addition to the project file, configuration values can also be passed
         to the runtime as command line arguments with the `--config` argument.
@@ -87,8 +87,31 @@ extern class Sys {
         @param default_value default value to return if the value does not exist
         @return config value as a string. nil or default_value if the config key doesn't exists
     **/
-    @:overload(function(key:String, default_value:String):String {})
-    static function get_config(key:String):Null<String>;
+    static function get_config_string(key:String, ?default_value:String):Null<String>;
+
+    /**
+        Get int config value from the game.project configuration file.
+
+        In addition to the project file, configuration values can also be passed
+        to the runtime as command line arguments with the `--config` argument.
+
+        @param key key to get value for. The syntax is SECTION.KEY
+        @param default_value default value to return if the value does not exist
+        @return config value as an integer. nil or default_value if the config key doesn't exists
+    **/
+    static function get_config_int(key:String, ?default_value:Int):Null<Int>;
+
+    /**
+        Get float config value from the game.project configuration file.
+
+        In addition to the project file, configuration values can also be passed
+        to the runtime as command line arguments with the `--config` argument.
+
+        @param key key to get value for. The syntax is SECTION.KEY
+        @param default_value default value to return if the value does not exist
+        @return config value as a float. nil or default_value if the config key doesn't exists
+    **/
+    static function get_config_number(key:String, ?default_value:Float):Null<Float>;
 
     /**
         Returns the current network connectivity status on mobile platforms.
