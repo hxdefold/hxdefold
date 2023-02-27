@@ -174,7 +174,7 @@ extern class Render {
 
 		Creates a new render target according to the supplied specification table.
 	**/
-	static function render_target(name:String, parameters:RenderTargetParameters):RenderTarget;
+	static function render_target(parameters:lua.Table<RenderBufferType,RenderTargetParameters>):RenderTarget;
 
 	/**
 		Sets the blending function.
