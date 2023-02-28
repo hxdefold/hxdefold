@@ -70,7 +70,7 @@ extern class Render {
 		@param predicate predicate to draw for
 		@param options optional table with properties
 	**/
-	static function draw(predicate:RenderPredicate, options:RenderDrawOptions):Void;
+	static function draw(predicate:RenderPredicate, ?options:RenderDrawOptions):Void;
 
 	/**
 		Draws all 2d debug graphics (Deprecated).
@@ -90,7 +90,7 @@ extern class Render {
 
 		@param material_id material id to enable
 	**/
-	static function enable_material(material_id:String):Void;
+	static function enable_material(material_id:HashOrString):Void;
 
 	/**
 		Enables a render state.
