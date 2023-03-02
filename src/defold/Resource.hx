@@ -95,6 +95,22 @@ extern class Resource {
     static function create_atlas(path:String, table:ResourceAtlasInfo):Hash;
 
     /**
+        This function creates a new buffer resource that can be used in the same way as any buffer created during build time.
+        The function requires a valid buffer created from either buffer.create or another pre-existing buffer resource.
+        By default, the new resource will take ownership of the buffer lua reference, meaning the buffer will not automatically be removed when the lua reference to the buffer is garbage collected.
+        This behaviour can be overruled by specifying `transfer_ownership = false` in the argument table.
+        If the new buffer resource is created from a buffer object that is created by another resource, the buffer object will be copied and the new resource
+        will effectively own a copy of the buffer instead. Note that the path to the new resource must have the `.bufferc` extension,
+        `/path/my_buffer` is not a valid path but `/path/my_buffer.bufferc` is.
+        The path must also be unique, attempting to create a buffer with the same name as an existing resource will raise an error.
+
+        @param path The path to the resource
+        @param options A table containing info about how to create the buffer
+        @return The resource buffer
+    **/
+    static function create_buffer(path:HashOrString, options:ResourceCreateBufferOptions):Buffer;
+
+    /**
         Gets the buffer from a resource
 
         @param path The path to the resource
@@ -475,4 +491,20 @@ typedef ResourceStoreArchiveOptions =
         If archive should be verified as well as stored (defaults to `true`).
     **/
     var ?verify:Bool;
+}
+
+/**
+    Options used by the `Resource.create_buffer` method.
+**/
+typedef ResourceCreateBufferOptions =
+{
+    /**
+        the buffer to bind to this resource.
+    **/
+    var buffer:Buffer;
+
+    /**
+        Optional flag to determine wether or not the resource should take over ownership of the buffer object (default `true`)
+    **/
+    var ?transfer_ownership:Bool;
 }
