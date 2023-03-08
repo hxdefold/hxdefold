@@ -66,6 +66,21 @@ extern class Factory {
         @param url the factory component to unload
     **/
     static function unload(?url:HashOrStringOrUrl):Void;
+
+    /**
+        Changes the prototype for the factory.
+        This allows the developer to load and spawn an arbitrary `.collectionc/.goc` file, further simplifying using dynamic content.
+        The `.collectionc/.goc` files still need to be part of the resource archive.
+
+        We’ve added a “Dynamic Prototype” checkbox to the factories. The prototype can only be overridden when this is checked.
+        If set, then the collection component count cannot be optimized, and the owning collection will use the default component counts from game.project.
+
+        Setting the prototype to `null` will revert back to the original prototype.
+
+        @param url the collection factory component
+        @param prototype the path to the new prototype, or `null`
+    **/
+    static function set_prototype(url:HashOrStringOrUrl, ?prototype:String):Void;
 }
 
 /**
