@@ -64,6 +64,14 @@ extern class Go {
     static function delete(?id:HashOrStringOrUrl, ?recursive:Bool):Void;
 
     /**
+        Check if the specified game object exists.
+
+        @param url url of the game object to check
+        @return `true` if the game object exists
+    **/
+    static function exists(url:HashOrStringOrUrl):Bool;
+
+    /**
         Gets a named property of the specified game object or component.
 
         @param url url of the game object or component having the property

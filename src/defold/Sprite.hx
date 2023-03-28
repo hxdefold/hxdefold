@@ -87,14 +87,20 @@ class SpriteProperties {
     static var scale(default, never) = new Property<Vector3>("scale");
 
     /**
-        (READ ONLY) Returns the size of the sprite, not allowing for any additional scaling that may be applied.
+        The size of the sprite, not allowing for any additional scaling that may be applied.
+        The type of the property is vector3. It is not possible to set the size if the size mode of the sprite is set to auto.
     **/
     static var size(default, never) = new Property<Vector3>("size");
 
     /**
-        (READ ONLY) Returns the texture path hash of the sprite. Used for getting/setting resource data
+        The image used when rendering the sprite.
     **/
-    static var texture0(default, never) = new Property<Hash>("texture0");
+    static var image(default, never) = new Property<TextureResourceReference>("image");
+
+    /**
+        The material used when rendering the sprite.
+    **/
+    static var material(default, never) = new Property<MaterialResourceReference>("material");
 
     /**
         The normalized animation cursor.
