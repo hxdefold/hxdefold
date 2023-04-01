@@ -37,7 +37,8 @@ extern class Go {
         @param complete_function function with parameters (self, url, property) to call when the animation has completed
     **/
     // TODO: easing is actually not a Vector3 but any vector created by Vmath.vector and we don't have a type for it right now.
-    static function animate<T>(url:HashOrStringOrUrl, property:HashOrString, playback:GoPlayback, to:GoAnimatedProperty, easing:EitherType<GoEasing,Vector3>, duration:Float, ?delay:Float, ?complete_function:T->Url->GoAnimatedProperty->Void):Void;
+    @:overload(function<T>(url:HashOrStringOrUrl, property:HashOrString, playback:GoPlayback, to:GoAnimatedProperty, easing:EitherType<GoEasing,Vector3>, duration:Float, ?delay:Float, ?complete_function:(T, Url, Hash)->Void):Void {})
+    static function animate<TSelf, TProp>(url:HashOrStringOrUrl, property:Property<TProp>, playback:GoPlayback, to:TProp, easing:EitherType<GoEasing,Vector3>, duration:Float, ?delay:Float, ?complete_function:(TSelf, Url, Property<TProp>)->Void):Void;
 
     /**
         Cancels all animations of the named property of the specified game object or component.
@@ -49,7 +50,8 @@ extern class Go {
         @param url url of the game object or component having the property
         @param property optional id of the property to cancel
     **/
-    static function cancel_animations(url:HashOrStringOrUrl, ?property:HashOrString):Void;
+    @:overload(function(url:HashOrStringOrUrl, ?property:HashOrString):Void {})
+    static function cancel_animations<T>(url:HashOrStringOrUrl, ?property:Property<T>):Void;
 
     /**
         Delete one or more game objects identified by id. Deletion is asynchronous meaning that
