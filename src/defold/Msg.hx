@@ -44,5 +44,6 @@ extern class Msg {
     **/
     @:overload(function():Url {})
     @:overload(function(socket:HashOrString, path:HashOrString, fragment:HashOrString):Url {})
+    @:overload(function(socket:UrlSocket, path:HashOrString, fragment:HashOrString):Url {})
     static function url(urlstring:String):Url;
 }
