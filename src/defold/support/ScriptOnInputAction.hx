@@ -1,5 +1,7 @@
 package defold.support;
 
+import defold.types.util.LuaArray;
+
 /**
     Type of the `action` argument of the `Script.on_input` method.
 **/
@@ -73,7 +75,7 @@ typedef ScriptOnInputAction = {
     /**
         List of touch input, one element per finger, if present.
     **/
-    @:optional var touch:lua.Table<Int,ScriptOnInputActionTouch>;
+    @:optional var touch:LuaArray<ScriptOnInputActionTouch>;
 
     /**
         The index of the gamepad device that provided the input.

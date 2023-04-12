@@ -1,6 +1,7 @@
 package defold;
 
 import defold.types.*;
+import defold.types.util.LuaArray;
 
 /**
     Functions and messages for using system resources, controlling the engine,
@@ -132,7 +133,7 @@ extern class Sys {
 
         @return an array of tables
     **/
-    static function get_ifaddrs():lua.Table<Int,SysIfaddr>;
+    static function get_ifaddrs():LuaArray<SysIfaddr>;
 
     /**
         Gets the save-file path.

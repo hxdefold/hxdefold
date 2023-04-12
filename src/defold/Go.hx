@@ -2,6 +2,7 @@ package defold;
 
 import haxe.extern.EitherType;
 import defold.types.*;
+import defold.types.util.LuaArray;
 
 /**
     Functions, core hooks, messages and constants for manipulation of
@@ -61,7 +62,7 @@ extern class Go {
         @param id optional id or table of id's of the instance(s) to delete, the instance of the calling script is deleted by default
         @param recursive optional boolean, set to true to recursively delete child hiearchy in child to parent order
     **/
-    @:overload(function(?id:lua.Table<Int,Hash>, ?recursive:Bool):Void {})
+    @:overload(function(?id:LuaArray<Hash>, ?recursive:Bool):Void {})
     static function delete(?id:HashOrStringOrUrl, ?recursive:Bool):Void;
 
     /**

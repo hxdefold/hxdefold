@@ -2,6 +2,7 @@ package defold;
 
 import haxe.extern.EitherType;
 import defold.types.*;
+import defold.types.util.LuaArray;
 
 /**
 	Rendering functions, messages and constants. The "render" namespace is
@@ -167,7 +168,7 @@ extern class Render {
 		@param predicates table of tags that the predicate should match (table).
 		@return new predicate
 	**/
-	static function predicate(predicates:lua.Table<Int,HashOrString>):RenderPredicate;
+	static function predicate(predicates:LuaArray<HashOrString>):RenderPredicate;
 
 	/**
 		Creates a new render target.
@@ -693,7 +694,7 @@ typedef SetRenderTargetOptions = {
 		Default is all non-transient. Be aware that some hardware uses a combined depth stencil buffer and when this is the case both are considered non-transient if exclusively selected!
 		A buffer type defined that doesn't exist in the render target is silently ignored
 	**/
-	var transient:lua.Table<Int, RenderBufferType>;
+	var transient:LuaArray< RenderBufferType>;
 }
 
 typedef RenderDrawOptions = {

@@ -1,5 +1,6 @@
 package defold;
 
+import defold.types.util.LuaArray;
 import defold.types.Message;
 import defold.types.Url;
 
@@ -23,7 +24,7 @@ extern class Collectionproxy {
         @param collectionproxy the collectionproxy to check for missing resources.
         @return the missing resources
     **/
-    static function missing_resources(collectionproxy:Url):lua.Table<Int,String>;
+    static function missing_resources(collectionproxy:Url):LuaArray<String>;
 
     /**
         Returns a list of all the resources that the collection proxy is dependent on.
@@ -33,7 +34,7 @@ extern class Collectionproxy {
         @param collectionproxy the collectionproxy to check
         @return the necessary resources
     **/
-    static function get_resources(collectionproxy:Url):lua.Table<Int,String>;
+    static function get_resources(collectionproxy:Url):LuaArray<String>;
 }
 
 /**

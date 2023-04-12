@@ -1,5 +1,6 @@
 package defold;
 
+import defold.types.util.LuaArray;
 import defold.types.BufferData;
 import defold.types.BufferStream;
 import defold.types.HashOrString;
@@ -47,7 +48,7 @@ extern class Buffer {
         @param element_count The number of elements the buffer should hold
         @param declaration A table where each entry (table) describes a stream
     **/
-    @:pure static function create(element_count:Int, declaration:lua.Table<Int,BufferStreamDeclaration>):defold.types.Buffer;
+    @:pure static function create(element_count:Int, declaration:LuaArray<BufferStreamDeclaration>):defold.types.Buffer;
 
     /**
         Get a copy of all the bytes from a specified stream as a Lua string.

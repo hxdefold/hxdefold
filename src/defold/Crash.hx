@@ -1,5 +1,7 @@
 package defold;
 
+import defold.types.util.LuaArray;
+
 /**
     Native crash logging functions.
 **/
@@ -28,7 +30,7 @@ extern class Crash {
         @param handle crash dump handle
         @return backtrace table containing the backtrace
     **/
-    static function get_backtrace(handle:CrashHandle):lua.Table<Int,String>;
+    static function get_backtrace(handle:CrashHandle):LuaArray<String>;
 
     /**
         Read text blob recorded in a crash dump.
@@ -49,7 +51,7 @@ extern class Crash {
         @param handle crash dump handle
         @return modules module table
     **/
-    static function get_modules(handle:CrashHandle):lua.Table<Int, {name:String, address:String}>;
+    static function get_modules(handle:CrashHandle):LuaArray< {name:String, address:String}>;
 
     /**
         Read signal number from a crash report.

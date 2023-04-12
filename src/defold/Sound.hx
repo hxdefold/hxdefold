@@ -1,6 +1,7 @@
 package defold;
 
 import defold.types.*;
+import defold.types.util.LuaArray;
 
 /**
     Functions and messages for controlling sound components and
@@ -35,7 +36,7 @@ extern class Sound {
 
         @return table of mixer groups names
     **/
-    static function get_groups():lua.Table<Int,Hash>;
+    static function get_groups():LuaArray<Hash>;
 
     /**
         Get peak value from mixer group.

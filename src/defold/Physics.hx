@@ -2,6 +2,7 @@ package defold;
 
 import defold.types.*;
 import haxe.extern.EitherType;
+import defold.types.util.LuaArray;
 
 /**
     Functions and messages for collision object physics interaction
@@ -28,7 +29,7 @@ extern class Physics {
         @param groups a lua table containing the hashed groups for which to test collisions against
         @param options a lua table containing options for the raycast
     **/
-    static function raycast(from:Vector3, to:Vector3, groups:lua.Table<Int,Hash>, ?options:PhysicsRaycastOptions):lua.Table<Int,PhysicsMessageRayCastResponse>;
+    static function raycast(from:Vector3, to:Vector3, groups:LuaArray<Hash>, ?options:PhysicsRaycastOptions):LuaArray<PhysicsMessageRayCastResponse>;
 
     /**
         Requests a ray cast to be performed.
@@ -47,10 +48,10 @@ extern class Physics {
         @param groups a lua table containing the hashed groups for which to test collisions against
         @param request_id a number between [0,-255]. It will be sent back in the response for identification, 0 by default
     **/
-    static function raycast_async(from:Vector3, to:Vector3, groups:lua.Table<Int,Hash>, ?request_id:Int):Void;
+    static function raycast_async(from:Vector3, to:Vector3, groups:LuaArray<Hash>, ?request_id:Int):Void;
 
     @:deprecated
-    static function ray_cast(from:Vector3, to:Vector3, groups:lua.Table<Int,Hash>, ?request_id:Int):Void;
+    static function ray_cast(from:Vector3, to:Vector3, groups:LuaArray<Hash>, ?request_id:Int):Void;
 
     /**
         Get the gravity in runtime. The gravity returned is not global,

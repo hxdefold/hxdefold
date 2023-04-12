@@ -1,5 +1,7 @@
 package defold;
 
+import defold.types.util.LuaArray;
+
 /**
     Functions and constants for interacting with local, as well as
     Apple's and Google's push notification services.
@@ -26,7 +28,7 @@ extern class Push {
 
         @return data table with all data associated with all scheduled notifications
     **/
-    static function get_all_scheduled():lua.Table<Int,PushData>;
+    static function get_all_scheduled():LuaArray<PushData>;
 
     /**
         Retrieve data on a scheduled local push notification.
@@ -48,7 +50,7 @@ extern class Push {
         @param notifications the types of notifications to listen to. (iOS only)
         @param callback register callback function (function)
     **/
-    static function register<T>(notifications:Null<lua.Table<Int,PushNotificationType>>, callback:T->String->{error:String}->Void):Void;
+    static function register<T>(notifications:Null<LuaArray<PushNotificationType>>, callback:T->String->{error:String}->Void):Void;
 
     /**
         Schedule a local push notification to be triggered at a specific time in the future.

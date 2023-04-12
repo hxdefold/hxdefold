@@ -1,8 +1,8 @@
 package defold;
 
 import haxe.extern.EitherType;
-
 import defold.types.*;
+import defold.types.util.LuaArray;
 
 /**
     Functions for mathematical operations on vectors, matrices and quaternions.
@@ -481,7 +481,7 @@ extern class Vmath {
         @param t table of numbers
         @return new vector
     **/
-    static function vector(t:lua.Table<Int,Float>):Vector;
+    static function vector(t:LuaArray<Float>):Vector;
 
     /**
         Creates a new zero vector, a vector from scalar value, from another existing vector or from given coordinates.
