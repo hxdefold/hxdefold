@@ -38,7 +38,7 @@ extern class Gui {
         @param complete_function function to call when the animation has completed
         @param playback playback mode
     **/
-    static function animate<T>(node:GuiNode, property:GuiAnimateProprty, to:GoAnimatedProperty, easing:EitherType<GuiEasing,EitherType<Vector3,Vector4>>, duration:Float, ?delay:Float, ?complete_function:T->GuiNode->Void, ?playback:GuiPlayback):Void;
+    static function animate<T>(node:GuiNode, property:GuiAnimateProprty, to:GoAnimatedProperty, easing:EitherType<GuiEasing,Vector>, duration:Float, ?delay:Float, ?complete_function:T->GuiNode->Void, ?playback:GuiPlayback):Void;
 
     /**
         Cancels an ongoing animation.

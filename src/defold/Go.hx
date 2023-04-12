@@ -36,9 +36,8 @@ extern class Go {
         @param delay delay before the animation starts in seconds
         @param complete_function function with parameters (self, url, property) to call when the animation has completed
     **/
-    // TODO: easing is actually not a Vector3 but any vector created by Vmath.vector and we don't have a type for it right now.
-    @:overload(function<T>(url:HashOrStringOrUrl, property:HashOrString, playback:GoPlayback, to:GoAnimatedProperty, easing:EitherType<GoEasing,Vector3>, duration:Float, ?delay:Float, ?complete_function:(T, Url, Hash)->Void):Void {})
-    static function animate<TSelf, TProp>(url:HashOrStringOrUrl, property:Property<TProp>, playback:GoPlayback, to:TProp, easing:EitherType<GoEasing,Vector3>, duration:Float, ?delay:Float, ?complete_function:(TSelf, Url, Property<TProp>)->Void):Void;
+    @:overload(function<T>(url:HashOrStringOrUrl, property:HashOrString, playback:GoPlayback, to:GoAnimatedProperty, easing:EitherType<GoEasing,Vector>, duration:Float, ?delay:Float, ?complete_function:(T, Url, Hash)->Void):Void {})
+    static function animate<TSelf, TProp>(url:HashOrStringOrUrl, property:Property<TProp>, playback:GoPlayback, to:TProp, easing:EitherType<GoEasing,Vector>, duration:Float, ?delay:Float, ?complete_function:(TSelf, Url, Property<TProp>)->Void):Void;
 
     /**
         Cancels all animations of the named property of the specified game object or component.

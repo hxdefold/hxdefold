@@ -481,8 +481,7 @@ extern class Vmath {
         @param t table of numbers
         @return new vector
     **/
-    // TODO: this should return some generic Vector type
-    static function vector(t:lua.Table<Int,Float>):haxe.extern.EitherType<Vector3,Vector4>;
+    static function vector(t:lua.Table<Int,Float>):Vector;
 
     /**
         Creates a new zero vector, a vector from scalar value, from another existing vector or from given coordinates.
