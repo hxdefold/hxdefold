@@ -28,6 +28,10 @@ abstract LuaArray<T>(Table<Int,T>) from Table<Int,T> to Table<Int,T> {
         return Table.toArray(this);
     }
 
+    public inline function iterator():Iterator<T> {
+        return toArray().iterator();
+    }
+
     @:op([])
     inline function get(i:Int):T {
         return this[i+1];

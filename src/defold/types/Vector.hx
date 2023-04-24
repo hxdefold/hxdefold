@@ -3,7 +3,7 @@ package defold.types;
 /**
     A vector of arbitrary size, which is returned by `Vmath.vector()`.
 
-    Array access is possible, but not that the indices given are actually incremented
+    Array access is possible, but note that the indices given are actually incremented
     by `1` in the abstract. This is because Lua indexes from `1`, but on the Haxe
     side we want to index from `0`.
 
