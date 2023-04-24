@@ -113,6 +113,13 @@ class SpriteProperties {
         The playback_rate is a non-negative number, a negative value will be clamped to 0.
     **/
     static var playback_rate(default, never) = new Property<Float>("playback_rate");
+
+    /**
+        The current animation id. An animation that plays currently for the sprite.
+
+        READ ONLY
+    **/
+    static var animation(default, never) = new Property<Hash>("animation");
 }
 
 /**

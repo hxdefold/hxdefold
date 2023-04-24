@@ -2,7 +2,7 @@
 
 # Haxe support library for the [Defold](https://www.defold.com/) game engine
 
-[![Build Status](https://travis-ci.org/hxdefold/hxdefold.svg?branch=master)](https://travis-ci.org/hxdefold/hxdefold) ![Defold API version: 1.4.4](https://img.shields.io/badge/api%20version-1.4.4-orange.svg)
+[![Build Status](https://travis-ci.org/hxdefold/hxdefold.svg?branch=master)](https://travis-ci.org/hxdefold/hxdefold) ![Defold API version: 1.4.5](https://img.shields.io/badge/api%20version-1.4.5-orange.svg)
 
 This library allows writing beautiful [Haxe](https://haxe.org/) code for the [Defold](https://www.defold.com/) game engine \o/
 
