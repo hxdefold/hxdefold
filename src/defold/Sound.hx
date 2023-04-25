@@ -195,19 +195,30 @@ typedef SoundMessagePlaySound = {
     /**
         Delay in seconds before the sound starts playing, default is 0.
     **/
-    @:optional var delay:Float;
+    var ?delay:Float;
 
     /**
         Sound gain between 0 and 1, default is 1.
 
         The final gain of the sound will be a combination of this gain, the group gain and the master gain.
     **/
-    @:optional var gain:Float;
+    var ?gain:Float;
+
+    /**
+        Sound pan between -1 and 1, default is 0. The final pan of the sound will be an addition of this pan and the sound pan.
+    **/
+    var ?pan:Float;
+
+    /**
+        Sound speed where 1.0 is normal speed, 0.5 is half speed and 2.0 is double speed.
+        The final speed of the sound will be a multiplication of this speed and the sound speed.
+    **/
+    var ?speed:Float;
 
     /**
         The identifier of the sound, can be used to distinguish between consecutive plays from the same component.
     **/
-    @:optional var play_id:Int;
+    var ?play_id:Int;
 }
 
 /**
@@ -217,7 +228,7 @@ typedef SoundMessageSetGain = {
     /**
         Sound gain between 0 and 1, default is 1.
     **/
-    @:optional var gain:Float;
+    var ?gain:Float;
 }
 
 /**
@@ -227,7 +238,7 @@ typedef SoundMessageSoundDone = {
     /**
         The sequential play identifier that was given by the sound.play function.
     **/
-    @:optional var play_id: Int;
+    var ?play_id: Int;
 }
 
 /**
