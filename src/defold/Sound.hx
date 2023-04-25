@@ -112,7 +112,7 @@ extern class Sound {
         @param play_properties optional table with properties
         @return The `play_id` of the sound that was played.
     **/
-    static function play<T>(url:HashOrStringOrUrl, ?play_properties:SoundPlayOptions, ?complete_function:T->Hash->SoundMessageSoundDone->Url->Void):SoundId;
+    static function play<T>(url:HashOrStringOrUrl, ?play_properties:SoundPlayOptions, ?complete_function:T->Hash->SoundMessageSoundDone->Url->Void):SoundPlayId;
 
     /**
         Set gain on all active playing voices of a sound.
@@ -235,7 +235,7 @@ typedef SoundMessagePlaySound = {
     /**
         The identifier of the sound, can be used to distinguish between consecutive plays from the same component.
     **/
-    var ?play_id:Int;
+    var ?play_id:SoundPlayId;
 }
 
 /**
@@ -255,7 +255,7 @@ typedef SoundMessageSoundDone = {
     /**
         The sequential play identifier that was given by the sound.play function.
     **/
-    var ?play_id: Int;
+    var ?play_id: SoundPlayId;
 }
 
 /**
