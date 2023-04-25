@@ -112,7 +112,7 @@ extern class Sound {
         @param play_properties optional table with properties
         @return The `play_id` of the sound that was played.
     **/
-    static function play<T>(url:HashOrStringOrUrl, ?play_properties:SoundMessagePlaySound, ?complete_function:T->Hash->SoundMessageSoundDone->Url->Void):Int;
+    static function play<T>(url:HashOrStringOrUrl, ?play_properties:SoundPlayOptions, ?complete_function:T->Hash->SoundMessageSoundDone->Url->Void):SoundId;
 
     /**
         Set gain on all active playing voices of a sound.
@@ -189,9 +189,9 @@ class SoundMessages {
 }
 
 /**
-    Data for the `SoundMessages.play_sound` message and `Sound.play` method.
+    Data for the `Sound.play` options.
 **/
-typedef SoundMessagePlaySound = {
+typedef SoundPlayOptions = {
     /**
         Delay in seconds before the sound starts playing, default is 0.
     **/
@@ -214,6 +214,23 @@ typedef SoundMessagePlaySound = {
         The final speed of the sound will be a multiplication of this speed and the sound speed.
     **/
     var ?speed:Float;
+}
+
+/**
+    Data for the `SoundMessages.play_sound` message.
+**/
+typedef SoundMessagePlaySound = {
+    /**
+        Delay in seconds before the sound starts playing, default is 0.
+    **/
+    var ?delay:Float;
+
+    /**
+        Sound gain between 0 and 1, default is 1.
+
+        The final gain of the sound will be a combination of this gain, the group gain and the master gain.
+    **/
+    var ?gain:Float;
 
     /**
         The identifier of the sound, can be used to distinguish between consecutive plays from the same component.
