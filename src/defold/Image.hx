@@ -31,7 +31,7 @@ typedef ImageLoadResult = {
     Image type, used in `ImageLoadResult.type`.
 **/
 @:native("_G.image")
-@:enum extern abstract ImageType(Int) {
+extern enum abstract ImageType(Int) {
     var TYPE_LUMINANCE;
     var TYPE_RGB;
     var TYPE_RGBA;

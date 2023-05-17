@@ -1140,7 +1140,7 @@ extern class GuiNode {}
     Possible GUI playback modes.
 **/
 @:native("_G.gui")
-@:enum extern abstract GuiPlayback({}) {
+extern enum abstract GuiPlayback({}) {
     /**
         Loop backward.
     **/
@@ -1179,7 +1179,7 @@ extern class GuiNode {}
     to a screen resolution which differs from the project settings.
 **/
 @:native("_G.gui")
-@:enum extern abstract GuiAdjustMode(Int) {
+extern enum abstract GuiAdjustMode(Int) {
     /**
         Fit adjust mode.
 
@@ -1211,7 +1211,7 @@ extern class GuiNode {}
     Blend mode defines how the node will be blended with the background.
 **/
 @:native("_G.gui")
-@:enum extern abstract GuiBlendMode({}) {
+extern enum abstract GuiBlendMode({}) {
     /**
         Alpha blending.
     **/
@@ -1238,7 +1238,7 @@ extern class GuiNode {}
     Clipping mode defines how the node will clipping it's children nodes
 **/
 @:native("_G.gui")
-@:enum extern abstract GuiClippingMode(Int) {
+extern enum abstract GuiClippingMode(Int) {
     /**
         Clipping mode none.
     **/
@@ -1254,7 +1254,7 @@ extern class GuiNode {}
     Possible node pivots.
 **/
 @:native("_G.gui")
-@:enum extern abstract GuiPivot(Int) {
+extern enum abstract GuiPivot(Int) {
     /**
         Center pivor.
     **/
@@ -1305,7 +1305,7 @@ extern class GuiNode {}
     Possible node size modes.
 **/
 @:native("_G.gui")
-@:enum extern abstract GuiSizeMode(Int) {
+extern enum abstract GuiSizeMode(Int) {
     /**
         Automatic size mode
 
@@ -1329,7 +1329,7 @@ typedef GuiTextMetrics = {
 }
 
 @:native("_G.gui")
-@:enum extern abstract GuiXAnchor(Int) {
+extern enum abstract GuiXAnchor(Int) {
     /**
         No anchor.
     **/
@@ -1347,7 +1347,7 @@ typedef GuiTextMetrics = {
 }
 
 @:native("_G.gui")
-@:enum extern abstract GuiYAnchor(Int) {
+extern enum abstract GuiYAnchor(Int) {
     /**
         No anchor.
     **/
@@ -1368,7 +1368,7 @@ typedef GuiTextMetrics = {
     Possible pie bounds.
 **/
 @:native("_G.gui")
-@:enum extern abstract GuiPieBounds({}) {
+extern enum abstract GuiPieBounds({}) {
     /**
         Elliptical pie node bounds.
     **/
@@ -1381,7 +1381,7 @@ typedef GuiTextMetrics = {
 }
 
 @:native("_G.gui")
-@:enum extern abstract GuiKeyboardType({}) {
+extern enum abstract GuiKeyboardType({}) {
     /**
         Default keyboard.
     **/
@@ -1404,7 +1404,7 @@ typedef GuiTextMetrics = {
 }
 
 @:native("_G.gui")
-@:enum extern abstract GuiEasing({}) {
+extern enum abstract GuiEasing({}) {
     var EASING_INBACK;
     var EASING_INBOUNCE;
     var EASING_INCIRC;
@@ -1450,7 +1450,7 @@ typedef GuiTextMetrics = {
 }
 
 @:native("_G.gui")
-@:enum extern abstract GuiNewTextureResultCode({}) {
+extern enum abstract GuiNewTextureResultCode({}) {
     /**
         The texture id already exists when trying to use `gui.new_texture()`.
     **/
@@ -1466,7 +1466,7 @@ typedef GuiTextMetrics = {
 }
 
 @:native("_G.gui")
-@:enum extern abstract GuiAnimateProprty({}) {
+extern enum abstract GuiAnimateProprty({}) {
     /**
         position property
     **/

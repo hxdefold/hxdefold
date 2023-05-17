@@ -124,7 +124,7 @@ typedef ProfilerViewRecordedFrame = {
     Possible values for `Profiler.set_ui_mode`.
 **/
 @:native("_G.profiler")
-@:enum extern abstract ProfilerMode({}) {
+extern enum abstract ProfilerMode({}) {
     /**
         Pauses on the currently displayed frame
     **/
@@ -150,7 +150,7 @@ typedef ProfilerViewRecordedFrame = {
     Possible values for `Profiler.set_ui_view_mode`.
 **/
 @:native("_G.profiler")
-@:enum extern abstract ProfilerViewMode({}) {
+extern enum abstract ProfilerViewMode({}) {
     /**
         The default mode which displays all the ui profiler details
     **/

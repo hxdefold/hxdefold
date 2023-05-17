@@ -409,7 +409,7 @@ abstract GoAnimatedProperty(Dynamic)
     Game object easing constants.
 **/
 @:native("_G.go")
-@:enum extern abstract GoEasing(Int) {
+extern enum abstract GoEasing(Int) {
     /**
         In-back.
     **/
@@ -620,7 +620,7 @@ abstract GoAnimatedProperty(Dynamic)
     Game object playback constants.
 **/
 @:native("_G.go")
-@:enum extern abstract GoPlayback(Int) {
+extern enum abstract GoPlayback(Int) {
     /**
         Loop backward.
     **/

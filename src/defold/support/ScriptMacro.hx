@@ -473,8 +473,21 @@ private class Glue {
 }
 
 class ScriptMacro {
+
+	static var generated:Bool = false;
+
     static function use() {
         if (!Context.defined("lua")) return; // run through `-lib hxdefold` for `haxelib run hxdefold`
+
+		if (generated) {
+			// script macro was called twice?
+			// this can now happen as of Haxe 4.3 if a project has '-lib hxdefold` while also including
+			// another library which has hxdefold as a dependency
+			// not sure if it's a bug, or if it's normal now that extraParams.hxml can be added multiple times
+			// for the same library
+			return;
+		}
+		generated = true;
 
         var defoldRoot = Context.definedValue("hxdefold-projectroot");
         if (defoldRoot == null) defoldRoot = ".";

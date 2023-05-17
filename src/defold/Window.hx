@@ -66,7 +66,7 @@ extern class Window {
     should dim the screen after a period without user interaction.
 **/
 @:native("_G.window")
-@:enum extern abstract WindowDimmingMode({}) {
+extern enum abstract WindowDimmingMode({}) {
     /**
         Dimming off
     **/
@@ -89,7 +89,7 @@ extern class Window {
     Window events, used in `Window.set_listener` callbacks.
 **/
 @:native("_G.window")
-@:enum extern abstract WindowEvent({}) {
+extern enum abstract WindowEvent({}) {
     /**
         Deiconified window event.
 

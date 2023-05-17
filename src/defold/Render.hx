@@ -515,7 +515,7 @@ typedef RenderMessageResize = {
 	Render buffer types.
 **/
 @:native("_G.render")
-@:enum extern abstract RenderBufferType(Int) to Int {
+extern enum abstract RenderBufferType(Int) to Int {
 	var BUFFER_COLOR_BIT;
 	var BUFFER_DEPTH_BIT;
 	var BUFFER_STENCIL_BIT;
@@ -566,7 +566,7 @@ typedef RenderTargetParameters = {
 	Type of the `RenderTargetParameters.format` field.
 **/
 @:native("_G.render")
-@:enum extern abstract RenderFormat({}) {
+extern enum abstract RenderFormat({}) {
 	var FORMAT_LUMINANCE;
 	var FORMAT_RGB;
 	var FORMAT_RGBA;
@@ -589,7 +589,7 @@ typedef RenderTargetParameters = {
 	Type of the `RenderTargetParameters.min_filter` (and `mag_filter`) field.
 **/
 @:native("_G.render")
-@:enum extern abstract RenderFilter({}) {
+extern enum abstract RenderFilter({}) {
 	var FILTER_LINEAR;
 	var FILTER_NEAREST;
 }
@@ -598,7 +598,7 @@ typedef RenderTargetParameters = {
 	Type of the `RenderTargetParameters.u_wrap` (and `v_wrap`) field.
 **/
 @:native("_G.render")
-@:enum extern abstract RenderWrap({}) {
+extern enum abstract RenderWrap({}) {
 	var WRAP_CLAMP_TO_BORDER;
 	var WRAP_CLAMP_TO_EDGE;
 	var WRAP_MIRRORED_REPEAT;
@@ -609,7 +609,7 @@ typedef RenderTargetParameters = {
 	Rendering states enumeration.
 **/
 @:native("_G.render")
-@:enum extern abstract RenderState({}) {
+extern enum abstract RenderState({}) {
 	var STATE_DEPTH_TEST;
 	var STATE_STENCIL_TEST;
 	var STATE_BLEND;
@@ -627,7 +627,7 @@ extern class RenderPredicate {}
 	Render blend functions enumeration (see `Render.set_blend_func`).
 **/
 @:native("_G.render")
-@:enum extern abstract RenderBlendFactor({}) {
+extern enum abstract RenderBlendFactor({}) {
 	var BLEND_ZERO;
 	var BLEND_ONE;
 	var BLEND_SRC_COLOR;
@@ -649,7 +649,7 @@ extern class RenderPredicate {}
 	Rendering cull face type enumeration (see `Render.set_cull_face`).
 **/
 @:native("_G.render")
-@:enum extern abstract RenderCullFaceType({}) {
+extern enum abstract RenderCullFaceType({}) {
 	var FACE_FRONT;
 	var FACE_BACK;
 	var FACE_FRONT_AND_BACK;
@@ -659,7 +659,7 @@ extern class RenderPredicate {}
 	Compare functions enumeration (used in `Render.set_depth_func` and `Render.set_stencil_func`).
 **/
 @:native("_G.render")
-@:enum extern abstract RenderCompareFunc({}) {
+extern enum abstract RenderCompareFunc({}) {
 	var COMPARE_FUNC_NEVER;
 	var COMPARE_FUNC_LESS;
 	var COMPARE_FUNC_LEQUAL;
@@ -674,7 +674,7 @@ extern class RenderPredicate {}
 	Stencil operations enumeration (see `Render.set_stencil_func`).
 **/
 @:native("_G.render")
-@:enum extern abstract RenderStencilOp({}) {
+extern enum abstract RenderStencilOp({}) {
 	var STENCIL_OP_KEEP;
 	var STENCIL_OP_ZERO;
 	var STENCIL_OP_REPLACE;

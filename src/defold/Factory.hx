@@ -87,7 +87,7 @@ extern class Factory {
     Possible return values for `Factory.get_Status`.
 **/
 @:native("_G.factory")
-@:enum extern abstract FactoryStatus({}) {
+extern enum abstract FactoryStatus({}) {
     var STATUS_UNLOADED;
     var STATUS_LOADING;
     var STATUS_LOADED;

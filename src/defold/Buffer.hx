@@ -90,7 +90,7 @@ typedef BufferStreamDeclaration = {
 }
 
 @:native("_G.buffer")
-@:enum extern abstract BufferStreamType(Int) {
+extern enum abstract BufferStreamType(Int) {
     /**
         Float, single precision, 4 bytes
     **/

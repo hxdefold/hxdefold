@@ -96,7 +96,7 @@ extern class Collectionfactory {
     Possible values for the `Collectionfactory.get_status` return value.
 **/
 @:native("_G.collectionfactory")
-@:enum extern abstract CollectionfactoryStatus({}) {
+extern enum abstract CollectionfactoryStatus({}) {
     var STATUS_UNLOADED;
     var STATUS_LOADING;
     var STATUS_LOADED;

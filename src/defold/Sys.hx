@@ -417,7 +417,7 @@ typedef SysApplicationInfo = {
     Return value of `Sys.get_connectivity`.
 **/
 @:native("_G.sys")
-@:enum extern abstract SysConnectivity(Int) {
+extern enum abstract SysConnectivity(Int) {
     /**
         No network connection is found.
     **/

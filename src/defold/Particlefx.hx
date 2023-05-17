@@ -61,7 +61,7 @@ extern class Particlefx {
 }
 
 @:native("_G.particlefx")
-@:enum extern abstract ParticlefxEmitterState({}) {
+extern enum abstract ParticlefxEmitterState({}) {
     /**
         Sleeping state.
 

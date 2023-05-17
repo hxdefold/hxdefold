@@ -135,7 +135,7 @@ typedef CrashHandle = Int;
     Crash report system fields.
 **/
 @:native("_G.crash")
-@:enum extern abstract CrashSysField(Int) {
+extern enum abstract CrashSysField(Int) {
     /**
         Android build fingerprint.
     **/

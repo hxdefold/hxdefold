@@ -704,7 +704,7 @@ typedef PhysicsRaycastOptions = {
     Types of physics joint available.
 **/
 @:native("_G.physics")
-@:enum extern abstract PhysicsJointType({}) {
+extern enum abstract PhysicsJointType({}) {
     var JOINT_TYPE_FIXED;
 
     var JOINT_TYPE_HINGE;

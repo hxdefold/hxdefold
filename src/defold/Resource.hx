@@ -397,7 +397,7 @@ typedef ResourceTextMetrics =
     Resource type used in `ResourceTextureInfo.type` field.
 **/
 @:native("_G.resource")
-@:enum extern abstract ResourceTextureType(Int) {
+extern enum abstract ResourceTextureType(Int) {
     /**
         2D texture type.
     **/
@@ -408,7 +408,7 @@ typedef ResourceTextMetrics =
     Resource format used in `ResourceTextureInfo.format` field.
 **/
 @:native("_G.resource")
-@:enum extern abstract ResourceTextureFormat(Int) {
+extern enum abstract ResourceTextureFormat(Int) {
     /**
         Luminance type texture format.
     **/
@@ -426,7 +426,7 @@ typedef ResourceTextMetrics =
 }
 
 @:native("_G.resource")
-@:enum extern abstract ResourceLiveUpdateStatus({}) {
+extern enum abstract ResourceLiveUpdateStatus({}) {
     /**
         Mismatch between between expected bundled resources and actual bundled resources.
         The manifest expects a resource to be in the bundle, but it was not found in the bundle.
@@ -470,7 +470,7 @@ typedef ResourceTextMetrics =
 }
 
 @:native("_G.resource")
-@:enum extern abstract ResourceTextureCompressionType({}) {
+extern enum abstract ResourceTextureCompressionType({}) {
     /**
         No compression.
     **/
