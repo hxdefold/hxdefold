@@ -107,7 +107,7 @@ extern class Render {
 		@param render_target render target from which to enable the specified texture unit
 		@param buffer_type buffer type from which to enable the texture
 	**/
-	static function enable_texture(unit:Int, render_target:RenderTarget, buffer_type:RenderBufferType):Void;
+	static function enable_texture(unit:Int, render_target:EitherType<RenderTarget,TextureResourceHandle>, buffer_type:RenderBufferType):Void;
 
 	/**
 		Gets the window height, as specified for the project.

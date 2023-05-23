@@ -1,5 +1,7 @@
 package defold;
 
+import defold.types.TextureResourceHandle;
+import haxe.extern.EitherType;
 import defold.Go.GoPlayback;
 import defold.types.Hash;
 import defold.types.Buffer;
@@ -77,7 +79,15 @@ extern class Resource {
 
         *NOTE* Currently, only 1 mipmap is generated.
     **/
-    static function set_texture(path:HashOrString, table:ResourceTextureInfo, buffer:Buffer):Void;
+    static function set_texture(path:HashOrString, table:ResourceSetTextureInfo, buffer:Buffer):Void;
+
+    /**
+     * Gets texture info from a texture resource path or a texture handle.
+     *
+     * @param path the path to the resource or a texture handle
+     * @return info about the texture
+    **/
+    static function get_texture_info(path:EitherType<HashOrString,TextureResourceHandle>):ResourceTextureInfo;
 
     /**
         This function creates a new atlas resource that can be used in the same way as any atlas created during build time.
@@ -213,7 +223,7 @@ typedef ResourceManifestReference = Int;
 /**
     Texture info used by the `Resource.set_texture` method.
 **/
-typedef ResourceTextureInfo = {
+typedef ResourceSetTextureInfo = {
     /**
         The texture type
     **/
@@ -256,10 +266,44 @@ typedef ResourceTextureInfo = {
 }
 
 /**
+    Texture info returned by the `Resource.get_texture_info` method.
+**/
+typedef ResourceTextureInfo = {
+    /**
+        The opaque handle to the texture resource
+    **/
+    var handle:TextureResourceHandle;
+
+    /**
+        Width of the texture
+    **/
+    var width:Int;
+
+    /**
+        Height of the texture
+    **/
+    var height:Int;
+
+    /**
+        Depth of the texture (i.e 1 for a 2D texture and 6 for a cube map)
+    **/
+    var depth:Int;
+
+    /**
+        Number of mipmaps of the texture
+    **/
+    var mipmaps:Int;
+
+    /**
+        The texture type. Supported values:
+    **/
+    var type:ResourceTextureType;
+}
+
+/**
     Atlas info used by the `Resource.create_atlas` method.
 **/
-typedef ResourceAtlasInfo =
-{
+typedef ResourceAtlasInfo = {
     /**
         The path to the texture resource, e.g "/main/my_texture.texturec"
     **/
@@ -402,13 +446,27 @@ extern enum abstract ResourceTextureType(Int) {
         2D texture type.
     **/
     var TEXTURE_TYPE_2D;
+
+    /**
+        Cube map texture type
+    **/
+    var TEXTURE_TYPE_CUBE_MAP;
+
+    /**
+        2D Array texture type
+    **/
+    var TEXTURE_TYPE_2D_ARRAY;
 }
 
 /**
     Resource format used in `ResourceTextureInfo.format` field.
+
+    Note that the device running your game might not support all of these features, and the constants will only be exposed if it does.
+
+    On the Haxe side, use the `isAvailable()` method on the enum to check if a format is supported.
 **/
 @:native("_G.resource")
-extern enum abstract ResourceTextureFormat(Int) {
+extern enum abstract ResourceTextureFormat(Null<Int>) {
     /**
         Luminance type texture format.
     **/
@@ -423,6 +481,116 @@ extern enum abstract ResourceTextureFormat(Int) {
         RGBA type texture format.
     **/
     var TEXTURE_FORMAT_RGBA;
+
+    /**
+        RGB_PVRTC_2BPPV1 type texture format
+    **/
+    var TEXTURE_FORMAT_RGB_PVRTC_2BPPV1;
+
+    /**
+        RGB_PVRTC_4BPPV1 type texture format
+    **/
+    var TEXTURE_FORMAT_RGB_PVRTC_4BPPV1;
+
+    /**
+        RGBA_PVRTC_2BPPV1 type texture format
+    **/
+    var TEXTURE_FORMAT_RGBA_PVRTC_2BPPV1;
+
+    /**
+        RGBA_PVRTC_4BPPV1 type texture format
+    **/
+    var TEXTURE_FORMAT_RGBA_PVRTC_4BPPV1;
+
+    /**
+        RGB_ETC1 type texture format
+    **/
+    var TEXTURE_FORMAT_RGB_ETC1;
+
+    /**
+        RGBA_ETC2 type texture format
+    **/
+    var TEXTURE_FORMAT_RGBA_ETC2;
+
+    /**
+        RGBA_ASTC_4x4 type texture format
+    **/
+    var TEXTURE_FORMAT_RGBA_ASTC_4x4;
+
+    /**
+        RGB_BC1 type texture format
+    **/
+    var TEXTURE_FORMAT_RGB_BC1;
+
+    /**
+        RGBA_BC3 type texture format
+    **/
+    var TEXTURE_FORMAT_RGBA_BC3;
+
+    /**
+        R_BC4 type texture format
+    **/
+    var TEXTURE_FORMAT_R_BC4;
+
+    /**
+        RG_BC5 type texture format
+    **/
+    var TEXTURE_FORMAT_RG_BC5;
+
+    /**
+        RGBA_BC7 type texture format
+    **/
+    var TEXTURE_FORMAT_RGBA_BC7;
+
+    /**
+        RGB16F type texture format
+    **/
+    var TEXTURE_FORMAT_RGB16F;
+
+    /**
+        RGB32F type texture format
+    **/
+    var TEXTURE_FORMAT_RGB32F;
+
+    /**
+        RGBA16F type texture format
+    **/
+    var TEXTURE_FORMAT_RGBA16F;
+
+    /**
+        RGBA32F type texture format
+    **/
+    var TEXTURE_FORMAT_RGBA32F;
+
+    /**
+        R16F type texture format
+    **/
+    var TEXTURE_FORMAT_R16F;
+
+    /**
+        RG16F type texture format
+    **/
+    var TEXTURE_FORMAT_RG16F;
+
+    /**
+        R32F type texture format
+    **/
+    var TEXTURE_FORMAT_R32F;
+
+    /**
+        RG32F type texture format
+    **/
+    var TEXTURE_FORMAT_RG32F;
+
+    /**
+        Checks if the device running the game supports this format.
+
+        @return `true` if the format is available on the device, otherwise `false`
+    **/
+    public inline function isAvailable():Bool {
+
+        return this != null;
+    }
 }
 
 @:native("_G.resource")
