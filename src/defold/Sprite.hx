@@ -120,6 +120,13 @@ class SpriteProperties {
         READ ONLY
     **/
     static var animation(default, never) = new Property<Hash>("animation");
+
+    /**
+        The frame count of the currently playing animation.
+
+        READ ONLY
+    **/
+    static var frame_count(default, never) = new Property<Hash>("frame_count");
 }
 
 /**

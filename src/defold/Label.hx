@@ -77,4 +77,19 @@ class LabelProperties {
         Returns the size of the label. The size will constrain the text if line break is enabled
     **/
     static var size(default, never) = new Property<Vector3>("size");
+
+    /**
+        The leading of the label. This value is used to scale the line spacing of text.
+    **/
+    static var leading(default, never) = new Property<Float>("leading");
+
+    /**
+        The tracking of the label. This value is used to adjust the vertical spacing of characters in the text.
+    **/
+    static var tracking(default, never) = new Property<Float>("tracking");
+
+    /**
+        The line break of the label. This value is used to adjust the vertical spacing of characters in the text.
+    **/
+    static var line_break(default, never) = new Property<Bool>("line_break");
 }
