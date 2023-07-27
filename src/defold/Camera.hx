@@ -1,6 +1,8 @@
 package defold;
 
+import defold.types.Matrix4;
 import defold.types.Message;
+import defold.types.Property;
 
 /**
     Messages to control camera components and camera focus.
@@ -67,4 +69,44 @@ typedef CameraMessageSetCamera = {
         Position of the far clipping plane (distance from camera along relative z)
     **/
     var far_z:Float;
+}
+
+
+@:publicFields
+class CameraProperties {
+
+    /**
+        Vertical field of view of the camera.
+    **/
+    static var fov(default, never) = new Property<Float>("fov");
+
+    /**
+        Camera frustum near plane.
+    **/
+    static var near_z(default, never) = new Property<Float>("near_z");
+
+    /**
+        Camera frustum far plane.
+    **/
+    static var far_z(default, never) = new Property<Float>("far_z");
+
+    /**
+        Zoom level when using an orthographic projection.
+    **/
+    static var orthographic_zoom(default, never) = new Property<Float>("orthographic_zoom");
+
+    /**
+        The calculated projection matrix of the camera. (READ ONLY)
+    **/
+    static var projection(default, never) = new Property<Matrix4>("projection");
+
+    /**
+        The calculated view matrix of the camera. (READ ONLY)
+    **/
+    static var view(default, never) = new Property<Matrix4>("view");
+
+    /**
+        The ratio between the frustum width and height. Used when calculating the projection of a perspective camera.
+    **/
+    static var aspect_ratio(default, never) = new Property<Float>("aspect_ratio");
 }

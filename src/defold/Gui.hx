@@ -87,6 +87,14 @@ extern class Gui {
     static function clone_tree(node:GuiNode):lua.Table<Hash,GuiNode>;
 
     /**
+        Get a node and all its children as a Lua table.
+
+        @param node root node to get node tree from
+        @return a table mapping node ids to the corresponding nodes
+    **/
+    static function get_tree(node:GuiNode):lua.Table<Hash,GuiNode>;
+
+    /**
         Deletes a node.
 
         Deletes the specified node. Any child nodes of the specified node will be

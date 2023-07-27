@@ -87,6 +87,12 @@ typedef ScriptOnInputAction = {
         Available on the `gamepad_connected` input event.
     **/
     var ?gamepad_name:String;
+
+    /**
+        Indicates that the connected gamepad is unidentified and will only generate raw input.
+        Available on the `gamepad_connected` input event.
+    **/
+    var ?gamepad_unknown:Bool;
 }
 
 /**
