@@ -367,12 +367,12 @@ typedef GoMessageSetParent = {
     /**
         the id of the new parent
     **/
-    @:optional var parent_id:Hash;
+    var ?parent_id:Hash;
 
     /**
         if the world transform of the instance should be preserved when changing spaces, 0 for false and 1 for true. The default value is 1.
     **/
-    @:optional var keep_world_transform:Int;
+    var ?keep_world_transform:Int;
 }
 
 /**

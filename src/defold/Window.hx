@@ -139,12 +139,12 @@ typedef WindowEventData = {
     /**
         The width of a resize event. null otherwise.
     **/
-    @:optional var width:Int;
+    var ?width:Int;
 
     /**
         The height of a resize event. null otherwise.
     **/
-    @:optional var height:Int;
+    var ?height:Int;
 }
 
 /**

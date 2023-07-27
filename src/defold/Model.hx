@@ -76,18 +76,18 @@ typedef ModelPlayAnimProperties = {
     /**
         Duration of a linear blend between the current and new animation.
     **/
-    @:optional var blend_duration:Float;
+    var ?blend_duration:Float;
 
     /**
         The normalized initial value of the animation cursor when the animation starts playing.
     **/
-    @:optional var offset:Float;
+    var ?offset:Float;
 
     /**
         The rate with which the animation will be played.
         Must be positive.
     **/
-    @:optional var playback_rate:Float;
+    var ?playback_rate:Float;
 }
 
 /**

@@ -392,7 +392,7 @@ typedef SysMessageStartRecord = {
         Frame period to record, ie write every nth frame.
         Default value is 2.
     **/
-    @:optional var frame_period:Int;
+    var ?frame_period:Int;
 
     /**
         Frames per second. Playback speed for the video.
@@ -400,7 +400,7 @@ typedef SysMessageStartRecord = {
 
         The fps value doens't affect the recording. It's only meta-data in the written video file.
     **/
-    @:optional var fps:Int;
+    var ?fps:Int;
 }
 
 /**

@@ -534,12 +534,12 @@ typedef PhysicsFixedJoint = {
     /**
         Set this flag to true if the attached bodies should collide.
     **/
-    @:optional var collide_connected:Bool;
+    var ?collide_connected:Bool;
 
     /**
         The maximum length of the rope.
     **/
-    @:optional var max_length:Float;
+    var ?max_length:Float;
 }
 
 /**
@@ -549,42 +549,42 @@ typedef PhysicsHingeJoint = {
     /**
         Set this flag to true if the attached bodies should collide.
     **/
-    @:optional var collide_connected:Bool;
+    var ?collide_connected:Bool;
 
     /**
         The bodyB angle minus bodyA angle in the reference state (radians).
     **/
-    @:optional var reference_angle:Float;
+    var ?reference_angle:Float;
 
     /**
         The lower angle for the joint limit (radians).
     **/
-    @:optional var lower_angle:Float;
+    var ?lower_angle:Float;
 
     /**
         The upper angle for the joint limit (radians)
     **/
-    @:optional var upper_angle:Float;
+    var ?upper_angle:Float;
 
     /**
         The maximum motor torque used to achieve the desired motor speed. Usually in N-m.
     **/
-    @:optional var max_motor_torque:Float;
+    var ?max_motor_torque:Float;
 
     /**
         The desired motor speed. Usually in radians per second.
     **/
-    @:optional var motor_speed:Float;
+    var ?motor_speed:Float;
 
     /**
         A flag to enable joint limits
     **/
-    @:optional var enable_limit:Bool;
+    var ?enable_limit:Bool;
 
     /**
          A flag to enable the joint motor.
     **/
-    @:optional var enable_motor:Bool;
+    var ?enable_motor:Bool;
 
     /**
         Read only fields, available from physics.get_joint_properties().
@@ -593,12 +593,12 @@ typedef PhysicsHingeJoint = {
     /**
         Current joint angle in radians
     **/
-    @:optional var joint_angle(default, null):Float;
+    var ?joint_angle(default, null):Float;
 
     /**
         Current joint angle speed in radians per second.
     **/
-    @:optional var joint_speed(default, null):Float;
+    var ?joint_speed(default, null):Float;
 }
 
 /**
@@ -608,47 +608,47 @@ typedef PhysicsSliderJoint = {
     /**
         Set this flag to true if the attached bodies should collide.
     **/
-    @:optional var collide_connected:Bool;
+    var ?collide_connected:Bool;
 
     /**
         The local translation unit axis in bodyA
     **/
-    @:optional var local_axis_a:Vector3;
+    var ?local_axis_a:Vector3;
 
     /**
         The constrained angle between the bodies: bodyB_angle - bodyA_angle.
     **/
-    @:optional var reference_angle:Float;
+    var ?reference_angle:Float;
 
     /**
         Enable/disable the joint limit.
     **/
-    @:optional var  enable_limit:Bool;
+    var ?enable_limit:Bool;
 
     /**
         The lower translation limit, usually in meters.
     **/
-    @:optional var lower_translation:Float;
+    var ?lower_translation:Float;
 
     /**
         The upper translation limit, usually in meters.
     **/
-    @:optional var upper_translation:Float;
+    var ?upper_translation:Float;
 
     /**
         Enable/disable the joint motor.
     **/
-    @:optional var enable_motor:Bool;
+    var ?enable_motor:Bool;
 
     /**
         The maximum motor torque, usually in N-m.
     **/
-    @:optional var max_motor_force:Float;
+    var ?max_motor_force:Float;
 
     /**
         The desired motor speed in radians per second.
     **/
-    @:optional var motor_speed:Float;
+    var ?motor_speed:Float;
 
     /**
         Read only fields, available from physics.get_joint_properties().
@@ -657,12 +657,12 @@ typedef PhysicsSliderJoint = {
     /**
         Current joint translation, usually in meters
     **/
-    @:optional var joint_translation(default, null):Float;
+    var ?joint_translation(default, null):Float;
 
     /**
         Current joint translation speed, usually in meters per second.
     **/
-    @:optional var joint_speed(default, null):Float;
+    var ?joint_speed(default, null):Float;
 }
 
 /**
@@ -672,22 +672,22 @@ typedef PhysicsSpringJoint = {
     /**
         Set this flag to true if the attached bodies should collide.
     **/
-    @:optional var collide_connected:Bool;
+    var ?collide_connected:Bool;
 
     /**
         The natural length between the anchor points.
     **/
-    @:optional var length:Float;
+    var ?length:Float;
 
     /**
         The mass-spring-damper frequency in Hertz. A value of 0 disables softness.
     **/
-    @:optional var frequency:Float;
+    var ?frequency:Float;
 
     /**
         The damping ratio. 0 = no damping, 1 = critical damping.
     **/
-    @:optional var damping:Float;
+    var ?damping:Float;
 }
 
 /**
