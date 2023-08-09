@@ -324,19 +324,13 @@ end
         }
     }
 
-    static function getProperties(cls:ClassType, pos:Position, ?genericParams:Array<Type>):Array<{name:String, value:String, order:Int}> {
+    static function getProperties(cls:ClassType, pos:Position):Array<{name:String, value:String, order:Int}> {
         var properties = [];
 
         // recursively add the properties from all parent classes
         if (cls.superClass != null)
         {
-            properties = properties.concat(getProperties(cls.superClass.t.get(), pos, cls.superClass.params));
-        }
-
-        // substitute the types if it's a generic class
-        if (cls.params.length > 0)
-        {
-
+            properties = properties.concat(getProperties(cls.superClass.t.get(), pos));
         }
 
         for (field in cls.fields.get())
@@ -349,6 +343,10 @@ end
                     {
                         case []:
                             // not a property
+
+                        case [prop] if (cls.params.length > 0):
+                            // generic classes are not allowed to have editor properties
+                            Context.fatalError('generic script classes are not allowed to have editor properties', field.pos);
 
                         case [prop]:
                             var type = getPropertyType(field.type, field.pos);
