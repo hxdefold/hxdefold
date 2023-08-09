@@ -92,13 +92,13 @@ private class Glue {
                         default:
                             switch getScriptType(cl) {
                                 case SCode:
-                                    scriptClasses.push({cls: cl, data: getScriptPropertiesType(cl), type: SCode});
+                                    scriptClasses.push({cls: cl, type: SCode});
 
                                 case SGui:
-                                    scriptClasses.push({cls: cl, data: getScriptPropertiesType(cl), type: SGui});
+                                    scriptClasses.push({cls: cl, type: SGui});
 
                                 case SRender:
-                                    scriptClasses.push({cls: cl, data: getScriptPropertiesType(cl), type: SRender});
+                                    scriptClasses.push({cls: cl, type: SRender});
 
                                 default:
                             }
@@ -122,7 +122,7 @@ private class Glue {
             var cl = script.cls;
 
             // get data properties for generating `go.property` calls, which should be in the genrated script
-            var props = getProperties(script.data, cl.pos);
+            var props = getProperties(cl, cl.pos);
             props.sort(function(a,b) return a.order - b.order);
 
             var baseMethods, ext;
@@ -210,8 +210,18 @@ private class Glue {
             b.add('require "$requireModule"\n\n');
 
             for (cb in script.callbacks) {
-                var args = cb.args.join(", ");
-                b.add('function ${cb.name}($args)\n\t${if (cb.isVoid) "" else "return "}$EXPORT_TABLE.${cb.method}($args)\nend\n\n');
+                var callbackArgs = 'self';
+                var methodCallArgs = cb.args.join(", ");
+                var callbackArgs = if (methodCallArgs == '') 'self' else 'self, $methodCallArgs';
+
+                var callbackName = callbackNameToSnakeCase(cb.name);
+
+                b.add('
+function ${callbackName}($callbackArgs)
+    _G.self = self
+    ${if (cb.isVoid) "" else "return "}$EXPORT_TABLE.${cb.method}($methodCallArgs)
+end
+');
             }
 
             sys.FileSystem.createDirectory(script.dir);
@@ -241,10 +251,7 @@ private class Glue {
 
             // in haxe 4, final is a keyword, so we need to handle this here
             // we could do it more elaborately via metadata or something, but oh well :)
-            var callbackName = switch fieldName {
-                case "final_": "final";
-                case _: fieldName;
-            };
+            var callbackName = fieldName;
 
             if (callbackNames.indexOf(callbackName) > -1) {
                 // This callback has already been defined by a previous call in the recursion.
@@ -317,28 +324,48 @@ private class Glue {
         }
     }
 
-    static function getProperties(type:Type, pos:Position):Array<{name:String, value:String, order:Int}> {
-        var result = [];
-        switch (type.follow()) {
-            case TAnonymous(_.get() => anon):
-                for (field in anon.fields) {
+    static function getProperties(cls:ClassType, pos:Position, ?genericParams:Array<Type>):Array<{name:String, value:String, order:Int}> {
+        var properties = [];
+
+        // recursively add the properties from all parent classes
+        if (cls.superClass != null)
+        {
+            properties = properties.concat(getProperties(cls.superClass.t.get(), pos, cls.superClass.params));
+        }
+
+        // substitute the types if it's a generic class
+        if (cls.params.length > 0)
+        {
+
+        }
+
+        for (field in cls.fields.get())
+        {
+            switch field.kind
+            {
+                case FVar(read, write):
                     var prop = field.meta.extract("property");
-                    switch (prop) {
+                    switch (prop)
+                    {
                         case []:
-                            continue;
+                            // not a property
+
                         case [prop]:
                             var type = getPropertyType(field.type, field.pos);
                             var value = if (prop.params.length == 0) getDefaultValue(type) else parsePropertyExpr(type, prop.params, prop.pos);
                             var order = Context.getPosInfos(field.pos).min;
-                            result.push({name: field.name, value: value, order: order});
+                            properties.push({name: field.name, value: value, order: order});
+
                         default:
-                            throw new Error("Only single @property metadata is allowed", field.pos);
+                            // not a property
                     }
-                }
-            default:
-                throw new Error('Invalid component data type: ${type.toString()}. Should be a structure.', pos);
+
+                default:
+                    // not a property
+            }
         }
-        return result;
+
+        return properties;
     }
 
     static function getPropertyType(type:Type, pos:Position):PropertyType {
@@ -439,29 +466,6 @@ private class Glue {
     }
 
     /**
-        Checks the given class type `cl`, and its super classes recursively, and returns the
-        first generic parameter to be defined on a superclass, which is presumably the anonymous
-        type which will act as the script's properties.
-
-        **Note:** The type `cl` needs to have already been confirmed to be a script type, using `getScriptType()`.
-
-        @param cl The class type to check.
-        @return The type, which if followed should lead to an anonymous structure which is the script's properties.
-    **/
-    static function getScriptPropertiesType(cl:ClassType):Type {
-        return switch (cl) {
-            // Check if there is a super class with a type parameter.
-            case {superClass: {params: [tData]}}: tData;
-
-            // If there is a super class, but without a type parameter, check it recursively.
-            case _ if (cl.superClass != null): getScriptPropertiesType(cl.superClass.t.get());
-
-            // Otherwise it's definitely not a script.
-            default: throw new Error('getScriptPropertiesType() called for a type that is not a script.', Context.currentPos());
-        }
-    }
-
-    /**
         Returns `true`, if the given class type `cl` is one of the base types `Script`, `GuiScript` or `RenderScript`.
     **/
     static function isBaseScriptType(cl:ClassType):Bool {
@@ -469,6 +473,20 @@ private class Glue {
             && cl.pack[0] == "defold"
             && cl.pack[1] == "support"
             && ["Script", "GuiScript", "RenderScript"].indexOf(cl.name) > -1;
+    }
+
+    static function callbackNameToSnakeCase(name:String):String {
+
+        return switch name {
+            case 'init': 'init';
+            case 'final_': 'final';
+            case 'update': 'update';
+            case 'onMessage': 'on_message';
+            case 'onInput': 'on_input';
+            case 'onReload': 'on_reload';
+            default:
+                Context.fatalError('invalid callback name: $name', Context.currentPos());
+        }
     }
 }
 
