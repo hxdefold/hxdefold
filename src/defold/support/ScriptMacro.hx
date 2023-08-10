@@ -10,6 +10,7 @@ import haxe.macro.Type;
 using StringTools;
 using haxe.macro.Tools;
 using haxe.macro.TypeTools;
+using haxe.macro.ExprTools;
 
 private enum ScriptType {
     SNone;
@@ -40,7 +41,7 @@ private typedef ScriptExport = {
     var name:String;
     var position:String;
     var properties:Array<{name:String, value:String}>;
-    var callbacks:Array<{name:String, method:String, args:Array<String>, isVoid:Bool}>;
+    var callbacks:Array<Callback>;
 }
 
 private typedef Callback = {
@@ -169,7 +170,7 @@ private class Glue {
                 position: {
                     var posStr = Std.string(cl.pos);
                     posStr.substring(5, posStr.length - 1);
-                },
+                }
             });
         }
 
@@ -341,12 +342,8 @@ end
                     var prop = field.meta.extract("property");
                     switch (prop)
                     {
-                        case []:
+                        case [] | null:
                             // not a property
-
-                        case [prop] if (cls.params.length > 0):
-                            // generic classes are not allowed to have editor properties
-                            Context.fatalError('generic script classes are not allowed to have editor properties', field.pos);
 
                         case [prop]:
                             var type = getPropertyType(field.type, field.pos);
@@ -355,7 +352,7 @@ end
                             properties.push({name: field.name, value: value, order: order});
 
                         default:
-                            // not a property
+                            Context.fatalError('only one @property tag is allowed on each field', pos);
                     }
 
                 default:

@@ -10,7 +10,14 @@ import haxe.macro.Type;
 using StringTools;
 using haxe.macro.Tools;
 using haxe.macro.TypeTools;
+using haxe.macro.ExprTools;
 
+
+private typedef PropertyInit =
+{
+    var name: String;
+    var value: String;
+}
 
 class ScriptBuilder
 {
@@ -18,10 +25,12 @@ class ScriptBuilder
     {
         var newFields: Array<Field> = [];
 
+        var additionalInitStatements: Array<Expr> = [];
+        var initMethod: Field = null;
+
+
         for (field in Context.getBuildFields())
         {
-            var newField: Field = field;
-
             switch field.kind
             {
                 /**
@@ -36,7 +45,7 @@ class ScriptBuilder
                     }
 
                     // replace variable with a property
-                    newField =
+                    var newField: Field =
                     {
                         name: field.name,
                         pos: field.pos,
@@ -56,10 +65,9 @@ class ScriptBuilder
                     }
                     else if (e != null)
                     {
-                        // this is a non-property field
+                        // this is a non-property field with a default value specified
                         // these should be initialized in init()
-                        // so throw an error if a default value has been set here for now
-                        Context.fatalError('non-property fields have to be initialized in init()', field.pos);
+                        additionalInitStatements.push({expr: EBinop(OpAssign, macro $i{field.name}, e), pos: field.pos});
                     }
 
                     // create the getter
@@ -93,14 +101,60 @@ class ScriptBuilder
                         })
                     });
 
+                    newFields.push(newField);
+
+
+                /**
+                 * The init method is kept and added later, in case we want to add some statements to it.
+                 */
+                case FFun(f) if (field.name == 'init'):
+                    initMethod = field;
+
 
                 /**
                  * All other fields shall be kept as-is.
                  */
                 default:
+                    newFields.push(field);
             }
+        }
 
-            newFields.push(newField);
+
+        if (additionalInitStatements.length > 0)
+        {
+            // we need to add initialization statements to init()
+            if (initMethod == null)
+            {
+                initMethod = createDefaultInit(additionalInitStatements);
+            }
+            else
+            {
+                var existingExprs: Expr = switch initMethod.kind
+                {
+                    case FFun(f): f.expr;
+
+                    default: Context.fatalError('init is not a function?', initMethod.pos);
+                }
+
+                initMethod =
+                {
+                    name: initMethod.name,
+                    meta: initMethod.meta,
+                    pos: initMethod.pos,
+                    access: initMethod.access,
+                    doc: initMethod.doc,
+                    kind: FFun({
+                        args: [],
+                        expr: macro $b{additionalInitStatements.concat([existingExprs])}
+                    })
+                }
+            }
+        }
+
+
+        if (initMethod != null)
+        {
+            newFields.push(initMethod);
         }
 
         return newFields;
@@ -116,6 +170,34 @@ class ScriptBuilder
             }
         }
         return false;
+    }
+
+    static function createDefaultInit(exprs: Array<Expr>): Field
+    {
+        return {
+            name: 'init',
+            pos: Context.currentPos(),
+            access: [ AOverride ],
+            kind: FFun({
+                args: [],
+                expr: macro {
+                    super.init();
+                    $b{exprs}
+                }
+            })
+        };
+    }
+
+    static function getInitMethod(): Field
+    {
+        for (field in Context.getBuildFields())
+        {
+            if (field.name == 'init')
+            {
+                return field;
+            }
+        }
+        return null;
     }
 }
 #end
