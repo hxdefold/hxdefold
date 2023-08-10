@@ -75,12 +75,13 @@ class ScriptBuilder
                     newFields.push({
                         name: 'get_${field.name}',
                         pos: field.pos,
-                        meta: [ { name: ':noCompletion', pos: field.pos }, { name: ':pure', pos: field.pos } ],
+                        // here the :pure tag is important!
+                        meta: [ { name: ':noCompletion', pos: field.pos } ],
                         access: [ APrivate, AInline ],
                         kind: FFun({
                             args: [],
                             ret: t,
-                            expr: macro return untyped __lua__($v{luaPropRef})
+                            expr: macro return untyped $i{luaPropRef}
                         })
                     });
 
