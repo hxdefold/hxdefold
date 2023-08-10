@@ -54,6 +54,7 @@ class ScriptBuilder
                         doc: field.doc,
                         kind: FProp('get', 'set', t)
                     };
+                    var luaPropRef: String = '_G.self.${field.name}';
                     if (fieldContainsMeta(field, 'property'))
                     {
                         // this var should generate a script property
@@ -71,31 +72,29 @@ class ScriptBuilder
                     }
 
                     // create the getter
-                    var luaPropRead: String = '_G.self.${field.name}';
                     newFields.push({
                         name: 'get_${field.name}',
                         pos: field.pos,
-                        meta: [ { name: ':noCompletion', pos: field.pos } ],
-                        access: [ APrivate ],
+                        meta: [ { name: ':noCompletion', pos: field.pos }, { name: ':pure', pos: field.pos } ],
+                        access: [ APrivate, AInline ],
                         kind: FFun({
                             args: [],
                             ret: t,
-                            expr: macro { return untyped __lua__($v{luaPropRead}); }
+                            expr: macro return untyped __lua__($v{luaPropRef})
                         })
                     });
 
                     // create the setter
-                    var luaPropWrite: String = '_G.self.${field.name} = value';
                     newFields.push({
                         name: 'set_${field.name}',
                         pos: field.pos,
                         meta: [ { name: ':noCompletion', pos: field.pos } ],
-                        access: [ APrivate ],
+                        access: [ APrivate, AInline ],
                         kind: FFun({
                             args: [ {name: 'value', type: t} ],
                             ret: t,
                             expr: macro {
-                                untyped __lua__($v{luaPropWrite});
+                                untyped $i{luaPropRef} = value;
                                 return value;
                             }
                         })
