@@ -174,6 +174,16 @@ private class Glue {
             });
         }
 
+        var supportedDefoldVersion: String = haxe.macro.Context.definedValue('defold_version');
+        initExprs.push(macro {
+            var defoldVersion: String = untyped __lua__('sys.get_engine_info().version');
+            var supportedDefoldVersion: String = $v{supportedDefoldVersion};
+            if (defoldVersion != supportedDefoldVersion)
+            {
+                std.Sys.println('WARNING: the installed hxdefold version supports Defold $supportedDefoldVersion, but you are running $defoldVersion');
+            }
+        });
+
         if (initExprs.length > 0) {
             var td = macro class Init {
                 static function init(exports:Dynamic) $b{initExprs};
