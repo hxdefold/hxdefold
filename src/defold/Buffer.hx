@@ -9,7 +9,8 @@ import defold.types.HashOrString;
     Functions for manipulating buffers and streams.
 **/
 @:native("_G.buffer")
-extern class Buffer {
+extern class Buffer
+{
     /**
         Copy all data streams from one buffer to another, element wise.
 
@@ -23,7 +24,8 @@ extern class Buffer {
         @param srcoffset the offset to start copying data from
         @param count the number of elements to copy
     **/
-    static function copy_buffer(dst:defold.types.Buffer, dstoffset:Int, src:defold.types.Buffer, srcoffset:Int, count:Int):Void;
+    @:native('copy_buffer')
+    static function copyBuffer(dst:defold.types.Buffer, dstoffset:Int, src:defold.types.Buffer, srcoffset:Int, count:Int):Void;
 
     /**
         Copy a specified amount of data from one stream to another.
@@ -37,7 +39,8 @@ extern class Buffer {
         @param srcoffset the offset to start copying data from (measured in value type)
         @param count the number of values to copy (measured in value type)
     **/
-    static function copy_stream(dst:BufferStream, dstoffset:Int, src:BufferStream, srcoffset:Int, count:Int):Void;
+    @:native('copy_stream')
+    static function copyStream(dst:BufferStream, dstoffset:Int, src:BufferStream, srcoffset:Int, count:Int):Void;
 
     /**
         Create a new data buffer containing a specified set of streams. A data buffer
@@ -48,7 +51,7 @@ extern class Buffer {
         @param element_count The number of elements the buffer should hold
         @param declaration A table where each entry (table) describes a stream
     **/
-    @:pure static function create(element_count:Int, declaration:LuaArray<BufferStreamDeclaration>):defold.types.Buffer;
+    static function create(element_count:Int, declaration:LuaArray<BufferStreamDeclaration>):defold.types.Buffer;
 
     /**
         Get a copy of all the bytes from a specified stream as a Lua string.
@@ -57,7 +60,8 @@ extern class Buffer {
         @param stream_name the name of the stream
         @return the buffer data as a Lua string
     **/
-    @:pure static function get_bytes(buffer:defold.types.Buffer, stream_name:HashOrString):BufferData;
+    @:native('get_bytes')
+    static function getBytes(buffer:defold.types.Buffer, stream_name:HashOrString):BufferData;
 
     /**
         Get a specified stream from a buffer.
@@ -66,13 +70,15 @@ extern class Buffer {
         @param stream_name the stream name
         @return the data stream
     **/
-    @:pure static function get_stream(buffer:defold.types.Buffer, stream_name:HashOrString):BufferStream;
+    @:native('get_stream')
+    static function getStream(buffer:defold.types.Buffer, stream_name:HashOrString):BufferStream;
 }
 
 /**
     Structure for buffer stream declaration used in `Buffer.create`.
 **/
-typedef BufferStreamDeclaration = {
+typedef BufferStreamDeclaration =
+{
     /**
         The name of the stream.
     **/
@@ -90,7 +96,8 @@ typedef BufferStreamDeclaration = {
 }
 
 @:native("_G.buffer")
-extern enum abstract BufferStreamType(Int) {
+extern enum abstract BufferStreamType(Int)
+{
     /**
         Float, single precision, 4 bytes
     **/

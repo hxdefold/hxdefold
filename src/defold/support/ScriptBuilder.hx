@@ -58,6 +58,8 @@ class ScriptBuilder
                     if (fieldContainsMeta(field, 'property'))
                     {
                         // this var should generate a script property
+                        // store the default value in the meta here so that the script generator
+                        // can add the default values as appropriate
                         newField.meta.push({
                             name: 'property',
                             pos: field.pos,
@@ -94,10 +96,7 @@ class ScriptBuilder
                         kind: FFun({
                             args: [ {name: 'value', type: t} ],
                             ret: t,
-                            expr: macro {
-                                untyped $i{luaPropRef} = value;
-                                return value;
-                            }
+                            expr: macro return untyped $i{luaPropRef} = value
                         })
                     });
 
@@ -120,6 +119,9 @@ class ScriptBuilder
         }
 
 
+        /**
+         * If any additional init statements are needed for the class, insert them here...
+         */
         if (additionalInitStatements.length > 0)
         {
             // we need to add initialization statements to init()
