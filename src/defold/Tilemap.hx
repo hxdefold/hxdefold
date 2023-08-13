@@ -6,7 +6,8 @@ import defold.types.*;
     Functions and messages used to manipulate tile map components.
 **/
 @:native("_G.tilemap")
-extern class Tilemap {
+extern class Tilemap
+{
     /**
         Get the bounds for a tile map. This function returns multiple values:
         The lower left corner index x and y coordinates (1-indexed),
@@ -17,7 +18,9 @@ extern class Tilemap {
 
         @param url the tile map
     **/
-    static function get_bounds(url:HashOrStringOrUrl):TilemapBounds;
+    @:pure
+    @:native('get_bounds')
+    static function getBounds(url:HashOrStringOrUrl):TilemapBounds;
 
     /**
         Get the tile set at the specified position in the tilemap.
@@ -32,7 +35,9 @@ extern class Tilemap {
         @param y y coordinate of the tile
         @return index of the tile
     **/
-    static function get_tile(url:HashOrStringOrUrl, name:HashOrString, x:Int, y:Int):Int;
+    @:pure
+    @:native('get_tile')
+    static function getTile(url:HashOrStringOrUrl, name:HashOrString, x:Int, y:Int):Int;
 
     /**
         Reset a shader constant for a tile map.
@@ -44,7 +49,8 @@ extern class Tilemap {
         @param url the tile map that should have a constant reset
         @param name of the constant
     **/
-    static function reset_constant(url:HashOrStringOrUrl, name:HashOrString):Void;
+    @:native('reset_constant')
+    static function resetConstant(url:HashOrStringOrUrl, name:HashOrString):Void;
 
     /**
         Set a shader constant for a tile map.
@@ -58,7 +64,8 @@ extern class Tilemap {
         @param name of the constant
         @param value of the constant
     **/
-    static function set_constant(url:HashOrStringOrUrl, name:HashOrString, value:Vector4):Void;
+    @:native('set_constant')
+    static function setConstant(url:HashOrStringOrUrl, name:HashOrString, value:Vector4):Void;
 
     /**
         Set a tile in a tile map.
@@ -88,10 +95,11 @@ extern class Tilemap {
         @param x x-coordinate of the tile
         @param y y-coordinate of the tile
         @param tile index of new tile to set. 0 resets the cell
-        @param h_flipped if the tile should be horizontally flipped
-        @param v_flipped if the tile should be vertically flipped
+        @param hFlipped if the tile should be horizontally flipped
+        @param vFlipped if the tile should be vertically flipped
     **/
-    static function set_tile(url:HashOrStringOrUrl, name:HashOrString, x:Int, y:Int, tile:Int, ?h_flipped:Bool, ?v_flipped:Bool):Void;
+    @:native('set_tile')
+    static function setTile(url:HashOrStringOrUrl, name:HashOrString, x:Int, y:Int, tile:Int, ?hFlipped:Bool, ?vFlipped:Bool):Void;
 
     /**
         Sets the visibility of the tilemap layer.
@@ -100,13 +108,15 @@ extern class Tilemap {
         @param layer name of the layer
         @param visible should the layer be visible
     **/
-    static function set_visible(url:HashOrStringOrUrl, layer:HashOrString, visible: Bool):Void;
+    @:native('set_visible')
+    static function setVisible(url:HashOrStringOrUrl, layer:HashOrString, visible: Bool):Void;
 }
 
 /**
     Return value of `Tilemap.get_bounds` method.
 **/
-@:multiReturn extern class TilemapBounds {
+@:multiReturn extern class TilemapBounds
+{
     /**
         x coordinate of the bottom left corner
     **/

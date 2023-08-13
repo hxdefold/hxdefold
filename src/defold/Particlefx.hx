@@ -7,7 +7,8 @@ import defold.types.*;
     shader constants.
 **/
 @:native("_G.particlefx")
-extern class Particlefx {
+extern class Particlefx
+{
     /**
         Start playing a particle FX.
 
@@ -28,10 +29,11 @@ extern class Particlefx {
         Which particle FX to reset a constant for is identified by the URL.
 
         @param url the particle FX that should have a constant reset
-        @param emitter_id the id of the emitter
+        @param emitterId the id of the emitter
         @param name the name of the constant
     **/
-    static function reset_constant(url:UrlOrString, emitter_id:HashOrString, name:HashOrString):Void;
+    @:native('reset_constant')
+    static function resetConstant(url:UrlOrString, emitterId:HashOrString, name:HashOrString):Void;
 
     /**
         Set a shader constant for a particle FX emitter.
@@ -42,11 +44,12 @@ extern class Particlefx {
         Which particle FX to set a constant for is identified by the URL.
 
         @param url the particle FX that should have a constant set
-        @param emitter_id the id of the emitter
+        @param emitterId the id of the emitter
         @param name the name of the constant
         @param value the value of the constant
     **/
-    static function set_constant(url:UrlOrString, emitter_id:HashOrString, name:HashOrString, value:Vector4):Void;
+    @:native('set_constant')
+    static function setConstant(url:UrlOrString, emitterId:HashOrString, name:HashOrString, value:Vector4):Void;
 
     /**
         Stop playing a particle fx.
@@ -61,7 +64,8 @@ extern class Particlefx {
 }
 
 @:native("_G.particlefx")
-extern enum abstract ParticlefxEmitterState({}) {
+extern enum abstract ParticlefxEmitterState({})
+{
     /**
         Sleeping state.
 
@@ -95,7 +99,8 @@ extern enum abstract ParticlefxEmitterState({}) {
 /**
     Options provided to the `stop()` method.
 **/
-typedef ParticleFxStopOptions = {
+typedef ParticleFxStopOptions =
+{
     /**
         instantly clear spawned particles
     **/

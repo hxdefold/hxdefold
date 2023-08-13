@@ -6,7 +6,8 @@ import defold.types.BufferData;
     Functions for creating image objects.
 **/
 @:native("_G.image")
-extern class Image {
+extern class Image
+{
     /**
         Load image (PNG or JPEG) from buffer.
 
@@ -20,7 +21,8 @@ extern class Image {
 /**
     Return type of the `Image.load` method.
 **/
-typedef ImageLoadResult = {
+typedef ImageLoadResult =
+{
     var width:Int;
     var height:Int;
     var type:ImageType;
@@ -31,7 +33,8 @@ typedef ImageLoadResult = {
     Image type, used in `ImageLoadResult.type`.
 **/
 @:native("_G.image")
-extern enum abstract ImageType(Int) {
+extern enum abstract ImageType(Int)
+{
     var TYPE_LUMINANCE;
     var TYPE_RGB;
     var TYPE_RGBA;

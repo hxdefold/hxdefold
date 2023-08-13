@@ -8,7 +8,8 @@ import defold.types.*;
     used to dynamically spawn collections into the runtime.
 **/
 @:native("_G.collectionfactory")
-extern class Collectionfactory {
+extern class Collectionfactory
+{
     /**
         Spawn a new instance of a collection into the existing collection.
 
@@ -51,7 +52,9 @@ extern class Collectionfactory {
         @param url the collection factory component to get status from
         @return status of the collection factory component
     **/
-    static function get_status(?url:HashOrStringOrUrl):CollectionfactoryStatus;
+    @:native('get_status')
+    @:pure
+    static function getStatus(?url:HashOrStringOrUrl):CollectionfactoryStatus;
 
     /**
         Load resources of a collection factory prototype.
@@ -89,14 +92,16 @@ extern class Collectionfactory {
         @param url the collection factory component
         @param prototype the path to the new prototype, or `null`
     **/
-    static function set_prototype(url:HashOrStringOrUrl, ?prototype:String):Void;
+    @:native('set_prototype')
+    static function setPrototype(url:HashOrStringOrUrl, ?prototype:String):Void;
 }
 
 /**
     Possible values for the `Collectionfactory.get_status` return value.
 **/
 @:native("_G.collectionfactory")
-extern enum abstract CollectionfactoryStatus({}) {
+extern enum abstract CollectionfactoryStatus({})
+{
     var STATUS_UNLOADED;
     var STATUS_LOADING;
     var STATUS_LOADED;

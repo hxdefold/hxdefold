@@ -14,7 +14,8 @@ import defold.Particlefx.ParticlefxEmitterState;
     See `GuiMessages` for related messages.
 **/
 @:native("_G.gui")
-extern class Gui {
+extern class Gui
+{
     /**
         Animates a node property.
 
@@ -48,7 +49,8 @@ extern class Gui {
         @param node node that should have its animation canceled
         @param property property for which the animation should be canceled
     **/
-    static function cancel_animation(node:GuiNode, property:String):Void;
+    @:native('cancel_animation')
+    static function cancelAnimation(node:GuiNode, property:String):Void;
 
     /**
         Cancel a node flipbook animation.
@@ -57,14 +59,16 @@ extern class Gui {
 
         @param node node cancel flipbook animation for
     **/
-    static function cancel_flipbook(node:GuiNode):Void;
+    @:native('cancel_flipbook')
+    static function cancelFlipbook(node:GuiNode):Void;
 
     /**
         Cancel a spine animation.
 
         @param node spine node that should cancel its animation
     **/
-    static function cancel_spine(node:GuiNode):Void;
+    @:native('cancel_spine')
+    static function cancelSpine(node:GuiNode):Void;
 
     /**
         Clone a node.
@@ -84,7 +88,8 @@ extern class Gui {
         @param node root node to clone
         @return a table mapping node ids to the corresponding cloned nodes
     **/
-    static function clone_tree(node:GuiNode):lua.Table<Hash,GuiNode>;
+    @:native('clone_tree')
+    static function cloneTree(node:GuiNode):lua.Table<Hash,GuiNode>;
 
     /**
         Get a node and all its children as a Lua table.
@@ -92,7 +97,9 @@ extern class Gui {
         @param node root node to get node tree from
         @return a table mapping node ids to the corresponding nodes
     **/
-    static function get_tree(node:GuiNode):lua.Table<Hash,GuiNode>;
+    @:pure
+    @:native('get_tree')
+    static function getTree(node:GuiNode):lua.Table<Hash,GuiNode>;
 
     /**
         Deletes a node.
@@ -102,14 +109,16 @@ extern class Gui {
 
         @param node node to delete
     **/
-    static function delete_node(node:GuiNode):Void;
+    @:native('delete_node')
+    static function deleteNode(node:GuiNode):Void;
 
     /**
         Delete a dynamically created texture.
 
         @param texture texture id
     **/
-    static function delete_texture(texture:HashOrString):Void;
+    @:native('delete_texture')
+    static function deleteTexture(texture:HashOrString):Void;
 
     /**
         Returns true if a node is visible and false if it's not. Invisible nodes are not rendered.
@@ -117,7 +126,9 @@ extern class Gui {
         @param node node to query
         @return whether the node is visible
     **/
-    static function get_visible(node:GuiNode):Bool;
+    @:pure
+    @:native('get_visible')
+    static function getVisible(node:GuiNode):Bool;
 
     /**
         Set if a node should be visible or not. Only visible nodes are rendered.
@@ -125,7 +136,8 @@ extern class Gui {
         @param node node to be visible or no
         @param visible whether the node should be visible or not
     **/
-    static function set_visible(node:GuiNode, visible:Bool):Void;
+    @:native('set_visible')
+    static function setVisible(node:GuiNode, visible:Bool):Void;
 
     /**
         Gets the node adjust mode.
@@ -135,7 +147,9 @@ extern class Gui {
         @param node node from which to get the adjust mode
         @return node adjust mode
     **/
-    static function get_adjust_mode(node:GuiNode):GuiAdjustMode;
+    @:pure
+    @:native('get_adjust_mode')
+    static function getAdjustMode(node:GuiNode):GuiAdjustMode;
 
     /**
         Gets the node blend mode.
@@ -145,7 +159,9 @@ extern class Gui {
         @param node node from which to get the blend mode
         @return node blend mode
     **/
-    static function get_blend_mode(node:GuiNode):GuiBlendMode;
+    @:pure
+    @:native('get_blend_mode')
+    static function getBlendMode(node:GuiNode):GuiBlendMode;
 
     /**
         Gets node clipping inverted state.
@@ -155,7 +171,9 @@ extern class Gui {
         @param node node from which to get the clipping inverted state
         @return true or false
     **/
-    static function get_clipping_inverted(node:GuiNode):Bool;
+    @:pure
+    @:native('get_clipping_inverted')
+    static function getClippingInverted(node:GuiNode):Bool;
 
     /**
         Gets the node clipping mode.
@@ -165,7 +183,9 @@ extern class Gui {
         @param node node from which to get the clipping mode
         @return node clipping mode
     **/
-    static function get_clipping_mode(node:GuiNode):GuiClippingMode;
+    @:pure
+    @:native('get_clipping_mode')
+    static function getClippingMode(node:GuiNode):GuiClippingMode;
 
     /**
         Gets node clipping visibility state.
@@ -175,7 +195,9 @@ extern class Gui {
         @param node node from which to get the clipping visibility state
         @return true or false
     **/
-    static function get_clipping_visible(node:GuiNode):Bool;
+    @:pure
+    @:native('get_clipping_visible')
+    static function getClippingVisible(node:GuiNode):Bool;
 
     /**
         Gets the node color.
@@ -183,7 +205,9 @@ extern class Gui {
         @param node node to get the color from
         @return node color
     **/
-    static function get_color(node:GuiNode):Vector4;
+    @:pure
+    @:native('get_color')
+    static function getColor(node:GuiNode):Vector4;
 
     /**
         Gets the angle for the filled pie sector.
@@ -191,7 +215,9 @@ extern class Gui {
         @param node node from which to get the fill angle
         @return sector angle
     **/
-    static function get_fill_angle(node:GuiNode):Float;
+    @:pure
+    @:native('get_fill_angle')
+    static function getFillAngle(node:GuiNode):Float;
 
     /**
         Get node flipbook animation.
@@ -199,7 +225,9 @@ extern class Gui {
         @param node node to get flipbook animation from
         @return animation animation id
     **/
-    static function get_flipbook(node:GuiNode):Hash;
+    @:pure
+    @:native('get_flipbook')
+    static function getFlipbook(node:GuiNode):Hash;
 
     /**
         Gets the normalized cursor of the animation on a node with flipbook animation.
@@ -209,7 +237,9 @@ extern class Gui {
         @param node node to get the cursor for
         @return cursor value
     **/
-    static function get_flipbook_cursor(node:GuiNode):Float;
+    @:pure
+    @:native('get_flipbook_cursor')
+    static function getFlipbookCursor(node:GuiNode):Float;
 
     /**
         Gets the playback rate of the flipbook animation on a node.
@@ -219,7 +249,9 @@ extern class Gui {
         @param node node to set the cursor for
         @return playback rate
     **/
-    static function get_flipbook_playback_rate(node:GuiNode):Float;
+    @:pure
+    @:native('get_flipbook_playback_rate')
+    static function getFlipbookPlaybackRate(node:GuiNode):Float;
 
     /**
         Gets the node font.
@@ -229,14 +261,18 @@ extern class Gui {
         @param node node from which to get the font
         @return font id
     **/
-    static function get_font(node:GuiNode):Hash;
+    @:pure
+    @:native('get_font')
+    static function getFont(node:GuiNode):Hash;
 
     /**
         Gets the scene height.
 
         @return scene height
     **/
-    static function get_height():Float;
+    @:pure
+    @:native('get_height')
+    static function getHeight():Float;
 
     /**
         Gets the id of the specified node.
@@ -244,14 +280,18 @@ extern class Gui {
         @param node node to retrieve the id from
         @return id of the node
     **/
-    static function get_id(node:GuiNode):Hash;
+    @:pure
+    @:native('get_id')
+    static function getId(node:GuiNode):Hash;
 
     /**
         Gets the node inherit alpha state.
 
         @param node node from which to get the inherit alpha state
     **/
-    static function get_inherit_alpha(node:GuiNode):Bool;
+    @:pure
+    @:native('get_inherit_alpha')
+    static function getInheritAlpha(node:GuiNode):Bool;
 
     /**
         Gets the index of the specified node.
@@ -262,7 +302,9 @@ extern class Gui {
         @param node node to retrieve the id from
         @return id of the node
     **/
-    static function get_index(node:GuiNode):Float;
+    @:pure
+    @:native('get_index')
+    static function getIndex(node:GuiNode):Float;
 
     /**
         Gets the node alpha.
@@ -270,7 +312,9 @@ extern class Gui {
         @param node node from which to get alpha
         @return 0..1 alpha color
     **/
-    static function get_alpha(node:GuiNode):Float;
+    @:pure
+    @:native('get_alpha')
+    static function getAlpha(node:GuiNode):Float;
 
     /**
         Sets the node alpha.
@@ -278,7 +322,8 @@ extern class Gui {
         @param node node on which to set alpha
         @param alpha 0..1 alpha color
     **/
-    static function set_alpha(node:GuiNode, alpha:Float):Void;
+    @:native('set_alpha')
+    static function setAlpha(node:GuiNode, alpha:Float):Void;
 
     /**
         Gets the pie inner radius (defined along the x dimension).
@@ -286,7 +331,9 @@ extern class Gui {
         @param node node from where to get the inner radius
         @return inner radius
     **/
-    static function get_inner_radius(node:GuiNode):Float;
+    @:pure
+    @:native('get_inner_radius')
+    static function getInnerRadius(node:GuiNode):Float;
 
     /**
         Gets the node layer.
@@ -296,14 +343,18 @@ extern class Gui {
         @param node node from which to get the layer
         @return layer id
     **/
-    static function get_layer(node:GuiNode):Hash;
+    @:pure
+    @:native('get_layer')
+    static function getLayer(node:GuiNode):Hash;
 
     /**
         Gets the scene current layout.
 
         @return layout id
     **/
-    static function get_layout():Hash;
+    @:pure
+    @:native('get_layout')
+    static function getLayout():Hash;
 
     /**
         Gets the leading of the text node.
@@ -311,7 +362,9 @@ extern class Gui {
         @param node node from where to get the leading
         @return scaling number (default=1)
     **/
-    static function get_leading(node:GuiNode):Float;
+    @:pure
+    @:native('get_leading')
+    static function getLeading(node:GuiNode):Float;
 
     /**
         Get line-break mode..
@@ -321,7 +374,9 @@ extern class Gui {
         @param node node from which to get the line-break for
         @return line_break
     **/
-    static function get_line_break(node:GuiNode):Bool;
+    @:pure
+    @:native('get_line_break')
+    static function getLineBreak(node:GuiNode):Bool;
 
     /**
         Gets the node with the specified id.
@@ -329,7 +384,9 @@ extern class Gui {
         @param id id of the node to retrieve
         @return node instance
     **/
-    static function get_node(id:HashOrString):GuiNode;
+    @:pure
+    @:native('get_node')
+    static function getNode(id:HashOrString):GuiNode;
 
     /**
         Gets the pie outer bounds mode.
@@ -337,7 +394,9 @@ extern class Gui {
         @param node node from where to get the outer bounds mode (node)
         @return PIEBOUNDS_RECTANGLE or PIEBOUNDS_ELLIPSE
     **/
-    static function get_outer_bounds(node:GuiNode):GuiPieBounds;
+    @:pure
+    @:native('get_outer_bounds')
+    static function getOuterBounds(node:GuiNode):GuiPieBounds;
 
     /**
         Gets the node outline color.
@@ -345,7 +404,9 @@ extern class Gui {
         @param node node to get the outline color from
         @return node outline color
     **/
-    static function get_outline(node:GuiNode):Vector4;
+    @:pure
+    @:native('get_outline')
+    static function getOutline(node:GuiNode):Vector4;
 
     /**
         Gets the parent of the specified node.
@@ -355,7 +416,9 @@ extern class Gui {
         @param node the node from which to retrieve its parent
         @return parent instance
     **/
-    static function get_parent(node:GuiNode):Null<GuiNode>;
+    @:pure
+    @:native('get_parent')
+    static function getParent(node:GuiNode):Null<GuiNode>;
 
     /**
         Get the paricle fx for a gui node
@@ -363,14 +426,18 @@ extern class Gui {
         @param node node to get particle fx for
         @return particle fx id
     **/
-    static function get_particlefx(node:GuiNode):Hash;
+    @:pure
+    @:native('get_particlefx')
+    static function getParticlefx(node:GuiNode):Hash;
 
     /**
         Gets the number of generated vertices around the perimeter.
 
         @return vertex count
     **/
-    static function get_perimeter_vertices():Int;
+    @:pure
+    @:native('get_perimeter_vertices')
+    static function getPerimeterVertices():Int;
 
     /**
         Gets the pivot of a node.
@@ -380,7 +447,9 @@ extern class Gui {
         @param node node to get pivot from
         @return pivot constant
     **/
-    static function get_pivot(node:GuiNode):GuiPivot;
+    @:pure
+    @:native('get_pivot')
+    static function getPivot(node:GuiNode):GuiPivot;
 
     /**
         Gets the node position.
@@ -388,7 +457,9 @@ extern class Gui {
         @param node node to get the position from
         @return node position
     **/
-    static function get_position(node:GuiNode):Vector3;
+    @:pure
+    @:native('get_position')
+    static function getPosition(node:GuiNode):Vector3;
 
     /**
         Gets the node rotation.
@@ -396,7 +467,9 @@ extern class Gui {
         @param node node to get the rotation from
         @return node rotation
     **/
-    static function get_rotation(node:GuiNode):Vector3;
+    @:pure
+    @:native('get_rotation')
+    static function getRotation(node:GuiNode):Vector3;
 
     /**
         Gets the node scale.
@@ -404,7 +477,9 @@ extern class Gui {
         @param node node to get the scale from
         @return node scale
     **/
-    static function get_scale(node:GuiNode):Vector3;
+    @:pure
+    @:native('get_scale')
+    static function getScale(node:GuiNode):Vector3;
 
     /**
         Returns the screen position of the supplied node. This function returns the
@@ -414,24 +489,30 @@ extern class Gui {
         @param node node to get the screen position from
         @return node screen position
     **/
-    static function get_screen_position(node:GuiNode):Vector3;
+    @:pure
+    @:native('get_screen_position')
+    static function getScreenPosition(node:GuiNode):Vector3;
 
     /**
         Set the screen position to the supplied node.
 
         @param node node to set the screen position to
-        @return screen position
+        @param screenPosition the screen position to set
     **/
-    static function set_screen_position(node:GuiNode, screen_position:Vector3):Void;
+    @:pure
+    @:native('set_screen_position')
+    static function setScreenPosition(node:GuiNode, screenPosition:Vector3):Void;
 
     /**
         Convert the screen position to the local position of supplied node.
 
         @param node node used for getting local transformation matrix
-        @param screen_position screen position
+        @param screenPosition screen position
         @return local position
     **/
-    static function screen_to_local(node:GuiNode, screen_position:Vector3):Vector3;
+    @:pure
+    @:native('screen_to_local')
+    static function screenToLocal(node:GuiNode, screenPosition:Vector3):Vector3;
 
     /**
         Gets the node shadow color.
@@ -439,7 +520,9 @@ extern class Gui {
         @param node node to get the shadow color from
         @return node shadow color
     **/
-    static function get_shadow(node:GuiNode):Vector4;
+    @:pure
+    @:native('get_shadow')
+    static function getShadow(node:GuiNode):Vector4;
 
     /**
         Gets the node size.
@@ -447,7 +530,9 @@ extern class Gui {
         @param node node to get the size from
         @return node size
     **/
-    static function get_size(node:GuiNode):Vector3;
+    @:pure
+    @:native('get_size')
+    static function getSize(node:GuiNode):Vector3;
 
     /**
         Gets the node size mode.
@@ -457,7 +542,9 @@ extern class Gui {
         @param node node from which to get the size mode
         @return node size mode
     **/
-    static function get_size_mode(node:GuiNode):GuiSizeMode;
+    @:pure
+    @:native('get_size_mode')
+    static function getSizeMode(node:GuiNode):GuiSizeMode;
 
     /**
         Get the slice9 values for the node.
@@ -465,7 +552,9 @@ extern class Gui {
         @param node node to manipulate
         @return configuration values
     **/
-    static function get_slice9(node:GuiNode):Vector4;
+    @:pure
+    @:native('get_slice9')
+    static function getSlice9(node:GuiNode):Vector4;
 
     /**
         Gets the node text.
@@ -475,26 +564,9 @@ extern class Gui {
         @param node node from which to get the text
         @return text value
     **/
-    static function get_text(node:GuiNode):String;
-
-    /**
-        Get text metrics
-
-        @param font font id
-        @param text text to measure
-        @param width max-width. use for line-breaks (default=FLT_MAX)
-        @param line_break true to break lines accordingly to width (default=false)
-        @param leading scale value for line spacing (default=1)
-        @param tracking scale value for letter spacing (default=0)
-    **/
-    static function get_text_metrics(font:HashOrString, text:String, ?width:Float, ?line_break:Bool, ?leading:Float, ?tracking:Float):GuiTextMetrics;
-
-    /**
-        Get text metrics from node.
-
-        @param node text node to measure text from
-    **/
-    static function get_text_metrics_from_node(node:GuiNode):GuiTextMetrics;
+    @:pure
+    @:native('get_text')
+    static function getText(node:GuiNode):String;
 
     /**
         Gets the node texture.
@@ -504,7 +576,9 @@ extern class Gui {
         @param node node to get texture from
         @return texture id
     **/
-    static function get_texture(node:GuiNode):Hash;
+    @:pure
+    @:native('get_texture')
+    static function getTexture(node:GuiNode):Hash;
 
     /**
         Gets the tracking of the text node.
@@ -512,14 +586,18 @@ extern class Gui {
         @param node node from where to get the tracking
         @return scaling number (default=0)
     **/
-    static function get_tracking(node:GuiNode):Float;
+    @:pure
+    @:native('get_tracking')
+    static function getTracking(node:GuiNode):Float;
 
     /**
         Gets the scene width.
 
         @return scene width
     **/
-    static function get_width():Float;
+    @:pure
+    @:native('get_width')
+    static function getWidth():Float;
 
     /**
         Gets the x-anchor of a node.
@@ -529,7 +607,9 @@ extern class Gui {
         @param node node to get x-anchor from
         @return anchor anchor constant
     **/
-    static function get_xanchor(node:GuiNode):GuiXAnchor;
+    @:pure
+    @:native('get_xanchor')
+    static function getAnchorX(node:GuiNode):GuiXAnchor;
 
     /**
         Gets the y-anchor of a node.
@@ -539,12 +619,15 @@ extern class Gui {
         @param node node to get y-anchor from
         @return anchor anchor constant
     **/
-    static function get_yanchor(node:GuiNode):GuiYAnchor;
+    @:pure
+    @:native('get_yanchor')
+    static function getAnchorY(node:GuiNode):GuiYAnchor;
 
     /**
         Hide the on-display keyboard on the device.
     **/
-    static function hide_keyboard():Void;
+    @:native('hide_keyboard')
+    static function hideKeyboard():Void;
 
     /**
         Retrieves if a node is enabled or not.
@@ -554,7 +637,9 @@ extern class Gui {
         @param node node to query
         @return whether the node is enabled or not
     **/
-    static function is_enabled(node:GuiNode):Bool;
+    @:pure
+    @:native('is_enabled')
+    static function isEnabled(node:GuiNode):Bool;
 
     /**
         Moves the first node above the second.
@@ -564,7 +649,8 @@ extern class Gui {
         @param node to move
         @param ref reference node above which the first node should be moved
     **/
-    static function move_above(node:GuiNode, ref:Null<GuiNode>):Void;
+    @:native('move_above')
+    static function moveAbove(node:GuiNode, ref:Null<GuiNode>):Void;
 
     /**
         Moves the first node below the second.
@@ -574,7 +660,8 @@ extern class Gui {
         @param node to move
         @param ref reference node below which the first node should be moved
     **/
-    static function move_below(node:GuiNode, ref:Null<GuiNode>):Void;
+    @:native('move_below')
+    static function moveBelow(node:GuiNode, ref:Null<GuiNode>):Void;
 
     /**
         Creates a new box node.
@@ -583,7 +670,8 @@ extern class Gui {
         @param size node size
         @return new box node
     **/
-    static function new_box_node(pos:EitherType<Vector3,Vector4>, size:Vector3):GuiNode;
+    @:native('new_box_node')
+    static function newBoxNode(pos:EitherType<Vector3,Vector4>, size:Vector3):GuiNode;
 
     /**
         Dynamically create a particle fx node.
@@ -592,7 +680,8 @@ extern class Gui {
         @param particlefx particle fx resource name
         @return new particle fx node
     **/
-    static function new_particlefx_node(pos:EitherType<Vector4,Vector3>, particlefx:HashOrString):GuiNode;
+    @:native('new_particlefx_node')
+    static function newParticlefxNode(pos:EitherType<Vector4,Vector3>, particlefx:HashOrString):GuiNode;
 
     /**
         Creates a new pie node.
@@ -601,16 +690,18 @@ extern class Gui {
         @param size node size
         @return new box node
     **/
-    static function new_pie_node(pos:EitherType<Vector3,Vector4>, size:Vector3):GuiNode;
+    @:native('new_pie_node')
+    static function newPieNode(pos:EitherType<Vector3,Vector4>, size:Vector3):GuiNode;
 
     /**
         Creates a new spine node.
 
         @param pos node position
-        @param spine_scene spine scene id
+        @param spineScene spine scene id
         @return new spine node
     **/
-    static function new_spine_node(pos:EitherType<Vector3,Vector4>, spine_scene:HashOrString):GuiNode;
+    @:native('new_spine_node')
+    static function newSpineNode(pos:EitherType<Vector3,Vector4>, spineScene:HashOrString):GuiNode;
 
     /**
         Creates a new text node.
@@ -619,7 +710,8 @@ extern class Gui {
         @param text node text
         @return new text node
     **/
-    static function new_text_node(pos:EitherType<Vector3,Vector4>, text:String):GuiNode;
+    @:native('new_text_node')
+    static function newTextNode(pos:EitherType<Vector3,Vector4>, text:String):GuiNode;
 
     /**
         Create new texture.
@@ -637,7 +729,8 @@ extern class Gui {
         @param flip flip texture vertically
         @return texture creation was successful
     **/
-    static function new_texture(texture:HashOrString, width:Float, height:Float, type:ImageType, buffer:BufferData, ?flip:Bool):GuiNewTextureResult;
+    @:native('new_texture')
+    static function newTexture(texture:HashOrString, width:Float, height:Float, type:ImageType, buffer:BufferData, ?flip:Bool):GuiNewTextureResult;
 
     /**
         Determines if the node is pickable by the supplied coordinates.
@@ -647,7 +740,9 @@ extern class Gui {
         @param y y-coordinate
         @return pick result
     **/
-    static function pick_node(node:GuiNode, x:Float, y:Float):Bool;
+    @:pure
+    @:native('pick_node')
+    static function pickNode(node:GuiNode, x:Float, y:Float):Bool;
 
     /**
         Play node flipbook animation.
@@ -656,48 +751,53 @@ extern class Gui {
 
         @param node node to set animation for
         @param animation animation id
-        @param complete_function function to call when the animation has completed
-        @param play_properties optional table with properties
+        @param completeFunction function to call when the animation has completed
+        @param playProperties optional table with properties
     **/
-    static function play_flipbook(node:GuiNode, animation:HashOrString, ?complete_function:Void->Void, ?play_properties:GuiPlayFlipbookProperties):Void;
+    @:native('play_flipbook')
+    static function playFlipbook(node:GuiNode, animation:HashOrString, ?completeFunction:Void->Void, ?playProperties:GuiPlayFlipbookProperties):Void;
 
     /**
         Plays the paricle fx for a gui node
 
         @param node node to play particle fx for
-        @param emitter_state_function optional callback function that will be called when an emitter attached to this particlefx changes state.
+        @param emitterStateFunction optional callback function that will be called when an emitter attached to this particlefx changes state.
                                       callback arguments:
                                        * self The current object
                                        * id The id of the particle fx component
                                        * emitter The id of the emitter
                                        * state the new state of the emitter
     **/
-    static function play_particlefx<T>(node:GuiNode, ?emitter_state_function:T->Hash->Hash->ParticlefxEmitterState->Void):Void;
+    @:native('play_particlefx')
+    static function playParticlefx<T>(node:GuiNode, ?emitterStateFunction:T->Hash->Hash->ParticlefxEmitterState->Void):Void;
 
     /**
         Play a spine animation.
 
         @param node spine node that should play the animation
-        @param animation_id id of the animation to play
+        @param animationId id of the animation to play
         @param playback playback mode
-        @param play_properties optional table with properties
-        @param complete_function function to call when the animation has completed
+        @param playProperties optional table with properties
+        @param completeFunction function to call when the animation has completed
     **/
-    static function play_spine_anim(node:GuiNode, animation_id:HashOrString, playback:GuiPlayback, ?play_properties:GuiPlaySpineProperties, ?complete_function:Void->Void):Void;
+        @:native('play_spine_anim')
+    static function playSpineAnim(node:GuiNode, animationId:HashOrString, playback:GuiPlayback, ?playProperties:GuiPlaySpineProperties, ?completeFunction:Void->Void):Void;
 
     /**
         Reset on-display keyboard if available.
 
         Reset input context of keyboard. This will clear marked text.
     **/
-    static function reset_keyboard():Void;
+    @:native('reset_keyboard')
+    static function resetKeyboard():Void;
 
     /**
         Reset all nodes to initial state.
 
         reset only applies to static node loaded from the scene. Nodes created dynamically from script are not affected
     **/
-    static function reset_nodes():Void;
+    @:native('reset_nodes')
+    static function resetNodes():Void;
 
     /**
         Sets node adjust mode.
@@ -705,9 +805,10 @@ extern class Gui {
         Adjust mode defines how the node will adjust itself to a screen resolution which differs from the project settings.
 
         @param node node to set adjust mode for
-        @param adjust_mode adjust mode to set
+        @param adjustMode adjust mode to set
     **/
-    static function set_adjust_mode(node:GuiNode, adjust_mode:GuiAdjustMode):Void;
+    @:native('set_adjust_mode')
+    static function setAdjustMode(node:GuiNode, adjustMode:GuiAdjustMode):Void;
 
     /**
         Sets node blend mode.
@@ -715,9 +816,10 @@ extern class Gui {
         Blend mode defines how the node will be blended with the background.
 
         @param node node to set blend mode for
-        @param blend_mode blend mode to set
+        @param blendMode blend mode to set
     **/
-    static function set_blend_mode(node:GuiNode, blend_mode:GuiBlendMode):Void;
+    @:native('set_blend_mode')
+    static function setBlendMode(node:GuiNode, blendMode:GuiBlendMode):Void;
 
     /**
         Sets node clipping visibility.
@@ -727,7 +829,8 @@ extern class Gui {
         @param node node to set clipping inverted state for
         @param visible true or false
     **/
-    static function set_clipping_inverted(node:GuiNode, visible:Bool):Void;
+    @:native('set_clipping_inverted')
+    static function setClippingInverted(node:GuiNode, visible:Bool):Void;
 
     /**
         Sets node clipping mode state.
@@ -735,9 +838,10 @@ extern class Gui {
         Clipping mode defines how the node will clipping it's children nodes
 
         @param node node to set clipping mode for
-        @param clipping_mode clipping mode to set
+        @param clippingMode clipping mode to set
     **/
-    static function set_clipping_mode(node:GuiNode, clipping_mode:GuiClippingMode):Void;
+    @:native('set_clipping_mode')
+    static function setClippingMode(node:GuiNode, clippingMode:GuiClippingMode):Void;
 
     /**
         Sets node clipping visibility.
@@ -747,7 +851,8 @@ extern class Gui {
         @param node node to set clipping visibility for
         @param visible true or false
     **/
-    static function set_clipping_visible(node:GuiNode, visible:Bool):Void;
+    @:native('set_clipping_visible')
+    static function setClippingVisible(node:GuiNode, visible:Bool):Void;
 
     /**
         Sets the node color.
@@ -755,7 +860,8 @@ extern class Gui {
         @param node node to set the color for
         @param color new color
     **/
-    static function set_color(node:GuiNode, color:EitherType<Vector3,Vector4>):Void;
+    @:native('set_color')
+    static function setColor(node:GuiNode, color:EitherType<Vector3,Vector4>):Void;
 
     /**
         Enables/disables a node.
@@ -765,7 +871,8 @@ extern class Gui {
         @param node node to be enabled/disabled
         @param enabled whether the node should be enabled or not
     **/
-    static function set_enabled(node:GuiNode, enabled:Bool):Void;
+    @:native('set_enabled')
+    static function setEnabled(node:GuiNode, enabled:Bool):Void;
 
     /**
         Sets the angle for the filled pie sector.
@@ -773,7 +880,8 @@ extern class Gui {
         @param node node to set the fill angle for
         @param sector angle
     **/
-    static function set_fill_angle(node:GuiNode, angle:Float):Void;
+    @:native('set_fill_angle')
+    static function setFillAngle(node:GuiNode, angle:Float):Void;
 
     /**
         Sets the normalized cursor of the animation on a node with flipbook animation.
@@ -783,7 +891,8 @@ extern class Gui {
         @param node node to set the cursor for
         @param cursor cursor value
     **/
-    static function set_flipbook_cursor(node:GuiNode, cursor:Float):Void;
+    @:native('set_flipbook_cursor')
+    static function setFlipbookCursor(node:GuiNode, cursor:Float):Void;
 
     /**
         Sets the playback rate of the flipbook animation on a node.
@@ -793,7 +902,8 @@ extern class Gui {
         @param node node to set the cursor for
         @param playback_rate playback rate
     **/
-    static function set_flipbook_playback_rate(node:GuiNode, playback_rate:Float):Void;
+    @:native('set_flipbook_playback_rate')
+    static function setFlipbookPlaybackRate(node:GuiNode, playback_rate:Float):Void;
 
     /**
         Sets the node font.
@@ -803,7 +913,8 @@ extern class Gui {
         @param node node for which to set the font
         @param font font id
     **/
-    static function set_font(node:GuiNode, font:HashOrString):Void;
+    @:native('set_font')
+    static function setFont(node:GuiNode, font:HashOrString):Void;
 
     /**
         Sets the id of the specified node.
@@ -818,7 +929,8 @@ extern class Gui {
         @param node node to set the id for
         @param id id to set
     **/
-    static function set_id(node:GuiNode, id:HashOrString):Void;
+    @:native('set_id')
+    static function setId(node:GuiNode, id:HashOrString):Void;
 
     /**
         Sets the node inherit alpha state.
@@ -826,7 +938,8 @@ extern class Gui {
         @param node node from which to set the inherit alpha state
         @param inherit_alpha true or false
     **/
-    static function set_inherit_alpha(node:GuiNode, inherit_alpha:Bool):Void;
+    @:native('set_inherit_alpha')
+    static function setInheritAlpha(node:GuiNode, inherit_alpha:Bool):Void;
 
     /**
         Sets the pie inner radius (defined along the x dimension).
@@ -834,7 +947,8 @@ extern class Gui {
         @param node node to set the inner radius for
         @param inner radius
     **/
-    static function set_inner_radius(node:GuiNode, inner:Float):Void;
+    @:native('set_inner_radius')
+    static function setInnerRadius(node:GuiNode, inner:Float):Void;
 
     /**
         Sets the node layer.
@@ -844,7 +958,8 @@ extern class Gui {
         @param node node for which to set the layer
         @param layer layer id
     **/
-    static function set_layer(node:GuiNode, layer:HashOrString):Void;
+    @:native('set_layer')
+    static function setLayer(node:GuiNode, layer:HashOrString):Void;
 
     /**
         Sets the leading of the text node.
@@ -852,7 +967,8 @@ extern class Gui {
         @param node node for which to set the leading
         @param leading a scaling number for the line spacing (default=1)
     **/
-    static function set_leading(node:GuiNode, leading:Float):Void;
+    @:native('set_leading')
+    static function setLeading(node:GuiNode, leading:Float):Void;
 
     /**
         Set line-break mode.
@@ -862,7 +978,8 @@ extern class Gui {
         @param node node to set line-break for
         @param line_break true or false
     **/
-    static function set_line_break(node:GuiNode, line_break:Bool):Void;
+    @:native('set_line_break')
+    static function setLineBreak(node:GuiNode, line_break:Bool):Void;
 
     /**
         Sets the pie outer bounds mode.
@@ -870,7 +987,8 @@ extern class Gui {
         @param node node for which to set the outer bounds mode
         @param bounds PIEBOUNDS_RECTANGLE or PIEBOUNDS_ELLIPSE
     **/
-    static function set_outer_bounds(node:GuiNode, bounds:GuiPieBounds):Void;
+    @:native('set_outer_bounds')
+    static function setOuterBounds(node:GuiNode, bounds:GuiPieBounds):Void;
 
     /**
         Sets the node outline color.
@@ -878,7 +996,8 @@ extern class Gui {
         @param node node to set the outline color for
         @param color new outline color
     **/
-    static function set_outline(node:GuiNode, color:EitherType<Vector3,Vector4>):Void;
+    @:native('set_outline')
+    static function setOutline(node:GuiNode, color:EitherType<Vector3,Vector4>):Void;
 
     /**
         Set the parent of the node.
@@ -887,7 +1006,8 @@ extern class Gui {
         @param parent parent node to set
         @param keep_scene_transform optional flag to make the scene position being perserved
     **/
-    static function set_parent(node:GuiNode, parent:GuiNode, ?keep_scene_transform:Bool):Void;
+    @:native('set_parent')
+    static function setParent(node:GuiNode, parent:GuiNode, ?keep_scene_transform:Bool):Void;
 
     /**
         Set the paricle fx for a gui node
@@ -895,14 +1015,16 @@ extern class Gui {
         @param node node to set particle fx for
         @param particlefx particle fx id
     **/
-    static function set_particlefx(node:GuiNode, particlefx:HashOrString):Void;
+    @:native('set_particlefx')
+    static function setParticlefx(node:GuiNode, particlefx:HashOrString):Void;
 
     /**
         Sets the number of generarted vertices around the perimeter.
 
         @param vertex count
     **/
-    static function set_perimeter_vertices(vertex:Int):Void;
+    @:native('set_perimeter_vertices')
+    static function setPerimeterVertices(vertex:Int):Void;
 
     /**
         Sets the pivot of a node.
@@ -912,7 +1034,8 @@ extern class Gui {
         @param node node to set pivot for
         @param pivot pivot constant
     **/
-    static function set_pivot(node:GuiNode, pivot:GuiPivot):Void;
+    @:native('set_pivot')
+    static function setPivot(node:GuiNode, pivot:GuiPivot):Void;
 
     /**
         Sets the node position.
@@ -920,7 +1043,8 @@ extern class Gui {
         @param node node to set the position for
         @param position new position
     **/
-    static function set_position(node:GuiNode, position:EitherType<Vector3,Vector4>):Void;
+    @:native('set_position')
+    static function setPosition(node:GuiNode, position:EitherType<Vector3,Vector4>):Void;
 
     /**
         Set the order number for the current GUI scene. The number dictates the sorting of the "gui" render predicate, in other words
@@ -930,7 +1054,8 @@ extern class Gui {
 
         @param order rendering order
     **/
-    static function set_render_order(order:Int):Void;
+    @:native('set_render_order')
+    static function setRenderOrder(order:Int):Void;
 
     /**
         Sets the node rotation.
@@ -938,7 +1063,8 @@ extern class Gui {
         @param node node to set the rotation for
         @param rotation new rotation
     **/
-    static function set_rotation(node:GuiNode, rotation:EitherType<Vector3,Vector4>):Void;
+    @:native('set_rotation')
+    static function setRotation(node:GuiNode, rotation:EitherType<Vector3,Vector4>):Void;
 
     /**
         Sets the node scale.
@@ -946,7 +1072,8 @@ extern class Gui {
         @param node node to set the scale for
         @param scale new scale
     **/
-    static function set_scale(node:GuiNode, scale:EitherType<Vector3,Vector4>):Void;
+    @:native('set_scale')
+    static function setScale(node:GuiNode, scale:EitherType<Vector3,Vector4>):Void;
 
     /**
         Sets the node shadow color.
@@ -954,7 +1081,8 @@ extern class Gui {
         @param node node to set the shadow color for
         @param color new shadow color
     **/
-    static function set_shadow(node:GuiNode, color:EitherType<Vector3,Vector4>):Void;
+    @:native('set_shadow')
+    static function setShadow(node:GuiNode, color:EitherType<Vector3,Vector4>):Void;
 
     /**
         Sets the node size.
@@ -964,7 +1092,8 @@ extern class Gui {
         @param node node to set the size for
         @param size new size
     **/
-    static function set_size(node:GuiNode, size:EitherType<Vector3,Vector4>):Void;
+    @:native('set_size')
+    static function setSize(node:GuiNode, size:EitherType<Vector3,Vector4>):Void;
 
     /**
         Sets node size mode.
@@ -974,7 +1103,8 @@ extern class Gui {
         @param node node to set size mode for
         @param size_mode size mode to set
     **/
-    static function set_size_mode(node:GuiNode, size_mode:GuiSizeMode):Void;
+    @:native('set_size_mode')
+    static function setSizeMode(node:GuiNode, size_mode:GuiSizeMode):Void;
 
     /**
         Set the slice9 configuration for the node.
@@ -982,7 +1112,8 @@ extern class Gui {
         @param node node to manipulate
         @param params new value
     **/
-    static function set_slice9(node:GuiNode, params:Vector4):Void;
+    @:native('set_slice9')
+    static function setSlice9(node:GuiNode, params:Vector4):Void;
 
     /**
         Sets the normalized cursor of the animation on a spine node.
@@ -992,7 +1123,8 @@ extern class Gui {
         @param node spine node to set the cursor for (node)
         @param cursor cursor value (number)
     **/
-    static function set_spine_cursor(node:GuiNode, cursor:Float):Void;
+    @:native('set_spine_cursor')
+    static function setSpineCursor(node:GuiNode, cursor:Float):Void;
 
     /**
         Sets the playback rate of the animation on a spine node.
@@ -1002,7 +1134,8 @@ extern class Gui {
         @param node spine node to set the cursor for
         @param playback_rate playback rate
     **/
-    static function set_spine_playback_rate(node:GuiNode, playback_rate:Float):Void;
+    @:native('set_spine_playback_rate')
+    static function setSpinePlaybackRate(node:GuiNode, playback_rate:Float):Void;
 
     /**
         Sets the spine scene of a node.
@@ -1012,7 +1145,8 @@ extern class Gui {
         @param node node to set spine scene for
         @param spine_scene spine scene id
     **/
-    static function set_spine_scene(node:GuiNode, spine_scene:HashOrString):Void;
+    @:native('set_spine_scene')
+    static function setSpineScene(node:GuiNode, spine_scene:HashOrString):Void;
 
     /**
         Sets the spine skin on a spine node.
@@ -1021,7 +1155,8 @@ extern class Gui {
         @param spine_skin spine skin id
         @param spine_slot optional slot id to only change a specific slot
     **/
-    static function set_spine_skin(node:GuiNode, spine_skin:HashOrString, ?spine_slot:HashOrString):Void;
+    @:native('set_spine_skin')
+    static function setSpineSkin(node:GuiNode, spine_skin:HashOrString, ?spine_slot:HashOrString):Void;
 
     /**
         Sets the node text.
@@ -1031,7 +1166,8 @@ extern class Gui {
         @param node node to set text for
         @param text text to set
     **/
-    static function set_text(node:GuiNode, text:String):Void;
+    @:native('set_text')
+    static function setText(node:GuiNode, text:String):Void;
 
     /**
         Sets the node texture.
@@ -1041,7 +1177,8 @@ extern class Gui {
         @param node node to set texture for
         @param texture texture id
     **/
-    static function set_texture(node:GuiNode, texture:HashOrString):Void;
+    @:native('set_texture')
+    static function setTexture(node:GuiNode, texture:HashOrString):Void;
 
     /**
         Set the buffer data for a texture.
@@ -1059,7 +1196,8 @@ extern class Gui {
         @param flip flip texture vertically
         @return setting the data was successful
     **/
-    static function set_texture_data(texture:HashOrString, width:Float, height:Float, type:ImageType, buffer:BufferData, ?flip:Bool):Bool;
+    @:native('set_texture_data')
+    static function setTextureData(texture:HashOrString, width:Float, height:Float, type:ImageType, buffer:BufferData, ?flip:Bool):Bool;
 
     /**
         Sets the tracking of the text node.
@@ -1067,7 +1205,8 @@ extern class Gui {
         @param node node for which to set the tracking
         @param tracking a scaling number for the letter spacing (default=0)
     **/
-    static function set_tracking(node:GuiNode, tracking:Float):Void;
+    @:native('set_tracking')
+    static function setTracking(node:GuiNode, tracking:Float):Void;
 
     /**
         Sets the x-anchor of a node.
@@ -1077,7 +1216,8 @@ extern class Gui {
         @param node node to set x-anchor for
         @param anchor anchor constant
     **/
-    static function set_xanchor(node:GuiNode, anchor:GuiXAnchor):Void;
+    @:native('set_xanchor')
+    static function setXanchor(node:GuiNode, anchor:GuiXAnchor):Void;
 
     /**
         Sets the y-anchor of a node.
@@ -1087,7 +1227,8 @@ extern class Gui {
         @param node node to set y-anchor for
         @param anchor anchor constant
     **/
-    static function set_yanchor(node:GuiNode, anchor:GuiYAnchor):Void;
+    @:native('set_yanchor')
+    static function setYanchor(node:GuiNode, anchor:GuiYAnchor):Void;
 
     /**
         Shows the on-display keyboard if available.
@@ -1100,21 +1241,24 @@ extern class Gui {
         @param type keyboard type
         @param autoclose close keyboard automatically when clicking outside
     **/
-    static function show_keyboard(type:GuiKeyboardType, autoclose:Bool):Void;
+    @:native('show_keyboard')
+    static function showKeyboard(type:GuiKeyboardType, autoclose:Bool):Void;
 
     /**
         Stops the particle fx for a gui node
 
         @param node node to stop particle fx for
     **/
-    static function stop_particlefx(node:GuiNode):Void;
+    @:native('stop_particlefx')
+    static function stopParticlefx(node:GuiNode):Void;
 }
 
 /**
     Messages related to the `Gui` module.
 **/
 @:publicFields
-class GuiMessages {
+class GuiMessages
+{
     /**
         Reports a layout change.
 
@@ -1127,7 +1271,8 @@ class GuiMessages {
 /**
     Data for the `GuiMessages.layout_changed` message.
 **/
-typedef GuiMessageLayoutChanged = {
+typedef GuiMessageLayoutChanged =
+{
     /**
         the id of the layout the engine is changing to
     **/
@@ -1148,7 +1293,8 @@ extern class GuiNode {}
     Possible GUI playback modes.
 **/
 @:native("_G.gui")
-extern enum abstract GuiPlayback({}) {
+extern enum abstract GuiPlayback({})
+{
     /**
         Loop backward.
     **/
@@ -1187,7 +1333,8 @@ extern enum abstract GuiPlayback({}) {
     to a screen resolution which differs from the project settings.
 **/
 @:native("_G.gui")
-extern enum abstract GuiAdjustMode(Int) {
+extern enum abstract GuiAdjustMode(Int)
+{
     /**
         Fit adjust mode.
 
@@ -1219,7 +1366,8 @@ extern enum abstract GuiAdjustMode(Int) {
     Blend mode defines how the node will be blended with the background.
 **/
 @:native("_G.gui")
-extern enum abstract GuiBlendMode({}) {
+extern enum abstract GuiBlendMode({})
+{
     /**
         Alpha blending.
     **/
@@ -1246,7 +1394,8 @@ extern enum abstract GuiBlendMode({}) {
     Clipping mode defines how the node will clipping it's children nodes
 **/
 @:native("_G.gui")
-extern enum abstract GuiClippingMode(Int) {
+extern enum abstract GuiClippingMode(Int)
+{
     /**
         Clipping mode none.
     **/
@@ -1262,7 +1411,8 @@ extern enum abstract GuiClippingMode(Int) {
     Possible node pivots.
 **/
 @:native("_G.gui")
-extern enum abstract GuiPivot(Int) {
+extern enum abstract GuiPivot(Int)
+{
     /**
         Center pivor.
     **/
@@ -1313,7 +1463,8 @@ extern enum abstract GuiPivot(Int) {
     Possible node size modes.
 **/
 @:native("_G.gui")
-extern enum abstract GuiSizeMode(Int) {
+extern enum abstract GuiSizeMode(Int)
+{
     /**
         Automatic size mode
 
@@ -1329,15 +1480,9 @@ extern enum abstract GuiSizeMode(Int) {
     var SIZE_MODE_MANUAL;
 }
 
-typedef GuiTextMetrics = {
-    var width:Float;
-    var height:Float;
-    var max_ascent:Float;
-    var max_descent:Float;
-}
-
 @:native("_G.gui")
-extern enum abstract GuiXAnchor(Int) {
+extern enum abstract GuiXAnchor(Int)
+{
     /**
         No anchor.
     **/
@@ -1355,7 +1500,8 @@ extern enum abstract GuiXAnchor(Int) {
 }
 
 @:native("_G.gui")
-extern enum abstract GuiYAnchor(Int) {
+extern enum abstract GuiYAnchor(Int)
+{
     /**
         No anchor.
     **/
@@ -1376,7 +1522,8 @@ extern enum abstract GuiYAnchor(Int) {
     Possible pie bounds.
 **/
 @:native("_G.gui")
-extern enum abstract GuiPieBounds({}) {
+extern enum abstract GuiPieBounds({})
+{
     /**
         Elliptical pie node bounds.
     **/
@@ -1389,7 +1536,8 @@ extern enum abstract GuiPieBounds({}) {
 }
 
 @:native("_G.gui")
-extern enum abstract GuiKeyboardType({}) {
+extern enum abstract GuiKeyboardType({})
+{
     /**
         Default keyboard.
     **/
@@ -1412,7 +1560,8 @@ extern enum abstract GuiKeyboardType({}) {
 }
 
 @:native("_G.gui")
-extern enum abstract GuiEasing({}) {
+extern enum abstract GuiEasing({})
+{
     var EASING_INBACK;
     var EASING_INBOUNCE;
     var EASING_INCIRC;
@@ -1458,7 +1607,8 @@ extern enum abstract GuiEasing({}) {
 }
 
 @:native("_G.gui")
-extern enum abstract GuiNewTextureResultCode({}) {
+extern enum abstract GuiNewTextureResultCode({})
+{
     /**
         The texture id already exists when trying to use `gui.new_texture()`.
     **/
@@ -1474,7 +1624,8 @@ extern enum abstract GuiNewTextureResultCode({}) {
 }
 
 @:native("_G.gui")
-extern enum abstract GuiAnimateProprty({}) {
+extern enum abstract GuiAnimateProprty({})
+{
     /**
         position property
     **/
@@ -1520,7 +1671,8 @@ extern enum abstract GuiAnimateProprty({}) {
 /**
     Data for the `play_properties` argument of `Gui.play_spine_anim` method.
 **/
-typedef GuiPlaySpineProperties = {
+typedef GuiPlaySpineProperties =
+{
     /**
         Duration of a linear blend between the current and new animation.
     **/
@@ -1540,7 +1692,8 @@ typedef GuiPlaySpineProperties = {
 /**
     Data for the `play_properties` argument of `Gui.play_flipbook` method.
 **/
-typedef GuiPlayFlipbookProperties = {
+typedef GuiPlayFlipbookProperties =
+{
     /**
         The normalized initial value of the animation cursor when the animation starts playing
     **/
@@ -1555,7 +1708,8 @@ typedef GuiPlayFlipbookProperties = {
 /**
     A type for returning multiple values from the `Gui.new_texture` method.
 **/
-@:multiReturn extern class GuiNewTextureResult {
+@:multiReturn extern class GuiNewTextureResult
+{
     /**
         texture creation was successful
     **/

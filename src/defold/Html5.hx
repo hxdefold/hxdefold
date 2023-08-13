@@ -6,7 +6,8 @@ package defold;
     (The following functions are only available on HTML5 builds, the `Html5` methods will not be available on other platforms.)
 **/
 @:native("_G.html5")
-extern class Html5 {
+extern class Html5
+{
     /**
         Run JavaScript code, in the browser, from Lua.
 
@@ -25,5 +26,6 @@ extern class Html5 {
 
         @param callback The interaction callback. Pass an empty function or nil if you no longer wish to receive callbacks.
     **/
-    static function set_interaction_listener<T>(callback:(self:T)->Void):Void;
+    @:native('set_interaction_listener')
+    static function setInteractionListener<T>(callback:(self:T)->Void):Void;
 }

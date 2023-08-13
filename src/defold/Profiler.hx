@@ -5,7 +5,8 @@ package defold;
     More detailed <a href="https://www.defold.com/manuals/profiling/">profiling</a> and <a href="http://www.defold.com/manuals/debugging/">debugging</a> information available in the manuals.</p>
  **/
 @:native("_G.profiler")
-extern class Profiler {
+extern class Profiler
+{
     /**
         Creates and shows or hides and destroys the on-sceen profiler ui
 
@@ -15,7 +16,8 @@ extern class Profiler {
 
         @param enabled true to enable, false to disable
     **/
-    static function enable_ui(enabled:Bool):Void;
+    @:native('enable_ui')
+    static function enableUi(enabled:Bool):Void;
 
     /**
         Get the percent of CPU usage by the application, as reported by the OS.
@@ -29,7 +31,8 @@ extern class Profiler {
 
         @return number of CPU used by the application
     **/
-    static function get_cpu_usage():Float;
+    @:native('get_cpu_usage')
+    static function getCpuUsage():Float;
 
     /**
         Get the amount of memory used (resident/working set) by the application in bytes, as reported by the OS.
@@ -46,14 +49,16 @@ extern class Profiler {
 
         @return bytes used by the application
     **/
-    static function get_memory_usage():Int;
+    @:native('get_memory_usage')
+    static function getMemoryUsage():Int;
 
     /**
         Get the number of recorded frames in the on-screen profiler ui recording buffer
 
         @return the number of recorded frames, zero if on-screen profiler is disabled
     **/
-    static function recorded_frame_count():Int;
+    @:native('recorded_frame_count')
+    static function recordedFrameCount():Int;
 
     /**
         Set the on-screen profile mode - run, pause, record or show peak frame
@@ -66,14 +71,16 @@ extern class Profiler {
         Every time you switch to recording mode the recording buffer is cleared.
         The recording buffer is also cleared when setting the `MODE_SHOW_PEAK_FRAME` mode.
     **/
-    static function set_ui_mode(mode:ProfilerMode):Void;
+    @:native('set_ui_mode')
+    static function setUiMode(mode:ProfilerMode):Void;
 
     /**
         Set the on-screen profile view mode - minimized or expanded
 
         @param mode the view mode to set the ui profiler in
     **/
-    static function set_ui_view_mode(mode:ProfilerViewMode):Void;
+    @:native('set_ui_view_mode')
+    static function setUiViewMode(mode:ProfilerViewMode):Void;
 
     /**
         Shows or hides the time the engine waits for vsync in the on-screen profiler
@@ -93,7 +100,8 @@ extern class Profiler {
 
         @param visible true to include it in the display, false to hide it.
     **/
-    static function set_ui_vsync_wait_visible(visible:Bool):Void;
+    @:native('set_ui_vsync_wait_visible')
+    static function setUiVsyncWaitVisible(visible:Bool):Void;
 
     /**
         Displays a previously recorded frame in the on-screen profiler ui.
@@ -102,13 +110,15 @@ extern class Profiler {
 
         The frame to show can either be an absolute frame or a relative frame to the current frame.
     **/
-    static function view_recorded_frame(frame_index:ProfilerViewRecordedFrame):Void;
+    @:native('view_recorded_frame')
+    static function viewRecordedFrame(frame_index:ProfilerViewRecordedFrame):Void;
 }
 
 /**
     Data for `Profiler.view_recorded_frame`.
 **/
-typedef ProfilerViewRecordedFrame = {
+typedef ProfilerViewRecordedFrame =
+{
     /**
         The offset from the currently displayed frame (this is truncated between zero and the number of recorded frames)
     **/
@@ -124,7 +134,8 @@ typedef ProfilerViewRecordedFrame = {
     Possible values for `Profiler.set_ui_mode`.
 **/
 @:native("_G.profiler")
-extern enum abstract ProfilerMode({}) {
+extern enum abstract ProfilerMode({})
+{
     /**
         Pauses on the currently displayed frame
     **/
@@ -150,7 +161,8 @@ extern enum abstract ProfilerMode({}) {
     Possible values for `Profiler.set_ui_view_mode`.
 **/
 @:native("_G.profiler")
-extern enum abstract ProfilerViewMode({}) {
+extern enum abstract ProfilerViewMode({})
+{
     /**
         The default mode which displays all the ui profiler details
     **/

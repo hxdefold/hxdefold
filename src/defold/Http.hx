@@ -24,10 +24,10 @@ extern class Http {
         @param method HTTP/HTTPS method, e.g. GET/PUT/POST/DELETE/...
         @param callback response callback
         @param headers optional lua-table with custom headers
-        @param post_data optional data to send
+        @param postData optional data to send
         @param options optional lua-table with request parameters
     **/
-    static function request<T>(url:String, method:String, callback:T->Hash->HttpResponse->Void, ?headers:lua.Table<String,String>, ?post_data:String, ?options:HttpOptions):Void;
+    static function request<T>(url:String, method:String, callback:T->Hash->HttpResponse->Void, ?headers:lua.Table<String,String>, ?postData:String, ?options:HttpOptions):Void;
 }
 
 /**

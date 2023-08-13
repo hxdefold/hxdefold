@@ -6,7 +6,8 @@ import defold.types.util.LuaArray;
     Native crash logging functions.
 **/
 @:native("_G.crash")
-extern class Crash {
+extern class Crash
+{
     /**
         The max number of user fields.
     **/
@@ -30,7 +31,9 @@ extern class Crash {
         @param handle crash dump handle
         @return backtrace table containing the backtrace
     **/
-    static function get_backtrace(handle:CrashHandle):LuaArray<String>;
+    @:pure
+    @:native('get_backtrace')
+    static function getBacktrace(handle:CrashHandle):LuaArray<String>;
 
     /**
         Read text blob recorded in a crash dump.
@@ -40,7 +43,9 @@ extern class Crash {
         @param handle crash dump handle
         @return blob string with the platform specific data
     **/
-    static function get_extra_data(handle:CrashHandle):String;
+    @:pure
+    @:native('get_extra_data')
+    static function getExtraData(handle:CrashHandle):String;
 
     /**
         Get all loaded modules from when the crash occured.
@@ -51,7 +56,9 @@ extern class Crash {
         @param handle crash dump handle
         @return modules module table
     **/
-    static function get_modules(handle:CrashHandle):LuaArray< {name:String, address:String}>;
+    @:pure
+    @:native('get_modules')
+    static function getModules(handle:CrashHandle):LuaArray< {name:String, address:String}>;
 
     /**
         Read signal number from a crash report.
@@ -59,7 +66,9 @@ extern class Crash {
         @param handle crash dump handle
         @return signal signal number
     **/
-    static function get_signum(handle:CrashHandle):Int;
+    @:pure
+    @:native('get_signum')
+    static function getSignum(handle:CrashHandle):Int;
 
     /**
         Reads a system field from a loaded crash dump.
@@ -68,7 +77,9 @@ extern class Crash {
         @param index system field enum. Must be less than `Crash.SYSFIELD_MAX`
         @return value recorded in the crash dump, or nil if it didn't exist
     **/
-    static function get_sys_field(handle:CrashHandle, index:CrashSysField):Null<String>;
+    @:pure
+    @:native('get_sys_field')
+    static function getSysField(handle:CrashHandle, index:CrashSysField):Null<String>;
 
     /**
         Reads user field from a loaded crash dump.
@@ -77,7 +88,9 @@ extern class Crash {
         @param index user data slot index
         @return user data value recorded in the crash dump
     **/
-    static function get_user_field(handle:CrashHandle, index:Int):String;
+    @:pure
+    @:native('get_user_field')
+    static function getUserField(handle:CrashHandle, index:Int):String;
 
     /**
         Loads a previously written crash dump.
@@ -86,7 +99,8 @@ extern class Crash {
 
         @return handle handle to the loaded dump, or nil if no dump was found.
     **/
-    static function load_previous():Null<CrashHandle>;
+    @:native('load_previous')
+    static function loadPrevious():Null<CrashHandle>;
 
     /**
         Releases a previously loaded crash dump.
@@ -102,7 +116,8 @@ extern class Crash {
 
         @param path file path to use
     **/
-    static function set_file_path(path:String):Void;
+    @:native('set_file_path')
+    static function setFilePath(path:String):Void;
 
     /**
         Stores user-defined string value.
@@ -115,7 +130,8 @@ extern class Crash {
         @param index slot index. 0-indexed.
         @param value string value to store
     **/
-    static function set_user_field(index:Int, value:String):Void;
+    @:native('set_user_field')
+    static function setUserField(index:Int, value:String):Void;
 
     /**
         Writes crash dump.
@@ -123,19 +139,21 @@ extern class Crash {
         Performs the same steps as if a crash had just occured but allows the program to continue.
         The generated dump can be read by `Crash.load_previous`.
     **/
-    static function write_dump():Void;
+    @:native('write_dump')
+    static function writeDump():Void;
 }
 
 /**
-    Crash dump handle (integer).
+    Crash dump handle.
 **/
-typedef CrashHandle = Int;
+extern abstract CrashHandle(Int) { }
 
 /**
     Crash report system fields.
 **/
 @:native("_G.crash")
-extern enum abstract CrashSysField(Int) {
+extern enum abstract CrashSysField(Int)
+{
     /**
         Android build fingerprint.
     **/

@@ -10,7 +10,8 @@ import defold.Go.GoPlayback;
     See `ModelMessages` for related messages.
 **/
 @:native("_G.model")
-extern class Model {
+extern class Model
+{
     /**
         Cancel all animation on a model.
 
@@ -27,20 +28,23 @@ extern class Model {
         Only available from .script files.
 
         @param url the model to query
-        @param bone_id id of the corresponding bone
+        @param boneId id of the corresponding bone
         @return id of the game object
     **/
-    static function get_go(url:UrlOrString, bone_id:HashOrString):Hash;
+    @:pure
+    @:native('get_go')
+    static function getGo(url:UrlOrString, boneId:HashOrString):Hash;
 
     /**
         Play an animation on a model.
 
         @param url the model for which to play the animation
-        @param anim_id id of the animation to play
+        @param animId id of the animation to play
         @param playback playback mode of the animation
-        @param play_properties optional table with properties
+        @param playProperties optional table with properties
     **/
-    static function play_anim(url:UrlOrString, anim_id:HashOrString, playback:GoPlayback, ?play_properties:ModelPlayAnimProperties):Void;
+    @:native('play_anim')
+    static function playAnim(url:UrlOrString, animId:HashOrString, playback:GoPlayback, ?playProperties:ModelPlayAnimProperties):Void;
 
     /**
         Reset a shader constant for a model.
@@ -52,7 +56,8 @@ extern class Model {
         @param url the model that should have a constant reset
         @param name of the constant
     **/
-    static function reset_constant(url:UrlOrString, name:HashOrString):Void;
+    @:native('reset_constant')
+    static function resetConstant(url:UrlOrString, name:HashOrString):Void;
 
     /**
         Set a shader constant for a model component.
@@ -66,13 +71,15 @@ extern class Model {
         @param name name of the constant
         @param value value of the constant
     **/
-    static function set_constant(url:UrlOrString, name:HashOrString, value:Vector4):Void;
+    @:native('set_constant')
+    static function setConstant(url:UrlOrString, name:HashOrString, value:Vector4):Void;
 }
 
 /**
     Data for the `play_properties` argument of the `Model.play_anim` method.
 **/
-typedef ModelPlayAnimProperties = {
+typedef ModelPlayAnimProperties =
+{
     /**
         Duration of a linear blend between the current and new animation.
     **/
@@ -94,7 +101,8 @@ typedef ModelPlayAnimProperties = {
     Messages related to the `Model` module.
 **/
 @:publicFields
-class ModelMessages {
+class ModelMessages
+{
     /**
         Reports the completion of a Model animation.
 
@@ -116,7 +124,8 @@ class ModelMessages {
 /**
     Data for the `ModelMessages.model_animation_done` message.
 **/
-typedef ModelMessageModelAnimationDone = {
+typedef ModelMessageModelAnimationDone =
+{
     /**
         The id of the completed animation.
     **/
@@ -132,7 +141,8 @@ typedef ModelMessageModelAnimationDone = {
     Properties related to the `Model` module.
 **/
 @:publicFields
-class ModelProperties {
+class ModelProperties
+{
     /**
         The current animation set on the component.
     **/

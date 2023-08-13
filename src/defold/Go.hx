@@ -13,7 +13,8 @@ import defold.types.util.LuaArray;
     See `GoMessages` for related messages.
 **/
 @:native("_G.go")
-extern class Go {
+extern class Go
+{
     /**
         Animates a named property of the specified game object or component.
 
@@ -50,8 +51,9 @@ extern class Go {
         @param url url of the game object or component having the property
         @param property optional id of the property to cancel
     **/
+    @:native('cancel_animations')
     @:overload(function(url:HashOrStringOrUrl, ?property:HashOrString):Void {})
-    static function cancel_animations<T>(url:HashOrStringOrUrl, ?property:Property<T>):Void;
+    static function cancelAnimations<T>(url:HashOrStringOrUrl, ?property:Property<T>):Void;
 
     /**
         Delete one or more game objects identified by id. Deletion is asynchronous meaning that
@@ -71,6 +73,7 @@ extern class Go {
         @param url url of the game object to check
         @return `true` if the game object exists
     **/
+    @:pure
     static function exists(url:HashOrStringOrUrl):Bool;
 
     /**
@@ -94,7 +97,9 @@ extern class Go {
         @param path path of the instance for which to return the id
         @return instance id
     **/
-    static function get_id(?path:String):Hash;
+    @:pure
+    @:native('get_id')
+    static function getId(?path:String):Hash;
 
     /**
         Gets the position of a game object instance.
@@ -105,7 +110,9 @@ extern class Go {
         @param id optional id of the game object instance to get the position for, by default the instance of the calling script
         @return instance position
     **/
-    static function get_position(?id:HashOrStringOrUrl):Vector3;
+    @:pure
+    @:native('get_position')
+    static function getPosition(?id:HashOrStringOrUrl):Vector3;
 
     /**
         Gets the rotation of the game object instance.
@@ -116,7 +123,9 @@ extern class Go {
         @param id optional id of the game object instance to get the rotation for, by default the instance of the calling script
         @return instance rotation
     **/
-    static function get_rotation(?id:HashOrStringOrUrl):Quaternion;
+    @:pure
+    @:native('get_rotation')
+    static function getRotation(?id:HashOrStringOrUrl):Quaternion;
 
     /**
         Gets the 3D scale factor of the game object instance.
@@ -127,7 +136,9 @@ extern class Go {
         @param id optional id of the game object instance to get the scale for, by default the instance of the calling script
         @return instance scale factor
     **/
-    static function get_scale(?id:HashOrStringOrUrl):Vector3;
+    @:pure
+    @:native('get_scale')
+    static function getScale(?id:HashOrStringOrUrl):Vector3;
 
     /**
         Gets the uniform scale factor of the game object instance.
@@ -138,7 +149,9 @@ extern class Go {
         @param id optional id of the game object instance to get the uniform scale for, by default the instance of the calling script
         @return uniform instance scale factor
     **/
-    static function get_scale_uniform(?id:HashOrStringOrUrl):Float;
+    @:pure
+    @:native('get_scale_uniform')
+    static function getScaleUniform(?id:HashOrStringOrUrl):Float;
 
     /**
         Get the parent for a game object instance.
@@ -146,7 +159,9 @@ extern class Go {
         @param id optional id of the game object instance to get parent for, defaults to the instance containing the calling script
         @param parent instance or nil
     **/
-    static function get_parent(?id:HashOrStringOrUrl):Hash;
+    @:pure
+    @:native('get_parent')
+    static function getParent(?id:HashOrStringOrUrl):Hash;
 
     /**
         Gets the game object instance world position.
@@ -156,7 +171,9 @@ extern class Go {
         @param id optional id of the game object instance to get the world position for, by default the instance of the calling script
         @return instance world position
     **/
-    static function get_world_position(?id:HashOrStringOrUrl):Vector3;
+    @:pure
+    @:native('get_world_position')
+    static function getWorldPosition(?id:HashOrStringOrUrl):Vector3;
 
     /**
         Gets the game object instance world rotation.
@@ -166,7 +183,9 @@ extern class Go {
         @param id optional id of the game object instance to get the world rotation for, by default the instance of the calling script
         @return instance world rotation
     **/
-    static function get_world_rotation(?id:HashOrStringOrUrl):Quaternion;
+    @:pure
+    @:native('get_world_rotation')
+    static function getWorldRotation(?id:HashOrStringOrUrl):Quaternion;
 
     /**
         Gets the game object instance world 3D scale factor.
@@ -178,7 +197,9 @@ extern class Go {
         @param id optional id of the game object instance to get the world scale for, by default the instance of the calling script
         @return uniform instance world scale factor
     **/
-    static function get_world_scale(?id:HashOrStringOrUrl):Vector3;
+    @:pure
+    @:native('get_world_scale')
+    static function getWorldScale(?id:HashOrStringOrUrl):Vector3;
 
     /**
         Gets the uniform game object instance world scale factor.
@@ -188,7 +209,9 @@ extern class Go {
         @param id optional id of the game object instance to get the world scale for, by default the instance of the calling script
         @return instance world scale factor
     **/
-    static function get_world_scale_uniform(?id:HashOrStringOrUrl):Float;
+    @:pure
+    @:native('get_world_scale_uniform')
+    static function getWorldScaleUniform(?id:HashOrStringOrUrl):Float;
 
     /**
         Gets the world transform of a game object instance.
@@ -196,7 +219,9 @@ extern class Go {
         @param id optional id of the game object instance to get the world transform for, by default the instance of the calling script
         @return instance world transform
     **/
-    static function get_world_transform(?id:HashOrStringOrUrl):Matrix4;
+    @:pure
+    @:native('get_world_transform')
+    static function getWorldTransform(?id:HashOrStringOrUrl):Matrix4;
 
     /**
         Sets a named property of the specified game object or component.
@@ -217,7 +242,8 @@ extern class Go {
         @param parent_id optional id of the new parent game object, defaults to detaching game object from its parent
         @param keep_world_transform optional boolean, set to true to maintain the world transform when changing spaces. Defaults to false.
     **/
-    static function set_parent(?id:HashOrStringOrUrl, ?parent_id:HashOrStringOrUrl, ?keep_world_transform:Bool):Void;
+    @:native('set_parent')
+    static function setParent(?id:HashOrStringOrUrl, ?parent_id:HashOrStringOrUrl, ?keep_world_transform:Bool):Void;
 
     /**
         Sets the position of the game object instance.
@@ -228,7 +254,8 @@ extern class Go {
         @param position position to set
         @param id optional id of the game object instance to set the position for, by default the instance of the calling script
     **/
-    static function set_position(position:Vector3, ?id:HashOrStringOrUrl):Void;
+    @:native('set_position')
+    static function setPosition(position:Vector3, ?id:HashOrStringOrUrl):Void;
 
     /**
         Sets the rotation of the game object instance.
@@ -239,7 +266,8 @@ extern class Go {
         @param rotation rotation to set
         @param id optional id of the game object instance to get the rotation for, by default the instance of the calling script
     **/
-    static function set_rotation(rotation:Quaternion, ?id:HashOrStringOrUrl):Void;
+    @:native('set_rotation')
+    static function setRotation(rotation:Quaternion, ?id:HashOrStringOrUrl):Void;
 
     /**
         Sets the scale factor of the game object instance.
@@ -251,14 +279,16 @@ extern class Go {
         @param scale vector or uniform scale factor, must be greater than 0
         @param id optional id of the game object instance to get the scale for, by default the instance of the calling script
     **/
-    static function set_scale(scale:EitherType<Float,Vector3>, ?id:HashOrStringOrUrl):Void;
+    @:native('set_scale')
+    static function setScale(scale:EitherType<Float,Vector3>, ?id:HashOrStringOrUrl):Void;
 }
 
 /**
     Properties related to the `Go` module.
 **/
 @:publicFields
-class GoProperties {
+class GoProperties
+{
     /**
         The rotation of the game object expressed in Euler angles.
         Euler angles are specified in degrees in the interval (-360, 360).
@@ -285,7 +315,8 @@ class GoProperties {
     Messages related to the `Go` module.
 **/
 @:publicFields
-class GoMessages {
+class GoMessages
+{
     /**
         Acquires the user input focus.
 
@@ -409,7 +440,8 @@ abstract GoAnimatedProperty(Dynamic)
     Game object easing constants.
 **/
 @:native("_G.go")
-extern enum abstract GoEasing(Int) {
+extern enum abstract GoEasing(Int)
+{
     /**
         In-back.
     **/
@@ -620,7 +652,8 @@ extern enum abstract GoEasing(Int) {
     Game object playback constants.
 **/
 @:native("_G.go")
-extern enum abstract GoPlayback(Int) {
+extern enum abstract GoPlayback(Int)
+{
     /**
         Loop backward.
     **/

@@ -10,7 +10,8 @@ import defold.types.util.LuaArray;
     See `SoundMessages` for related messages.
 **/
 @:native("_G.sound")
-extern class Sound {
+extern class Sound
+{
     /**
         Get mixer group gain
 
@@ -19,7 +20,9 @@ extern class Sound {
         @param group group name
         @return gain in linear scale
     **/
-    static function get_group_gain(group:HashOrString):Float;
+    @:pure
+    @:native('get_group_gain')
+    static function getGroupGain(group:HashOrString):Float;
 
     /**
         Get a mixer group name as a string.
@@ -29,14 +32,18 @@ extern class Sound {
         @param group group name
         @return group name
     **/
-    static function get_group_name(group:HashOrString):String;
+    @:pure
+    @:native('get_group_name')
+    static function getGroupName(group:HashOrString):String;
 
     /**
         Get all mixer group names
 
         @return table of mixer groups names
     **/
-    static function get_groups():LuaArray<Hash>;
+    @:pure
+    @:native('get_groups')
+    static function getGroups():LuaArray<Hash>;
 
     /**
         Get peak value from mixer group.
@@ -47,7 +54,9 @@ extern class Sound {
         @param group group name
         @param window window length in seconds
     **/
-    static function get_peak(group:HashOrString, window:Float):SoundLeftRight<Float>;
+    @:pure
+    @:native('get_peak')
+    static function getPeak(group:HashOrString, window:Float):SoundLeftRight<Float>;
 
     /**
         Get RMS (Root Mean Square) value from mixer group.
@@ -58,7 +67,9 @@ extern class Sound {
         @param group group name
         @param window window length in seconds
     **/
-    static function get_rms(group:HashOrString, window:Float):SoundLeftRight<Float>;
+    @:pure
+    @:native('get_rms')
+    static function getRms(group:HashOrString, window:Float):SoundLeftRight<Float>;
 
     /**
         Checks if background music is playing, e.g. from iTunes.
@@ -79,7 +90,9 @@ extern class Sound {
 
         @return true if music is playing
     **/
-    static function is_music_playing():Bool;
+    @:pure
+    @:native('is_music_playing')
+    static function isMusicPlaying():Bool;
 
     /**
         Checks if a phone call is active. If there is an active phone call all
@@ -87,7 +100,9 @@ extern class Sound {
 
         @return true if there is an active phone call
     **/
-    static function is_phone_call_active():Bool;
+    @:pure
+    @:native('is_phone_call_active')
+    static function isPhoneCallActive():Bool;
 
     /**
         Pause all active voices.
@@ -109,10 +124,11 @@ extern class Sound {
         A sound will continue to play even if the game object the sound component belonged to is deleted. You can send a stop_sound to stop the sound.
 
         @param url the sound that should play
-        @param play_properties optional table with properties
+        @param playProperties optional table with properties
+        @param completeFunction function to call when the sound has finished playing
         @return The `play_id` of the sound that was played.
     **/
-    static function play<T>(url:HashOrStringOrUrl, ?play_properties:SoundPlayOptions, ?complete_function:T->Hash->SoundMessageSoundDone->Url->Void):SoundPlayId;
+    static function play<T>(url:HashOrStringOrUrl, ?playProperties:SoundPlayOptions, ?completeFunction:(T, Hash, SoundMessageSoundDone, Url)->Void):SoundPlayId;
 
     /**
         Set gain on all active playing voices of a sound.
@@ -124,7 +140,8 @@ extern class Sound {
         @param url the sound to set the gain of
         @param gain sound gain between 0 and 1. The final gain of the sound will be a combination of this gain, the group gain and the master gain.
     **/
-    static function set_gain(url:HashOrStringOrUrl, ?gain:Float):Void;
+    @:native('set_gain')
+    static function setGain(url:HashOrStringOrUrl, ?gain:Float):Void;
 
     /**
         Set mixer group gain
@@ -134,7 +151,8 @@ extern class Sound {
         @param group group name
         @param gain gain in linear scale
     **/
-    static function set_group_gain(group:HashOrString, gain:Float):Bool;
+    @:native('set_group_gain')
+    static function setGroupGain(group:HashOrString, gain:Float):Bool;
 
     /**
         Set panning on all active playing voices of a sound.
@@ -144,7 +162,8 @@ extern class Sound {
         @param url the sound to set the panning value to
         @param pan sound panning between `-1.0` and `1.0`
     **/
-    static function set_pan(url:HashOrStringOrUrl, pan:Float):Void;
+    @:native('set_pan')
+    static function setPan(url:HashOrStringOrUrl, pan:Float):Void;
 
     /**
         Stop a playing a sound(s).
@@ -160,7 +179,8 @@ extern class Sound {
     Messages related to the `Sound` module.
 **/
 @:publicFields
-class SoundMessages {
+class SoundMessages
+{
     /**
         Plays a sound.
 
@@ -191,7 +211,8 @@ class SoundMessages {
 /**
     Data for the `Sound.play` options.
 **/
-typedef SoundPlayOptions = {
+typedef SoundPlayOptions =
+{
     /**
         Delay in seconds before the sound starts playing, default is 0.
     **/
@@ -219,7 +240,8 @@ typedef SoundPlayOptions = {
 /**
     Data for the `SoundMessages.play_sound` message.
 **/
-typedef SoundMessagePlaySound = {
+typedef SoundMessagePlaySound =
+{
     /**
         Delay in seconds before the sound starts playing, default is 0.
     **/
@@ -241,7 +263,8 @@ typedef SoundMessagePlaySound = {
 /**
     Data for the `SoundMessages.set_gain` message.
 **/
-typedef SoundMessageSetGain = {
+typedef SoundMessageSetGain =
+{
     /**
         Sound gain between 0 and 1, default is 1.
     **/
@@ -251,7 +274,8 @@ typedef SoundMessageSetGain = {
 /**
     Data for the `SoundMessages.sound_done` message.
 **/
-typedef SoundMessageSoundDone = {
+typedef SoundMessageSoundDone =
+{
     /**
         The sequential play identifier that was given by the sound.play function.
     **/
@@ -261,7 +285,8 @@ typedef SoundMessageSoundDone = {
 /**
     A type for returning multiple values from the sound component API.
 **/
-@:multiReturn extern class SoundLeftRight<T> {
+@:multiReturn extern class SoundLeftRight<T>
+{
     /**
         Left channel value.
     **/

@@ -16,7 +16,8 @@ import defold.types.TileSourceResourceReference;
     Functions and constants to access resources.
 **/
 @:native("_G.resource")
-extern class Resource {
+extern class Resource
+{
     /**
         Constructor-like function with two purposes:
 
@@ -42,7 +43,8 @@ extern class Resource {
 
         @return reference to the Manifest that is currently loaded
     **/
-    static function get_current_manifest():ResourceManifestReference;
+    @:native('get_current_manifest')
+    static function getCurrentManifest():ResourceManifestReference;
 
     /**
         Loads the resource data for a specific resource.
@@ -79,7 +81,8 @@ extern class Resource {
 
         *NOTE* Currently, only 1 mipmap is generated.
     **/
-    static function set_texture(path:HashOrString, table:ResourceSetTextureInfo, buffer:Buffer):Void;
+    @:native('set_texture')
+    static function setTexture(path:HashOrString, table:ResourceSetTextureInfo, buffer:Buffer):Void;
 
     /**
      * Gets texture info from a texture resource path or a texture handle.
@@ -87,7 +90,9 @@ extern class Resource {
      * @param path the path to the resource or a texture handle
      * @return info about the texture
     **/
-    static function get_texture_info(path:EitherType<HashOrString,TextureResourceHandle>):ResourceTextureInfo;
+    @:pure
+    @:native('get_texture_info')
+    static function getTextureInfo(path:EitherType<HashOrString,TextureResourceHandle>):ResourceTextureInfo;
 
     /**
         This function creates a new atlas resource that can be used in the same way as any atlas created during build time.
@@ -102,7 +107,8 @@ extern class Resource {
         @param table A table containing info about how to create the texture
         @return Returns the atlas resource path
     **/
-    static function create_atlas(path:String, table:ResourceAtlasInfo):Hash;
+    @:native('create_atlas')
+    static function createAtlas(path:String, table:ResourceAtlasInfo):Hash;
 
     /**
         This function creates a new buffer resource that can be used in the same way as any buffer created during build time.
@@ -118,7 +124,8 @@ extern class Resource {
         @param options A table containing info about how to create the buffer
         @return The resource buffer
     **/
-    static function create_buffer(path:HashOrString, options:ResourceCreateBufferOptions):Buffer;
+    @:native('create_buffer')
+    static function createBuffer(path:HashOrString, options:ResourceCreateBufferOptions):Buffer;
 
     /**
         Gets the buffer from a resource
@@ -126,7 +133,9 @@ extern class Resource {
         @param path The path to the resource
         @return The resource buffer
     **/
-    static function get_buffer(path:HashOrString):Buffer;
+    @:pure
+    @:native('get_buffer')
+    static function getBuffer(path:HashOrString):Buffer;
 
     /**
         Sets the buffer of a resource
@@ -134,7 +143,8 @@ extern class Resource {
         @param path The path to the resource
         @param buffer The resource buffer
     **/
-    static function set_buffer(path:HashOrString, buffer:Buffer):Void;
+    @:native('set_buffer')
+    static function setBuffer(path:HashOrString, buffer:Buffer):Void;
 
     /**
         Gets the text metrics from a font.
@@ -143,7 +153,9 @@ extern class Resource {
         @param text Text to measure
         @param options (optional) A table containing parameters for the text.
     **/
-    static function get_text_metrics(url:Hash, text:String, ?options:ResourceGetTextMetricsOptions):ResourceTextMetrics;
+    @:pure
+    @:native('get_text_metrics')
+    static function getTextMetrics(url:Hash, text:String, ?options:ResourceGetTextMetricsOptions):ResourceTextMetrics;
 
     /**
         Create, verify, and store a manifest to device.
@@ -160,7 +172,8 @@ extern class Resource {
         @param manifest_buffer the binary data that represents the manifest
         @param callback the callback function executed once the engine has attempted to store the manifest.
     **/
-    static function store_manifest<T>(manifest_buffer:String, callback:(self:T, status:ResourceLiveUpdateStatus)->Void):Void;
+    @:native('store_manifest')
+    static function storeManifest<T>(manifest_buffer:String, callback:(self:T, status:ResourceLiveUpdateStatus)->Void):Void;
 
     /**
         Stores a zip file and uses it for live update content. The path is renamed and stored in the (internal) live update location.
@@ -169,14 +182,17 @@ extern class Resource {
         @param callback the callback function executed after the storage has completed
         @param options optional table with extra parameters
     **/
-    static function store_archive<T>(path:String, callback:(self:T, status:ResourceLiveUpdateStatus)->Void, ?options:ResourceStoreArchiveOptions):Void;
+    @:native('store_archive')
+    static function storeArchive<T>(path:String, callback:(self:T, status:ResourceLiveUpdateStatus)->Void, ?options:ResourceStoreArchiveOptions):Void;
 
     /**
         Is any liveupdate data mounted and currently in use? This can be used to determine if a new manifest or zip file should be downloaded.
 
         @return true if a liveupdate archive (any format) has been loaded
     **/
-    static function is_using_liveupdate_data():Bool;
+    @:pure
+    @:native('is_using_liveupdate_data')
+    static function isUsingLiveupdateData():Bool;
 
     /**
         Add a resource to the data archive and runtime index.
@@ -192,7 +208,8 @@ extern class Resource {
          * `hexdigest` The hexdigest of the resource.
          * `status` Whether or not the resource was successfully stored.
     **/
-    static function store_resource<T>(manifest_reference:ResourceManifestReference, data:String, hexdigest:String, callback:T->String->Bool->Void):Void;
+    @:native('store_resource')
+    static function storeResource<T>(manifest_reference:ResourceManifestReference, data:String, hexdigest:String, callback:T->String->Bool->Void):Void;
 
     /**
         Constructor-like function with two purposes:
@@ -212,18 +229,20 @@ extern class Resource {
 
         **Note:** This function can only be called within `@property()`.
     **/
-    static function tile_source(path:String):TileSourceResourceReference;
+    @:native('tile_source')
+    static function tileSource(path:String):TileSourceResourceReference;
 }
 
 /**
     Resource manifest reference used by the `Resource` module.
 **/
-typedef ResourceManifestReference = Int;
+extern abstract ResourceManifestReference(Int) { }
 
 /**
     Texture info used by the `Resource.set_texture` method.
 **/
-typedef ResourceSetTextureInfo = {
+typedef ResourceSetTextureInfo =
+{
     /**
         The texture type
     **/
@@ -268,7 +287,8 @@ typedef ResourceSetTextureInfo = {
 /**
     Texture info returned by the `Resource.get_texture_info` method.
 **/
-typedef ResourceTextureInfo = {
+typedef ResourceTextureInfo =
+{
     /**
         The opaque handle to the texture resource
     **/
@@ -303,7 +323,8 @@ typedef ResourceTextureInfo = {
 /**
     Atlas info used by the `Resource.create_atlas` method.
 **/
-typedef ResourceAtlasInfo = {
+typedef ResourceAtlasInfo =
+{
     /**
         The path to the texture resource, e.g "/main/my_texture.texturec"
     **/
@@ -441,7 +462,8 @@ typedef ResourceTextMetrics =
     Resource type used in `ResourceTextureInfo.type` field.
 **/
 @:native("_G.resource")
-extern enum abstract ResourceTextureType(Int) {
+extern enum abstract ResourceTextureType(Int)
+{
     /**
         2D texture type.
     **/
@@ -466,7 +488,8 @@ extern enum abstract ResourceTextureType(Int) {
     On the Haxe side, use the `isAvailable()` method on the enum to check if a format is supported.
 **/
 @:native("_G.resource")
-extern enum abstract ResourceTextureFormat(Null<Int>) {
+extern enum abstract ResourceTextureFormat(Null<Int>)
+{
     /**
         Luminance type texture format.
     **/
@@ -587,14 +610,15 @@ extern enum abstract ResourceTextureFormat(Null<Int>) {
 
         @return `true` if the format is available on the device, otherwise `false`
     **/
-    public inline function isAvailable():Bool {
-
+    public inline function isAvailable():Bool
+    {
         return this != null;
     }
 }
 
 @:native("_G.resource")
-extern enum abstract ResourceLiveUpdateStatus({}) {
+extern enum abstract ResourceLiveUpdateStatus({})
+{
     /**
         Mismatch between between expected bundled resources and actual bundled resources.
         The manifest expects a resource to be in the bundle, but it was not found in the bundle.
@@ -638,7 +662,8 @@ extern enum abstract ResourceLiveUpdateStatus({}) {
 }
 
 @:native("_G.resource")
-extern enum abstract ResourceTextureCompressionType({}) {
+extern enum abstract ResourceTextureCompressionType({})
+{
     /**
         No compression.
     **/

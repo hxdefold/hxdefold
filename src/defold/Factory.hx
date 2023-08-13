@@ -9,7 +9,8 @@ import defold.types.*;
     dynamically spawn game objects into the runtime.
 **/
 @:native("_G.factory")
-extern class Factory {
+extern class Factory
+{
     /**
         Make a factory create a new game object.
 
@@ -42,7 +43,9 @@ extern class Factory {
         @param url the factory component to get status from
         @return status of the factory component
     **/
-    static function get_status(?url:HashOrStringOrUrl):FactoryStatus;
+    @:pure
+    @:native('get_status')
+    static function getStatus(?url:HashOrStringOrUrl):FactoryStatus;
 
     /**
         Load resources of a factory prototype.
@@ -80,14 +83,16 @@ extern class Factory {
         @param url the collection factory component
         @param prototype the path to the new prototype, or `null`
     **/
-    static function set_prototype(url:HashOrStringOrUrl, ?prototype:String):Void;
+    @:native('set_prototype')
+    static function setPrototype(url:HashOrStringOrUrl, ?prototype:String):Void;
 }
 
 /**
-    Possible return values for `Factory.get_Status`.
+    Possible return values for `Factory.get_status`.
 **/
 @:native("_G.factory")
-extern enum abstract FactoryStatus({}) {
+extern enum abstract FactoryStatus({})
+{
     var STATUS_UNLOADED;
     var STATUS_LOADING;
     var STATUS_LOADED;

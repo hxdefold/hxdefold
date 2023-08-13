@@ -24,11 +24,12 @@ extern class Defold {
         @param h hash value to get hex string for
         @return hex representation of the hash
     **/
-    @:pure static function hash_to_hex(h:Hash):String;
+    @:native('hash_to_hex')
+    @:pure static function hashToHex(h:Hash):String;
 
     /**
         Pretty printing of Lua values.
-        
+
         This function prints Lua values in a manner similar to `lua.Lua.print`, but will also recurse into tables
         and pretty print them. There is a limit to how deep the function will recurse.
 

@@ -21,7 +21,7 @@ class CameraMessages
 
         The reason it is called "camera focus" is the similarity to how acquiring input focus works (see `acquire_input_focus`).
     **/
-    static var acquireCameraFocus(default, never) = new Message<Void>("acquire_camera_focus");
+    static var acquire_camera_focus(default, never) = new Message<Void>("acquire_camera_focus");
 
     /**
         Deactivates the receiving camera.
@@ -29,14 +29,14 @@ class CameraMessages
         Post this message to a camera-component to deactivate it. The camera is then removed from the active cameras.
         See `acquire_camera_focus` for more information how the active cameras are used in rendering.
     **/
-    static var releaseCameraFocus(default, never) = new Message<Void>("release_camera_focus");
+    static var release_camera_focus(default, never) = new Message<Void>("release_camera_focus");
 
     /**
         Sets camera properties.
 
         Post this message to a camera-component to set its properties at run-time.
     **/
-    static var setCamera(default, never) = new Message<CameraMessageSetCamera>("set_camera");
+    static var set_camera(default, never) = new Message<CameraMessageSetCamera>("set_camera");
 }
 
 /**
@@ -46,7 +46,6 @@ typedef CameraMessageSetCamera = {
     /**
         Aspect ratio of the screen (width divided by height)
     **/
-    @:native('aspect_ratio2')
     var aspect_ratio:Float;
 
     /**
@@ -78,17 +77,17 @@ class CameraProperties
     /**
         Camera frustum near plane.
     **/
-    static var nearZ(default, never) = new Property<Float>("near_z");
+    static var near_z(default, never) = new Property<Float>("near_z");
 
     /**
         Camera frustum far plane.
     **/
-    static var farZ(default, never) = new Property<Float>("far_z");
+    static var far_z(default, never) = new Property<Float>("far_z");
 
     /**
         Zoom level when using an orthographic projection.
     **/
-    static var orthographicZoom(default, never) = new Property<Float>("orthographic_zoom");
+    static var orthographic_zoom(default, never) = new Property<Float>("orthographic_zoom");
 
     /**
         The calculated projection matrix of the camera. (READ ONLY)
@@ -103,5 +102,5 @@ class CameraProperties
     /**
         The ratio between the frustum width and height. Used when calculating the projection of a perspective camera.
     **/
-    static var aspectRatio(default, never) = new Property<Float>("aspect_ratio");
+    static var aspect_ratio(default, never) = new Property<Float>("aspect_ratio");
 }

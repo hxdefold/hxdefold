@@ -5,7 +5,8 @@ package defold;
     and screen dimming.
 **/
 @:native("_G.window")
-extern class Window {
+extern class Window
+{
     /**
         Returns the current dimming mode set on a mobile device.
 
@@ -15,14 +16,18 @@ extern class Window {
 
         @return The mode for screen dimming
     **/
-    static function get_dim_mode():WindowDimmingMode;
+    @:pure
+    @:native('get_dim_mode')
+    static function getDimMode():WindowDimmingMode;
 
     /**
         This returns the current window size (width and height).
 
         @return The size of the window.
     **/
-    static function get_size():WindowSize;
+    @:pure
+    @:native('get_size')
+    static function getSize():WindowSize;
 
     /**
         Sets the dimming mode on a mobile device.
@@ -34,14 +39,16 @@ extern class Window {
 
         @param mode The mode for screen dimming
     **/
-    static function set_dim_mode(mode:WindowDimmingMode):Void;
+    @:native('set_dim_mode')
+    static function setDimMode(mode:WindowDimmingMode):Void;
 
     /**
         Sets a window event listener.
 
         @param callback A callback which receives info about window events. Can be null.
     **/
-    static function set_listener<T>(callback:T->WindowEvent->WindowEventData->Void):Void;
+    @:native('set_listener')
+    static function setListener<T>(callback:(T, WindowEvent, WindowEventData)->Void):Void;
 
     /**
         Set the locking state for current mouse cursor on a PC platform.
@@ -50,14 +57,17 @@ extern class Window {
 
         @param flag The lock state for the mouse cursor
     **/
-    static function set_mouse_lock(flag:Bool):Void;
+    @:native('set_mouse_lock')
+    static function setMouseLock(flag:Bool):Void;
 
     /**
         This returns the current lock state of the mouse cursor.
 
         @return The lock state
     **/
-    static function get_mouse_lock():Bool;
+    @:pure
+    @:native('get_mouse_lock')
+    static function getMouseLock():Bool;
 }
 
 
@@ -66,7 +76,8 @@ extern class Window {
     should dim the screen after a period without user interaction.
 **/
 @:native("_G.window")
-extern enum abstract WindowDimmingMode({}) {
+extern enum abstract WindowDimmingMode({})
+{
     /**
         Dimming off
     **/
@@ -89,7 +100,8 @@ extern enum abstract WindowDimmingMode({}) {
     Window events, used in `Window.set_listener` callbacks.
 **/
 @:native("_G.window")
-extern enum abstract WindowEvent({}) {
+extern enum abstract WindowEvent({})
+{
     /**
         Deiconified window event.
 
@@ -135,7 +147,8 @@ extern enum abstract WindowEvent({}) {
 /**
     Window event data, used in `Window.set_listener` callbacks.
 **/
-typedef WindowEventData = {
+typedef WindowEventData =
+{
     /**
         The width of a resize event. null otherwise.
     **/
@@ -150,7 +163,8 @@ typedef WindowEventData = {
 /**
     Window size data, returned from `Window.get_size()`.
 **/
-@:multiReturn extern class WindowSize {
+@:multiReturn extern class WindowSize
+{
     /**
         The window width.
     **/
