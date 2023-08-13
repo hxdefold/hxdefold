@@ -44,27 +44,21 @@ class ScriptBuilder
                         Context.fatalError('public properties are not allowed', field.pos);
                     }
 
-                    // replace variable with a property
-                    var newField: Field =
-                    {
-                        name: field.name,
-                        pos: field.pos,
-                        meta: [],
-                        access: [ APrivate ],
-                        doc: field.doc,
-                        kind: FProp('get', 'set', t)
-                    };
-                    var luaPropRef: String = '_G.self.${field.name}';
+                    var readOnly: Bool = false;
+                    var meta: Metadata = [];
+
                     if (fieldContainsMeta(field, 'property'))
                     {
                         // this var should generate a script property
                         // store the default value in the meta here so that the script generator
                         // can add the default values as appropriate
-                        newField.meta.push({
+                        meta.push({
                             name: 'property',
                             pos: field.pos,
                             params: e == null ? null : [ e ]
                         });
+
+                        readOnly = isReadOnlyType(t.toType());
                     }
                     else if (e != null)
                     {
@@ -72,6 +66,18 @@ class ScriptBuilder
                         // these should be initialized in init()
                         additionalInitStatements.push({expr: EBinop(OpAssign, macro $i{field.name}, e), pos: field.pos});
                     }
+
+                    // replace variable with a property
+                    var luaPropRef: String = '_G.self.${field.name}';
+                    var newField: Field =
+                    {
+                        name: field.name,
+                        pos: field.pos,
+                        meta: meta,
+                        access: [ APrivate ],
+                        doc: field.doc,
+                        kind: FProp('get', readOnly ? 'never' : 'set', t)
+                    };
 
                     // create the getter
                     newFields.push({
@@ -88,17 +94,20 @@ class ScriptBuilder
                     });
 
                     // create the setter
-                    newFields.push({
-                        name: 'set_${field.name}',
-                        pos: field.pos,
-                        meta: [ { name: ':noCompletion', pos: field.pos } ],
-                        access: [ APrivate, AInline ],
-                        kind: FFun({
-                            args: [ {name: 'value', type: t} ],
-                            ret: t,
-                            expr: macro return untyped $i{luaPropRef} = value
-                        })
-                    });
+                    if (!readOnly)
+                    {
+                        newFields.push({
+                            name: 'set_${field.name}',
+                            pos: field.pos,
+                            meta: [ { name: ':noCompletion', pos: field.pos } ],
+                            access: [ APrivate, AInline ],
+                            kind: FFun({
+                                args: [ {name: 'value', type: t} ],
+                                ret: t,
+                                expr: macro return untyped $i{luaPropRef} = value
+                            })
+                        });
+                    }
 
                     newFields.push(newField);
 
@@ -200,6 +209,22 @@ class ScriptBuilder
             }
         }
         return null;
+    }
+
+    static function isReadOnlyType(type: Type): Bool
+    {
+        return switch type
+        {
+            case TAbstract(_.get() => {pack: ["defold", "types"], name: "AtlasResourceReference"}, _)
+               | TAbstract(_.get() => {pack: ["defold", "types"], name: "FontResourceReference"}, _)
+               | TAbstract(_.get() => {pack: ["defold", "types"], name: "MaterialResourceReference"}, _)
+               | TAbstract(_.get() => {pack: ["defold", "types"], name: "TextureResourceReference"}, _)
+               | TAbstract(_.get() => {pack: ["defold", "types"], name: "TileSourceResourceReference"}, _)
+               | TAbstract(_.get() => {pack: ["defold", "types"], name: "BufferResourceReference"}, _):
+                true;
+
+            default: false;
+        }
     }
 }
 #end

@@ -444,27 +444,21 @@ end
                 'vmath.quat($x, $y, $z, $w)';
 
             case [PAtlasResourceReference, [{expr: EConst(CString(s))}]]
-               | [PAtlasResourceReference, [{expr: ECall(macro atlas, [{expr: EConst(CString(s))}])}]]
                | [PAtlasResourceReference, [{expr: ECall(macro Resource.atlas, [{expr: EConst(CString(s))}])}]]:
                 'resource.atlas(${haxe.Json.stringify(s)})';
             case [PFontResourceReference, [{expr: EConst(CString(s))}]]
-               | [PFontResourceReference, [{expr: ECall(macro font, [{expr: EConst(CString(s))}])}]]
                | [PFontResourceReference, [{expr: ECall(macro Resource.font, [{expr: EConst(CString(s))}])}]]:
                 'resource.font(${haxe.Json.stringify(s)})';
             case [PMaterialResourceReference, [{expr: EConst(CString(s))}]]
-               | [PMaterialResourceReference, [{expr: ECall(macro material, [{expr: EConst(CString(s))}])}]]
                | [PMaterialResourceReference, [{expr: ECall(macro Resource.material, [{expr: EConst(CString(s))}])}]]:
                 'resource.material(${haxe.Json.stringify(s)})';
             case [PTextureResourceReference, [{expr: EConst(CString(s))}]]
-               | [PTextureResourceReference, [{expr: ECall(macro texture, [{expr: EConst(CString(s))}])}]]
                | [PTextureResourceReference, [{expr: ECall(macro Resource.texture, [{expr: EConst(CString(s))}])}]]:
                 'resource.texture(${haxe.Json.stringify(s)})';
             case [PTileSourceResourceReference, [{expr: EConst(CString(s))}]]
-               | [PTileSourceResourceReference, [{expr: ECall(macro tileSource, [{expr: EConst(CString(s))}])}]]
                | [PTileSourceResourceReference, [{expr: ECall(macro Resource.tileSource, [{expr: EConst(CString(s))}])}]]:
                 'resource.tile_source(${haxe.Json.stringify(s)})';
             case [PBufferResourceReference, [{expr: EConst(CString(s))}]]
-               | [PBufferResourceReference, [{expr: ECall(macro buffer, [{expr: EConst(CString(s))}])}]]
                | [PBufferResourceReference, [{expr: ECall(macro Resource.buffer, [{expr: EConst(CString(s))}])}]]:
                 'resource.buffer(${haxe.Json.stringify(s)})';
 
