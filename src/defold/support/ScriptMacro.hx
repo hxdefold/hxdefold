@@ -379,7 +379,7 @@ end
             case TInst(_.get() => {pack: ["defold", "types"], name: "Url"}, _): PUrl;
             case TAbstract(_.get() => {pack: ["defold", "types"], name: "Vector3"}, _): PVector3;
             case TAbstract(_.get() => {pack: ["defold", "types"], name: "Vector4"}, _): PVector4;
-            case TInst(_.get() => {pack: ["defold", "types"], name: "Quaternion"}, _): PQuaternion;
+            case TAbstract(_.get() => {pack: ["defold", "types"], name: "Quaternion"}, _): PQuaternion;
             case TAbstract(_.get() => {pack: [], name: "Int"}, _): PInt;
             case TAbstract(_.get() => {pack: [], name: "Float"}, _): PFloat;
             case TAbstract(_.get() => {pack: [], name: "Bool"}, _): PBool;
@@ -414,37 +414,62 @@ end
 
     static function parsePropertyExpr(type:PropertyType, exprs:Array<Expr>, pos:Position):String {
         return switch [type, exprs] {
-            case [PBool, [{expr: EConst(CIdent(s = "true" | "false"))}]]:
-                s;
-            case [PHash, [{expr: EConst(CString(s))}]]:
+
+            case [PHash, [{expr: EConst(CString(s))}]]
+               | [PHash, [{expr: ECall(macro hash, [{expr: EConst(CString(s))}])}]]
+               | [PHash, [{expr: ECall(macro Defold.hash, [{expr: EConst(CString(s))}])}]]:
                 'hash(${haxe.Json.stringify(s)})';
+
             case [PUrl, _]:
-                throw new Error("No default value allowed for URL properties", pos);
+                Context.fatalError("No default value allowed for URL properties", pos);
+
             case [PFloat, [{expr: EConst(CFloat(s) | CInt(s))}]]:
                 s;
             case [PInt, [{expr: EConst(CInt(s))}]] if (Std.parseInt(s) != null):
                 s;
-            case [PVector3, [{expr: EConst(CFloat(x) | CInt(x))}, {expr: EConst(CFloat(y) | CInt(y))}, {expr: EConst(CFloat(z) | CInt(z))}]]:
+            case [PBool, [{expr: EConst(CIdent(s = "true" | "false"))}]]:
+                s;
+
+            case [PVector3, [{expr: ECall(macro vector3, [{expr: EConst(CFloat(x) | CInt(x))}, {expr: EConst(CFloat(y) | CInt(y))}, {expr: EConst(CFloat(z) | CInt(z))}])}]]
+               | [PVector3, [{expr: ECall(macro Vmath.vector3, [{expr: EConst(CFloat(x) | CInt(x))}, {expr: EConst(CFloat(y) | CInt(y))}, {expr: EConst(CFloat(z) | CInt(z))}])}]]:
                 'vmath.vector3($x, $y, $z)';
-            case [PVector4, [{expr: EConst(CFloat(x) | CInt(x))}, {expr: EConst(CFloat(y) | CInt(y))}, {expr: EConst(CFloat(z) | CInt(z))}, {expr: EConst(CFloat(w) | CInt(w))}]]:
+            case [PVector3, [{expr: ECall(macro vector3, [{expr: EConst(CFloat(n) | CInt(n))}]) }]]
+               | [PVector3, [{expr: ECall(macro Vmath.vector3, [{expr: EConst(CFloat(n) | CInt(n))}]) }]]:
+                'vmath.vector3($n)';
+            case [PVector4, [{expr: ECall(macro vector4, [{expr: EConst(CFloat(x) | CInt(x))}, {expr: EConst(CFloat(y) | CInt(y))}, {expr: EConst(CFloat(z) | CInt(z))}, {expr: EConst(CFloat(w) | CInt(w))}])}]]
+               | [PVector4, [{expr: ECall(macro Vmath.vector4, [{expr: EConst(CFloat(x) | CInt(x))}, {expr: EConst(CFloat(y) | CInt(y))}, {expr: EConst(CFloat(z) | CInt(z))}, {expr: EConst(CFloat(w) | CInt(w))}])}]]:
                 'vmath.vector4($x, $y, $z, $w)';
-            case [PQuaternion, [{expr: EConst(CFloat(x) | CInt(x))}, {expr: EConst(CFloat(y) | CInt(y))}, {expr: EConst(CFloat(z) | CInt(z))}, {expr: EConst(CFloat(w) | CInt(w))}]]:
+            case [PQuaternion, [{expr: ECall(macro quat, [{expr: EConst(CFloat(x) | CInt(x))}, {expr: EConst(CFloat(y) | CInt(y))}, {expr: EConst(CFloat(z) | CInt(z))}, {expr: EConst(CFloat(w) | CInt(w))}])}]]
+               | [PQuaternion, [{expr: ECall(macro Vmath.quat, [{expr: EConst(CFloat(x) | CInt(x))}, {expr: EConst(CFloat(y) | CInt(y))}, {expr: EConst(CFloat(z) | CInt(z))}, {expr: EConst(CFloat(w) | CInt(w))}])}]]:
                 'vmath.quat($x, $y, $z, $w)';
-            case [PAtlasResourceReference, [{expr: EConst(CString(s))}]]:
+
+            case [PAtlasResourceReference, [{expr: EConst(CString(s))}]]
+               | [PAtlasResourceReference, [{expr: ECall(macro atlas, [{expr: EConst(CString(s))}])}]]
+               | [PAtlasResourceReference, [{expr: ECall(macro Resource.atlas, [{expr: EConst(CString(s))}])}]]:
                 'resource.atlas(${haxe.Json.stringify(s)})';
-            case [PFontResourceReference, [{expr: EConst(CString(s))}]]:
+            case [PFontResourceReference, [{expr: EConst(CString(s))}]]
+               | [PFontResourceReference, [{expr: ECall(macro font, [{expr: EConst(CString(s))}])}]]
+               | [PFontResourceReference, [{expr: ECall(macro Resource.font, [{expr: EConst(CString(s))}])}]]:
                 'resource.font(${haxe.Json.stringify(s)})';
-            case [PMaterialResourceReference, [{expr: EConst(CString(s))}]]:
+            case [PMaterialResourceReference, [{expr: EConst(CString(s))}]]
+               | [PMaterialResourceReference, [{expr: ECall(macro material, [{expr: EConst(CString(s))}])}]]
+               | [PMaterialResourceReference, [{expr: ECall(macro Resource.material, [{expr: EConst(CString(s))}])}]]:
                 'resource.material(${haxe.Json.stringify(s)})';
-            case [PTextureResourceReference, [{expr: EConst(CString(s))}]]:
+            case [PTextureResourceReference, [{expr: EConst(CString(s))}]]
+               | [PTextureResourceReference, [{expr: ECall(macro texture, [{expr: EConst(CString(s))}])}]]
+               | [PTextureResourceReference, [{expr: ECall(macro Resource.texture, [{expr: EConst(CString(s))}])}]]:
                 'resource.texture(${haxe.Json.stringify(s)})';
-            case [PTileSourceResourceReference, [{expr: EConst(CString(s))}]]:
+            case [PTileSourceResourceReference, [{expr: EConst(CString(s))}]]
+               | [PTileSourceResourceReference, [{expr: ECall(macro tileSource, [{expr: EConst(CString(s))}])}]]
+               | [PTileSourceResourceReference, [{expr: ECall(macro Resource.tileSource, [{expr: EConst(CString(s))}])}]]:
                 'resource.tile_source(${haxe.Json.stringify(s)})';
-            case [PBufferResourceReference, [{expr: EConst(CString(s))}]]:
+            case [PBufferResourceReference, [{expr: EConst(CString(s))}]]
+               | [PBufferResourceReference, [{expr: ECall(macro buffer, [{expr: EConst(CString(s))}])}]]
+               | [PBufferResourceReference, [{expr: ECall(macro Resource.buffer, [{expr: EConst(CString(s))}])}]]:
                 'resource.buffer(${haxe.Json.stringify(s)})';
 
             default:
-                throw new Error('Invalid @property value for type ${type.getName().substr(1)}', pos);
+                Context.fatalError('Invalid @property value for type ${type.getName().substr(1)}', pos);
         }
     }
 
