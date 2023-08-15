@@ -84,7 +84,7 @@ class ScriptBuilder
                         name: 'get_${field.name}',
                         pos: field.pos,
                         // here the :pure tag is important!
-                        meta: [ { name: ':noCompletion', pos: field.pos } ],
+                        meta: [ { name: ':noCompletion', pos: field.pos }, { name: ':pure', pos: field.pos } ],
                         access: [ APrivate, AInline ],
                         kind: FFun({
                             args: [],
