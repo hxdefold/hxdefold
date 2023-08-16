@@ -183,7 +183,11 @@ class ScriptBuilder
             newFields.push(initMethod);
         }
 
-        definePropertiesType(scriptClass, properties);
+
+        if (!scriptClass.meta.has('noGen'))
+        {
+            definePropertiesType(scriptClass, properties);
+        }
 
         return newFields;
     }
@@ -214,7 +218,7 @@ class ScriptBuilder
 
         var propertiesClassName: String = '${scriptClass.name}Properties';
         var typeDef: TypeDefinition = {
-            pack: scriptClass.pack,
+            pack: [],
             pos: scriptClass.pos,
             name: propertiesClassName,
             doc: 'List of properties defined in the ${scriptClass.name} script class.',
