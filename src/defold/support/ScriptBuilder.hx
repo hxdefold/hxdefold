@@ -23,6 +23,7 @@ typedef Property =
 {
     var name: String;
     var type: Type;
+    var doc: String;
 }
 
 class ScriptBuilder
@@ -73,7 +74,8 @@ class ScriptBuilder
 
                         properties.push({
                             name: field.name,
-                            type: t.toType()
+                            type: t.toType(),
+                            doc: field.doc
                         });
                     }
                     else if (e != null)
@@ -204,6 +206,7 @@ class ScriptBuilder
             fields.push({
                 name: prop.name,
                 pos: scriptClass.pos,
+                doc: prop.doc,
                 access: [ APublic, AStatic, AFinal ],
                 kind: FVar(
                     TPath({
