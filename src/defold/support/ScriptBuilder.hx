@@ -203,20 +203,30 @@ class ScriptBuilder
         var fields: Array<Field> = [];
         for (prop in properties)
         {
-            fields.push({
-                name: prop.name,
-                pos: scriptClass.pos,
-                doc: prop.doc,
-                access: [ APublic, AStatic, AFinal ],
-                kind: FVar(
-                    TPath({
-                        pack: [ 'defold', 'types' ],
-                        name: 'Property',
-                        params: [ TPType(prop.type.toComplexType()) ]
-                    }),
-                    macro new defold.types.Property($v{prop.name})
-                )
-            });
+            fields.push(generatePropertyField(prop.name, prop.name, prop.doc, prop.type.toComplexType(), scriptClass.pos));
+
+            /**
+             * Now let's go one step further...
+             *
+             * Take properties of the following 3 types: Vector3, Vector4, Quaternion
+             * And generate also property hashes for their `.x`, `.y`, `.z`, and `.w` components!
+             */
+            switch prop.type.followWithAbstracts()
+            {
+                case TInst(_.get() => {pack: ["defold", "types", "_Vector3"], name: "Vector3Data"}, _):
+                    fields.push(generatePropertyField(prop.name + 'X', prop.name + '.x', 'The x-component of property ${prop.name}', macro: Float, scriptClass.pos));
+                    fields.push(generatePropertyField(prop.name + 'Y', prop.name + '.y', 'The y-component of property ${prop.name}', macro: Float, scriptClass.pos));
+                    fields.push(generatePropertyField(prop.name + 'Z', prop.name + '.z', 'The z-component of property ${prop.name}', macro: Float, scriptClass.pos));
+
+                case TInst(_.get() => {pack: ["defold", "types", "_Vector4"], name: "Vector4Data"}, _)
+                   | TInst(_.get() => {pack: ["defold", "types", "_Quaternion"], name: "QuaternionData"}, _):
+                    fields.push(generatePropertyField(prop.name + 'X', prop.name + '.x', 'The x-component of property ${prop.name}', macro: Float, scriptClass.pos));
+                    fields.push(generatePropertyField(prop.name + 'Y', prop.name + '.y', 'The y-component of property ${prop.name}', macro: Float, scriptClass.pos));
+                    fields.push(generatePropertyField(prop.name + 'Z', prop.name + '.z', 'The z-component of property ${prop.name}', macro: Float, scriptClass.pos));
+                    fields.push(generatePropertyField(prop.name + 'W', prop.name + '.w', 'The w-component of property ${prop.name}', macro: Float, scriptClass.pos));
+
+                default:
+            }
         }
 
         var propertiesClassName: String = '${scriptClass.name}Properties';
@@ -231,6 +241,24 @@ class ScriptBuilder
         Context.defineType(typeDef);
 
         return propertiesClassName;
+    }
+
+    static function generatePropertyField(name: String, hashName: String, doc: String, type: ComplexType, pos: Position): Field
+    {
+        return {
+            name: name,
+            pos: pos,
+            doc: doc,
+            access: [ APublic, AStatic, AFinal ],
+            kind: FVar(
+                TPath({
+                    pack: [ 'defold', 'types' ],
+                    name: 'Property',
+                    params: [ TPType(type) ]
+                }),
+                macro new defold.types.Property($v{hashName})
+            )
+        };
     }
 
     static function fieldContainsMeta(field: Field, name: String): Bool
