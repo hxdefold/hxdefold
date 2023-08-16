@@ -19,14 +19,25 @@ private typedef PropertyInit =
     var value: String;
 }
 
+typedef Property =
+{
+    var name: String;
+    var type: ComplexType;
+}
+
 class ScriptBuilder
 {
+    public static final globalSelfRef: String = '_G.__hxdefold_self__';
+
+
     public static macro function build(): Array<Field>
     {
+        var scriptClass: ClassType = Context.getLocalClass().get();
         var newFields: Array<Field> = [];
 
         var additionalInitStatements: Array<Expr> = [];
         var initMethod: Field = null;
+        var properties: Array<Property> = [];
 
 
         for (field in Context.getBuildFields())
@@ -59,6 +70,11 @@ class ScriptBuilder
                         });
 
                         readOnly = isReadOnlyType(t.toType());
+
+                        properties.push({
+                            name: field.name,
+                            type: t
+                        });
                     }
                     else if (e != null)
                     {
@@ -68,7 +84,7 @@ class ScriptBuilder
                     }
 
                     // replace variable with a property
-                    var luaPropRef: String = '_G.self.${field.name}';
+                    var luaPropRef: String = '${globalSelfRef}.${field.name}';
                     var newField: Field =
                     {
                         name: field.name,
@@ -162,13 +178,52 @@ class ScriptBuilder
             }
         }
 
-
         if (initMethod != null)
         {
             newFields.push(initMethod);
         }
 
+        definePropertiesType(scriptClass, properties);
+
         return newFields;
+    }
+
+    /**
+     * This method defines a class called `ScriptNameProperties` with public static `Property<T>` fields
+     * for each property of the `ScriptName` script.
+     */
+    static function definePropertiesType(scriptClass: ClassType, properties: Array<Property>): String
+    {
+        var fields: Array<Field> = [];
+        for (prop in properties)
+        {
+            fields.push({
+                name: prop.name,
+                pos: scriptClass.pos,
+                access: [ APublic, AStatic, AFinal ],
+                kind: FVar(
+                    TPath({
+                        pack: [ 'defold', 'types' ],
+                        name: 'Property',
+                        params: [ TPType(prop.type) ]
+                    }),
+                    macro new defold.types.Property($v{prop.name})
+                )
+            });
+        }
+
+        var propertiesClassName: String = '${scriptClass.name}Properties';
+        var typeDef: TypeDefinition = {
+            pack: scriptClass.pack,
+            pos: scriptClass.pos,
+            name: propertiesClassName,
+            doc: 'List of properties defined in the ${scriptClass.name} script class.',
+            kind: TDClass(null, null, null, true),
+            fields: fields
+        };
+        Context.defineType(typeDef);
+
+        return propertiesClassName;
     }
 
     static function fieldContainsMeta(field: Field, name: String): Bool
