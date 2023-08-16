@@ -36,9 +36,9 @@ class ScriptBuilder
         var scriptClass: ClassType = Context.getLocalClass().get();
         var newFields: Array<Field> = [];
 
+        var properties: Array<Property> = [];
         var additionalInitStatements: Array<Expr> = [];
         var initMethod: Field = null;
-        var properties: Array<Property> = [];
 
 
         for (field in Context.getBuildFields())
@@ -186,6 +186,11 @@ class ScriptBuilder
         }
 
 
+        if (scriptClass.superClass != null)
+        {
+            // get properties from the super-classes as well
+            properties = properties.concat(getProperties(scriptClass.superClass.t.get()));
+        }
         if (!scriptClass.meta.has('noGen'))
         {
             definePropertiesType(scriptClass, properties);
@@ -241,6 +246,34 @@ class ScriptBuilder
         Context.defineType(typeDef);
 
         return propertiesClassName;
+    }
+
+    static function getProperties(scriptClass: ClassType): Array<Property>
+    {
+        var properties: Array<Property> = [];
+
+        if (scriptClass.superClass != null)
+        {
+            var superClass: ClassType = scriptClass.superClass.t.get();
+            properties = properties.concat(getProperties(superClass));
+        }
+
+        for (field in scriptClass.fields.get())
+        {
+            switch field.kind
+            {
+                case FVar(t, e) if (field.meta.has('property')):
+                    properties.push({
+                        name: field.name,
+                        type: field.type,
+                        doc: field.doc
+                    });
+
+                default:
+            };
+        }
+
+        return properties;
     }
 
     static function generatePropertyField(name: String, hashName: String, doc: String, type: ComplexType, pos: Position): Field
