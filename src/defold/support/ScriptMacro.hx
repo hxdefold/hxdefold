@@ -373,8 +373,15 @@ end
         return properties;
     }
 
-    static function getPropertyType(type:Type, pos:Position):PropertyType {
-        return switch (type.follow()) {
+    static function getPropertyType(type:Type, pos:Position):PropertyType
+    {
+        var actualType: Type = type.follow();
+
+        // if one step of followWithAbstracts returns a different type, then we have an abstract
+        var isAbstract: Bool = !actualType.followWithAbstracts(true).unify(actualType);
+
+        return switch actualType
+        {
             case TInst(_.get() => {pack: ["defold", "types"], name: "Hash"}, _): PHash;
             case TInst(_.get() => {pack: ["defold", "types"], name: "Url"}, _): PUrl;
             case TAbstract(_.get() => {pack: ["defold", "types"], name: "Vector3"}, _): PVector3;
@@ -389,7 +396,19 @@ end
             case TAbstract(_.get() => {pack: ["defold", "types"], name: "TextureResourceReference"}, _): PTextureResourceReference;
             case TAbstract(_.get() => {pack: ["defold", "types"], name: "TileSourceResourceReference"}, _): PTileSourceResourceReference;
             case TAbstract(_.get() => {pack: ["defold", "types"], name: "BufferResourceReference"}, _): PBufferResourceReference;
-            default: Context.fatalError('Unsupported type for script property: ${type.toString()}', pos);
+
+            case _ if (isAbstract):
+                /**
+                 * This recursive call allows the user to define abstracts over a property type,
+                 * and then use those abstracts for properties!
+                 */
+                return getPropertyType(actualType.followWithAbstracts(true), pos);
+
+            default:
+                /**
+                 * We reached the final non-abstract type and didn't find any supported property type.
+                 */
+                Context.fatalError('Unsupported type for script property: ${type.toString()}', pos);
         }
     }
 

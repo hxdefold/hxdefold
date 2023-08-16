@@ -36,7 +36,7 @@ extern abstract Vector4(Vector4Data) {
     }
 }
 
-extern class Vector4Data {
+private extern class Vector4Data {
     var x:Float;
     var y:Float;
     var z:Float;
