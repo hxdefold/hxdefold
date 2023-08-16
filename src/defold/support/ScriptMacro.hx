@@ -297,7 +297,7 @@ end
                         })
                     };
                 default:
-                    throw new Error("Overriden class field is not a method. This can't happen! :)", field.pos);
+                    Context.fatalError("Overriden class field is not a method. This can't happen! :)", field.pos);
             }
 
             var exportName = exportPrefix + fieldName;
@@ -389,7 +389,7 @@ end
             case TAbstract(_.get() => {pack: ["defold", "types"], name: "TextureResourceReference"}, _): PTextureResourceReference;
             case TAbstract(_.get() => {pack: ["defold", "types"], name: "TileSourceResourceReference"}, _): PTileSourceResourceReference;
             case TAbstract(_.get() => {pack: ["defold", "types"], name: "BufferResourceReference"}, _): PBufferResourceReference;
-            default: throw new Error('Unsupported type for script property: ${type.toString()}', pos);
+            default: Context.fatalError('Unsupported type for script property: ${type.toString()}', pos);
         }
     }
 
@@ -542,7 +542,7 @@ class ScriptMacro {
             defoldRoot += "/";
         var outFile = absolutePath(Compiler.getOutput());
         if (!StringTools.startsWith(outFile, defoldRoot)) {
-            throw new Error("Haxe/Lua output file should be within specified defold project root (" + defoldRoot + "), but is " + outFile + ". Check -lua argument in your build hxml file.", Context.currentPos());
+            Context.fatalError("Haxe/Lua output file should be within specified defold project root (" + defoldRoot + "), but is " + outFile + ". Check -lua argument in your build hxml file.", Context.currentPos());
         }
 
         outDir = Path.join([defoldRoot, outDir]);

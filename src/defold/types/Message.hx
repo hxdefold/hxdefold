@@ -7,5 +7,6 @@ package defold.types;
     as its type parameter. This is used to provide type-checked messaging.
 **/
 abstract Message<T>(Hash) {
+    @:pure
     public inline function new(s:String) this = Defold.hash(s);
 }

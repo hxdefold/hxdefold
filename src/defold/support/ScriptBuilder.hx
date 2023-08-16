@@ -22,7 +22,7 @@ private typedef PropertyInit =
 typedef Property =
 {
     var name: String;
-    var type: ComplexType;
+    var type: Type;
 }
 
 class ScriptBuilder
@@ -73,7 +73,7 @@ class ScriptBuilder
 
                         properties.push({
                             name: field.name,
-                            type: t
+                            type: t.toType()
                         });
                     }
                     else if (e != null)
@@ -209,7 +209,7 @@ class ScriptBuilder
                     TPath({
                         pack: [ 'defold', 'types' ],
                         name: 'Property',
-                        params: [ TPType(prop.type) ]
+                        params: [ TPType(prop.type.toComplexType()) ]
                     }),
                     macro new defold.types.Property($v{prop.name})
                 )

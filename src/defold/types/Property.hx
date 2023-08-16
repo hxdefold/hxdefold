@@ -8,5 +8,6 @@ package defold.types;
     and type inference for getting and setting properties.
 **/
 abstract Property<T>(Hash) {
+    @:pure
     public inline function new(s:String) this = Defold.hash(s);
 }
