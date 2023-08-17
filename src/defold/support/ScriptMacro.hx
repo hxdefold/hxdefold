@@ -231,6 +231,7 @@ private class Glue {
 function ${callbackName}($callbackArgs)
     ${ScriptBuilder.globalSelfRef} = self
     ${if (cb.isVoid) "" else "return "}$EXPORT_TABLE.${cb.method}($methodCallArgs)
+    ${ScriptBuilder.globalSelfRef} = nil
 end
 ');
             }
