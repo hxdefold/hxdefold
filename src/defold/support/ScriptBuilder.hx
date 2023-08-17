@@ -87,15 +87,14 @@ class ScriptBuilder
 
                     // replace variable with a property
                     var luaPropRef: String = '${globalSelfRef}.${field.name}';
-                    var newField: Field =
-                    {
+                    newFields.push({
                         name: field.name,
                         pos: field.pos,
                         meta: meta,
                         access: [ APrivate ],
                         doc: field.doc,
                         kind: FProp('get', readOnly ? 'never' : 'set', t)
-                    };
+                    });
 
                     // create the getter
                     newFields.push({
@@ -126,8 +125,6 @@ class ScriptBuilder
                             })
                         });
                     }
-
-                    newFields.push(newField);
 
 
                 /**
@@ -179,13 +176,15 @@ class ScriptBuilder
                 }
             }
         }
-
         if (initMethod != null)
         {
             newFields.push(initMethod);
         }
 
 
+        /**
+         * Generate properties-related fields and types.
+         */
         if (scriptClass.superClass != null)
         {
             // get properties from the super-classes as well
@@ -193,8 +192,9 @@ class ScriptBuilder
         }
         if (!scriptClass.meta.has('noGen'))
         {
-            definePropertiesType(scriptClass, properties);
+            definePropertiesType(scriptClass, properties, Context.currentPos());
         }
+        newFields.push(generateCreateMethod(properties, scriptClass.pos));
 
         return newFields;
     }
@@ -203,12 +203,12 @@ class ScriptBuilder
      * This method defines a class called `ScriptNameProperties` with public static `Property<T>` fields
      * for each property of the `ScriptName` script.
      */
-    static function definePropertiesType(scriptClass: ClassType, properties: Array<Property>): String
+    static function definePropertiesType(scriptClass: ClassType, properties: Array<Property>, pos: Position): String
     {
         var fields: Array<Field> = [];
         for (prop in properties)
         {
-            fields.push(generatePropertyField(prop.name, prop.name, prop.doc, prop.type.toComplexType(), scriptClass.pos));
+            fields.push(generatePropertyField(prop.name, prop.name, prop.doc, prop.type.toComplexType(), pos));
 
             /**
              * Now let's go one step further...
@@ -219,16 +219,16 @@ class ScriptBuilder
             switch prop.type.followWithAbstracts()
             {
                 case TInst(_.get() => {pack: ["defold", "types", "_Vector3"], name: "Vector3Data"}, _):
-                    fields.push(generatePropertyField(prop.name + 'X', prop.name + '.x', 'The x-component of property ${prop.name}', macro: Float, scriptClass.pos));
-                    fields.push(generatePropertyField(prop.name + 'Y', prop.name + '.y', 'The y-component of property ${prop.name}', macro: Float, scriptClass.pos));
-                    fields.push(generatePropertyField(prop.name + 'Z', prop.name + '.z', 'The z-component of property ${prop.name}', macro: Float, scriptClass.pos));
+                    fields.push(generatePropertyField(prop.name + 'X', prop.name + '.x', 'The x-component of property ${prop.name}', macro: Float, pos));
+                    fields.push(generatePropertyField(prop.name + 'Y', prop.name + '.y', 'The y-component of property ${prop.name}', macro: Float, pos));
+                    fields.push(generatePropertyField(prop.name + 'Z', prop.name + '.z', 'The z-component of property ${prop.name}', macro: Float, pos));
 
                 case TInst(_.get() => {pack: ["defold", "types", "_Vector4"], name: "Vector4Data"}, _)
                    | TInst(_.get() => {pack: ["defold", "types", "_Quaternion"], name: "QuaternionData"}, _):
-                    fields.push(generatePropertyField(prop.name + 'X', prop.name + '.x', 'The x-component of property ${prop.name}', macro: Float, scriptClass.pos));
-                    fields.push(generatePropertyField(prop.name + 'Y', prop.name + '.y', 'The y-component of property ${prop.name}', macro: Float, scriptClass.pos));
-                    fields.push(generatePropertyField(prop.name + 'Z', prop.name + '.z', 'The z-component of property ${prop.name}', macro: Float, scriptClass.pos));
-                    fields.push(generatePropertyField(prop.name + 'W', prop.name + '.w', 'The w-component of property ${prop.name}', macro: Float, scriptClass.pos));
+                    fields.push(generatePropertyField(prop.name + 'X', prop.name + '.x', 'The x-component of property ${prop.name}', macro: Float, pos));
+                    fields.push(generatePropertyField(prop.name + 'Y', prop.name + '.y', 'The y-component of property ${prop.name}', macro: Float, pos));
+                    fields.push(generatePropertyField(prop.name + 'Z', prop.name + '.z', 'The z-component of property ${prop.name}', macro: Float, pos));
+                    fields.push(generatePropertyField(prop.name + 'W', prop.name + '.w', 'The w-component of property ${prop.name}', macro: Float, pos));
 
                 default:
             }
@@ -237,7 +237,7 @@ class ScriptBuilder
         var propertiesClassName: String = '${scriptClass.name}Properties';
         var typeDef: TypeDefinition = {
             pack: [],
-            pos: scriptClass.pos,
+            pos: pos,
             name: propertiesClassName,
             doc: 'List of properties defined in the ${scriptClass.name} script class.',
             kind: TDClass(null, null, null, true),
@@ -291,6 +291,58 @@ class ScriptBuilder
                 }),
                 macro new defold.types.Property($v{hashName})
             )
+        };
+    }
+
+    static function generateCreateMethod(properties: Array<Property>, pos: Position): Field
+    {
+        var args: Array<FunctionArg> = [];
+        var argDocs: Array<String> = [];
+        var tableInitExprs: Array<String> = [];
+
+        for (property in properties)
+        {
+            if (isReadOnlyType(property.type))
+            {
+                // don't include readonly properties in the create method
+                continue;
+            }
+
+            args.push({
+                name: property.name,
+                opt: true,
+                type: property.type.toComplexType()
+            });
+            tableInitExprs.push('${property.name} = ${property.name}');
+            argDocs.push('@param ${property.name} ${property.doc ?? ""}');
+        }
+
+        /**
+         * The expression of the method is simply to initialize the lua table and return it.
+         */
+        var tableInit: String = '{ ${tableInitExprs.join(', ')} }';
+        var expr: Expr = {
+            expr: EReturn(macro untyped __lua__($v{tableInit})),
+            pos: pos
+        };
+
+        var doc: String = 'This method can be used to create a type-safe properties table, that can be passed to the `Factory.create()` function when creating instances of an object that contains this script.
+
+${argDocs.join('\n')}
+@return the properties table
+';
+
+        return {
+            name: 'create',
+            pos: pos,
+            doc: doc,
+            access: [ APublic, AStatic ],
+            meta: [ { name: ':pure', pos: pos } ],
+            kind: FFun({
+                args: args,
+                ret: macro: lua.Table<String, defold.Go.GoProperty>,
+                expr: expr
+            })
         };
     }
 
