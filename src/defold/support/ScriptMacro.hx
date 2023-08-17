@@ -377,9 +377,6 @@ end
     {
         var actualType: Type = type.follow();
 
-        // if one step of followWithAbstracts returns a different type, then we have an abstract
-        var isAbstract: Bool = !actualType.followWithAbstracts(true).unify(actualType);
-
         return switch actualType
         {
             case TInst(_.get() => {pack: ["defold", "types"], name: "Hash"}, _): PHash;
@@ -397,12 +394,12 @@ end
             case TAbstract(_.get() => {pack: ["defold", "types"], name: "TileSourceResourceReference"}, _): PTileSourceResourceReference;
             case TAbstract(_.get() => {pack: ["defold", "types"], name: "BufferResourceReference"}, _): PBufferResourceReference;
 
-            case _ if (isAbstract):
+            case TAbstract(_.get() => t, _):
                 /**
                  * This recursive call allows the user to define abstracts over a property type,
                  * and then use those abstracts for properties!
                  */
-                return getPropertyType(actualType.followWithAbstracts(true), pos);
+                return getPropertyType(t.type, pos);
 
             default:
                 /**
