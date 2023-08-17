@@ -47,8 +47,18 @@ extern class Window
 
         @param callback A callback which receives info about window events. Can be null.
     **/
-    @:native('set_listener')
-    static function setListener<T>(callback:(T, WindowEvent, WindowEventData)->Void):Void;
+    static inline function setListener(callback:(event:WindowEvent, data:WindowEventData)->Void):Void
+    {
+        // 1. hide the reall callback parameter which expects a function with a "self" argument
+        // 2. ensure that the global self reference is present for the callback
+        setListener_((self, event, data) ->
+        {
+            untyped __lua__('_hxdefold_.self = _self');
+            callback(event, data);
+            untyped __lua__('_hxdefold_.self = nil');
+        });
+    }
+    @:native('set_listener') private static function setListener_(callback:(Any, WindowEvent, WindowEventData)->Void):Void;
 
     /**
         Set the locking state for current mouse cursor on a PC platform.

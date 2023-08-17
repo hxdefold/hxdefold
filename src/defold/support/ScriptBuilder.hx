@@ -43,6 +43,11 @@ class ScriptBuilder
 
         for (field in Context.getBuildFields())
         {
+            if (field.access.contains(APublic) && !field.access.contains(AStatic))
+            {
+                Context.fatalError('script classes are not allowed to have non-static public fields', field.pos);
+            }
+
             switch field.kind
             {
                 /**

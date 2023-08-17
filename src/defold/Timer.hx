@@ -41,7 +41,18 @@ extern class Timer
         @param callback timer callback function
         @return identifier for the create timer, returns `TimerHandle.Invalid` if the timer can not be created
     **/
-    static function delay<T>(delay:Float, repeat:Bool, callback:(self:T, handle:TimerHandle, timeElapsed:Float)->Void):TimerHandle;
+    static inline function delay(delay:Float, repeat:Bool, callback:(handle:TimerHandle, timeElapsed:Float)->Void):TimerHandle
+    {
+        // 1. hide the reall callback parameter which expects a function with a "self" argument
+        // 2. ensure that the global self reference is present for the callback
+        return delay_(delay, repeat, callback == null ? null : (self, handle, timeElapsed) ->
+        {
+            untyped __lua__('_hxdefold_.self = _self');
+            callback(handle, timeElapsed);
+            untyped __lua__('_hxdefold_.self = nil');
+        });
+    }
+    @:native('delay') private static function delay_(delay:Float, repeat:Bool, callback:(Any, TimerHandle, Float)->Void):TimerHandle;
 
     /**
         Manual triggering a callback for a timer.

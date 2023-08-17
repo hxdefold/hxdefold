@@ -128,7 +128,18 @@ extern class Sound
         @param completeFunction function to call when the sound has finished playing
         @return The `play_id` of the sound that was played.
     **/
-    static function play<T>(url:HashOrStringOrUrl, ?playProperties:SoundPlayOptions, ?completeFunction:(T, Hash, SoundMessageSoundDone, Url)->Void):SoundPlayId;
+    static inline function play(url:HashOrStringOrUrl, ?playProperties:SoundPlayOptions, ?completeFunction:(messageId:Hash, message:SoundMessageSoundDone, sender:Url)->Void):SoundPlayId
+    {
+        // 1. hide the reall callback parameter which expects a function with a "self" argument
+        // 2. ensure that the global self reference is present for the callback
+        return play_(url, playProperties, completeFunction == null ? null : (self, messageId, message, sender) ->
+        {
+            untyped __lua__('_hxdefold_.self = _self');
+            completeFunction(messageId, message, sender);
+            untyped __lua__('_hxdefold_.self = nil');
+        });
+    }
+    @:native('play') private static function play_(url:HashOrStringOrUrl, ?playProperties:SoundPlayOptions, ?completeFunction:(Any, Hash, SoundMessageSoundDone, Url)->Void):SoundPlayId;
 
     /**
         Set gain on all active playing voices of a sound.

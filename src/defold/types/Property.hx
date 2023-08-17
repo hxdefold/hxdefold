@@ -1,5 +1,7 @@
 package defold.types;
 
+import defold.types.HashOrString;
+
 /**
     A typed property.
 
@@ -7,7 +9,7 @@ package defold.types;
     names together with their types. This is used for type checking
     and type inference for getting and setting properties.
 **/
-abstract Property<T>(Hash) {
+abstract Property<T>(Hash) from HashOrString {
     @:pure
     public inline function new(s:String) this = Defold.hash(s);
 }

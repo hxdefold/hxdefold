@@ -27,7 +27,7 @@ extern class Gui
         You can address the components individually by suffixing the name with a dot '.' and the name of the component.
         For instance, "position.x" (the position x coordinate) or "color.w" (the color alpha value).
 
-        If a `complete_function` is specified, that function will be called when the animation has completed.
+        If a `completeFunction` is specified, that function will be called when the animation has completed.
         By starting a new animation in that function, several animations can be sequenced together. See the examples for more information.
 
         @param node node to animate
@@ -36,10 +36,21 @@ extern class Gui
         @param easing easing to use during animation.
         @param duration duration of the animation in seconds.
         @param delay delay before the animation starts in seconds.
-        @param complete_function function to call when the animation has completed
+        @param completeFunction function to call when the animation has completed
         @param playback playback mode
     **/
-    static function animate<T>(node:GuiNode, property:GuiAnimateProprty, to:GoAnimatedProperty, easing:EitherType<GuiEasing,Vector>, duration:Float, ?delay:Float, ?complete_function:T->GuiNode->Void, ?playback:GuiPlayback):Void;
+    static inline function animate(node:GuiNode, property:GuiAnimateProprty, to:GoAnimatedProperty, easing:EitherType<GuiEasing,Vector>, duration:Float, ?delay:Float, ?completeFunction:GuiNode->Void, ?playback:GuiPlayback):Void
+    {
+        // 1. hide the reall callback parameter which expects a function with a "self" argument
+        // 2. ensure that the global self reference is present for the callback
+        animate_(node, property, to, easing, duration, delay, completeFunction == null ? null : (self, node) ->
+        {
+            untyped __lua__('_hxdefold_.self = _self');
+            completeFunction(node);
+            untyped __lua__('_hxdefold_.self = nil');
+        }, playback);
+    }
+    @:native('animate') private static function animate_(node:GuiNode, property:GuiAnimateProprty, to:GoAnimatedProperty, easing:EitherType<GuiEasing,Vector>, duration:Float, ?delay:Float, ?completeFunction:(Any, GuiNode)->Void, ?playback:GuiPlayback):Void;
 
     /**
         Cancels an ongoing animation.
@@ -768,8 +779,18 @@ extern class Gui
                                        * emitter The id of the emitter
                                        * state the new state of the emitter
     **/
-    @:native('play_particlefx')
-    static function playParticlefx<T>(node:GuiNode, ?emitterStateFunction:T->Hash->Hash->ParticlefxEmitterState->Void):Void;
+    static inline function playParticlefx(node:GuiNode, ?emitterStateFunction:(Hash, Hash, ParticlefxEmitterState)->Void):Void
+    {
+        // 1. hide the reall callback parameter which expects a function with a "self" argument
+        // 2. ensure that the global self reference is present for the callback
+        playParticlefx_(node, emitterStateFunction == null ? null : (self, hash, hash, state) ->
+        {
+            untyped __lua__('_hxdefold_.self = _self');
+            emitterStateFunction(hash, hash, state);
+            untyped __lua__('_hxdefold_.self = nil');
+        });
+    }
+    @:native('play_particlefx') private static function playParticlefx_(node:GuiNode, ?emitterStateFunction:(Any, Hash, Hash, ParticlefxEmitterState)->Void):Void;
 
     /**
         Play a spine animation.

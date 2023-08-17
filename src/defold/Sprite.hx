@@ -23,11 +23,23 @@ extern class Sprite
         @param completeFunction function to call when the animation has completed.
         @param playProperties optional table with properties
     **/
+    static inline function playFlipbook(url:HashOrStringOrUrl, id:HashOrString,
+        ?completeFunction:(messageId:Message<SpriteMessageAnimationDone>, message:SpriteMessageAnimationDone, sender:Url)->Void,
+        ?playProperties:SpritePlayFlipbookProperties):Void
+    {
+        // 1. hide the reall callback parameter which expects a function with a "self" argument
+        // 2. ensure that the global self reference is present for the callback
+        playFlipbook_(url, id, completeFunction == null ? null : (self, messageId, message, sender) ->
+        {
+            untyped __lua__('_hxdefold_.self = _self');
+            completeFunction(messageId, message, sender);
+            untyped __lua__('_hxdefold_.self = nil');
+        });
+    }
     @:native('play_flipbook')
-    static function playFlipbook<T>(url:HashOrStringOrUrl, id:Hash,
-        ?completeFunction:(self:T, message_id:Message<SpriteMessageAnimationDone>, message:SpriteMessageAnimationDone, sender:Url)->Void,
-        ?playProperties:SpritePlayFlipbookProperties
-    ):Void;
+    private static function playFlipbook_(url:HashOrStringOrUrl, id:HashOrString,
+        ?completeFunction:(self:Any, message_id:Message<SpriteMessageAnimationDone>, message:SpriteMessageAnimationDone, sender:Url)->Void,
+        ?playProperties:SpritePlayFlipbookProperties):Void;
 
     /**
         Reset a shader constant for a sprite.

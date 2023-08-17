@@ -16,10 +16,21 @@ extern class Particlefx
         Which particle FX to play is identified by the URL.
 
         @param url the particle fx that should start playing
-        @param emitter_state_cb optional callback that will be called when an emitter attached to this particlefx changes state.
+        @param emitterStateCb optional callback that will be called when an emitter attached to this particlefx changes state.
         The callback receives the hash of the path to the particlefx, the hash of the id of the emitter, and the new state of the emitter.
     **/
-    static function play<T>(url:UrlOrString, ?emitter_state_cb:T->Hash->Hash->ParticlefxEmitterState->Void):Void;
+    static inline function play(url:UrlOrString, ?emitterStateCb:(id: Hash, emitter: Hash, state: ParticlefxEmitterState)->Void):Void
+    {
+        // 1. hide the reall callback parameter which expects a function with a "self" argument
+        // 2. ensure that the global self reference is present for the callback
+        play_(url, emitterStateCb == null ? null : (self, hash, hash, state) ->
+        {
+            untyped __lua__('_hxdefold_.self = _self');
+            emitterStateCb(hash, hash, state);
+            untyped __lua__('_hxdefold_.self = nil');
+        });
+    }
+    @:native('play') private static function play_(url:UrlOrString, ?emitterStateCb:(Any, Hash, Hash, ParticlefxEmitterState)->Void):Void;
 
     /**
         Reset a shader constant for a particle FX emitter.

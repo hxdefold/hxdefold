@@ -64,9 +64,21 @@ extern class CollectionFactory
         Calling this function when the factory is not marked as dynamic loading does nothing.
 
         @param url the collection factory component to load
-        @param complete_function function to call when resources are loaded.
+        @param completeFunction function to call when resources are loaded.
     **/
-    static function load<T>(?url:HashOrStringOrUrl, ?complete_function:(self:T, url:Url, result:Bool)->Void):Void;
+    static inline function load(?url:HashOrStringOrUrl, ?completeFunction:(url:Url, result:Bool)->Void):Void
+    {
+        // 1. hide the reall callback parameter which expects a function with a "self" argument
+        // 2. ensure that the global self reference is present for the callback
+        load_(url, completeFunction == null ? null : (self, url, result) ->
+        {
+            untyped __lua__('_hxdefold_.self = _self');
+            completeFunction(url, result);
+            untyped __lua__('_hxdefold_.self = nil');
+        });
+
+    }
+    @:native('load') private static function load_(?url:HashOrStringOrUrl, ?completeFunction:(Any, Url, Bool)->Void):Void;
 
     /**
         Unload resources previously loaded using `CollectionFactory.load`.

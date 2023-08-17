@@ -27,7 +27,18 @@ extern class Http {
         @param postData optional data to send
         @param options optional lua-table with request parameters
     **/
-    static function request<T>(url:String, method:String, callback:T->Hash->HttpResponse->Void, ?headers:lua.Table<String,String>, ?postData:String, ?options:HttpOptions):Void;
+    static inline function request(url:String, method:String, callback:HttpResponse->Void, ?headers:lua.Table<String,String>, ?postData:String, ?options:HttpOptions):Void
+    {
+        // 1. hide the reall callback parameter which expects a function with a "self" argument
+        // 2. ensure that the global self reference is present for the callback
+        request_(url, method, (self, hash, response) ->
+        {
+            untyped __lua__('_hxdefold_.self = _self');
+            callback(response);
+            untyped __lua__('_hxdefold_.self = nil');
+        }, headers, postData, options);
+    }
+    @:native('request') private static function request_(url:String, method:String, callback:(Any, Hash, HttpResponse)->Void, ?headers:lua.Table<String,String>, ?postData:String, ?options:HttpOptions):Void;
 }
 
 /**

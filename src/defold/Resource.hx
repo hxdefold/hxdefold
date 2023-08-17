@@ -39,14 +39,6 @@ extern class Resource
     static function font(path:String):FontResourceReference;
 
     /**
-        Return a reference to the Manifest that is currently loaded.
-
-        @return reference to the Manifest that is currently loaded
-    **/
-    @:native('get_current_manifest')
-    static function getCurrentManifest():ResourceManifestReference;
-
-    /**
         Loads the resource data for a specific resource.
 
         @param path The path to the resource
@@ -158,60 +150,6 @@ extern class Resource
     static function getTextMetrics(url:Hash, text:String, ?options:ResourceGetTextMetricsOptions):ResourceTextMetrics;
 
     /**
-        Create, verify, and store a manifest to device.
-
-        Create a new manifest from a buffer. The created manifest is verified
-        by ensuring that the manifest was signed using the bundled public/private
-        key-pair during the bundle process and that the manifest supports the current
-        running engine version. Once the manifest is verified it is stored on device.
-        The next time the engine starts (or is rebooted) it will look for the stored
-        manifest before loading resources. Storing a new manifest allows the
-        developer to update the game, modify existing resources, or add new
-        resources to the game through LiveUpdate.
-
-        @param manifest_buffer the binary data that represents the manifest
-        @param callback the callback function executed once the engine has attempted to store the manifest.
-    **/
-    @:native('store_manifest')
-    static function storeManifest<T>(manifest_buffer:String, callback:(self:T, status:ResourceLiveUpdateStatus)->Void):Void;
-
-    /**
-        Stores a zip file and uses it for live update content. The path is renamed and stored in the (internal) live update location.
-
-        @param path the path to the original file on disc
-        @param callback the callback function executed after the storage has completed
-        @param options optional table with extra parameters
-    **/
-    @:native('store_archive')
-    static function storeArchive<T>(path:String, callback:(self:T, status:ResourceLiveUpdateStatus)->Void, ?options:ResourceStoreArchiveOptions):Void;
-
-    /**
-        Is any liveupdate data mounted and currently in use? This can be used to determine if a new manifest or zip file should be downloaded.
-
-        @return true if a liveupdate archive (any format) has been loaded
-    **/
-    @:pure
-    @:native('is_using_liveupdate_data')
-    static function isUsingLiveupdateData():Bool;
-
-    /**
-        Add a resource to the data archive and runtime index.
-
-        The resource will be verified internally before being added to the data archive.
-
-        @param manifest_reference The manifest to check against.
-        @param data The resource data that should be stored.
-        @param hexdigest The expected hash for the resource, retrieved through collectionproxy.missing_resources.
-        @param callback  The callback function that is executed once the engine has been attempted to store
-        the resource. Arguments:
-         * `self` The current object.
-         * `hexdigest` The hexdigest of the resource.
-         * `status` Whether or not the resource was successfully stored.
-    **/
-    @:native('store_resource')
-    static function storeResource<T>(manifest_reference:ResourceManifestReference, data:String, hexdigest:String, callback:T->String->Bool->Void):Void;
-
-    /**
         Constructor-like function with two purposes:
 
         - Load the specified resource as part of loading the script
@@ -232,11 +170,6 @@ extern class Resource
     @:native('tile_source')
     static function tileSource(path:String):TileSourceResourceReference;
 }
-
-/**
-    Resource manifest reference used by the `Resource` module.
-**/
-extern abstract ResourceManifestReference(Int) { }
 
 /**
     Texture info used by the `Resource.set_texture` method.
@@ -617,51 +550,6 @@ extern enum abstract ResourceTextureFormat(Null<Int>)
 }
 
 @:native("_G.resource")
-extern enum abstract ResourceLiveUpdateStatus({})
-{
-    /**
-        Mismatch between between expected bundled resources and actual bundled resources.
-        The manifest expects a resource to be in the bundle, but it was not found in the bundle.
-        This is typically the case when a non-excluded resource was modified between publishing the bundle and publishing the manifest.
-    **/
-    var LIVEUPDATE_BUNDLED_RESOURCE_MISMATCH;
-
-    /**
-        Mismatch between running engine version and engine versions supported by manifest.
-    **/
-    var LIVEUPDATE_ENGINE_VERSION_MISMATCH;
-
-    /**
-        Failed to parse manifest data buffer. The manifest was probably produced by a different engine version.
-    **/
-    var LIVEUPDATE_FORMAT_ERROR;
-
-    /**
-        The handled resource is invalid.
-    **/
-    var LIVEUPDATE_INVALID_RESOURCE;
-
-    var LIVEUPDATE_OK;
-
-    /**
-        Mismatch between scheme used to load resources.
-        Resources are loaded with a different scheme than from manifest, for example over HTTP or directly from file.
-        This is typically the case when running the game directly from the editor instead of from a bundle.
-    **/
-    var LIVEUPDATE_SCHEME_MISMATCH;
-
-    /**
-        Mismatch between manifest expected signature and actual signature.
-    **/
-    var LIVEUPDATE_SIGNATURE_MISMATCH;
-
-    /**
-        Mismatch between manifest expected version and actual version.
-    **/
-    var LIVEUPDATE_VERSION_MISMATCH;
-}
-
-@:native("_G.resource")
 extern enum abstract ResourceTextureCompressionType({})
 {
     /**
@@ -673,17 +561,6 @@ extern enum abstract ResourceTextureCompressionType({})
         Compression with basic UASTC.
     **/
     var COMPRESSION_TYPE_BASIS_UASTC;
-}
-
-/**
-    Options used by the `Resource.store_archive` method.
-**/
-typedef ResourceStoreArchiveOptions =
-{
-    /**
-        If archive should be verified as well as stored (defaults to `true`).
-    **/
-    var ?verify:Bool;
 }
 
 /**

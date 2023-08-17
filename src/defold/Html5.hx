@@ -26,6 +26,16 @@ extern class Html5
 
         @param callback The interaction callback. Pass an empty function or nil if you no longer wish to receive callbacks.
     **/
-    @:native('set_interaction_listener')
-    static function setInteractionListener<T>(callback:(self:T)->Void):Void;
+    static inline function setInteractionListener(callback:Void->Void):Void
+    {
+        // 1. hide the reall callback parameter which expects a function with a "self" argument
+        // 2. ensure that the global self reference is present for the callback
+        setInteractionListener_((self) ->
+        {
+            untyped __lua__('_hxdefold_.self = _self');
+            callback();
+            untyped __lua__('_hxdefold_.self = nil');
+        });
+    }
+    @:native('set_interaction_listener') private static function setInteractionListener_(callback:Any->Void):Void;
 }

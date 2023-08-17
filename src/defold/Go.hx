@@ -36,10 +36,20 @@ extern class Go
         @param easing easing to use during animation. Either specify a constant, see the <a href="/doc/properties">properties guide</a> for a complete list, or a vmath.vector with a curve.
         @param duration duration of the animation in seconds
         @param delay delay before the animation starts in seconds
-        @param complete_function function with parameters (self, url, property) to call when the animation has completed
+        @param completeFunction function with parameters (url, property) to call when the animation has completed
     **/
-    @:overload(function<T>(url:HashOrStringOrUrl, property:HashOrString, playback:GoPlayback, to:GoAnimatedProperty, easing:EitherType<GoEasing,Vector>, duration:Float, ?delay:Float, ?complete_function:(T, Url, Hash)->Void):Void {})
-    static function animate<TSelf, TProp>(url:HashOrStringOrUrl, property:Property<TProp>, playback:GoPlayback, to:TProp, easing:EitherType<GoEasing,Vector>, duration:Float, ?delay:Float, ?complete_function:(TSelf, Url, Property<TProp>)->Void):Void;
+    static inline function animate<T>(url:HashOrStringOrUrl, property:Property<T>, playback:GoPlayback, to:T, easing:EitherType<GoEasing,Vector>, duration:Float, ?delay:Float, ?completeFunction:(Url, Property<T>)->Void):Void
+    {
+        // 1. hide the reall callback parameter which expects a function with a "self" argument
+        // 2. ensure that the global self reference is present for the callback
+        animate_(url, cast property, playback, cast to, easing, duration, delay, completeFunction == null ? null : (self, url, property) ->
+        {
+            untyped __lua__('_hxdefold_.self = _self');
+            completeFunction(url, property);
+            untyped __lua__('_hxdefold_.self = nil');
+        });
+    }
+    @:native('animate') private static function animate_(url:HashOrStringOrUrl, property:HashOrString, playback:GoPlayback, to:GoAnimatedProperty, easing:EitherType<GoEasing,Vector>, duration:Float, ?delay:Float, ?completeFunction:(Any, Url, Hash)->Void):Void;
 
     /**
         Cancels all animations of the named property of the specified game object or component.
