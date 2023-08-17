@@ -8,7 +8,7 @@ import defold.types.Url;
     Messages for controlling and interacting with collection proxies
     which are used to dynamically load collections into the runtime.
 
-    See `CollectionproxyMessages` for related messages.
+    See `CollectionProxyMessages` for related messages.
 **/
 @:native("_G.collectionproxy")
 extern class CollectionProxy
@@ -43,7 +43,7 @@ extern class CollectionProxy
 }
 
 /**
-    Messages related to the `Collectionproxy` module.
+    Messages related to the `CollectionProxy` module.
 **/
 @:publicFields
 class CollectionProxyMessages
@@ -141,7 +141,7 @@ class CollectionProxyMessages
 }
 
 /**
-    Data for the `CollectionproxyMessages.set_time_step` message.
+    Data for the `CollectionProxyMessages.set_time_step` message.
 **/
 typedef CollectionProxyMessageSetTimeStep =
 {
