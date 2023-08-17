@@ -194,7 +194,7 @@ class ScriptBuilder
         {
             definePropertiesType(scriptClass, properties, Context.currentPos());
         }
-        newFields.push(generateCreateMethod(properties, scriptClass.pos));
+        newFields.push(generateCreateMethod(properties, Context.currentPos()));
 
         return newFields;
     }
