@@ -277,6 +277,16 @@ extern final class Gui
     static function getFont(node:GuiNode):Hash;
 
     /**
+        This is only useful for text nodes. The font must be mapped to the gui scene in the gui editor.
+
+        @param fontName font of which to get the path hash
+        @return path hash to resource
+    **/
+    @:pure
+    @:native('get_font_resource')
+    static function getFontResource(fontName:HashOrString):Hash;
+
+    /**
         Gets the scene height.
 
         @return scene height
