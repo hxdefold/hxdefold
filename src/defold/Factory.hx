@@ -9,7 +9,7 @@ import defold.types.*;
     dynamically spawn game objects into the runtime.
 **/
 @:native("_G.factory")
-extern class Factory
+extern final class Factory
 {
     /**
         Make a factory create a new game object.

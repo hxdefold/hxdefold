@@ -14,7 +14,7 @@ import defold.Particlefx.ParticlefxEmitterState;
     See `GuiMessages` for related messages.
 **/
 @:native("_G.gui")
-extern class Gui
+extern final class Gui
 {
     /**
         Animates a node property.
@@ -1308,7 +1308,7 @@ typedef GuiMessageLayoutChanged =
 /**
     An instance of a GUI node.
 **/
-extern class GuiNode {}
+extern final class GuiNode {}
 
 /**
     Possible GUI playback modes.
@@ -1729,7 +1729,7 @@ typedef GuiPlayFlipbookProperties =
 /**
     A type for returning multiple values from the `Gui.new_texture` method.
 **/
-@:multiReturn extern class GuiNewTextureResult
+@:multiReturn extern final class GuiNewTextureResult
 {
     /**
         texture creation was successful

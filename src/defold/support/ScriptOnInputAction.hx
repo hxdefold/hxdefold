@@ -3,9 +3,10 @@ package defold.support;
 import defold.types.util.LuaArray;
 
 /**
-    Type of the `action` argument of the `Script.on_input` method.
+    Type of the `action` argument of the `Script.onInput` method.
 **/
-typedef ScriptOnInputAction = {
+typedef ScriptOnInputAction =
+{
     /**
         The amount of input given by the user.
         This is usually 1 for buttons and 0-1 for analogue inputs.
@@ -98,7 +99,8 @@ typedef ScriptOnInputAction = {
 /**
     Type of the `ScriptOnInputAction.touch` field.
 **/
-typedef ScriptOnInputActionTouch = {
+typedef ScriptOnInputActionTouch =
+{
     /**
         A number identifying the touch input during its duration.
     **/

@@ -9,7 +9,8 @@ import defold.types.*;
     See `ScriptMacro` for more details.
 **/
 @:autoBuild(defold.support.ScriptBuilder.build())
-abstract class GuiScript {
+abstract class GuiScript
+{
     final function new() {}
 
     /**

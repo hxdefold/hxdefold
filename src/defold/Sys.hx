@@ -10,7 +10,7 @@ import defold.types.util.LuaArray;
     See `SysMessages` for standard system messages.
 **/
 @:native("_G.sys")
-extern class Sys
+extern final class Sys
 {
     /**
         Exits application.
@@ -597,7 +597,7 @@ typedef GetSysInfoOptions =
 /**
     The returned value of `Sys.load_resource()`.
 **/
-@:multiReturn extern class SysResource
+@:multiReturn extern final class SysResource
 {
     /**
         Loaded data, or `null` if the resource could not be loaded.

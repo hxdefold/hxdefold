@@ -10,7 +10,7 @@ import defold.Go.GoPlayback;
     See `ModelMessages` for related messages.
 **/
 @:native("_G.model")
-extern class Model
+extern final class Model
 {
     /**
         Cancel all animation on a model.

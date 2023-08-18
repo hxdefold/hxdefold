@@ -5,7 +5,7 @@ package defold;
     and screen dimming.
 **/
 @:native("_G.window")
-extern class Window
+extern final class Window
 {
     /**
         Returns the current dimming mode set on a mobile device.
@@ -173,7 +173,7 @@ typedef WindowEventData =
 /**
     Window size data, returned from `Window.get_size()`.
 **/
-@:multiReturn extern class WindowSize
+@:multiReturn extern final class WindowSize
 {
     /**
         The window width.

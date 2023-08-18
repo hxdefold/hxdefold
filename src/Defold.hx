@@ -4,7 +4,8 @@ import defold.types.Hash;
     Built-in scripting functions.
 **/
 @:native("_G")
-extern class Defold {
+extern final class Defold
+{
     /**
         Hashes a string.
 

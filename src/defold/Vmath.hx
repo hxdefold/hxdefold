@@ -18,7 +18,7 @@ import defold.types.util.LuaArray;
     * All types performs equality comparison by each component value.
 **/
 @:native("_G.vmath")
-extern class Vmath
+extern final class Vmath
 {
     /**
         Calculates the conjugate of a quaternion. The result is a

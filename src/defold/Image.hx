@@ -6,7 +6,7 @@ import defold.types.BufferData;
     Functions for creating image objects.
 **/
 @:native("_G.image")
-extern class Image
+extern final class Image
 {
     /**
         Load image (PNG or JPEG) from buffer.

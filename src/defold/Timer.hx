@@ -9,7 +9,7 @@ import defold.types.Hash;
     also affect the new timer.
 **/
 @:native("_G.timer")
-extern class Timer
+extern final class Timer
 {
     /**
         Cancel a timer.
@@ -83,7 +83,7 @@ extern enum abstract TimerHandle(Hash)
 /**
     Timer information returned by the `get_info()` method.
 **/
-extern class TimerInfo
+extern final class TimerInfo
 {
     /** Time remaining until the next time a timer.delay() fires. */
     @:native('time_remaining')

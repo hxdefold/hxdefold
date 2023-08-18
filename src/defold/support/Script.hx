@@ -9,7 +9,8 @@ import defold.types.*;
     See `ScriptMacro` for more details.
 **/
 @:autoBuild(defold.support.ScriptBuilder.build())
-abstract class Script {
+abstract class Script
+{
     final function new() {}
 
     /**

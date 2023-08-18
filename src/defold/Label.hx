@@ -8,7 +8,7 @@ import defold.types.*;
     See `LabelProperties` for related properties.
 **/
 @:native("_G.label")
-extern class Label
+extern final class Label
 {
 
     /**

@@ -13,7 +13,7 @@ import defold.types.util.LuaArray;
     See `GoMessages` for related messages.
 **/
 @:native("_G.go")
-extern class Go
+extern final class Go
 {
     /**
         Animates a named property of the specified game object or component.

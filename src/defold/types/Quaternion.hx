@@ -11,7 +11,7 @@ extern abstract Quaternion(QuaternionData) {
     }
 }
 
-private extern class QuaternionData {
+private extern final class QuaternionData {
     var x:Float;
     var y:Float;
     var z:Float;

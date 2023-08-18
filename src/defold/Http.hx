@@ -6,7 +6,7 @@ import defold.types.Hash;
     Functions for performing HTTP and HTTPS requests.
 **/
 @:native("_G.http")
-extern class Http {
+extern final class Http {
     /**
         Perform a HTTP/HTTPS request.
 

@@ -6,7 +6,7 @@ import defold.types.*;
     Functions for passing messages and constructing URL objects.
 **/
 @:native("_G.msg")
-extern class Msg
+extern final class Msg
 {
     /**
         Post a message to a receiving URL. The most common case is to send messages

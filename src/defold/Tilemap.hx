@@ -6,7 +6,7 @@ import defold.types.*;
     Functions and messages used to manipulate tile map components.
 **/
 @:native("_G.tilemap")
-extern class Tilemap
+extern final class Tilemap
 {
     /**
         Get the bounds for a tile map. This function returns multiple values:
@@ -115,7 +115,7 @@ extern class Tilemap
 /**
     Return value of `Tilemap.get_bounds` method.
 **/
-@:multiReturn extern class TilemapBounds
+@:multiReturn extern final class TilemapBounds
 {
     /**
         x coordinate of the bottom left corner

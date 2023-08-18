@@ -11,7 +11,7 @@ import defold.types.Url;
     See `CollectionProxyMessages` for related messages.
 **/
 @:native("_G.collectionproxy")
-extern class CollectionProxy
+extern final class CollectionProxy
 {
     /**
         Return an indexed table of missing resources for a collection proxy.

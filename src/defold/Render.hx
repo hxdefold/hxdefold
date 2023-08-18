@@ -11,7 +11,7 @@ import defold.types.util.LuaArray;
 	See `RenderMessages` for related messages.
 **/
 @:native("_G.render")
-extern class Render
+extern final class Render
 {
 	static var RENDER_TARGET_DEFAULT(default, never):RenderTarget;
 
@@ -592,12 +592,12 @@ typedef RenderMessageWindowResized =
 	The buffer's constant elements can be indexed like an ordinary Lua table,
 	but you can't iterate over them with pairs() or ipairs().
 **/
-extern class RenderConstantBuffer implements Dynamic<Dynamic> {}
+extern final class RenderConstantBuffer implements Dynamic<Dynamic> {}
 
 /**
 	Rendering target.
 **/
-extern class RenderTarget {}
+extern final class RenderTarget {}
 
 /**
 	Type of the `parameters` argument of the `Render.render_target` method.
@@ -676,7 +676,7 @@ extern enum abstract RenderState({})
 /**
 	Render predicate used in `Render.draw` and created by `Render.predicate`.
 **/
-extern class RenderPredicate {}
+extern final class RenderPredicate {}
 
 /**
 	Render blend functions enumeration (see `Render.set_blend_func`).

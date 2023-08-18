@@ -10,7 +10,7 @@ import defold.types.util.LuaArray;
     See `SoundMessages` for related messages.
 **/
 @:native("_G.sound")
-extern class Sound
+extern final class Sound
 {
     /**
         Get mixer group gain
@@ -296,7 +296,7 @@ typedef SoundMessageSoundDone =
 /**
     A type for returning multiple values from the sound component API.
 **/
-@:multiReturn extern class SoundLeftRight<T>
+@:multiReturn extern final class SoundLeftRight<T>
 {
     /**
         Left channel value.

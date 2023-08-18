@@ -6,7 +6,7 @@ import lua.Table;
     Manipulation of JSON data strings.
 **/
 @:native("_G.json")
-extern class Json
+extern final class Json
 {
     /**
         Decode a string of JSON data into a Lua table.

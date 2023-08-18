@@ -9,7 +9,7 @@ import defold.types.*;
     See `SpriteMessages` for related messages.
 **/
 @:native("_G.sprite")
-extern class Sprite
+extern final class Sprite
 {
     /**
         Play an animation on a sprite component from its tile set
@@ -30,15 +30,15 @@ extern class Sprite
         // 1. hide the reall callback parameter which expects a function with a "self" argument
         // 2. ensure that the global self reference is present for the callback
         // 3. last I checked if a null playProperties is passed, defold throws an error
-        switch [ completeFunction == null, playProperties == null ]
+        switch [ completeFunction, playProperties ]
         {
-            case [true, true]:
+            case [null, null]:
                 playFlipbook_(url, id);
 
-            case [true, false]:
+            case [null, _]:
                 playFlipbook_(url, id, null, playProperties);
 
-            case [false, true]:
+            case [_, null]:
                 playFlipbook_(url, id, (self, messageId, message, sender) ->
                 {
                     untyped __lua__('_hxdefold_.self = _self');
@@ -46,7 +46,7 @@ extern class Sprite
                     untyped __lua__('_hxdefold_.self = nil');
                 });
 
-            case [false, false]:
+            case [_, _]:
                 playFlipbook_(url, id, (self, messageId, message, sender) ->
                 {
                     untyped __lua__('_hxdefold_.self = _self');

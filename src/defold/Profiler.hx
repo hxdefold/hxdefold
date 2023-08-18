@@ -5,7 +5,7 @@ package defold;
     More detailed <a href="https://www.defold.com/manuals/profiling/">profiling</a> and <a href="http://www.defold.com/manuals/debugging/">debugging</a> information available in the manuals.</p>
  **/
 @:native("_G.profiler")
-extern class Profiler
+extern final class Profiler
 {
     /**
         Creates and shows or hides and destroys the on-sceen profiler ui

@@ -9,7 +9,8 @@ import defold.types.*;
     See `ScriptMacro` for more details.
 **/
 @:autoBuild(defold.support.ScriptBuilder.build())
-abstract class RenderScript {
+abstract class RenderScript
+{
     final function new() {}
 
     /**
@@ -43,5 +44,5 @@ abstract class RenderScript {
         @param message a table containing the message data
         @param sender address of the sender
     **/
-    @:dox(show) function on_message<TMessage>(messageId:Message<TMessage>, message:TMessage, sender:Url):Void {}
+    @:dox(show) function onMessage<TMessage>(messageId:Message<TMessage>, message:TMessage, sender:Url):Void {}
 }

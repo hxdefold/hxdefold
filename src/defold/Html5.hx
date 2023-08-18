@@ -6,7 +6,7 @@ package defold;
     (The following functions are only available on HTML5 builds, the `Html5` methods will not be available on other platforms.)
 **/
 @:native("_G.html5")
-extern class Html5
+extern final class Html5
 {
     /**
         Run JavaScript code, in the browser, from Lua.

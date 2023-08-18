@@ -16,7 +16,7 @@ import defold.types.TileSourceResourceReference;
     Functions and constants to access resources.
 **/
 @:native("_G.resource")
-extern class Resource
+extern final class Resource
 {
     /**
         Constructor-like function with two purposes:

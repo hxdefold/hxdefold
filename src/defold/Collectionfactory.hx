@@ -8,7 +8,7 @@ import defold.types.*;
     used to dynamically spawn collections into the runtime.
 **/
 @:native("_G.collectionfactory")
-extern class CollectionFactory
+extern final class CollectionFactory
 {
     /**
         Spawn a new instance of a collection into the existing collection.

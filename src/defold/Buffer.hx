@@ -9,7 +9,7 @@ import defold.types.HashOrString;
     Functions for manipulating buffers and streams.
 **/
 @:native("_G.buffer")
-extern class Buffer
+extern final class Buffer
 {
     /**
         Copy all data streams from one buffer to another, element wise.

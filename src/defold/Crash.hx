@@ -6,7 +6,7 @@ import defold.types.util.LuaArray;
     Native crash logging functions.
 **/
 @:native("_G.crash")
-extern class Crash
+extern final class Crash
 {
     /**
         The max number of user fields.

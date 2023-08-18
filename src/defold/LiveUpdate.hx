@@ -5,7 +5,7 @@ package defold;
     Functions and constants to access live update.
 **/
 @:native("_G.liveupdate")
-extern class LiveUpdate
+extern final class LiveUpdate
 {
     /**
         Return a reference to the Manifest that is currently loaded.

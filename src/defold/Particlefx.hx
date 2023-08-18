@@ -7,7 +7,7 @@ import defold.types.*;
     shader constants.
 **/
 @:native("_G.particlefx")
-extern class Particlefx
+extern final class Particlefx
 {
     /**
         Start playing a particle FX.
