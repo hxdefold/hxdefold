@@ -8,7 +8,7 @@ package defold.types;
     side we want to index from `0`.
 
 ```haxe
-var vec: Vector = Vmath.vector(Table.fromArray([ 1, 2, 3 ]));
+var vec: Vector = Vmath.vector([ 1, 2, 3 ]);
 var firstElement: Float = vec[0]; // in Lua this would be vec[1]
 ```
 **/

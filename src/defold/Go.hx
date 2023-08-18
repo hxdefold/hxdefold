@@ -74,7 +74,7 @@ extern class Go
         @param id optional id or table of id's of the instance(s) to delete, the instance of the calling script is deleted by default
         @param recursive optional boolean, set to true to recursively delete child hiearchy in child to parent order
     **/
-    @:overload(function(?id:LuaArray<Hash>, ?recursive:Bool):Void {})
+    @:overload(function(?ids:LuaArray<Hash>, ?recursive:Bool):Void {})
     static function delete(?id:HashOrStringOrUrl, ?recursive:Bool):Void;
 
     /**
@@ -94,6 +94,7 @@ extern class Go
         @param options (optional) options table - index integer index into array property (1 based) - key hash name of internal property
         @return the value of the specified property
     **/
+    @:pure
     @:overload(function(url:HashOrStringOrUrl, id:HashOrString, ?options:lua.Table.AnyTable):GoProperty {})
     static function get<T>(url:HashOrStringOrUrl, id:Property<T>, ?options:lua.Table.AnyTable):T;
 
@@ -250,10 +251,10 @@ extern class Go
 
         @param id optional id of the game object instance to set parent for, defaults to the instance containing the calling script
         @param parent_id optional id of the new parent game object, defaults to detaching game object from its parent
-        @param keep_world_transform optional boolean, set to true to maintain the world transform when changing spaces. Defaults to false.
+        @param keepWorldTransform optional boolean, set to true to maintain the world transform when changing spaces. Defaults to false.
     **/
     @:native('set_parent')
-    static function setParent(?id:HashOrStringOrUrl, ?parent_id:HashOrStringOrUrl, ?keep_world_transform:Bool):Void;
+    static function setParent(?id:HashOrStringOrUrl, ?parent_id:HashOrStringOrUrl, ?keepWorldTransform:Bool):Void;
 
     /**
         Sets the position of the game object instance.

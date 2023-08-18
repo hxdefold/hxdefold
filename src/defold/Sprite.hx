@@ -29,12 +29,31 @@ extern class Sprite
     {
         // 1. hide the reall callback parameter which expects a function with a "self" argument
         // 2. ensure that the global self reference is present for the callback
-        playFlipbook_(url, id, completeFunction == null ? null : (self, messageId, message, sender) ->
+        // 3. last I checked if a null playProperties is passed, defold throws an error
+        switch [ completeFunction == null, playProperties == null ]
         {
-            untyped __lua__('_hxdefold_.self = _self');
-            completeFunction(messageId, message, sender);
-            untyped __lua__('_hxdefold_.self = nil');
-        });
+            case [true, true]:
+                playFlipbook_(url, id);
+
+            case [true, false]:
+                playFlipbook_(url, id, null, playProperties);
+
+            case [false, true]:
+                playFlipbook_(url, id, (self, messageId, message, sender) ->
+                {
+                    untyped __lua__('_hxdefold_.self = _self');
+                    completeFunction(messageId, message, sender);
+                    untyped __lua__('_hxdefold_.self = nil');
+                });
+
+            case [false, false]:
+                playFlipbook_(url, id, (self, messageId, message, sender) ->
+                {
+                    untyped __lua__('_hxdefold_.self = _self');
+                    completeFunction(messageId, message, sender);
+                    untyped __lua__('_hxdefold_.self = nil');
+                }, playProperties);
+        }
     }
     @:native('play_flipbook')
     private static function playFlipbook_(url:HashOrStringOrUrl, id:HashOrString,
