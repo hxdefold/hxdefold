@@ -123,12 +123,28 @@ class SpriteProperties
         The non-uniform scale of the sprite.
     **/
     static var scale(default, never) = new Property<Vector3>("scale");
+    /**
+        The non-uniform scale of the sprite on the x-axis.
+    **/
+    static var scaleX(default, never) = new Property<Float>("scale.x");
+    /**
+        The non-uniform scale of the sprite on the y-axis.
+    **/
+    static var scaleY(default, never) = new Property<Float>("scale.y");
 
     /**
         The size of the sprite, not allowing for any additional scaling that may be applied.
         The type of the property is vector3. It is not possible to set the size if the size mode of the sprite is set to auto.
     **/
     static var size(default, never) = new Property<Vector3>("size");
+    /**
+        The width of the sprite, not allowing for any additional scaling that may be applied.
+    **/
+    static var sizeX(default, never) = new Property<Float>("size.x");
+    /**
+        The height of the sprite, not allowing for any additional scaling that may be applied.
+    **/
+    static var sizeY(default, never) = new Property<Float>("size.y");
 
     /**
         The image used when rendering the sprite.
@@ -164,7 +180,7 @@ class SpriteProperties
 
         READ ONLY
     **/
-    static var frame_count(default, never) = new Property<Hash>("frame_count");
+    static var frame_count(default, never) = new Property<Int>("frame_count");
 }
 
 /**

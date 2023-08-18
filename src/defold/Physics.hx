@@ -13,7 +13,8 @@ import defold.types.util.LuaArray;
     See `PhysicsMessages` for related messages.
 **/
 @:native("_G.physics")
-extern final class Physics{
+extern final class Physics
+{
     /**
         Requests a ray cast to be performed.
 

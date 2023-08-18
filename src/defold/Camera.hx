@@ -42,7 +42,8 @@ class CameraMessages
 /**
     Data for the `CameraMessages.set_camera` message.
 **/
-typedef CameraMessageSetCamera = {
+typedef CameraMessageSetCamera =
+{
     /**
         Aspect ratio of the screen (width divided by height)
     **/

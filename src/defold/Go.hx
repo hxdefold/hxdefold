@@ -305,16 +305,59 @@ class GoProperties
         Euler angles are specified in degrees in the interval (-360, 360).
     **/
     static var euler(default, never) = new Property<Vector3>("euler");
+    /**
+        The rotation of the game object around the x-axis expressed in Eulrer angles.
+        Euler angles are specified in degrees in the interval (-360, 360).
+    **/
+    static var eulerX(default, never) = new Property<Float>("euler.x");
+    /**
+        The rotation of the game object around the y-axis expressed in Eulrer angles.
+        Euler angles are specified in degrees in the interval (-360, 360).
+    **/
+    static var eulerY(default, never) = new Property<Float>("euler.y");
+    /**
+        The rotation of the game object around the z-axis expressed in Eulrer angles.
+        Euler angles are specified in degrees in the interval (-360, 360).
+    **/
+    static var eulerZ(default, never) = new Property<Float>("euler.z");
 
     /**
         The position of the game object.
     **/
     static var position(default, never) = new Property<Vector3>("position");
+    /**
+        The position of the game object on the x-axis.
+    **/
+    static var positionX(default, never) = new Property<Float>("position.x");
+    /**
+        The position of the game object on the y-axis.
+    **/
+    static var positionY(default, never) = new Property<Float>("position.y");
+    /**
+        The position of the game object on the z-axis.
+    **/
+    static var positionZ(default, never) = new Property<Float>("position.z");
 
     /**
         The rotation of the game object.
     **/
     static var rotation(default, never) = new Property<Quaternion>("rotation");
+    /**
+        The x-component of the game object's rotation quaternion.
+    **/
+    static var rotationX(default, never) = new Property<Float>("rotation.x");
+    /**
+        The y-component of the game object's rotation quaternion.
+    **/
+    static var rotationY(default, never) = new Property<Float>("rotation.y");
+    /**
+        The z-component of the game object's rotation quaternion.
+    **/
+    static var rotationZ(default, never) = new Property<Float>("rotation.z");
+    /**
+        The w-component of the game object's rotation quaternion.
+    **/
+    static var rotationW(default, never) = new Property<Float>("rotation.w");
 
     /**
         The uniform scale of the game object.
@@ -405,7 +448,8 @@ class GoMessages
 /**
     Data for the `GoMessages.set_parent` message.
 **/
-typedef GoMessageSetParent = {
+typedef GoMessageSetParent =
+{
     /**
         the id of the new parent
     **/

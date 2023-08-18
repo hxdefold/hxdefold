@@ -6,7 +6,8 @@ import defold.types.Hash;
     Functions for performing HTTP and HTTPS requests.
 **/
 @:native("_G.http")
-extern final class Http {
+extern final class Http
+{
     /**
         Perform a HTTP/HTTPS request.
 
@@ -44,7 +45,8 @@ extern final class Http {
 /**
     Type for the `response` argument for the http request callback.
 **/
-typedef HttpResponse = {
+typedef HttpResponse =
+{
     /**
         Status code.
     **/
@@ -64,7 +66,8 @@ typedef HttpResponse = {
 /**
     Type for the `options` argument of `Http.request` method.
 **/
-typedef HttpOptions = {
+typedef HttpOptions =
+{
     /**
         Request timeout in seconds
     **/
