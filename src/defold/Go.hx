@@ -44,7 +44,7 @@ extern final class Go
         // 2. ensure that the global self reference is present for the callback
         animate_(url, cast property, playback, cast to, easing, duration, delay, completeFunction == null ? null : (self, url, property) ->
         {
-            untyped __lua__('_hxdefold_.self = _self');
+            untyped __lua__('_hxdefold_.self = {0}', self);
             completeFunction(url, property);
             untyped __lua__('_hxdefold_.self = nil');
         });

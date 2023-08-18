@@ -33,7 +33,7 @@ extern final class Http {
         // 2. ensure that the global self reference is present for the callback
         request_(url, method, (self, hash, response) ->
         {
-            untyped __lua__('_hxdefold_.self = _self');
+            untyped __lua__('_hxdefold_.self = {0}', self);
             callback(response);
             untyped __lua__('_hxdefold_.self = nil');
         }, headers, postData, options);

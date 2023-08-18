@@ -36,7 +36,7 @@ extern final class LiveUpdate
         // 2. ensure that the global self reference is present for the callback
         storeManifest_(manifest_buffer, (self, status) ->
         {
-            untyped __lua__('_hxdefold_.self = _self');
+            untyped __lua__('_hxdefold_.self = {0}', self);
             callback(status);
             untyped __lua__('_hxdefold_.self = nil');
         });
@@ -56,7 +56,7 @@ extern final class LiveUpdate
         // 2. ensure that the global self reference is present for the callback
         storeArchive_(path, (self, status) ->
         {
-            untyped __lua__('_hxdefold_.self = _self');
+            untyped __lua__('_hxdefold_.self = {0}', self);
             callback(status);
             untyped __lua__('_hxdefold_.self = nil');
         }, options);
@@ -92,7 +92,7 @@ extern final class LiveUpdate
         // 2. ensure that the global self reference is present for the callback
         storeResource_(manifestReference, data, hexdigest, (self, hexdigest, status) ->
         {
-            untyped __lua__('_hxdefold_.self = _self');
+            untyped __lua__('_hxdefold_.self = {0}', self);
             callback(hexdigest, status);
             untyped __lua__('_hxdefold_.self = nil');
         });

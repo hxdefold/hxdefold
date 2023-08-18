@@ -40,7 +40,7 @@ extern final class Msg
         @param urlstring string to create the url from
         @param socket socket of the URL
         @param path path of the URL
-        @param fragment fragment of the URL
+        @param fragment fragment of the URL (without the #)
         @return a new URL
     **/
     @:pure

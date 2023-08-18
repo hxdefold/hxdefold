@@ -41,7 +41,7 @@ extern final class Sprite
             case [_, null]:
                 playFlipbook_(url, id, (self, messageId, message, sender) ->
                 {
-                    untyped __lua__('_hxdefold_.self = _self');
+                    untyped __lua__('_hxdefold_.self = {0}', self);
                     completeFunction(messageId, message, sender);
                     untyped __lua__('_hxdefold_.self = nil');
                 });
@@ -49,7 +49,7 @@ extern final class Sprite
             case [_, _]:
                 playFlipbook_(url, id, (self, messageId, message, sender) ->
                 {
-                    untyped __lua__('_hxdefold_.self = _self');
+                    untyped __lua__('_hxdefold_.self = {0}', self);
                     completeFunction(messageId, message, sender);
                     untyped __lua__('_hxdefold_.self = nil');
                 }, playProperties);

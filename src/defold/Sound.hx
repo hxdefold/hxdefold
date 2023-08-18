@@ -134,7 +134,7 @@ extern final class Sound
         // 2. ensure that the global self reference is present for the callback
         return play_(url, playProperties, completeFunction == null ? null : (self, messageId, message, sender) ->
         {
-            untyped __lua__('_hxdefold_.self = _self');
+            untyped __lua__('_hxdefold_.self = {0}', self);
             completeFunction(messageId, message, sender);
             untyped __lua__('_hxdefold_.self = nil');
         });

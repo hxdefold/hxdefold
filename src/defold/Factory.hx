@@ -63,7 +63,7 @@ extern final class Factory
         // 2. ensure that the global self reference is present for the callback
         load_(url, completeFunction == null ? null : (self, url, result) ->
         {
-            untyped __lua__('_hxdefold_.self = _self');
+            untyped __lua__('_hxdefold_.self = {0}', self);
             completeFunction(url, result);
             untyped __lua__('_hxdefold_.self = nil');
         });

@@ -53,7 +53,7 @@ extern final class Window
         // 2. ensure that the global self reference is present for the callback
         setListener_((self, event, data) ->
         {
-            untyped __lua__('_hxdefold_.self = _self');
+            untyped __lua__('_hxdefold_.self = {0}', self);
             callback(event, data);
             untyped __lua__('_hxdefold_.self = nil');
         });

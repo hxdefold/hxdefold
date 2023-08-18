@@ -45,7 +45,7 @@ extern final class Gui
         // 2. ensure that the global self reference is present for the callback
         animate_(node, property, to, easing, duration, delay, completeFunction == null ? null : (self, node) ->
         {
-            untyped __lua__('_hxdefold_.self = _self');
+            untyped __lua__('_hxdefold_.self = {0}', self);
             completeFunction(node);
             untyped __lua__('_hxdefold_.self = nil');
         }, playback);
@@ -785,7 +785,7 @@ extern final class Gui
         // 2. ensure that the global self reference is present for the callback
         playParticlefx_(node, emitterStateFunction == null ? null : (self, hash, hash, state) ->
         {
-            untyped __lua__('_hxdefold_.self = _self');
+            untyped __lua__('_hxdefold_.self = {0}', self);
             emitterStateFunction(hash, hash, state);
             untyped __lua__('_hxdefold_.self = nil');
         });
