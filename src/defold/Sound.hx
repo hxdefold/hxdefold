@@ -308,3 +308,31 @@ typedef SoundMessageSoundDone =
     **/
     var right:T;
 }
+
+/**
+    Properties related to the `Sound` module.
+**/
+@:publicFields
+final class SoundProperties
+{
+    /**
+        The gain on the sound-component. Note that gain is in linear scale, between `0` and `1`.
+    **/
+    static var gain(default, never): Property<Float> = new Property("gain");
+
+    /**
+        The pan on the sound-component. The valid range is from `-1.0` to `1.0`, representing `-45` degrees left, to `+45` degrees right.
+    **/
+    static var pan(default, never): Property<Float> = new Property("pan");
+
+    /**
+        The speed on the sound-component where `1.0` is normal speed, `0.5` is half speed and `2.0` is double speed.
+    **/
+    static var speed(default, never): Property<Float> = new Property("speed");
+
+    /**
+        The sound data used when playing the sound.
+    **/
+    static var sound(default, never): Property<Hash> = new Property("sound");
+}
+
