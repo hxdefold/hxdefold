@@ -229,9 +229,10 @@ private class Glue {
 
                 b.add('
 function ${callbackName}($callbackArgs)
+    tmp = ${ScriptBuilder.globalSelfRef}
     ${ScriptBuilder.globalSelfRef} = self
     ${if (cb.isVoid) "" else "ret = "}$EXPORT_TABLE.${cb.method}($methodCallArgs)
-    ${ScriptBuilder.globalSelfRef} = nil
+    ${ScriptBuilder.globalSelfRef} = tmp
     ${if (cb.isVoid) "" else "return ret"}
 end
 ');
