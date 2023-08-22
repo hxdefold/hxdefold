@@ -229,10 +229,10 @@ private class Glue {
 
                 b.add('
 function ${callbackName}($callbackArgs)
-    tmp = ${ScriptBuilder.globalSelfRef}
+    _hxdefold_tmp = ${ScriptBuilder.globalSelfRef}
     ${ScriptBuilder.globalSelfRef} = self
     ${if (cb.isVoid) "" else "ret = "}$EXPORT_TABLE.${cb.method}($methodCallArgs)
-    ${ScriptBuilder.globalSelfRef} = tmp
+    ${ScriptBuilder.globalSelfRef} = _hxdefold_tmp
     ${if (cb.isVoid) "" else "return ret"}
 end
 ');
@@ -527,6 +527,7 @@ end
             case 'init': 'init';
             case 'final_': 'final';
             case 'update': 'update';
+            case 'fixedUpdate': 'fixed_update';
             case 'onMessage': 'on_message';
             case 'onInput': 'on_input';
             case 'onReload': 'on_reload';

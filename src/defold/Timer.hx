@@ -45,7 +45,7 @@ extern final class Timer
     {
         // 1. hide the reall callback parameter which expects a function with a "self" argument
         // 2. ensure that the global self reference is present for the callback
-        return delay_(delay, repeat, callback == null ? null : (self, handle, timeElapsed) ->
+        return delay_(delay, repeat, (self, handle, timeElapsed) ->
         {
             untyped __lua__('_hxdefold_.self = {0}', self);
             callback(handle, timeElapsed);
