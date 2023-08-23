@@ -32,9 +32,9 @@ extern final class Html5
         // 2. ensure that the global self reference is present for the callback
         setInteractionListener_((self) ->
         {
-            untyped __lua__('_hxdefold_.self = {0}', self);
+            untyped __lua__('_G._hxdefold_self_ = {0}', self);
             callback();
-            untyped __lua__('_hxdefold_.self = nil');
+            untyped __lua__('_G._hxdefold_self_ = nil');
         });
     }
     @:native('set_interaction_listener') private static function setInteractionListener_(callback:Any->Void):Void;

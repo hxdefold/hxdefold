@@ -44,9 +44,9 @@ extern final class Go
         // 2. ensure that the global self reference is present for the callback
         animate_(url, cast property, playback, cast to, easing, duration, delay, completeFunction == null ? null : (self, url, property) ->
         {
-            untyped __lua__('_hxdefold_.self = {0}', self);
+            untyped __lua__('_G._hxdefold_self_ = {0}', self);
             completeFunction(url, property);
-            untyped __lua__('_hxdefold_.self = nil');
+            untyped __lua__('_G._hxdefold_self_ = nil');
         });
     }
     @:native('animate') private static function animate_(url:HashOrStringOrUrl, property:HashOrString, playback:GoPlayback, to:GoAnimatedProperty, easing:EitherType<GoEasing,Vector>, duration:Float, ?delay:Float, ?completeFunction:(Any, Url, Hash)->Void):Void;

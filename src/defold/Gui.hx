@@ -45,9 +45,9 @@ extern final class Gui
         // 2. ensure that the global self reference is present for the callback
         animate_(node, property, to, easing, duration, delay, completeFunction == null ? null : (self, node) ->
         {
-            untyped __lua__('_hxdefold_.self = {0}', self);
+            untyped __lua__('_G._hxdefold_self_ = {0}', self);
             completeFunction(node);
-            untyped __lua__('_hxdefold_.self = nil');
+            untyped __lua__('_G._hxdefold_self_ = nil');
         }, playback);
     }
     @:native('animate') private static function animate_(node:GuiNode, property:GuiAnimateProprty, to:GoAnimatedProperty, easing:EitherType<GuiEasing,Vector>, duration:Float, ?delay:Float, ?completeFunction:(Any, GuiNode)->Void, ?playback:GuiPlayback):Void;
@@ -795,9 +795,9 @@ extern final class Gui
         // 2. ensure that the global self reference is present for the callback
         playParticlefx_(node, emitterStateFunction == null ? null : (self, hash, hash, state) ->
         {
-            untyped __lua__('_hxdefold_.self = {0}', self);
+            untyped __lua__('_G._hxdefold_self_ = {0}', self);
             emitterStateFunction(hash, hash, state);
-            untyped __lua__('_hxdefold_.self = nil');
+            untyped __lua__('_G._hxdefold_self_ = nil');
         });
     }
     @:native('play_particlefx') private static function playParticlefx_(node:GuiNode, ?emitterStateFunction:(Any, Hash, Hash, ParticlefxEmitterState)->Void):Void;

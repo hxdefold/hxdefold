@@ -41,17 +41,17 @@ extern final class Sprite
             case [_, null]:
                 playFlipbook_(url, id, (self, messageId, message, sender) ->
                 {
-                    untyped __lua__('_hxdefold_.self = {0}', self);
+                    untyped __lua__('_G._hxdefold_self_ = {0}', self);
                     completeFunction(messageId, message, sender);
-                    untyped __lua__('_hxdefold_.self = nil');
+                    untyped __lua__('_G._hxdefold_self_ = nil');
                 });
 
             case [_, _]:
                 playFlipbook_(url, id, (self, messageId, message, sender) ->
                 {
-                    untyped __lua__('_hxdefold_.self = {0}', self);
+                    untyped __lua__('_G._hxdefold_self_ = {0}', self);
                     completeFunction(messageId, message, sender);
-                    untyped __lua__('_hxdefold_.self = nil');
+                    untyped __lua__('_G._hxdefold_self_ = nil');
                 }, playProperties);
         }
     }

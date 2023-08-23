@@ -25,9 +25,9 @@ extern final class Particlefx
         // 2. ensure that the global self reference is present for the callback
         play_(url, emitterStateCb == null ? null : (self, hash, hash, state) ->
         {
-            untyped __lua__('_hxdefold_.self = {0}', self);
+            untyped __lua__('_G._hxdefold_self_ = {0}', self);
             emitterStateCb(hash, hash, state);
-            untyped __lua__('_hxdefold_.self = nil');
+            untyped __lua__('_G._hxdefold_self_ = nil');
         });
     }
     @:native('play') private static function play_(url:UrlOrString, ?emitterStateCb:(Any, Hash, Hash, ParticlefxEmitterState)->Void):Void;

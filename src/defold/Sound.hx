@@ -134,9 +134,9 @@ extern final class Sound
         // 2. ensure that the global self reference is present for the callback
         return play_(url, playProperties, completeFunction == null ? null : (self, messageId, message, sender) ->
         {
-            untyped __lua__('_hxdefold_.self = {0}', self);
+            untyped __lua__('_G._hxdefold_self_ = {0}', self);
             completeFunction(messageId, message, sender);
-            untyped __lua__('_hxdefold_.self = nil');
+            untyped __lua__('_G._hxdefold_self_ = nil');
         });
     }
     @:native('play') private static function play_(url:HashOrStringOrUrl, ?playProperties:SoundPlayOptions, ?completeFunction:(Any, Hash, SoundMessageSoundDone, Url)->Void):SoundPlayId;

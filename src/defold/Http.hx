@@ -34,9 +34,9 @@ extern final class Http
         // 2. ensure that the global self reference is present for the callback
         request_(url, method, (self, hash, response) ->
         {
-            untyped __lua__('_hxdefold_.self = {0}', self);
+            untyped __lua__('_G._hxdefold_self_ = {0}', self);
             callback(response);
-            untyped __lua__('_hxdefold_.self = nil');
+            untyped __lua__('_G._hxdefold_self_ = nil');
         }, headers, postData, options);
     }
     @:native('request') private static function request_(url:String, method:String, callback:(Any, Hash, HttpResponse)->Void, ?headers:lua.Table<String,String>, ?postData:String, ?options:HttpOptions):Void;

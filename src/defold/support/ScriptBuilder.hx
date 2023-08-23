@@ -28,7 +28,7 @@ typedef Property =
 
 class ScriptBuilder
 {
-    public static final globalSelfRef: String = '_hxdefold_.self';
+    public static final globalSelfRef: String = '_G._hxdefold_self_';
 
 
     public static macro function build(): Array<Field>
