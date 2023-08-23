@@ -457,12 +457,18 @@ end
             case [PVector3, [{expr: ECall(macro vector3, [{expr: EConst(CFloat(n) | CInt(n))}]) }]]
                | [PVector3, [{expr: ECall(macro Vmath.vector3, [{expr: EConst(CFloat(n) | CInt(n))}]) }]]:
                 'vmath.vector3($n)';
+            case [PVector3, [{expr: ECall(macro vector3, []) }]]
+               | [PVector3, [{expr: ECall(macro Vmath.vector3, []) }]]:
+                'vmath.vector3()';
             case [PVector4, [{expr: ECall(macro vector4, [{expr: EConst(CFloat(x) | CInt(x))}, {expr: EConst(CFloat(y) | CInt(y))}, {expr: EConst(CFloat(z) | CInt(z))}, {expr: EConst(CFloat(w) | CInt(w))}])}]]
                | [PVector4, [{expr: ECall(macro Vmath.vector4, [{expr: EConst(CFloat(x) | CInt(x))}, {expr: EConst(CFloat(y) | CInt(y))}, {expr: EConst(CFloat(z) | CInt(z))}, {expr: EConst(CFloat(w) | CInt(w))}])}]]:
                 'vmath.vector4($x, $y, $z, $w)';
             case [PVector4, [{expr: ECall(macro vector4, [{expr: EConst(CFloat(n) | CInt(n))}]) }]]
                | [PVector4, [{expr: ECall(macro Vmath.vector4, [{expr: EConst(CFloat(n) | CInt(n))}]) }]]:
                 'vmath.vector4($n)';
+            case [PVector4, [{expr: ECall(macro vector4, []) }]]
+               | [PVector4, [{expr: ECall(macro Vmath.vector4, []) }]]:
+                'vmath.vector4()';
             case [PQuaternion, [{expr: ECall(macro quat, [{expr: EConst(CFloat(x) | CInt(x))}, {expr: EConst(CFloat(y) | CInt(y))}, {expr: EConst(CFloat(z) | CInt(z))}, {expr: EConst(CFloat(w) | CInt(w))}])}]]
                | [PQuaternion, [{expr: ECall(macro Vmath.quat, [{expr: EConst(CFloat(x) | CInt(x))}, {expr: EConst(CFloat(y) | CInt(y))}, {expr: EConst(CFloat(z) | CInt(z))}, {expr: EConst(CFloat(w) | CInt(w))}])}]]:
                 'vmath.quat($x, $y, $z, $w)';
