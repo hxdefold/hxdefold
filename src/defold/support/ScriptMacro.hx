@@ -88,7 +88,9 @@ private class Glue {
                             for (field in cl.fields.get())
                                 baseRenderScriptMethods[field.name] = true;
 
-                        case {params: [tData]}: // Generic type in file, do nothing.
+                        // Do not generate scripts from abstract or generic classes
+                        case {params: [tData]}:
+                        case _ if (cl.isAbstract):
 
                         default:
                             switch getScriptType(cl) {
