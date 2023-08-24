@@ -101,45 +101,54 @@ extern enum abstract BufferStreamType(Int)
     /**
         Float, single precision, 4 bytes
     **/
-    var VALUE_TYPE_FLOAT32;
+    @:native('VALUE_TYPE_FLOAT32')
+    var Float32;
 
     /**
         Signed integer, 2 bytes
     **/
-    var VALUE_TYPE_INT16;
+    @:native('VALUE_TYPE_INT16')
+    var Int16;
 
     /**
         Signed integer, 4 bytes
     **/
-    var VALUE_TYPE_INT32;
+    @:native('VALUE_TYPE_INT32')
+    var Int32;
 
     /**
         Signed integer, 8 bytes
     **/
-    var VALUE_TYPE_INT64;
+    @:native('VALUE_TYPE_INT64')
+    var Int64;
 
     /**
         Signed integer, 1 byte
     **/
-    var VALUE_TYPE_INT8;
+    @:native('VALUE_TYPE_INT8')
+    var Int8;
 
     /**
         Unsigned integer, 2 bytes
     **/
-    var VALUE_TYPE_UINT16;
+    @:native('VALUE_TYPE_UINT16')
+    var Uint16;
 
     /**
         Unsigned integer, 4 bytes
     **/
-    var VALUE_TYPE_UINT32;
+    @:native('VALUE_TYPE_UINT32')
+    var Uint32;
 
     /**
         Unsigned integer, 8 bytes
     **/
-    var VALUE_TYPE_UINT64;
+    @:native('VALUE_TYPE_UINT64')
+    var Uint64;
 
     /**
         Unsigned integer, 1 byte
     **/
-    var VALUE_TYPE_UINT8;
+    @:native('VALUE_TYPE_UINT8')
+    var Uint8;
 }

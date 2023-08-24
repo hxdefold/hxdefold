@@ -114,41 +114,49 @@ extern enum abstract LiveUpdateStatus({})
         The manifest expects a resource to be in the bundle, but it was not found in the bundle.
         This is typically the case when a non-excluded resource was modified between publishing the bundle and publishing the manifest.
     **/
-    var LIVEUPDATE_BUNDLED_RESOURCE_MISMATCH;
+    @:native('LIVEUPDATE_BUNDLED_RESOURCE_MISMATCH')
+    var BundledResourceMismatch;
 
     /**
         Mismatch between running engine version and engine versions supported by manifest.
     **/
-    var LIVEUPDATE_ENGINE_VERSION_MISMATCH;
+    @:native('LIVEUPDATE_ENGINE_VERSION_MISMATCH')
+    var EngineVersionMismatch;
 
     /**
         Failed to parse manifest data buffer. The manifest was probably produced by a different engine version.
     **/
-    var LIVEUPDATE_FORMAT_ERROR;
+    @:native('LIVEUPDATE_FORMAT_ERROR')
+    var FormatError;
 
     /**
         The handled resource is invalid.
     **/
-    var LIVEUPDATE_INVALID_RESOURCE;
+    @:native('LIVEUPDATE_INVALID_RESOURCE')
+    var InvalidResource;
 
-    var LIVEUPDATE_OK;
+    @:native('LIVEUPDATE_OK')
+    var Ok;
 
     /**
         Mismatch between scheme used to load resources.
         Resources are loaded with a different scheme than from manifest, for example over HTTP or directly from file.
         This is typically the case when running the game directly from the editor instead of from a bundle.
     **/
-    var LIVEUPDATE_SCHEME_MISMATCH;
+    @:native('LIVEUPDATE_SCHEME_MISMATCH')
+    var SchemeMismatch;
 
     /**
         Mismatch between manifest expected signature and actual signature.
     **/
-    var LIVEUPDATE_SIGNATURE_MISMATCH;
+    @:native('LIVEUPDATE_SIGNATURE_MISMATCH')
+    var SignatureMismatch;
 
     /**
         Mismatch between manifest expected version and actual version.
     **/
-    var LIVEUPDATE_VERSION_MISMATCH;
+    @:native('LIVEUPDATE_VERSION_MISMATCH')
+    var VersionMismatch;
 }
 
 

@@ -458,17 +458,20 @@ extern enum abstract SysConnectivity(Int)
     /**
         No network connection is found.
     **/
-    var NETWORK_DISCONNECTED;
+    @:native('NETWORK_DISCONNECTED')
+    var Disconnected;
 
     /**
         Connected through mobile cellular.
     **/
-    var NETWORK_CONNECTED_CELLULAR;
+    @:native('NETWORK_CONNECTED_CELLULAR')
+    var ConnectedCellular;
 
     /**
         Connected not through a cellular connection (Wifi).
     **/
-    var NETWORK_CONNECTED;
+    @:native('NETWORK_CONNECTED')
+    var Connected;
 }
 
 /**

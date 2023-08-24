@@ -400,17 +400,20 @@ extern enum abstract ResourceTextureType(Int)
     /**
         2D texture type.
     **/
-    var TEXTURE_TYPE_2D;
+    @:native('TEXTURE_TYPE_2D')
+    var Type2D;
 
     /**
         Cube map texture type
     **/
-    var TEXTURE_TYPE_CUBE_MAP;
+    @:native('TEXTURE_TYPE_CUBE_MAP')
+    var TypeCubeMap;
 
     /**
         2D Array texture type
     **/
-    var TEXTURE_TYPE_2D_ARRAY;
+    @:native('TEXTURE_TYPE_2D_ARRAY')
+    var TypeArray2D;
 }
 
 /**
@@ -426,117 +429,140 @@ extern enum abstract ResourceTextureFormat(Null<Int>)
     /**
         Luminance type texture format.
     **/
-    var TEXTURE_FORMAT_LUMINANCE;
+    @:native('TEXTURE_FORMAT_LUMINANCE')
+    var Luminance;
 
     /**
         RGB type texture format.
     **/
-    var TEXTURE_FORMAT_RGB;
+    @:native('TEXTURE_FORMAT_RGB')
+    var Rgb;
 
     /**
         RGBA type texture format.
     **/
-    var TEXTURE_FORMAT_RGBA;
+    @:native('TEXTURE_FORMAT_RGBA')
+    var Rgba;
 
     /**
         RGB_PVRTC_2BPPV1 type texture format
     **/
-    var TEXTURE_FORMAT_RGB_PVRTC_2BPPV1;
+    @:native('TEXTURE_FORMAT_RGB_PVRTC_2BPPV1')
+    var RgbPvrtc2BPPv1;
 
     /**
         RGB_PVRTC_4BPPV1 type texture format
     **/
-    var TEXTURE_FORMAT_RGB_PVRTC_4BPPV1;
+    @:native('TEXTURE_FORMAT_RGB_PVRTC_4BPPV1')
+    var RgbPvrtc4BPPv1;
 
     /**
         RGBA_PVRTC_2BPPV1 type texture format
     **/
-    var TEXTURE_FORMAT_RGBA_PVRTC_2BPPV1;
+    @:native('TEXTURE_FORMAT_RGBA_PVRTC_2BPPV1')
+    var RgbaPvrtc2BPPv1;
 
     /**
         RGBA_PVRTC_4BPPV1 type texture format
     **/
-    var TEXTURE_FORMAT_RGBA_PVRTC_4BPPV1;
+    @:native('TEXTURE_FORMAT_RGBA_PVRTC_4BPPV1')
+    var RgbaPvrtc4BPPv1;
 
     /**
         RGB_ETC1 type texture format
     **/
-    var TEXTURE_FORMAT_RGB_ETC1;
+    @:native('TEXTURE_FORMAT_RGB_ETC1')
+    var RgbEtc1;
 
     /**
         RGBA_ETC2 type texture format
     **/
-    var TEXTURE_FORMAT_RGBA_ETC2;
+    @:native('TEXTURE_FORMAT_RGBA_ETC2')
+    var RgbEtc2;
 
     /**
         RGBA_ASTC_4x4 type texture format
     **/
-    var TEXTURE_FORMAT_RGBA_ASTC_4x4;
+    @:native('TEXTURE_FORMAT_RGBA_ASTC_4x4')
+    var RgbaAstc4x4;
 
     /**
         RGB_BC1 type texture format
     **/
-    var TEXTURE_FORMAT_RGB_BC1;
+    @:native('TEXTURE_FORMAT_RGB_BC1')
+    var RggBc1;
 
     /**
         RGBA_BC3 type texture format
     **/
-    var TEXTURE_FORMAT_RGBA_BC3;
+    @:native('TEXTURE_FORMAT_RGBA_BC3')
+    var RgbaBc3;
 
     /**
         R_BC4 type texture format
     **/
-    var TEXTURE_FORMAT_R_BC4;
+    @:native('TEXTURE_FORMAT_R_BC4')
+    var RBC4;
 
     /**
         RG_BC5 type texture format
     **/
-    var TEXTURE_FORMAT_RG_BC5;
+    @:native('TEXTURE_FORMAT_RG_BC5')
+    var RgBC5;
 
     /**
         RGBA_BC7 type texture format
     **/
-    var TEXTURE_FORMAT_RGBA_BC7;
+    @:native('TEXTURE_FORMAT_RGBA_BC7')
+    var RgbaBC7;
 
     /**
         RGB16F type texture format
     **/
-    var TEXTURE_FORMAT_RGB16F;
+    @:native('TEXTURE_FORMAT_RGB16F')
+    var Rgb16f;
 
     /**
         RGB32F type texture format
     **/
-    var TEXTURE_FORMAT_RGB32F;
+    @:native('TEXTURE_FORMAT_RGB32F')
+    var Rgb32f;
 
     /**
         RGBA16F type texture format
     **/
-    var TEXTURE_FORMAT_RGBA16F;
+    @:native('TEXTURE_FORMAT_RGBA16F')
+    var Rgba16f;
 
     /**
         RGBA32F type texture format
     **/
-    var TEXTURE_FORMAT_RGBA32F;
+    @:native('TEXTURE_FORMAT_RGBA32F')
+    var Rgba32f;
 
     /**
         R16F type texture format
     **/
-    var TEXTURE_FORMAT_R16F;
+    @:native('TEXTURE_FORMAT_R16F')
+    var R16f;
 
     /**
         RG16F type texture format
     **/
-    var TEXTURE_FORMAT_RG16F;
+    @:native('TEXTURE_FORMAT_RG16F')
+    var Rg16f;
 
     /**
         R32F type texture format
     **/
-    var TEXTURE_FORMAT_R32F;
+    @:native('TEXTURE_FORMAT_R32F')
+    var R32f;
 
     /**
         RG32F type texture format
     **/
-    var TEXTURE_FORMAT_RG32F;
+    @:native('TEXTURE_FORMAT_RG32F')
+    var Rg32f;
 
     /**
         Checks if the device running the game supports this format.
@@ -555,12 +581,14 @@ extern enum abstract ResourceTextureCompressionType({})
     /**
         No compression.
     **/
-    var COMPRESSION_TYPE_DEFAULT;
+    @:native('COMPRESSION_TYPE_DEFAULT')
+    var Default;
 
     /**
-        Compression with basic UASTC.
+        Compression with BASIS_UASTC.
     **/
-    var COMPRESSION_TYPE_BASIS_UASTC;
+    @:native('COMPRESSION_TYPE_BASIS_UASTC')
+    var BasisUastc;
 }
 
 /**

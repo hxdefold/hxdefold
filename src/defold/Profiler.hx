@@ -139,22 +139,26 @@ extern enum abstract ProfilerMode({})
     /**
         Pauses on the currently displayed frame
     **/
-    var MODE_PAUSE;
+    @:native('MODE_PAUSE')
+    var Pause;
 
     /**
         Records all incoming frames to the recording buffer
     **/
-    var MODE_RECORD;
+    @:native('MODE_RECORD')
+    var Record;
 
     /**
         This is default mode that continously shows the last frame
     **/
-    var MODE_RUN;
+    @:native('MODE_RUN')
+    var run;
 
     /**
         Pauses on the currently displayed frame but shows a new frame if that frame is slower
     **/
-    var MODE_SHOW_PEAK_FRAME;
+    @:native('MODE_SHOW_PEAK_FRAME')
+    var ShowPeakFrame;
 }
 
 /**
@@ -166,10 +170,12 @@ extern enum abstract ProfilerViewMode({})
     /**
         The default mode which displays all the ui profiler details
     **/
-    var VIEW_MODE_FULL;
+    @:native('VIEW_MODE_FULL')
+    var ModeFull;
 
     /**
         Minimized mode which only shows the top header (fps counters and ui profiler mode)
     **/
-    var VIEW_MODE_MINIMIZED;
+    @:native('VIEW_MODE_MINIMIZED')
+    var Minimized;
 }

@@ -630,7 +630,7 @@ extern final class Gui
     **/
     @:pure
     @:native('get_xanchor')
-    static function getAnchorX(node:GuiNode):GuiXAnchor;
+    static function getAnchorX(node:GuiNode):GuiAnchor;
 
     /**
         Gets the y-anchor of a node.
@@ -642,7 +642,7 @@ extern final class Gui
     **/
     @:pure
     @:native('get_yanchor')
-    static function getAnchorY(node:GuiNode):GuiYAnchor;
+    static function getAnchorY(node:GuiNode):GuiAnchor;
 
     /**
         Hide the on-display keyboard on the device.
@@ -1248,7 +1248,7 @@ extern final class Gui
         @param anchor anchor constant
     **/
     @:native('set_xanchor')
-    static function setXanchor(node:GuiNode, anchor:GuiXAnchor):Void;
+    static function setXanchor(node:GuiNode, anchor:GuiAnchor):Void;
 
     /**
         Sets the y-anchor of a node.
@@ -1259,7 +1259,7 @@ extern final class Gui
         @param anchor anchor constant
     **/
     @:native('set_yanchor')
-    static function setYanchor(node:GuiNode, anchor:GuiYAnchor):Void;
+    static function setYanchor(node:GuiNode, anchor:GuiAnchor):Void;
 
     /**
         Shows the on-display keyboard if available.
@@ -1329,32 +1329,38 @@ extern enum abstract GuiPlayback({})
     /**
         Loop backward.
     **/
-    var PLAYBACK_LOOP_BACKWARD;
+    @:native('PLAYBACK_LOOP_BACKWARD')
+    var LoopBackward;
 
     /**
         Loop forward.
     **/
-    var PLAYBACK_LOOP_FORWARD;
+    @:native('PLAYBACK_LOOP_FORWARD')
+    var LoopForward;
 
     /**
         Ping pong loop.
     **/
-    var PLAYBACK_LOOP_PINGPONG;
+    @:native('PLAYBACK_LOOP_PINGPONG')
+    var LoopPingPing;
 
     /**
         Once backward.
     **/
-    var PLAYBACK_ONCE_BACKWARD;
+    @:native('PLAYBACK_ONCE_BACKWARD')
+    var OnceBackward;
 
     /**
         Once forward.
     **/
-    var PLAYBACK_ONCE_FORWARD;
+    @:native('PLAYBACK_ONCE_FORWARD')
+    var OnceForward;
 
     /**
-        Once forward and then backward.
+        Once ping pong.
     **/
-    var PLAYBACK_ONCE_PINGPONG;
+    @:native('PLAYBACK_ONCE_PINGPONG')
+    var OncePingPong;
 }
 
 /**
@@ -1372,7 +1378,8 @@ extern enum abstract GuiAdjustMode(Int)
         Adjust mode is used when the screen resolution differs from the project settings.
         The fit mode ensures that the entire node is visible in the adjusted gui scene.
     **/
-    var ADJUST_FIT;
+    @:native('ADJUST_FIT')
+    var Fit;
 
     /**
         Stretch adjust mode.
@@ -1380,7 +1387,8 @@ extern enum abstract GuiAdjustMode(Int)
         Adjust mode is used when the screen resolution differs from the project settings.
         The stretch mode ensures that the node is displayed as is in the adjusted gui scene, which might scale it non-uniformally.
     **/
-    var ADJUST_STRETCH;
+    @:native('ADJUST_STRETCH')
+    var Stretch;
 
     /**
         Zoom adjust mode.
@@ -1388,7 +1396,8 @@ extern enum abstract GuiAdjustMode(Int)
         Adjust mode is used when the screen resolution differs from the project settings.
         The zoom mode ensures that the node fills its entire area and might make the node exceed it.
     **/
-    var ADJUST_ZOOM;
+    @:native('ADJUST_ZOOM')
+    var Zoom;
 }
 
 /**
@@ -1402,22 +1411,26 @@ extern enum abstract GuiBlendMode({})
     /**
         Alpha blending.
     **/
-    var BLEND_ALPHA;
+    @:native('BLEND_ALPHA')
+    var Alpha;
 
     /**
         Additive blending.
     **/
-    var BLEND_ADD;
+    @:native('BLEND_ADD')
+    var Add;
 
     /**
         Additive alpha blending.
     **/
-    var BLEND_ADD_ALPHA;
+    @:native('BLEND_ADD_ALPHA')
+    var AddAlpha;
 
     /**
         Multiply blending.
     **/
-    var BLEND_MULT;
+    @:native('BLEND_MULT')
+    var Mult;
 }
 
 /**
@@ -1430,12 +1443,14 @@ extern enum abstract GuiClippingMode(Int)
     /**
         Clipping mode none.
     **/
-    var CLIPPING_MODE_NONE;
+    @:native('CLIPPING_MODE_NONE')
+    var None;
 
     /**
         Clipping mode stencil.
     **/
-    var CLIPPING_MODE_STENCIL;
+    @:native('CLIPPING_MODE_STENCIL')
+    var Stencil;
 }
 
 /**
@@ -1447,47 +1462,56 @@ extern enum abstract GuiPivot(Int)
     /**
         Center pivor.
     **/
-    var PIVOT_CENTER;
+    @:native('PIVOT_CENTER')
+    var Center;
 
     /**
         North pivot.
     **/
-    var PIVOT_N;
+    @:native('PIVOT_N')
+    var North;
 
     /**
         North-east pivot.
     **/
-    var PIVOT_NE;
+    @:native('PIVOT_NE')
+    var NorthEast;
 
     /**
         East pivot.
     **/
-    var PIVOT_E;
+    @:native('PIVOT_E')
+    var East;
 
     /**
         South-east pivot.
     **/
-    var PIVOT_SE;
+    @:native('PIVOT_SE')
+    var SouthEast;
 
     /**
         South pivot.
     **/
-    var PIVOT_S;
+    @:native('PIVOT_S')
+    var South;
 
     /**
         South-west pivot.
     **/
-    var PIVOT_SW;
+    @:native('PIVOT_SW')
+    var SouthWest;
 
     /**
         West pivot.
     **/
-    var PIVOT_W;
+    @:native('PIVOT_W')
+    var West;
 
     /**
         North-west pivot.
     **/
-    var PIVOT_NW;
+    @:native('PIVOT_NW')
+    var NorthWest;
 }
 
 /**
@@ -1501,52 +1525,38 @@ extern enum abstract GuiSizeMode(Int)
 
         The size of the node is determined by the currently assigned texture.
     **/
-    var SIZE_MODE_AUTO;
+    @:native('SIZE_MODE_AUTO')
+    var Auto;
 
     /**
         Manual size mode
 
         The size of the node is determined by the size set in the editor, the constructor or by `Gui.set_size`.
     **/
-    var SIZE_MODE_MANUAL;
+    @:native('SIZE_MODE_MANUAL')
+    var Manual;
 }
 
 @:native("_G.gui")
-extern enum abstract GuiXAnchor(Int)
+extern enum abstract GuiAnchor(Int)
 {
     /**
         No anchor.
     **/
-    var ANCHOR_NONE;
+    @:native('ANCHOR_NONE')
+    var None;
 
     /**
         Left x-anchor.
     **/
-    var ANCHOR_LEFT;
+    @:native('ANCHOR_LEFT')
+    var Left;
 
     /**
         Right x-anchor.
     **/
-    var ANCHOR_RIGHT;
-}
-
-@:native("_G.gui")
-extern enum abstract GuiYAnchor(Int)
-{
-    /**
-        No anchor.
-    **/
-    var ANCHOR_NONE;
-
-    /**
-        Top y-anchor.
-    **/
-    var ANCHOR_TOP;
-
-    /**
-        Bottom y-anchor.
-    **/
-    var ANCHOR_BOTTOM;
+    @:native('ANCHOR_RIGHT')
+    var Right;
 }
 
 /**
@@ -1558,12 +1568,14 @@ extern enum abstract GuiPieBounds({})
     /**
         Elliptical pie node bounds.
     **/
-    var PIEBOUNDS_ELLIPSE;
+    @:native('PIEBOUNDS_ELLIPSE')
+    var Ellipse;
 
     /**
         Rectangular pie node bounds.
     **/
-    var PIEBOUNDS_RECTANGLE;
+    @:native('PIEBOUNDS_RECTANGLE')
+    var Rectangle;
 }
 
 @:native("_G.gui")
@@ -1572,69 +1584,276 @@ extern enum abstract GuiKeyboardType({})
     /**
         Default keyboard.
     **/
-    var KEYBOARD_TYPE_DEFAULT;
+    @:native('KEYBOARD_TYPE_DEFAULT')
+    var Default;
 
     /**
         Email keyboard.
     **/
-    var KEYBOARD_TYPE_EMAIL;
+    @:native('KEYBOARD_TYPE_EMAIL')
+    var Email;
 
     /**
         Number input keyboard.
     **/
-    var KEYBOARD_TYPE_NUMBER_PAD;
+    @:native('KEYBOARD_TYPE_NUMBER_PAD')
+    var NumberPad;
 
     /**
         Password keyboard.
     **/
-    var KEYBOARD_TYPE_PASSWORD;
+    @:native('KEYBOARD_TYPE_PASSWORD')
+    var Password;
 }
 
 @:native("_G.gui")
 extern enum abstract GuiEasing({})
 {
-    var EASING_INBACK;
-    var EASING_INBOUNCE;
-    var EASING_INCIRC;
-    var EASING_INCUBIC;
-    var EASING_INELASTIC;
-    var EASING_INEXPO;
-    var EASING_INOUTBACK;
-    var EASING_INOUTBOUNCE;
-    var EASING_INOUTCIRC;
-    var EASING_INOUTCUBIC;
-    var EASING_INOUTELASTIC;
-    var EASING_INOUTEXPO;
-    var EASING_INOUTQUAD;
-    var EASING_INOUTQUART;
-    var EASING_INOUTQUINT;
-    var EASING_INOUTSINE;
-    var EASING_INQUAD;
-    var EASING_INQUART;
-    var EASING_INQUINT;
-    var EASING_INSINE;
-    var EASING_LINEAR;
-    var EASING_OUT;
-    var EASING_OUTBACK;
-    var EASING_OUTBOUNCE;
-    var EASING_OUTCIRC;
-    var EASING_OUTCUBIC;
-    var EASING_OUTELASTIC;
-    var EASING_OUTEXPO;
-    var EASING_OUTINBACK;
-    var EASING_OUTINBOUNCE;
-    var EASING_OUTINCIRC;
-    var EASING_OUTINCUBIC;
-    var EASING_OUTINELASTIC;
-    var EASING_OUTINEXPO;
-    var EASING_OUTINQUAD;
-    var EASING_OUTINQUART;
-    var EASING_OUTINQUINT;
-    var EASING_OUTINSINE;
-    var EASING_OUTQUAD;
-    var EASING_OUTQUART;
-    var EASING_OUTQUINT;
-    var EASING_OUTSINE;
+    /**
+        In-back.
+    **/
+    @:native('EASING_INBACK')
+    var InBack;
+
+    /**
+        In-bounce.
+    **/
+    @:native('EASING_INBOUNCE')
+    var InBounce;
+
+    /**
+        In-circlic.
+    **/
+    @:native('EASING_INCIRC')
+    var InCirc;
+
+    /**
+        In-cubic.
+    **/
+    @:native('EASING_INCUBIC')
+    var InCubic;
+
+    /**
+        In-elastic.
+    **/
+    @:native('EASING_INELASTIC')
+    var InElastic;
+
+    /**
+        In-exponential.
+    **/
+    @:native('EASING_INEXPO')
+    var InExpo;
+
+    /**
+        In-out-back.
+    **/
+    @:native('EASING_INOUTBACK')
+    var InOutBack;
+
+    /**
+        In-out-bounce.
+    **/
+    @:native('EASING_INOUTBOUNCE')
+    var InOutBounce;
+
+    /**
+        In-out-circlic.
+    **/
+    @:native('EASING_INOUTCIRC')
+    var InOutCirc;
+
+    /**
+        In-out-cubic.
+    **/
+    @:native('EASING_INOUTCUBIC')
+    var InOutCubic;
+
+    /**
+        In-out-elastic.
+    **/
+    @:native('EASING_INOUTELASTIC')
+    var InOutElastic;
+
+    /**
+        In-out-exponential.
+    **/
+    @:native('EASING_INOUTEXPO')
+    var InOutExpo;
+
+    /**
+        In-out-quadratic.
+    **/
+    @:native('EASING_INOUTQUAD')
+    var InOutQuad;
+
+    /**
+        In-out-quartic.
+    **/
+    @:native('EASING_INOUTQUART')
+    var InOutQuart;
+
+    /**
+        In-out-quintic.
+    **/
+    @:native('EASING_INOUTQUINT')
+    var InOutQuint;
+
+    /**
+        In-out-sine.
+    **/
+    @:native('EASING_INOUTSINE')
+    var InOutSine;
+
+    /**
+        In-quadratic.
+    **/
+    @:native('EASING_INQUAD')
+    var InQuad;
+
+    /**
+        In-quartic.
+    **/
+    @:native('EASING_INQUART')
+    var InQuart;
+
+    /**
+        In-quintic.
+    **/
+    @:native('EASING_INQUINT')
+    var InQuint;
+
+    /**
+        In-sine.
+    **/
+    @:native('EASING_INSINE')
+    var InSine;
+
+    /**
+        Linear interpolation.
+    **/
+    @:native('EASING_LINEAR')
+    var Linear;
+
+    /**
+        Out-back.
+    **/
+    @:native('EASING_OUTBACK')
+    var OutBack;
+
+    /**
+        Out-bounce.
+    **/
+    @:native('EASING_OUTBOUNCE')
+    var OutBounce;
+
+    /**
+        Out-circlic.
+    **/
+    @:native('EASING_OUTCIRC')
+    var OutCirc;
+
+    /**
+        Out-cubic.
+    **/
+    @:native('EASING_OUTCUBIC')
+    var OutCubic;
+
+    /**
+        Out-elastic.
+    **/
+    @:native('EASING_OUTELASTIC')
+    var OutElastic;
+
+    /**
+        Out-exponential.
+    **/
+    @:native('EASING_OUTEXPO')
+    var OutExpo;
+
+    /**
+        Out-in-back.
+    **/
+    @:native('EASING_OUTINBACK')
+    var OutInBack;
+
+    /**
+        Out-in-bounce.
+    **/
+    @:native('EASING_OUTINBOUNCE')
+    var OutInBounce;
+
+    /**
+        Out-in-circlic.
+    **/
+    @:native('EASING_OUTINCIRC')
+    var OutInCirc;
+
+    /**
+        Out-in-cubic.
+    **/
+    @:native('EASING_OUTINCUBIC')
+    var OutInCubic;
+
+    /**
+        Out-in-elastic.
+    **/
+    @:native('EASING_OUTINELASTIC')
+    var OutInElastic;
+
+    /**
+        Out-in-exponential.
+    **/
+    @:native('EASING_OUTINEXPO')
+    var OutInExpo;
+
+    /**
+        Out-in-quadratic.
+    **/
+    @:native('EASING_OUTINQUAD')
+    var OutInQuad;
+
+    /**
+        Out-in-quartic.
+    **/
+    @:native('EASING_OUTINQUART')
+    var OutInQuart;
+
+    /**
+        Out-in-quintic.
+    **/
+    @:native('EASING_OUTINQUINT')
+    var OutInQuint;
+
+    /**
+        Out-in-sine.
+    **/
+    @:native('EASING_OUTINSINE')
+    var OutInSine;
+
+    /**
+        Out-quadratic.
+    **/
+    @:native('EASING_OUTQUAD')
+    var OutQuad;
+
+    /**
+        Out-quartic.
+    **/
+    @:native('EASING_OUTQUART')
+    var OutQuart;
+
+    /**
+        Out-quintic.
+    **/
+    @:native('EASING_OUTQUINT')
+    var OutQuint;
+
+    /**
+        Out-sine.
+    **/
+    @:native('EASING_OUTSINE')
+    var OutSine;
 }
 
 @:native("_G.gui")
@@ -1643,15 +1862,18 @@ extern enum abstract GuiNewTextureResultCode({})
     /**
         The texture id already exists when trying to use `gui.new_texture()`.
     **/
-    var RESULT_TEXTURE_ALREADY_EXISTS;
+    @:native('RESULT_TEXTURE_ALREADY_EXISTS')
+    var TextureAlreadyExists;
     /**
         The system is out of resources, for instance when trying to create a new texture using `gui.new_texture()`.
     **/
-    var RESULT_OUT_OF_RESOURCES;
+    @:native('RESULT_OUT_OF_RESOURCES')
+    var OutOfResources;
     /**
         The provided data is not in the expected format or is in some other way incorrect, for instance the image data provided to `gui.new_texture()`.
     **/
-    var RESULT_DATA_ERROR;
+    @:native('RESULT_DATA_ERROR')
+    var DataError;
 }
 
 @:native("_G.gui")
@@ -1660,43 +1882,53 @@ extern enum abstract GuiAnimateProprty({})
     /**
         position property
     **/
-    var PROP_POSITION;
+    @:native('PROP_POSITION')
+    var Position;
     /**
         rotation property
     **/
-    var PROP_ROTATION;
+    @:native('PROP_ROTATION')
+    var Rotation;
     /**
         scale property
     **/
-    var PROP_SCALE;
+    @:native('PROP_SCALE')
+    var Scale;
     /**
         color property
     **/
-    var PROP_COLOR;
+    @:native('PROP_COLOR')
+    var Color;
     /**
         outline property
     **/
-    var PROP_OUTLINE;
+    @:native('PROP_OUTLINE')
+    var Outline;
     /**
         shadow color property
     **/
-    var PROP_SHADOW;
+    @:native('PROP_SHADOW')
+    var Shadow;
     /**
         size property
     **/
-    var PROP_SIZE;
+    @:native('PROP_SIZE')
+    var Size;
     /**
         fill_angle property
     **/
-    var PROP_FILL_ANGLE;
+    @:native('PROP_FILL_ANGLE')
+    var FillAngle;
     /**
         inner_radius property
     **/
-    var PROP_INNER_RADIUS;
+    @:native('PROP_INNER_RADIUS')
+    var InnerRadius;
     /**
         slice9 property
     **/
-    var PROP_SLICE9;
+    @:native('PROP_SLICE9')
+    var Slice9;
 }
 
 /**

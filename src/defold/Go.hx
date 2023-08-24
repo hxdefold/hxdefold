@@ -500,207 +500,248 @@ extern enum abstract GoEasing(Int)
     /**
         In-back.
     **/
-    var EASING_INBACK;
+    @:native('EASING_INBACK')
+    var InBack;
 
     /**
         In-bounce.
     **/
-    var EASING_INBOUNCE;
+    @:native('EASING_INBOUNCE')
+    var InBounce;
 
     /**
         In-circlic.
     **/
-    var EASING_INCIRC;
+    @:native('EASING_INCIRC')
+    var InCirc;
 
     /**
         In-cubic.
     **/
-    var EASING_INCUBIC;
+    @:native('EASING_INCUBIC')
+    var InCubic;
 
     /**
         In-elastic.
     **/
-    var EASING_INELASTIC;
+    @:native('EASING_INELASTIC')
+    var InElastic;
 
     /**
         In-exponential.
     **/
-    var EASING_INEXPO;
+    @:native('EASING_INEXPO')
+    var InExpo;
 
     /**
         In-out-back.
     **/
-    var EASING_INOUTBACK;
+    @:native('EASING_INOUTBACK')
+    var InOutBack;
 
     /**
         In-out-bounce.
     **/
-    var EASING_INOUTBOUNCE;
+    @:native('EASING_INOUTBOUNCE')
+    var InOutBounce;
 
     /**
         In-out-circlic.
     **/
-    var EASING_INOUTCIRC;
+    @:native('EASING_INOUTCIRC')
+    var InOutCirc;
 
     /**
         In-out-cubic.
     **/
-    var EASING_INOUTCUBIC;
+    @:native('EASING_INOUTCUBIC')
+    var InOutCubic;
 
     /**
         In-out-elastic.
     **/
-    var EASING_INOUTELASTIC;
+    @:native('EASING_INOUTELASTIC')
+    var InOutElastic;
 
     /**
         In-out-exponential.
     **/
-    var EASING_INOUTEXPO;
+    @:native('EASING_INOUTEXPO')
+    var InOutExpo;
 
     /**
         In-out-quadratic.
     **/
-    var EASING_INOUTQUAD;
+    @:native('EASING_INOUTQUAD')
+    var InOutQuad;
 
     /**
         In-out-quartic.
     **/
-    var EASING_INOUTQUART;
+    @:native('EASING_INOUTQUART')
+    var InOutQuart;
 
     /**
         In-out-quintic.
     **/
-    var EASING_INOUTQUINT;
+    @:native('EASING_INOUTQUINT')
+    var InOutQuint;
 
     /**
         In-out-sine.
     **/
-    var EASING_INOUTSINE;
+    @:native('EASING_INOUTSINE')
+    var InOutSine;
 
     /**
         In-quadratic.
     **/
-    var EASING_INQUAD;
+    @:native('EASING_INQUAD')
+    var InQuad;
 
     /**
         In-quartic.
     **/
-    var EASING_INQUART;
+    @:native('EASING_INQUART')
+    var InQuart;
 
     /**
         In-quintic.
     **/
-    var EASING_INQUINT;
+    @:native('EASING_INQUINT')
+    var InQuint;
 
     /**
         In-sine.
     **/
-    var EASING_INSINE;
+    @:native('EASING_INSINE')
+    var InSine;
 
     /**
         Linear interpolation.
     **/
-    var EASING_LINEAR;
+    @:native('EASING_LINEAR')
+    var Linear;
 
     /**
         Out-back.
     **/
-    var EASING_OUTBACK;
+    @:native('EASING_OUTBACK')
+    var OutBack;
 
     /**
         Out-bounce.
     **/
-    var EASING_OUTBOUNCE;
+    @:native('EASING_OUTBOUNCE')
+    var OutBounce;
 
     /**
         Out-circlic.
     **/
-    var EASING_OUTCIRC;
+    @:native('EASING_OUTCIRC')
+    var OutCirc;
 
     /**
         Out-cubic.
     **/
-    var EASING_OUTCUBIC;
+    @:native('EASING_OUTCUBIC')
+    var OutCubic;
 
     /**
         Out-elastic.
     **/
-    var EASING_OUTELASTIC;
+    @:native('EASING_OUTELASTIC')
+    var OutElastic;
 
     /**
         Out-exponential.
     **/
-    var EASING_OUTEXPO;
+    @:native('EASING_OUTEXPO')
+    var OutExpo;
 
     /**
         Out-in-back.
     **/
-    var EASING_OUTINBACK;
+    @:native('EASING_OUTINBACK')
+    var OutInBack;
 
     /**
         Out-in-bounce.
     **/
-    var EASING_OUTINBOUNCE;
+    @:native('EASING_OUTINBOUNCE')
+    var OutInBounce;
 
     /**
         Out-in-circlic.
     **/
-    var EASING_OUTINCIRC;
+    @:native('EASING_OUTINCIRC')
+    var OutInCirc;
 
     /**
         Out-in-cubic.
     **/
-    var EASING_OUTINCUBIC;
+    @:native('EASING_OUTINCUBIC')
+    var OutInCubic;
 
     /**
         Out-in-elastic.
     **/
-    var EASING_OUTINELASTIC;
+    @:native('EASING_OUTINELASTIC')
+    var OutInElastic;
 
     /**
         Out-in-exponential.
     **/
-    var EASING_OUTINEXPO;
+    @:native('EASING_OUTINEXPO')
+    var OutInExpo;
 
     /**
         Out-in-quadratic.
     **/
-    var EASING_OUTINQUAD;
+    @:native('EASING_OUTINQUAD')
+    var OutInQuad;
 
     /**
         Out-in-quartic.
     **/
-    var EASING_OUTINQUART;
+    @:native('EASING_OUTINQUART')
+    var OutInQuart;
 
     /**
         Out-in-quintic.
     **/
-    var EASING_OUTINQUINT;
+    @:native('EASING_OUTINQUINT')
+    var OutInQuint;
 
     /**
         Out-in-sine.
     **/
-    var EASING_OUTINSINE;
+    @:native('EASING_OUTINSINE')
+    var OutInSine;
 
     /**
         Out-quadratic.
     **/
-    var EASING_OUTQUAD;
+    @:native('EASING_OUTQUAD')
+    var OutQuad;
 
     /**
         Out-quartic.
     **/
-    var EASING_OUTQUART;
+    @:native('EASING_OUTQUART')
+    var OutQuart;
 
     /**
         Out-quintic.
     **/
-    var EASING_OUTQUINT;
+    @:native('EASING_OUTQUINT')
+    var OutQuint;
 
     /**
         Out-sine.
     **/
-    var EASING_OUTSINE;
+    @:native('EASING_OUTSINE')
+    var OutSine;
 }
 
 /**
@@ -712,35 +753,42 @@ extern enum abstract GoPlayback(Int)
     /**
         Loop backward.
     **/
-    var PLAYBACK_LOOP_BACKWARD;
+    @:native('PLAYBACK_LOOP_BACKWARD')
+    var LoopBackward;
 
     /**
         Loop forward.
     **/
-    var PLAYBACK_LOOP_FORWARD;
+    @:native('PLAYBACK_LOOP_FORWARD')
+    var LoopForward;
 
     /**
         Ping pong loop.
     **/
-    var PLAYBACK_LOOP_PINGPONG;
+    @:native('PLAYBACK_LOOP_PINGPONG')
+    var LoopPingPing;
 
     /**
         No playback.
     **/
-    var PLAYBACK_NONE;
+    @:native('PLAYBACK_NONE')
+    var None;
 
     /**
         Once backward.
     **/
-    var PLAYBACK_ONCE_BACKWARD;
+    @:native('PLAYBACK_ONCE_BACKWARD')
+    var OnceBackward;
 
     /**
         Once forward.
     **/
-    var PLAYBACK_ONCE_FORWARD;
+    @:native('PLAYBACK_ONCE_FORWARD')
+    var OnceForward;
 
     /**
         Once ping pong.
     **/
-    var PLAYBACK_ONCE_PINGPONG;
+    @:native('PLAYBACK_ONCE_PINGPONG')
+    var OncePingPong;
 }

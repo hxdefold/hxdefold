@@ -274,7 +274,7 @@ class PhysicsProperties
     Messages related to the `Physics` module.
 **/
 @:publicFields
-class PhysicsMessages
+final class PhysicsMessages
 {
     /**
         Applies a force on a collision object.
@@ -739,11 +739,15 @@ typedef PhysicsRaycastOptions =
 @:native("_G.physics")
 extern enum abstract PhysicsJointType({})
 {
-    var JOINT_TYPE_FIXED;
+    @:native('JOINT_TYPE_FIXED')
+    var Fixed;
 
-    var JOINT_TYPE_HINGE;
+    @:native('JOINT_TYPE_HINGE')
+    var Hinge;
 
-    var JOINT_TYPE_SLIDER;
+    @:native('JOINT_TYPE_SLIDER')
+    var Slider;
 
-    var JOINT_TYPE_SPRING;
+    @:native('JOINT_TYPE_SPRING')
+    var Spring;
 }

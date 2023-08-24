@@ -35,7 +35,10 @@ typedef ImageLoadResult =
 @:native("_G.image")
 extern enum abstract ImageType(Int)
 {
-    var TYPE_LUMINANCE;
-    var TYPE_RGB;
-    var TYPE_RGBA;
+    @:native('TYPE_LUMINANCE')
+    var Luminance;
+    @:native('TYPE_RGB')
+    var Rgb;
+    @:native('TYPE_RGBA')
+    var Rgba;
 }

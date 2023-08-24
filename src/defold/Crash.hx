@@ -11,17 +11,20 @@ extern final class Crash
     /**
         The max number of user fields.
     **/
-    static var USERFIELD_MAX(default,never):Int;
+    @:native('USERFIELD_MAX')
+    static var UserFieldMax(default,never):Int;
 
     /**
         The max size of a single user field.
     **/
-    static var USERFIELD_SIZE(default,never):Int;
+    @:native('USERFIELD_SIZE')
+    static var UserFieldSize(default,never):Int;
 
     /**
         The max number of sysfields.
     **/
-    static var SYSFIELD_MAX(default,never):Int;
+    @:native('SYSFIELD_MAX')
+    static var SysFieldMax(default,never):Int;
 
     /**
         Read backtrace recorded in a loaded crash dump.
@@ -157,50 +160,60 @@ extern enum abstract CrashSysField(Int)
     /**
         Android build fingerprint.
     **/
-    var SYSFIELD_ANDROID_BUILD_FINGERPRINT;
+    @:native('SYSFIELD_ANDROID_BUILD_FINGERPRINT')
+    var AndroidBuildFingerprint;
 
     /**
         System device language as reported by `Sys.get_sys_info`.
     **/
-    var SYSFIELD_DEVICE_LANGUAGE;
+    @:native('SYSFIELD_DEVICE_LANGUAGE')
+    var DeviceLanguage;
 
     /**
         Device manufacturer as reported by `Sys.get_sys_info`.
     **/
-    var SYSFIELD_MANUFACTURER;
+    @:native('SYSFIELD_MANUFACTURER')
+    var Manufacturer;
 
     /**
         Device model as reported by `Sys.get_sys_info`.
     **/
-    var SYSFIELD_DEVICE_MODEL;
+    @:native('SYSFIELD_DEVICE_MODEL')
+    var DeviceModel;
 
     /**
         Engine version as hash.
     **/
-    var SYSFIELD_ENGINE_HASH;
+    @:native('SYSFIELD_ENGINE_HASH')
+    var EngineHash;
 
     /**
         Engine version as release number.
     **/
-    var SYSFIELD_ENGINE_VERSION;
+    @:native('SYSFIELD_ENGINE_VERSION')
+    var EngineVersion;
 
     /**
         System language as reported by `Sys.get_sys_info`.
     **/
-    var SYSFIELD_LANGUAGE;
+    @:native('SYSFIELD_LANGUAGE')
+    var Language;
 
     /**
         System name as reported by `Sys.get_sys_info`.
     **/
-    var SYSFIELD_SYSTEM_NAME;
+    @:native('SYSFIELD_SYSTEM_NAME')
+    var SystemName;
 
     /**
         System version as reported by `Sys.get_sys_info`.
     **/
-    var SYSFIELD_SYSTEM_VERSION;
+    @:native('SYSFIELD_SYSTEM_VERSION')
+    var SystemVersion;
 
     /**
         System territory as reported by `Sys.get_sys_info`.
     **/
-    var SYSFIELD_TERRITORY;
+    @:native('SYSFIELD_TERRITORY')
+    var Territory;
 }

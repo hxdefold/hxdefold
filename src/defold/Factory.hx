@@ -104,7 +104,21 @@ extern final class Factory
 @:native("_G.factory")
 extern enum abstract FactoryStatus({})
 {
-    var STATUS_UNLOADED;
-    var STATUS_LOADING;
-    var STATUS_LOADED;
+    /**
+     * The factory is unloaded.
+     */
+    @:native('STATUS_UNLOADED')
+    var Unloaded;
+
+    /**
+     * The factory is loading.
+     */
+    @:native('STATUS_LOADING')
+    var Loading;
+
+    /**
+     * The factory is loaded.
+     */
+    @:native('STATUS_LOADED')
+    var Loaded;
 }

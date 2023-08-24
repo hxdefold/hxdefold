@@ -91,18 +91,21 @@ extern enum abstract WindowDimmingMode({})
     /**
         Dimming off
     **/
-    var DIMMING_OFF;
+    @:native('DIMMING_OFF')
+    var Off;
 
     /**
         Dimming on
     **/
-    var DIMMING_ON;
+    @:native('DIMMING_ON')
+    var On;
 
     /**
         This mode indicates that the dim mode can't be determined,
         or that the platform doesn't support dimming.
     **/
-    var DIMMING_UNKNOWN;
+    @:native('DIMMING_UNKNOWN')
+    var Unknown;
 }
 
 
@@ -118,7 +121,8 @@ extern enum abstract WindowEvent({})
         This event is sent to a window event listener when the game window or app screen
         is restored after being iconified.
     **/
-    var WINDOW_EVENT_DEICONIFIED;
+    @:native('WINDOW_EVENT_DEICONIFIED')
+    var Deiconified;
 
     /**
         Iconify window event.
@@ -126,7 +130,8 @@ extern enum abstract WindowEvent({})
         This event is sent to a window event listener when the game window or app screen
         is iconified (reduced to an application icon in a toolbar, application tray or similar).
     **/
-    var WINDOW_EVENT_ICONFIED;
+    @:native('WINDOW_EVENT_ICONFIED')
+    var Iconified;
 
     /**
         Focus gained window event.
@@ -135,14 +140,16 @@ extern enum abstract WindowEvent({})
         gained focus.
         This event is also sent at game startup and the engine gives focus to the game.
     **/
-    var WINDOW_EVENT_FOCUS_GAINED;
+    @:native('WINDOW_EVENT_FOCUS_GAINED')
+    var FocusGained;
 
     /**
         Focus lost window event.
 
         This event is sent to a window event listener when the game window or app screen has lost focus.
     **/
-    var WINDOW_EVENT_FOCUS_LOST;
+    @:native('WINDOW_EVENT_FOCUS_LOST')
+    var FocusLost;
 
     /**
         Resized window event.
@@ -150,7 +157,8 @@ extern enum abstract WindowEvent({})
         This event is sent to a window event listener when the game window or app screen is resized.
         The new size is passed along in the data field to the event listener.
     **/
-    var WINDOW_EVENT_RESIZED;
+    @:native('WINDOW_EVENT_RESIZED')
+    var Resized;
 }
 
 
