@@ -146,12 +146,26 @@ class CollectionProxyMessages
 typedef CollectionProxyMessageSetTimeStep =
 {
     /**
-        time-step scaling factor
+        Time-step scaling factor
     **/
     var factor:Float;
 
     /**
-        time-step mode: 0 for continuous and 1 for discrete
+        Time-step mode, either continous or discreet.
     **/
-    var mode:Int;
+    var mode:SetTimeStepMode;
+}
+
+
+enum abstract SetTimeStepMode(Int)
+{
+    /**
+        The continuous mode can be used for slow-motion or fast-forward effects.
+    **/
+    var Continuous = 0;
+
+    /**
+        The discrete mode is only useful when scaling the time-step to pass slower than real time (`factor` is below `1`).
+    **/
+    var Discrete = 1;
 }
