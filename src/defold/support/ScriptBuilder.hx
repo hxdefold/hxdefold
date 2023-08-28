@@ -305,8 +305,9 @@ class ScriptBuilder
         var argDocs: Array<String> = [];
         var tableInitExprs: Array<String> = [];
 
-        for (property in properties)
+        for (i in 0...properties.length)
         {
+            var property: Property = properties[i];
             if (isReadOnlyType(property.type))
             {
                 // don't include readonly properties in the create method
@@ -318,7 +319,7 @@ class ScriptBuilder
                 opt: true,
                 type: property.type.toComplexType()
             });
-            tableInitExprs.push('${property.name} = ${property.name}');
+            tableInitExprs.push('${property.name} = {$i}');
             argDocs.push('@param ${property.name} ${property.doc ?? ""}');
         }
 
@@ -326,8 +327,22 @@ class ScriptBuilder
          * The expression of the method is simply to initialize the lua table and return it.
          */
         var tableInit: String = '{ ${tableInitExprs.join(', ')} }';
+        var tableInitArgs: Array<Expr> = [ macro $v{tableInit} ];
+        for (property in properties)
+        {
+            tableInitArgs.push(macro $i{property.name});
+        }
         var expr: Expr = {
-            expr: EReturn(macro untyped __lua__($v{tableInit})),
+            expr: EReturn({
+                expr: EUntyped({
+                    expr: ECall(
+                        macro __lua__,
+                        tableInitArgs
+                    ),
+                    pos: pos
+                }),
+                pos: pos
+            }),
             pos: pos
         };
 
@@ -341,7 +356,7 @@ ${argDocs.join('\n')}
             name: 'create',
             pos: pos,
             doc: doc,
-            access: [ APublic, AStatic ],
+            access: [ APublic, AStatic, AInline ],
             meta: [ { name: ':pure', pos: pos } ],
             kind: FFun({
                 args: args,
