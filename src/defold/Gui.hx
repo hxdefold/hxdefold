@@ -1231,6 +1231,32 @@ extern final class Gui
     static function setTextureData(texture:HashOrString, width:Float, height:Float, type:ImageType, buffer:BufferData, ?flip:Bool):Bool;
 
     /**
+        Returns the material of a node. The material must be mapped to the gui scene in the gui editor.
+
+        @param node node to get the material for
+    **/
+    @:native('get_material')
+    static function getMaterial(node:GuiNode):MaterialResourceReference;
+
+    /**
+        Set the material on a node. The material must be mapped to the gui scene in the gui editor, and assigning a material is supported for all node types.
+        To set the default material that is assigned to the gui scene node, use `Gui.reset_material` instead.
+
+        @param node node to set the material for
+        @param material the material id, either a hash reference or a name specified in the list of materials in the GUI file
+    **/
+    @:native('set_material')
+    static function setMaterial(node:GuiNode, material:EitherType<MaterialResourceReference, String>):Void;
+
+    /**
+        Resets the node material to the material assigned in the gui scene.
+
+        @param node node to reset the material for
+    **/
+    @:native('reset_material')
+    static function resetMaterial(node:GuiNode):Void;
+
+    /**
         Sets the tracking of the text node.
 
         @param node node for which to set the tracking

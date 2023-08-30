@@ -479,6 +479,10 @@ abstract GoProperty(Dynamic)
     from TextureResourceReference to TextureResourceReference
     from TileSourceResourceReference to TileSourceResourceReference
     from BufferResourceReference to BufferResourceReference
+    from LuaArray<Int> to LuaArray<Int>
+    from LuaArray<Float> to LuaArray<Float>
+    from LuaArray<Vector3> to LuaArray<Vector3>
+    from LuaArray<Vector4> to LuaArray<Vector4>
     {}
 
 /**

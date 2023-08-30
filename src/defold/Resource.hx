@@ -130,13 +130,23 @@ extern final class Resource
     static function getBuffer(path:HashOrString):Buffer;
 
     /**
-        Sets the buffer of a resource
+       Sets the buffer of a resource.
+
+       By default, setting the resource buffer will either copy the data from the incoming buffer object to the buffer stored in the destination resource,
+       or make a new buffer object if the sizes between the source buffer and the destination buffer stored in the resource differs. In some cases, e.g performance reasons,
+       it might be beneficial to just set the buffer object on the resource without copying or cloning.
+
+       To achieve this, set the transfer_ownership flag to true in the argument table.
+       Transferring ownership from a lua buffer to a resource with this function works exactly the same as resource.create_buffer: the destination resource
+       will take ownership of the buffer held by the lua reference, i.e the buffer will not automatically be removed when the lua reference to the buffer
+       is garbage collected. Note: When setting a buffer with transfer_ownership = true, the currently bound buffer in the resource will be destroyed.
 
         @param path The path to the resource
         @param buffer The resource buffer
+        @param table options about how to set the buffer
     **/
     @:native('set_buffer')
-    static function setBuffer(path:HashOrString, buffer:Buffer):Void;
+    static function setBuffer(path:HashOrString, buffer:Buffer, table:ResourceSetBufferOptions):Void;
 
     /**
         Gets the text metrics from a font.
@@ -603,6 +613,17 @@ typedef ResourceCreateBufferOptions =
 
     /**
         Optional flag to determine wether or not the resource should take over ownership of the buffer object (default `true`)
+    **/
+    var ?transfer_ownership:Bool;
+}
+
+/**
+    Options used by the `Resource.set_buffer` method.
+**/
+typedef ResourceSetBufferOptions =
+{
+    /**
+        Optional flag to determine wether or not the resource should take over ownership of the buffer object (default `false`)
     **/
     var ?transfer_ownership:Bool;
 }

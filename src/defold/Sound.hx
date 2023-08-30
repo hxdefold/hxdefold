@@ -214,9 +214,14 @@ class SoundMessages
     static var stop_sound(default, never) = new Message<Void>("stop_sound");
 
     /**
-        Callback message indicating that a sound has finished playing.
+        This message is sent back to the sender of a `play_sound` message, if the sound could be played to completion.
     **/
-    static var sound_done(default, never) = new Message<Void>("sound_done");
+    static var sound_done(default, never) = new Message<SoundMessageSoundDone>("sound_done");
+
+    /**
+        This message is sent back to the sender of a `play_sound` message, if the sound has been manually stopped.
+    **/
+    static var sound_stopped(default, never) = new Message<SoundMessageSoundStopped>("sound_stopped");
 }
 
 /**
@@ -287,6 +292,16 @@ typedef SoundMessageSetGain =
 **/
 typedef SoundMessageSoundDone =
 {
+    /**
+        The sequential play identifier that was given by the sound.play function.
+    **/
+    var ?play_id: SoundPlayId;
+}
+
+/**
+    Data for the `SoundMessages.sound_stopped` message.
+**/
+typedef SoundMessageSoundStopped = {
     /**
         The sequential play identifier that was given by the sound.play function.
     **/
