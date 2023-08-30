@@ -519,6 +519,22 @@ class ScriptMacro {
             if (afterTypingCalled) return;
             afterTypingCalled = true;
             glue.process(types);
+
+            std.Sys.println('
+=============================== WARNING ===============================
+
+hxdefold is being thoroughly reworked and will introduce breaking
+changes starting with v2.0.0 in the near future.
+
+To prepare for these changes and provide your feedback on them, please
+visit the pull-request:
+
+             https://github.com/hxdefold/hxdefold/pull/37
+
+Thank you for using hxdefold!
+
+=======================================================================
+');
         });
 
         Context.onAfterGenerate(glue.generate);
