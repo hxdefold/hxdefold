@@ -1,5 +1,7 @@
 package defold;
 
+import defold.types.util.LuaArray;
+
 
 /**
     Functions and constants to access live update.
@@ -98,6 +100,36 @@ extern final class LiveUpdate
         });
     }
     @:native('store_resource') private static function storeResource_(manifestReference:LiveUpdateManifestReference, data:String, hexdigest:String, callback:(Any, String, Bool)->Void):Void;
+
+    /**
+     * Get an array of the current mounts This can be used to determine if a new mount is needed or not.
+     *
+     * @return array of mounts
+     */
+    @:native('get_mounts')
+    static function getMounts():LuaArray<Dynamic>;
+
+    /**
+     * Adds a resource mount to the resource system. The mounts are persisted between sessions.
+     * After the mount succeeded, the resources are available to load. (i.e. no reboot required)
+     *
+     * @param name unique name of the mount
+     * @param uri the uri of the mount, including the scheme. Currently supported schemes are 'zip' and 'archive'.
+     * @param priority priority of mount. Larger priority takes prescedence
+     * @param callback callback after the asynchronous request completed
+     * @return the result of the request
+     */
+    @:native('add_mount')
+    static function addMount(name:String, uri:String, priority:Int, callback:()->Void):Int;
+
+    /**
+     * Remove a mount the resource system. The remaining mounts are persisted between sessions. Removing a mount does not affect any loaded resources.
+     *
+     * @param name unique name of the mount
+     * @return the result of the call
+     */
+    @:native('remove_mount')
+    static function removeMount(name:String):Int;
 }
 
 /**
