@@ -76,7 +76,7 @@ abstract class GuiScript
         @param action_id id of the received input action, as mapped in the input_binding-file
         @param action a table containing the input data, see above for a description
     **/
-    @:dox(show) function onInput(action_id:Hash, action:ScriptOnInputAction):Bool return false;
+    @:dox(show) function onInput(actionId:Hash, action:ScriptOnInputAction):Bool return false;
 
     /**
         Called when the gui script is reloaded.
