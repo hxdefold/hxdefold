@@ -770,7 +770,7 @@ extern enum abstract GoPlayback(Int)
         Ping pong loop.
     **/
     @:native('PLAYBACK_LOOP_PINGPONG')
-    var LoopPingPing;
+    var LoopPingPong;
 
     /**
         No playback.

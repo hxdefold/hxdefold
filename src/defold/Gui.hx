@@ -1368,7 +1368,7 @@ extern enum abstract GuiPlayback({})
         Ping pong loop.
     **/
     @:native('PLAYBACK_LOOP_PINGPONG')
-    var LoopPingPing;
+    var LoopPingPong;
 
     /**
         Once backward.
