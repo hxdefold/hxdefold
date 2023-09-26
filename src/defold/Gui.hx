@@ -39,7 +39,7 @@ extern final class Gui
         @param completeFunction function to call when the animation has completed
         @param playback playback mode
     **/
-    static inline function animate(node:GuiNode, property:GuiAnimateProprty, to:GoAnimatedProperty, easing:EitherType<GuiEasing,Vector>, duration:Float, ?delay:Float, ?completeFunction:GuiNode->Void, ?playback:GuiPlayback):Void
+    static inline function animate(node:GuiNode, property:EitherType<GuiAnimateProperty,String>, to:GoAnimatedProperty, easing:EitherType<GuiEasing,Vector>, duration:Float, ?delay:Float, ?completeFunction:GuiNode->Void, ?playback:GuiPlayback):Void
     {
         // 1. hide the reall callback parameter which expects a function with a "self" argument
         // 2. ensure that the global self reference is present for the callback
@@ -50,7 +50,7 @@ extern final class Gui
             untyped __lua__('_G._hxdefold_self_ = nil');
         }, playback);
     }
-    @:native('animate') private static function animate_(node:GuiNode, property:GuiAnimateProprty, to:GoAnimatedProperty, easing:EitherType<GuiEasing,Vector>, duration:Float, ?delay:Float, ?completeFunction:(Any, GuiNode)->Void, ?playback:GuiPlayback):Void;
+    @:native('animate') private static function animate_(node:GuiNode, property:EitherType<GuiAnimateProperty,String>, to:GoAnimatedProperty, easing:EitherType<GuiEasing,Vector>, duration:Float, ?delay:Float, ?completeFunction:(Any, GuiNode)->Void, ?playback:GuiPlayback):Void;
 
     /**
         Cancels an ongoing animation.
@@ -1903,7 +1903,7 @@ extern enum abstract GuiNewTextureResultCode({})
 }
 
 @:native("_G.gui")
-extern enum abstract GuiAnimateProprty({})
+extern enum abstract GuiAnimateProperty({})
 {
     /**
         position property
