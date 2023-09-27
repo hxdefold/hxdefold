@@ -135,6 +135,14 @@ class ScriptBuilder
 
 
                 /**
+                 * Properties are only allowed with getters and/or setters.
+                 * Currently we are not handling properties with 'default' access, so we should make them raise errors.
+                 */
+                case FProp('default', _, _, _) | FProp(_, 'default', _, _):
+                    Context.fatalError('script class fields with access "default" are currently not supported', field.pos);
+
+
+                /**
                  * The init method is kept and added later, in case we want to add some statements to it.
                  */
                 case FFun(f) if (field.name == 'init'):
