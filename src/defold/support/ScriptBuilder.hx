@@ -75,7 +75,9 @@ class ScriptBuilder
                             params: e == null ? null : [ e ]
                         });
 
-                        readOnly = isReadOnlyType(t.toType());
+                        readOnly = isReadOnlyType(t.toType())
+                                || fieldContainsMeta(field, 'readonly')
+                                || field.access.contains(AFinal);
 
                         properties.push({
                             name: field.name,
