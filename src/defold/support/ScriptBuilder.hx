@@ -55,16 +55,27 @@ class ScriptBuilder
                  */
                 case FVar(t, e) if (!field.access.contains(AStatic)):
 
+                    var isDefoldProperty: Bool = fieldContainsMeta(field, 'property');
+                    var isReadOnly: Bool = fieldContainsMeta(field, 'readonly')
+                                        || field.access.contains(AFinal);
+
                     // do some checks
                     if (field.access.contains(APublic))
                     {
-                        Context.fatalError('public properties are not allowed', field.pos);
+                        Context.fatalError('public script class fields are not allowed', field.pos);
+                    }
+                    if (field.access.contains(AInline))
+                    {
+                        Context.fatalError('inline script class fields are not allowed', field.pos);
+                    }
+                    if (!isDefoldProperty && isReadOnly)
+                    {
+                        Context.fatalError('only script class fields that are marked as @property can be readonly', field.pos);
                     }
 
-                    var readOnly: Bool = false;
-                    var meta: Metadata = [];
 
-                    if (fieldContainsMeta(field, 'property'))
+                    var meta: Metadata = [];
+                    if (isDefoldProperty)
                     {
                         // this var should generate a script property
                         // store the default value in the meta here so that the script generator
@@ -75,9 +86,7 @@ class ScriptBuilder
                             params: e == null ? null : [ e ]
                         });
 
-                        readOnly = isReadOnlyType(t.toType())
-                                || fieldContainsMeta(field, 'readonly')
-                                || field.access.contains(AFinal);
+                        isReadOnly = isReadOnly || isReadOnlyType(t.toType());
 
                         properties.push({
                             name: field.name,
@@ -100,7 +109,7 @@ class ScriptBuilder
                         meta: meta,
                         access: [ APrivate ],
                         doc: field.doc,
-                        kind: FProp('get', readOnly ? 'never' : 'set', t)
+                        kind: FProp('get', isReadOnly ? 'never' : 'set', t)
                     });
 
                     // create the getter
@@ -118,7 +127,7 @@ class ScriptBuilder
                     });
 
                     // create the setter
-                    if (!readOnly)
+                    if (!isReadOnly)
                     {
                         newFields.push({
                             name: 'set_${field.name}',
