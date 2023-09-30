@@ -1,5 +1,7 @@
 package defold.support;
 
+import sys.FileSystem;
+import sys.io.File;
 #if macro
 import haxe.io.Path;
 import haxe.macro.Compiler;
@@ -595,12 +597,27 @@ class ScriptMacro {
         });
 
         Context.onAfterGenerate(glue.generate);
+
+        // create empty files for false library dependencies
+        // this is needed because the Haxe compiler will inevitably generate
+        // calls such as: _G.require("luv")
+        // and these will cause the Defold compiler to look for a lua file with this name
+        // at the project root
+        for (lib in [ 'luv', 'bit32', 'socket' ]) {
+            createEmptyFile(Path.join([defoldRoot, '$lib.lua']));
+        }
     }
 
     // sys.FileSystem.absolutePath is broken on Haxe 4, so we use the old method
     static function absolutePath(relPath:String):String {
         if (haxe.io.Path.isAbsolute(relPath)) return relPath;
         return haxe.io.Path.join([std.Sys.getCwd(), relPath]);
+    }
+
+    static function createEmptyFile(path:String) {
+        if (!FileSystem.exists(path)) {
+            File.saveContent(path, '');
+        }
     }
 }
 #end
