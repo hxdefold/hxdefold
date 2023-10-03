@@ -147,7 +147,7 @@ class ScriptBuilder
                  * Properties are only allowed with getters and/or setters.
                  * Currently we are not handling properties with 'default' access, so we should make them raise errors.
                  */
-                case FProp('default', _, _, _) | FProp(_, 'default', _, _):
+                case FProp('default', _, _, _) | FProp(_, 'default', _, _)  if (!field.access.contains(AStatic)):
                     Context.fatalError('script class fields with access "default" are currently not supported', field.pos);
 
 
