@@ -1,7 +1,5 @@
 package defold.support;
 
-import sys.FileSystem;
-import sys.io.File;
 #if macro
 import haxe.io.Path;
 import haxe.macro.Compiler;
@@ -614,9 +612,9 @@ class ScriptMacro {
         return haxe.io.Path.join([std.Sys.getCwd(), relPath]);
     }
 
-    static function createEmptyFile(path:String) {
-        if (!FileSystem.exists(path)) {
-            File.saveContent(path, '');
+    static inline function createEmptyFile(path:String) {
+        if (!sys.FileSystem.exists(path)) {
+            sys.io.File.saveContent(path, '');
         }
     }
 }
