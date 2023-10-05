@@ -152,6 +152,14 @@ class ScriptBuilder
 
 
                 /**
+                 * Non-static dynamic functions are not currently supported.
+                 * Only a single class instance is created in practice, so we should force the user to explicitly make it static.
+                 */
+                case FFun(f) if (field.access.contains(ADynamic) && !field.access.contains(AStatic)):
+                    Context.fatalError('script classes shall not define non-static dynamic functions', field.pos);
+
+
+                /**
                  * The init method is kept and added later, in case we want to add some statements to it.
                  */
                 case FFun(f) if (field.name == 'init'):
@@ -339,7 +347,7 @@ class ScriptBuilder
                 type: property.type.toComplexType()
             });
             tableInitExprs.push('${property.name} = {$i}');
-            argDocs.push('@param ${property.name} ${property.doc ?? ""}');
+            argDocs.push('@param ${property.name} ${property.doc == null ? "" : property.doc}');
         }
 
         /**
