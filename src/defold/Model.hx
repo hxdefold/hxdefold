@@ -73,6 +73,26 @@ extern final class Model
     **/
     @:native('set_constant')
     static function setConstant(url:UrlOrString, name:HashOrString, value:Vector4):Void;
+
+    /**
+     * Enable or disable visibility of a mesh.
+     *
+     * @param url the model
+     * @param meshId the id of the mesh
+     * @param enabled `true` if the mesh should be visible, `false` if it should be hidden
+     */
+    @:native('set_mesh_enabled')
+    static function setMeshEnabled(url:HashOrStringOrUrl, meshId:HashOrStringOrUrl, enabled:Bool):Void;
+
+    /**
+     * Get the enabled state of a mesh
+     *
+     * @param url the model
+     * @param meshId the id of the mesh
+     * @return `true` true if the mesh is visible, false otherwise
+     */
+    @:native('get_mesh_enabled')
+    static function getMeshEnabled(url:HashOrStringOrUrl, meshId:HashOrStringOrUrl):Bool;
 }
 
 /**
