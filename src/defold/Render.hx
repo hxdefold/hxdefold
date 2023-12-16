@@ -613,10 +613,11 @@ typedef RenderTargetParameters =
     var format:RenderFormat;
     var width:Int;
     var height:Int;
-    var min_filter:RenderFilter;
-    var mag_filter:RenderFilter;
-    var u_wrap:RenderWrap;
-    var v_wrap:RenderWrap;
+    var ?min_filter:RenderFilter;
+    var ?mag_filter:RenderFilter;
+    var ?u_wrap:RenderWrap;
+    var ?v_wrap:RenderWrap;
+    var ?flags:RenderTargetFlags;
 }
 
 /**
@@ -685,6 +686,19 @@ extern enum abstract RenderWrap({})
     var MirroredRepeat;
     @:native('WRAP_REPEAT')
     var Repeat;
+}
+
+/**
+    Type of the `RenderTargetParameters.u_wrap` (and `v_wrap`) field.
+**/
+@:native("_G.render")
+extern enum abstract RenderTargetFlags({})
+{
+    /**
+     * (only applicable to depth and stencil buffers)
+     */
+    @:native('TEXTURE_BIT')
+    var TextureBit;
 }
 
 /**
@@ -813,6 +827,24 @@ extern enum abstract RenderStencilOp({})
 }
 
 /**
+    Frustum planes options (see `Render.draw`).
+**/
+@:native("_G.render")
+extern enum abstract RenderDrawFrustumPlanes({})
+{
+    /**
+     * The left, right, top and bottom sides of the frustum.
+     */
+    @:native('FRUSTUM_PLANES_SIDES')
+    var Sides;
+    /**
+     * All 6 sides of the frustum.
+     */
+    @:native('FRUSTUM_PLANES_ALL')
+    var All;
+}
+
+/**
     Options for the `Render.set_render_target`.
 **/
 typedef SetRenderTargetOptions =
@@ -831,6 +863,11 @@ typedef RenderDrawOptions =
         A frustum matrix used to cull renderable items. (E.g. local frustum = proj * view).
     **/
     var ?frustum:Matrix4;
+
+    /**
+        Determines which sides of the frustum will be used. Default is `Sides`.
+    **/
+    var ?frustum_planes:RenderDrawFrustumPlanes;
 
     /**
         Constants to use while rendering

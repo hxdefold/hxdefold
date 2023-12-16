@@ -188,6 +188,14 @@ extern final class Sys
     static function load(filename:String):lua.Table.AnyTable;
 
     /**
+        Check if a path exists Good for checking if a file exists before loading a large file
+
+        @param path path to check
+        @return `true` if the path exists, `false` otherwise
+    **/
+    static function exists(path:String):Bool;
+
+    /**
         Loads resource from game data.
 
         Loads a custom resource. Specify the full filename of the resource that you want
