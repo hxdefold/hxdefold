@@ -1886,17 +1886,17 @@ extern enum abstract GuiEasing({})
 extern enum abstract GuiNewTextureResultCode({})
 {
     /**
-        The texture id already exists when trying to use `gui.new_texture()`.
+        The texture id already exists when trying to use `gui.newTexture()`.
     **/
     @:native('RESULT_TEXTURE_ALREADY_EXISTS')
     var TextureAlreadyExists;
     /**
-        The system is out of resources, for instance when trying to create a new texture using `gui.new_texture()`.
+        The system is out of resources, for instance when trying to create a new texture using `gui.newTexture()`.
     **/
     @:native('RESULT_OUT_OF_RESOURCES')
     var OutOfResources;
     /**
-        The provided data is not in the expected format or is in some other way incorrect, for instance the image data provided to `gui.new_texture()`.
+        The provided data is not in the expected format or is in some other way incorrect, for instance the image data provided to `gui.newTexture()`.
     **/
     @:native('RESULT_DATA_ERROR')
     var DataError;
@@ -1995,7 +1995,7 @@ typedef GuiPlayFlipbookProperties =
 }
 
 /**
-    A type for returning multiple values from the `Gui.new_texture` method.
+    A type for returning multiple values from the `Gui.newTexture` method.
 **/
 @:multiReturn extern final class GuiNewTextureResult
 {
