@@ -250,13 +250,13 @@ class ScriptBuilder
              */
             switch prop.type.followWithAbstracts()
             {
-                case TInst(_.get() => {pack: ["defold", "types", "_Vector3"], name: "Vector3Data"}, _):
+                case TInst(_.get() => {pack: ["defold", "types"], name: "Vector3Data"}, _):
                     fields.push(generatePropertyField(prop.name + 'X', prop.name + '.x', 'The x-component of property ${prop.name}', macro: Float, pos));
                     fields.push(generatePropertyField(prop.name + 'Y', prop.name + '.y', 'The y-component of property ${prop.name}', macro: Float, pos));
                     fields.push(generatePropertyField(prop.name + 'Z', prop.name + '.z', 'The z-component of property ${prop.name}', macro: Float, pos));
 
-                case TInst(_.get() => {pack: ["defold", "types", "_Vector4"], name: "Vector4Data"}, _)
-                   | TInst(_.get() => {pack: ["defold", "types", "_Quaternion"], name: "QuaternionData"}, _):
+                case TInst(_.get() => {pack: ["defold", "types"], name: "Vector4Data"}, _)
+                   | TInst(_.get() => {pack: ["defold", "types"], name: "QuaternionData"}, _):
                     fields.push(generatePropertyField(prop.name + 'X', prop.name + '.x', 'The x-component of property ${prop.name}', macro: Float, pos));
                     fields.push(generatePropertyField(prop.name + 'Y', prop.name + '.y', 'The y-component of property ${prop.name}', macro: Float, pos));
                     fields.push(generatePropertyField(prop.name + 'Z', prop.name + '.z', 'The z-component of property ${prop.name}', macro: Float, pos));

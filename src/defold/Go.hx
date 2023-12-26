@@ -363,6 +363,18 @@ class GoProperties
         The uniform scale of the game object.
     **/
     static var scale(default, never) = new Property<Float>("scale");
+    /**
+        The x-component of the scale of the game object.
+    **/
+    static var scaleX(default, never) = new Property<Float>("scale.x");
+    /**
+        The y-component of the scale of the game object.
+    **/
+    static var scaleY(default, never) = new Property<Float>("scale.y");
+    /**
+        The z-component of the scale of the game object.
+    **/
+    static var scaleZ(default, never) = new Property<Float>("scale.z");
 }
 
 /**

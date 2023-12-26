@@ -43,7 +43,7 @@ extern abstract Vector3(Vector3Data)
     }
 }
 
-private extern final class Vector3Data
+extern final class Vector3Data
 {
     var x:Float;
     var y:Float;
