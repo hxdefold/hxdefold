@@ -55,8 +55,9 @@ class ScriptBuilder
                  */
                 case FVar(t, e) if (!field.access.contains(AStatic)):
 
-                    var isDefoldProperty: Bool = fieldContainsMeta(field, 'property');
-                    var isReadOnly: Bool = fieldContainsMeta(field, 'readonly')
+                    var propertyMeta: MetadataEntry = fieldGetMeta(field, 'property');
+                    var isDefoldProperty: Bool = propertyMeta != null;
+                    var isReadOnly: Bool = (fieldGetMeta(field, 'readonly') != null)
                                         || field.access.contains(AFinal);
 
                     // do some checks
@@ -71,6 +72,10 @@ class ScriptBuilder
                     if (!isDefoldProperty && isReadOnly)
                     {
                         Context.fatalError('only script class fields that are marked as @property can be readonly', field.pos);
+                    }
+                    if (isDefoldProperty && (propertyMeta.params.length > 0))
+                    {
+                        Context.fatalError('parameters given to @property have no effect, default property values are now defined as variable initializations', field.pos);
                     }
 
 
@@ -393,16 +398,16 @@ ${argDocs.join('\n')}
         };
     }
 
-    static function fieldContainsMeta(field: Field, name: String): Bool
+    static function fieldGetMeta(field: Field, name: String): MetadataEntry
     {
         for (meta in field.meta)
         {
             if (meta.name == name)
             {
-                return true;
+                return meta;
             }
         }
-        return false;
+        return null;
     }
 
     static function createDefaultInit(exprs: Array<Expr>): Field
