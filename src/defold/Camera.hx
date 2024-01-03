@@ -63,6 +63,16 @@ typedef CameraMessageSetCamera =
         Position of the far clipping plane (distance from camera along relative z)
     **/
     var far_z:Float;
+
+    /**
+        Set to use an orthographic projection
+    **/
+    var orthographic_projection:Bool;
+
+    /**
+        Zoom level when the camera is using an orthographic projection
+    **/
+    var orthographic_zoom:Float;
 }
 
 
