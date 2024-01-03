@@ -1,3 +1,5 @@
 -D lua-vanilla
 -D luajit
 --macro defold.support.ScriptMacro.use()
+
+-D defold_version=1.6.2

@@ -10,7 +10,8 @@ import defold.types.util.LuaArray;
     See `SysMessages` for standard system messages.
 **/
 @:native("_G.sys")
-extern class Sys {
+extern final class Sys
+{
     /**
         Exits application.
 
@@ -43,7 +44,8 @@ extern class Sys {
 
         @param frequency target frequency. 60 for 60 fps
     **/
-    static function set_update_frequency(frequency:Int):Void;
+    @:native('set_update_frequency')
+    static function setUpdateFrequency(frequency:Int):Void;
 
     /**
         Set vsync swap interval.
@@ -60,23 +62,29 @@ extern class Sys {
 
         This setting may be overridden by driver settings.
 
-        @param swap_interval target swap interval.
+        @param swapInterval target swap interval.
     **/
-    static function set_vsync_swap_interval(swap_interval:Int):Void;
+    @:native('set_vsync_swap_interval')
+    static function setVsyncSwapInterval(swapInterval:Int):Void;
 
     /**
         Get application information.
 
+        @param appString platform specific string with application package or query, see above for details
         @return table with application information
     **/
-    static function get_application_info(_:String):SysApplicationInfo; // TODO: wtf is this string arg?
+    @:pure
+    @:native('get_application_info')
+    static function getApplicationInfo(appString:String):SysApplicationInfo;
 
     /**
         The path from which the application is run.
 
         @return path to application executable
     **/
-    static function get_application_path(): String;
+    @:pure
+    @:native('get_application_path')
+    static function getApplicationPath(): String;
 
     /**
         Get string config value from the game.project configuration file.
@@ -85,10 +93,12 @@ extern class Sys {
         to the runtime as command line arguments with the `--config` argument.
 
         @param key key to get value for. The syntax is SECTION.KEY
-        @param default_value default value to return if the value does not exist
-        @return config value as a string. nil or default_value if the config key doesn't exists
+        @param defaultValue default value to return if the value does not exist
+        @return config value as a string. nil or defaultValue if the config key doesn't exists
     **/
-    static function get_config_string(key:String, ?default_value:String):Null<String>;
+    @:pure
+    @:native('get_config_string')
+    static function getConfigString(key:String, ?defaultValue:String):Null<String>;
 
     /**
         Get int config value from the game.project configuration file.
@@ -97,10 +107,12 @@ extern class Sys {
         to the runtime as command line arguments with the `--config` argument.
 
         @param key key to get value for. The syntax is SECTION.KEY
-        @param default_value default value to return if the value does not exist
-        @return config value as an integer. nil or default_value if the config key doesn't exists
+        @param defaultValue default value to return if the value does not exist
+        @return config value as an integer. nil or defaultValue if the config key doesn't exists
     **/
-    static function get_config_int(key:String, ?default_value:Int):Null<Int>;
+    @:pure
+    @:native('get_config_int')
+    static function getConfigInt(key:String, ?defaultValue:Int):Null<Int>;
 
     /**
         Get float config value from the game.project configuration file.
@@ -109,42 +121,51 @@ extern class Sys {
         to the runtime as command line arguments with the `--config` argument.
 
         @param key key to get value for. The syntax is SECTION.KEY
-        @param default_value default value to return if the value does not exist
-        @return config value as a float. nil or default_value if the config key doesn't exists
+        @param defaultValue default value to return if the value does not exist
+        @return config value as a float. nil or defaultValue if the config key doesn't exists
     **/
-    static function get_config_number(key:String, ?default_value:Float):Null<Float>;
+    @:pure
+    @:native('get_config_number')
+    static function getConfigNumber(key:String, ?defaultValue:Float):Null<Float>;
 
     /**
         Returns the current network connectivity status on mobile platforms.
 
         On desktop, this function always return `NETWORK_CONNECTED`.
     **/
-    static function get_connectivity():SysConnectivity;
+    @:pure
+    @:native('get_connectivity')
+    static function getConnectivity():SysConnectivity;
 
     /**
         Get engine information.
 
         @return table with engine information
     **/
-    static function get_engine_info():SysEngineInfo;
+    @:pure
+    @:native('get_engine_info')
+    static function getEngineInfo():SysEngineInfo;
 
     /**
         Enumerate network cards.
 
         @return an array of tables
     **/
-    static function get_ifaddrs():LuaArray<SysIfaddr>;
+    @:pure
+    @:native('get_ifaddrs')
+    static function getIfAddrs():LuaArray<SysIfaddr>;
 
     /**
         Gets the save-file path.
 
         The save-file path is operating system specific and is typically located under the users home directory.
 
-        @param application_id user defined id of the application, which helps define the location of the save-file
-        @param file_name file-name to get path for
+        @param applicationId user defined id of the application, which helps define the location of the save-file
+        @param fileName file-name to get path for
         @return path to save-file
     **/
-    static function get_save_file(application_id:String, file_name:String):String;
+    @:native('get_save_file')
+    static function getSaveFile(applicationId:String, fileName:String):String;
 
     /**
         Get system information.
@@ -152,7 +173,9 @@ extern class Sys {
         @param options table
         @return table with system information
     **/
-    static function get_sys_info(?options:GetSysInfoOptions):SysSysInfo;
+    @:pure
+    @:native('get_sys_info')
+    static function getSysInfo(?options:GetSysInfoOptions):SysSysInfo;
 
     /**
         Loads a lua table from a file on disk.
@@ -163,6 +186,14 @@ extern class Sys {
         @return loaded lua table, which is empty if the file could not be found
     **/
     static function load(filename:String):lua.Table.AnyTable;
+
+    /**
+        Check if a path exists Good for checking if a file exists before loading a large file
+
+        @param path path to check
+        @return `true` if the path exists, `false` otherwise
+    **/
+    static function exists(path:String):Bool;
 
     /**
         Loads resource from game data.
@@ -182,7 +213,8 @@ extern class Sys {
         @param filename resource to load, full path
         @return loaded data, which is empty if the file could not be found
     **/
-    static function load_resource(filename:String):SysResource;
+    @:native('load_resource')
+    static function loadResource(filename:String):SysResource;
 
     /**
         Open url in default application.
@@ -192,7 +224,8 @@ extern class Sys {
         @param url url to open
         @return a boolean indicating if the url could be opened or not
     **/
-    static function open_url(url:String):Bool;
+    @:native('open_url')
+    static function openUrl(url:String):Bool;
 
     /**
         Saves a lua table to a file stored on disk.
@@ -217,14 +250,16 @@ extern class Sys {
 
         @param host hostname to check against
     **/
-    static function set_connectivity_host(host:String):Void;
+    @:native('set_connectivity_host')
+    static function setConnectivityHost(host:String):Void;
 
     /**
         Set the error handler. The error handler is a function which is called whenever a lua runtime error occurs..
 
-        @param error_handler the function to be called on error (arguments: source, message, traceback)
+        @param errorHandler the function to be called on error (arguments: source, message, traceback)
     **/
-    static function set_error_handler(error_handler:String->String->String->Void):Void;
+    @:native('set_error_handler')
+    static function setErrorHandler(errorHandler:ErrorHandlerCallback):Void;
 
 
     /**
@@ -233,6 +268,7 @@ extern class Sys {
         @param buffer lua table to serialize
         @return serialized data buffer
     **/
+    @:pure
     static function serialize(buffer:lua.Table.AnyTable):String;
 
 
@@ -242,6 +278,7 @@ extern class Sys {
         @param buffer buffer to deserialize from
         @return lua table with deserialized data
     **/
+    @:pure
     static function deserialize(buffer:String):lua.Table.AnyTable;
 }
 
@@ -249,7 +286,8 @@ extern class Sys {
     Messages handled by the system (send to the `@system:` socket).
 **/
 @:publicFields
-class SysMessages {
+class SysMessages
+{
     /**
         Exits application.
 
@@ -340,7 +378,8 @@ class SysMessages {
 /**
     Data for the `SysMessages.exit` message.
 **/
-typedef SysMessageExit = {
+typedef SysMessageExit =
+{
     /**
         exit code to report to the OS, 0 means clean exit
     **/
@@ -350,7 +389,8 @@ typedef SysMessageExit = {
 /**
     Data for the `SysMessages.reboot` message.
 **/
-typedef SysMessageReboot = {
+typedef SysMessageReboot =
+{
     ?arg1:String,
     ?arg2:String,
     ?arg3:String,
@@ -362,7 +402,8 @@ typedef SysMessageReboot = {
 /**
     Data for the `SysMessages.set_update_frequency` message.
 **/
-typedef SysMessageSetUpdateFrequency = {
+typedef SysMessageSetUpdateFrequency =
+{
     /**
         target frequency. 60 for 60 fps
     **/
@@ -372,7 +413,8 @@ typedef SysMessageSetUpdateFrequency = {
 /**
     Data for the `SysMessages.set_vsync` message.
 **/
-typedef SysMessageSetVsync = {
+typedef SysMessageSetVsync =
+{
     /**
         Target swap interval.
     **/
@@ -382,7 +424,8 @@ typedef SysMessageSetVsync = {
 /**
     Data for the `SysMessages.start_record` message.
 **/
-typedef SysMessageStartRecord = {
+typedef SysMessageStartRecord =
+{
     /**
         File name to write the video to.
     **/
@@ -406,7 +449,8 @@ typedef SysMessageStartRecord = {
 /**
     Return value of `Sys.get_application_info`.
 **/
-typedef SysApplicationInfo = {
+typedef SysApplicationInfo =
+{
     /**
         Is application installed?
     **/
@@ -417,27 +461,32 @@ typedef SysApplicationInfo = {
     Return value of `Sys.get_connectivity`.
 **/
 @:native("_G.sys")
-extern enum abstract SysConnectivity(Int) {
+extern enum abstract SysConnectivity(Int)
+{
     /**
         No network connection is found.
     **/
-    var NETWORK_DISCONNECTED;
+    @:native('NETWORK_DISCONNECTED')
+    var Disconnected;
 
     /**
         Connected through mobile cellular.
     **/
-    var NETWORK_CONNECTED_CELLULAR;
+    @:native('NETWORK_CONNECTED_CELLULAR')
+    var ConnectedCellular;
 
     /**
         Connected not through a cellular connection (Wifi).
     **/
-    var NETWORK_CONNECTED;
+    @:native('NETWORK_CONNECTED')
+    var Connected;
 }
 
 /**
     Return value for `Sys.get_engine_info`.
 **/
-typedef SysEngineInfo = {
+typedef SysEngineInfo =
+{
     /**
         The current Defold engine version, i.e. "1.2.96"
     **/
@@ -457,7 +506,11 @@ typedef SysEngineInfo = {
 /**
     Return value for `Sys.get_ifaddrs`.
 **/
-typedef SysIfaddr = {
+typedef SysIfaddr =
+{
+    /**
+        Interface name
+    **/
     var name:String;
 
     /**
@@ -469,7 +522,15 @@ typedef SysIfaddr = {
         Hardware address, colon separated string (null if not available).
     **/
     var mac:String;
+
+    /**
+        `true` if the interface is up (available to transmit and receive data), `false` otherwise.
+    **/
     var up:Bool;
+
+    /**
+        `true` if the interface is running, `false` otherwise.
+    **/
     var running:Bool;
 }
 
@@ -477,7 +538,8 @@ typedef SysIfaddr = {
 /**
     Return value for `Sys.get_sys_info`.
 **/
-typedef SysSysInfo = {
+typedef SysSysInfo =
+{
     /**
         Only available on iOS and Android.
     **/
@@ -535,7 +597,8 @@ typedef SysSysInfo = {
     var user_agent:String;
 }
 
-typedef GetSysInfoOptions = {
+typedef GetSysInfoOptions =
+{
     /**
         this flag ignores values might be secured by OS e.g. `device_ident`
     **/
@@ -545,7 +608,8 @@ typedef GetSysInfoOptions = {
 /**
     The returned value of `Sys.load_resource()`.
 **/
-@:multiReturn extern class SysResource {
+@:multiReturn extern final class SysResource
+{
     /**
         Loaded data, or `null` if the resource could not be loaded.
     **/
@@ -556,3 +620,5 @@ typedef GetSysInfoOptions = {
     **/
     var error: String;
 }
+
+typedef ErrorHandlerCallback = (source:String, message:String, traceback:String)->Void;

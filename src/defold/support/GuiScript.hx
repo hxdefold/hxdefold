@@ -8,18 +8,18 @@ import defold.types.*;
     Subclasses of this class will be available as .gui_script files in the Defold project.
     See `ScriptMacro` for more details.
 **/
-class GuiScript<T:{}> {
-    function new() {}
+@:autoBuild(defold.support.ScriptBuilder.build())
+abstract class GuiScript
+{
+    final function new() {}
 
     /**
         Called when a gui component is initialized.
 
         This is a callback-function, which is called by the engine when a gui component is initialized. It can be used
         to set the initial state of the script and gui scene.
-
-        @param self reference to the script state to be used for storing data
     **/
-    @:dox(show) function init(self:T) {}
+    @:dox(show) function init() {}
 
     /**
         Called when a gui component is finalized.
@@ -28,10 +28,8 @@ class GuiScript<T:{}> {
         be used to e.g. take some last action, report the finalization to other game object instances
         or release user input focus (see `release_input_focus`). There is no use in starting any animations or similar
         from this function since the gui component is about to be destroyed.
-
-        @param self reference to the script state to be used for storing data
     **/
-    @:dox(show) function final_(self:T) {}
+    @:dox(show) function final_() {}
 
     /**
         Called every frame to update the gui component.
@@ -39,10 +37,9 @@ class GuiScript<T:{}> {
         This is a callback-function, which is called by the engine every frame to update the state of a gui component.
         It can be used to perform any kind of gui related tasks, e.g. animating nodes.
 
-        @param self reference to the script state to be used for storing data
         @param dt the time-step of the frame update
     **/
-    @:dox(show) function update(self:T, dt:Float) {}
+    @:dox(show) function update(dt:Float) {}
 
     /**
         Called when a message has been sent to the gui component.
@@ -55,11 +52,10 @@ class GuiScript<T:{}> {
 
         See the `update` function for examples on how to use this callback-function.
 
-        @param self reference to the script state to be used for storing data
-        @param message_id id of the received message
+        @param messageId id of the received message
         @param message a table containing the message data
     **/
-    @:dox(show) function on_message<TMessage>(self:T, message_id:Message<TMessage>, message:TMessage, sender:Url):Void {}
+    @:dox(show) function onMessage<TMessage>(messageId:Message<TMessage>, message:TMessage, sender:Url):Void {}
 
     /**
         Called when user input is received.
@@ -77,19 +73,16 @@ class GuiScript<T:{}> {
         Mouse movement is specifically handled and uses `null` as its `action_id`.
         The `action` only contains positional parameters in this case, such as x and y of the pointer.
 
-        @param self reference to the script state to be used for storing data
         @param action_id id of the received input action, as mapped in the input_binding-file
         @param action a table containing the input data, see above for a description
     **/
-    @:dox(show) function on_input(self:T, action_id:Hash, action:ScriptOnInputAction):Bool return false;
+    @:dox(show) function onInput(actionId:Hash, action:ScriptOnInputAction):Bool return false;
 
     /**
         Called when the gui script is reloaded.
 
         This is a callback-function, which is called by the engine when the gui script is reloaded, e.g. from the editor.
         It can be used for live development, e.g. to tweak constants or set up the state properly for the script.
-
-        @param self reference to the script state to be used for storing data
     **/
-    @:dox(show) function on_reload(self:T) {}
+    @:dox(show) function onReload() {}
 }

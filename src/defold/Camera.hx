@@ -4,20 +4,13 @@ import defold.types.Matrix4;
 import defold.types.Message;
 import defold.types.Property;
 
-/**
-    Messages to control camera components and camera focus.
-
-    This module currently has no functions.
-
-    See `CameraMessages` for related messages.
-**/
-extern class Camera {}
 
 /**
     Messages related to the `Camera` module.
 **/
 @:publicFields
-class CameraMessages {
+class CameraMessages
+{
     /**
         Makes the receiving camera become the active camera.
 
@@ -49,7 +42,8 @@ class CameraMessages {
 /**
     Data for the `CameraMessages.set_camera` message.
 **/
-typedef CameraMessageSetCamera = {
+typedef CameraMessageSetCamera =
+{
     /**
         Aspect ratio of the screen (width divided by height)
     **/
@@ -69,11 +63,22 @@ typedef CameraMessageSetCamera = {
         Position of the far clipping plane (distance from camera along relative z)
     **/
     var far_z:Float;
+
+    /**
+        Set to use an orthographic projection
+    **/
+    var orthographic_projection:Bool;
+
+    /**
+        Zoom level when the camera is using an orthographic projection
+    **/
+    var orthographic_zoom:Float;
 }
 
 
 @:publicFields
-class CameraProperties {
+class CameraProperties
+{
 
     /**
         Vertical field of view of the camera.

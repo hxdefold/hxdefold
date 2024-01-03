@@ -9,7 +9,8 @@ import defold.types.*;
     See `SpriteMessages` for related messages.
 **/
 @:native("_G.sprite")
-extern class Sprite {
+extern final class Sprite
+{
     /**
         Play an animation on a sprite component from its tile set
 
@@ -19,13 +20,45 @@ extern class Sprite {
 
         @param url the sprite that should play the animation
         @param id name hash of the animation to play
-        @param complete_function function to call when the animation has completed.
-        @param play_properties optional table with properties
+        @param completeFunction function to call when the animation has completed.
+        @param playProperties optional table with properties
     **/
-    static function play_flipbook<T>(url:HashOrStringOrUrl, id:Hash,
-        ?complete_function:(self:T, message_id:Message<SpriteMessageAnimationDone>, message:SpriteMessageAnimationDone, sender:Url)->Void,
-        ?play_properties:SpritePlayFlipbookProperties
-    ):Void;
+    static inline function playFlipbook(url:HashOrStringOrUrl, id:HashOrString,
+        ?completeFunction:(messageId:Message<SpriteMessageAnimationDone>, message:SpriteMessageAnimationDone, sender:Url)->Void,
+        ?playProperties:SpritePlayFlipbookProperties):Void
+    {
+        // 1. hide the reall callback parameter which expects a function with a "self" argument
+        // 2. ensure that the global self reference is present for the callback
+        // 3. last I checked if a null playProperties is passed, defold throws an error
+        switch [ completeFunction, playProperties ]
+        {
+            case [null, null]:
+                playFlipbook_(url, id);
+
+            case [null, _]:
+                playFlipbook_(url, id, null, playProperties);
+
+            case [_, null]:
+                playFlipbook_(url, id, (self, messageId, message, sender) ->
+                {
+                    untyped __lua__('_G._hxdefold_self_ = {0}', self);
+                    completeFunction(messageId, message, sender);
+                    untyped __lua__('_G._hxdefold_self_ = nil');
+                });
+
+            case [_, _]:
+                playFlipbook_(url, id, (self, messageId, message, sender) ->
+                {
+                    untyped __lua__('_G._hxdefold_self_ = {0}', self);
+                    completeFunction(messageId, message, sender);
+                    untyped __lua__('_G._hxdefold_self_ = nil');
+                }, playProperties);
+        }
+    }
+    @:native('play_flipbook')
+    private static function playFlipbook_(url:HashOrStringOrUrl, id:HashOrString,
+        ?completeFunction:(self:Any, message_id:Message<SpriteMessageAnimationDone>, message:SpriteMessageAnimationDone, sender:Url)->Void,
+        ?playProperties:SpritePlayFlipbookProperties):Void;
 
     /**
         Reset a shader constant for a sprite.
@@ -37,7 +70,8 @@ extern class Sprite {
         @param url the sprite that should have a constant reset
         @param name of the constant
     **/
-    static function reset_constant(url:UrlOrString, name:HashOrString):Void;
+    @:native('reset_constant')
+    static function resetConstant(url:UrlOrString, name:HashOrString):Void;
 
     /**
         Set a shader constant for a sprite.
@@ -51,7 +85,8 @@ extern class Sprite {
         @param name of the constant
         @param value of the constant
     **/
-    static function set_constant(url:UrlOrString, name:HashOrString, value:Vector4):Void;
+    @:native('set_constant')
+    static function setConstant(url:UrlOrString, name:HashOrString, value:Vector4):Void;
 
     /**
         Sets horizontal flipping of the provided sprite's animations.
@@ -62,7 +97,8 @@ extern class Sprite {
         @param url the sprite that should flip its animations
         @param flip if the sprite should flip its animations or not
     **/
-    static function set_hflip(url:UrlOrString, flip:Bool):Void;
+    @:native('set_hflip')
+    static function setHflip(url:UrlOrString, flip:Bool):Void;
 
     /**
         Sets vertical flipping of the provided sprite's animations.
@@ -73,24 +109,42 @@ extern class Sprite {
         @param url the sprite that should flip its animations
         @param flip if the sprite should flip its animations or not
     **/
-    static function set_vflip(url:UrlOrString, flip:Bool):Void;
+    @:native('set_vflip')
+    static function setVflip(url:UrlOrString, flip:Bool):Void;
 }
 
 /**
     Properties related to the `Sprite` module.
 **/
 @:publicFields
-class SpriteProperties {
+class SpriteProperties
+{
     /**
         The non-uniform scale of the sprite.
     **/
     static var scale(default, never) = new Property<Vector3>("scale");
+    /**
+        The non-uniform scale of the sprite on the x-axis.
+    **/
+    static var scaleX(default, never) = new Property<Float>("scale.x");
+    /**
+        The non-uniform scale of the sprite on the y-axis.
+    **/
+    static var scaleY(default, never) = new Property<Float>("scale.y");
 
     /**
         The size of the sprite, not allowing for any additional scaling that may be applied.
         The type of the property is vector3. It is not possible to set the size if the size mode of the sprite is set to auto.
     **/
     static var size(default, never) = new Property<Vector3>("size");
+    /**
+        The width of the sprite, not allowing for any additional scaling that may be applied.
+    **/
+    static var sizeX(default, never) = new Property<Float>("size.x");
+    /**
+        The height of the sprite, not allowing for any additional scaling that may be applied.
+    **/
+    static var sizeY(default, never) = new Property<Float>("size.y");
 
     /**
         The image used when rendering the sprite.
@@ -126,14 +180,15 @@ class SpriteProperties {
 
         READ ONLY
     **/
-    static var frame_count(default, never) = new Property<Hash>("frame_count");
+    static var frame_count(default, never) = new Property<Int>("frame_count");
 }
 
 /**
     Messages related to the `Sprite` module.
 **/
 @:publicFields
-class SpriteMessages {
+class SpriteMessages
+{
     /**
         Reports that an animation has completed.
 
@@ -163,7 +218,8 @@ class SpriteMessages {
 /**
     Data for the `SpriteMessages.animation_done` message.
 **/
-typedef SpriteMessageAnimationDone = {
+typedef SpriteMessageAnimationDone =
+{
     /**
         The current tile of the sprite.
     **/
@@ -178,7 +234,8 @@ typedef SpriteMessageAnimationDone = {
 /**
     Data for the `SpriteMessages.play_animation` message.
 **/
-typedef SpriteMessagePlayAnimation = {
+typedef SpriteMessagePlayAnimation =
+{
     /**
         The id of the animation to play.
     **/
@@ -188,7 +245,8 @@ typedef SpriteMessagePlayAnimation = {
 /**
     Data for the `play_properties` argument of `Sprite.play_flipbook` method.
 **/
-typedef SpritePlayFlipbookProperties = {
+typedef SpritePlayFlipbookProperties =
+{
     /**
         the normalized initial value of the animation cursor when the animation starts playing.
     **/

@@ -8,21 +8,26 @@ import defold.types.*;
     See `LabelProperties` for related properties.
 **/
 @:native("_G.label")
-extern class Label {
+extern final class Label
+{
 
     /**
         Gets the text from a label component
 
         @return the label text
     **/
-    static function get_text(url:HashOrStringOrUrl): String;
+    @:pure
+    @:native('get_text')
+    static function getText(url:HashOrStringOrUrl): String;
 
     /**
         Gets the text metrics from a label component
 
         @param url the label to get the (unscaled) metrics from
     **/
-    static function get_text_metrics(url:HashOrStringOrUrl):LabelTextMetrics;
+    @:pure
+    @:native('get_text_metrics')
+    static function getTextMetrics(url:HashOrStringOrUrl):LabelTextMetrics;
 
     /**
         Set the text for a label.
@@ -30,13 +35,15 @@ extern class Label {
         @param url the label that should have a constant set
         @param text the text
     **/
-    static function set_text(url:UrlOrString, text:HashOrString):Void;
+    @:native('set_text')
+    static function setText(url:UrlOrString, text:HashOrString):Void;
 }
 
 /**
     Return structure for `Label.get_text_metrics`.
 **/
-typedef LabelTextMetrics = {
+typedef LabelTextMetrics =
+{
     var width:Float;
     var height:Float;
     var max_ascent:Float;
@@ -47,7 +54,8 @@ typedef LabelTextMetrics = {
     Properties related to the `Label` module.
 **/
 @:publicFields
-class LabelProperties {
+class LabelProperties
+{
     /**
         The color of the label.
     **/
