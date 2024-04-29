@@ -13,17 +13,30 @@ extern final class Json
         A Lua error is raised for syntax errors.
 
         @param json json data
+        @param options table with decode options
         @return decoded json
     **/
     @:pure
-    static function decode(json:String):Table<String,Dynamic>;
+    static function decode(json:String, ?options:JsonEncodingOptions):Table<String,Dynamic>;
 
     /**
         Encode a lua table to a JSON string. A Lua error is raised for syntax errors.
 
         @param tbl lua table to encode
+        @param options table with decode options
         @return encoded json
     **/
     @:pure
-    static function encode(tbl:Table<String,Dynamic>):String;
+    static function encode(tbl:Table<String,Dynamic>, ?options:JsonEncodingOptions):String;
+}
+
+
+typedef JsonEncodingOptions =
+{
+    /**
+        Whether to decode a JSON null value as json.null or nil (default is nil)
+
+        This is currentlu omitted on purpose, since in Haxe we only want to work with the native null.
+    **/
+    // var decode_null_as_userdata:Bool;
 }

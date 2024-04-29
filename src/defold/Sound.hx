@@ -182,8 +182,9 @@ extern final class Sound
         Stop playing all active voices
 
         @param url the sound that should stop
+        @param properties optional sound stopping options
     **/
-    static function stop(url:HashOrStringOrUrl):Void;
+    static function stop(url:HashOrStringOrUrl, ?properties:SoundStopOptions):Void;
 }
 
 /**
@@ -251,6 +252,15 @@ typedef SoundPlayOptions =
         The final speed of the sound will be a multiplication of this speed and the sound speed.
     **/
     var ?speed:Float;
+}
+
+/**
+    Data for the `Sound.stop` options.
+**/
+typedef SoundStopOptions =
+{
+    @:native('play_id')
+    var playId:Int;
 }
 
 /**

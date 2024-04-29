@@ -280,6 +280,39 @@ extern final class Sys
     **/
     @:pure
     static function deserialize(buffer:String):lua.Table.AnyTable;
+
+    /**
+        This function will first try to load the resource from any of the mounted resource locations and return the data if any matching entries found.
+        If not, the path will be tried as is from the primary disk on the device. In order for the engine to include custom resources in the build process,
+        you need to specify them in the "custom_resources" key in your "game.project" settings file. You can specify single resource files or directories.
+        If a directory is included in the resource list, all files and directories in that directory is recursively included: For example "main/data/,assets/level_data.json".
+
+        @param path the path to load the buffer from
+        @return lua table with deserialized data
+    **/
+    @:native('load_buffer')
+    static function loadBuffer(path:String):lua.Table.AnyTable;
+
+    /**
+        This function will first try to load the resource from any of the mounted resource locations and return the data if any matching entries found.
+        If not, the path will be tried as is from the primary disk on the device. In order for the engine to include custom resources in the build process,
+        you need to specify them in the "custom_resources" key in your "game.project" settings file. You can specify single resource files or directories.
+        If a directory is included in the resource list, all files and directories in that directory is recursively included: For example "main/data/,assets/level_data.json".
+
+        @param path the path to load the buffer from
+    **/
+    static inline function loadBufferAsync(path:String, statusCallback:LoadBufferAsyncCallback):LoadBufferAsyncHandle
+    {
+        // 1. hide the reall callback parameter which expects a function with a "self" argument
+        // 2. ensure that the global self reference is present for the callback
+        return loadBufferAsync_(path, (self, status, buffer) ->
+        {
+            untyped __lua__('_G._hxdefold_self_ = {0}', self);
+            statusCallback(status, buffer);
+            untyped __lua__('_G._hxdefold_self_ = nil');
+        });
+    }
+    @:native('load_buffer_async') static private function loadBufferAsync_(path:String, statusCallback:(Any, LoadBufferStatus, Null<lua.Table.AnyTable>)->Void):LoadBufferAsyncHandle;
 }
 
 /**
@@ -621,4 +654,23 @@ typedef GetSysInfoOptions =
     var error: String;
 }
 
+extern enum abstract LoadBufferStatus(Int)
+{
+    @:native('REQUEST_STATUS_FINISHED')
+    var Finished;
+    @:native('REQUEST_STATUS_ERROR_IO_ERROR')
+    var IoError;
+    @:native('REQUEST_STATUS_ERROR_NOT_FOUND')
+    var NotFound;
+}
+
 typedef ErrorHandlerCallback = (source:String, message:String, traceback:String)->Void;
+
+/**
+ * The callback for the `Sys.loadBufferAsync` function.
+ *
+ * @param status the status of the request
+ * @param buffer If the request was successfull, this will contain the request payload in a buffer object, and nil otherwise.
+ *               Make sure to check the status before doing anything with the buffer value!
+ */
+typedef LoadBufferAsyncCallback = (status:LoadBufferStatus, buffer:Null<lua.Table.AnyTable>)->Void;

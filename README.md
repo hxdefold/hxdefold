@@ -2,7 +2,7 @@
 
 # Haxe support library for the [Defold](https://www.defold.com/) game engine
 
-![Defold API version: 1.6.3](https://img.shields.io/badge/api%20version-1.6.3-orange.svg)
+![Defold API version: 1.6.4](https://img.shields.io/badge/api%20version-1.6.4-orange.svg)
 
 This library allows writing beautiful [Haxe](https://haxe.org/) code for the [Defold](https://www.defold.com/) game engine \o/
 
@@ -92,7 +92,7 @@ Note that this is not standard [semver](https://semver.org/), since we might pot
 
 | hxdefold | Haxe | Defold API |
 |:--------:|:----:|:----------:|
-| 2.0.0    | 4.3  | 1.6.3      |
+| 2.0.0    | 4.3  | 1.6.4      |
 
 
 

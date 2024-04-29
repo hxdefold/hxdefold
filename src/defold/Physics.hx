@@ -1,5 +1,7 @@
 package defold;
 
+import defold.types.PhysicsShape.PhysicsShapeWrapper;
+import defold.types.PhysicsShape.PhysicsShapeData;
 import defold.types.*;
 import haxe.extern.EitherType;
 import defold.types.util.LuaArray;
@@ -223,6 +225,43 @@ extern final class Physics
     @:overload(function(collisionobject:HashOrStringOrUrl, jointId:HashOrString, properties:PhysicsSliderJoint):Void {})
     @:overload(function(collisionobject:HashOrStringOrUrl, jointId:HashOrString, properties:PhysicsSpringJoint):Void {})
     static function setJointProperties(collisionobject:HashOrStringOrUrl, jointId:HashOrString, properties:PhysicsFixedJoint):Void;
+
+    /**
+        Gets collision shape data from a collision object
+
+        @param url the collision object
+        @param shapeName the name of the shape to get data for
+        @return the physics shape
+    **/
+    @:pure
+    static inline function getShape(url:HashOrString, shapeName:HashOrString):PhysicsShape
+    {
+        return getShape_(url, shapeName).toPhysicsShape();
+    }
+    @:native('get_shape') static private function getShape_(url:HashOrString, shapeName:HashOrString):PhysicsShapeWrapper;
+
+    /**
+        Gets collision shape data from a collision object
+
+        @param url the collision object
+        @param shapeName the name of the shape to get data for
+        @param shape the physics shape
+    **/
+    static inline function setShape(url:HashOrString, shapeName:HashOrString, shape:PhysicsShape)
+    {
+        setShape_(url, shapeName, PhysicsShapeWrapper.fromPhysicsShape(shape));
+    }
+    @:native('set_shape') static private function setShape_(url:HashOrString, shapeName:HashOrString, shape:PhysicsShapeData):Void;
+
+    /**
+     * The function recalculates the density of each shape based on the total area of all shapes and the specified mass, then updates the mass of the body accordingly.
+     * Note: Currently only supported in 2D physics.
+     *
+     * @param collisionobject the collision object whose mass needs to be updated
+     * @param mass the new mass value to set for the collision object
+     */
+    @:native('update_mass')
+    static function updateMass(collisionobject:HashOrStringOrUrl, mass:Float):Void;
 }
 
 /**
@@ -750,4 +789,7 @@ extern enum abstract PhysicsJointType({})
 
     @:native('JOINT_TYPE_SPRING')
     var Spring;
+
+    @:native('JOINT_TYPE_WHEEL')
+    var Wheel;
 }
