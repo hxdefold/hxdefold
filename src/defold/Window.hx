@@ -5,7 +5,8 @@ package defold;
     and screen dimming.
 **/
 @:native("_G.window")
-extern class Window {
+extern final class Window
+{
     /**
         Returns the current dimming mode set on a mobile device.
 
@@ -15,14 +16,18 @@ extern class Window {
 
         @return The mode for screen dimming
     **/
-    static function get_dim_mode():WindowDimmingMode;
+    @:pure
+    @:native('get_dim_mode')
+    static function getDimMode():WindowDimmingMode;
 
     /**
         This returns the current window size (width and height).
 
         @return The size of the window.
     **/
-    static function get_size():WindowSize;
+    @:pure
+    @:native('get_size')
+    static function getSize():WindowSize;
 
     /**
         Sets the dimming mode on a mobile device.
@@ -34,14 +39,26 @@ extern class Window {
 
         @param mode The mode for screen dimming
     **/
-    static function set_dim_mode(mode:WindowDimmingMode):Void;
+    @:native('set_dim_mode')
+    static function setDimMode(mode:WindowDimmingMode):Void;
 
     /**
         Sets a window event listener.
 
         @param callback A callback which receives info about window events. Can be null.
     **/
-    static function set_listener<T>(callback:T->WindowEvent->WindowEventData->Void):Void;
+    static inline function setListener(callback:(event:WindowEvent, data:WindowEventData)->Void):Void
+    {
+        // 1. hide the reall callback parameter which expects a function with a "self" argument
+        // 2. ensure that the global self reference is present for the callback
+        setListener_((self, event, data) ->
+        {
+            untyped __lua__('_G._hxdefold_self_ = {0}', self);
+            callback(event, data);
+            untyped __lua__('_G._hxdefold_self_ = nil');
+        });
+    }
+    @:native('set_listener') private static function setListener_(callback:(Any, WindowEvent, WindowEventData)->Void):Void;
 
     /**
         Set the locking state for current mouse cursor on a PC platform.
@@ -50,14 +67,17 @@ extern class Window {
 
         @param flag The lock state for the mouse cursor
     **/
-    static function set_mouse_lock(flag:Bool):Void;
+    @:native('set_mouse_lock')
+    static function setMouseLock(flag:Bool):Void;
 
     /**
         This returns the current lock state of the mouse cursor.
 
         @return The lock state
     **/
-    static function get_mouse_lock():Bool;
+    @:pure
+    @:native('get_mouse_lock')
+    static function getMouseLock():Bool;
 }
 
 
@@ -66,22 +86,26 @@ extern class Window {
     should dim the screen after a period without user interaction.
 **/
 @:native("_G.window")
-extern enum abstract WindowDimmingMode({}) {
+extern enum abstract WindowDimmingMode({})
+{
     /**
         Dimming off
     **/
-    var DIMMING_OFF;
+    @:native('DIMMING_OFF')
+    var Off;
 
     /**
         Dimming on
     **/
-    var DIMMING_ON;
+    @:native('DIMMING_ON')
+    var On;
 
     /**
         This mode indicates that the dim mode can't be determined,
         or that the platform doesn't support dimming.
     **/
-    var DIMMING_UNKNOWN;
+    @:native('DIMMING_UNKNOWN')
+    var Unknown;
 }
 
 
@@ -89,14 +113,16 @@ extern enum abstract WindowDimmingMode({}) {
     Window events, used in `Window.set_listener` callbacks.
 **/
 @:native("_G.window")
-extern enum abstract WindowEvent({}) {
+extern enum abstract WindowEvent({})
+{
     /**
         Deiconified window event.
 
         This event is sent to a window event listener when the game window or app screen
         is restored after being iconified.
     **/
-    var WINDOW_EVENT_DEICONIFIED;
+    @:native('WINDOW_EVENT_DEICONIFIED')
+    var Deiconified;
 
     /**
         Iconify window event.
@@ -104,7 +130,8 @@ extern enum abstract WindowEvent({}) {
         This event is sent to a window event listener when the game window or app screen
         is iconified (reduced to an application icon in a toolbar, application tray or similar).
     **/
-    var WINDOW_EVENT_ICONFIED;
+    @:native('WINDOW_EVENT_ICONFIED')
+    var Iconified;
 
     /**
         Focus gained window event.
@@ -113,14 +140,16 @@ extern enum abstract WindowEvent({}) {
         gained focus.
         This event is also sent at game startup and the engine gives focus to the game.
     **/
-    var WINDOW_EVENT_FOCUS_GAINED;
+    @:native('WINDOW_EVENT_FOCUS_GAINED')
+    var FocusGained;
 
     /**
         Focus lost window event.
 
         This event is sent to a window event listener when the game window or app screen has lost focus.
     **/
-    var WINDOW_EVENT_FOCUS_LOST;
+    @:native('WINDOW_EVENT_FOCUS_LOST')
+    var FocusLost;
 
     /**
         Resized window event.
@@ -128,14 +157,16 @@ extern enum abstract WindowEvent({}) {
         This event is sent to a window event listener when the game window or app screen is resized.
         The new size is passed along in the data field to the event listener.
     **/
-    var WINDOW_EVENT_RESIZED;
+    @:native('WINDOW_EVENT_RESIZED')
+    var Resized;
 }
 
 
 /**
     Window event data, used in `Window.set_listener` callbacks.
 **/
-typedef WindowEventData = {
+typedef WindowEventData =
+{
     /**
         The width of a resize event. null otherwise.
     **/
@@ -150,7 +181,8 @@ typedef WindowEventData = {
 /**
     Window size data, returned from `Window.get_size()`.
 **/
-@:multiReturn extern class WindowSize {
+@:multiReturn extern final class WindowSize
+{
     /**
         The window width.
     **/

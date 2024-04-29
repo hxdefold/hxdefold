@@ -7,7 +7,8 @@ import defold.types.*;
     shader constants.
 **/
 @:native("_G.particlefx")
-extern class Particlefx {
+extern final class Particlefx
+{
     /**
         Start playing a particle FX.
 
@@ -15,10 +16,21 @@ extern class Particlefx {
         Which particle FX to play is identified by the URL.
 
         @param url the particle fx that should start playing
-        @param emitter_state_cb optional callback that will be called when an emitter attached to this particlefx changes state.
+        @param emitterStateCb optional callback that will be called when an emitter attached to this particlefx changes state.
         The callback receives the hash of the path to the particlefx, the hash of the id of the emitter, and the new state of the emitter.
     **/
-    static function play<T>(url:UrlOrString, ?emitter_state_cb:T->Hash->Hash->ParticlefxEmitterState->Void):Void;
+    static inline function play(url:UrlOrString, ?emitterStateCb:(id: Hash, emitter: Hash, state: ParticlefxEmitterState)->Void):Void
+    {
+        // 1. hide the reall callback parameter which expects a function with a "self" argument
+        // 2. ensure that the global self reference is present for the callback
+        play_(url, emitterStateCb == null ? null : (self, hash, hash, state) ->
+        {
+            untyped __lua__('_G._hxdefold_self_ = {0}', self);
+            emitterStateCb(hash, hash, state);
+            untyped __lua__('_G._hxdefold_self_ = nil');
+        });
+    }
+    @:native('play') private static function play_(url:UrlOrString, ?emitterStateCb:(Any, Hash, Hash, ParticlefxEmitterState)->Void):Void;
 
     /**
         Reset a shader constant for a particle FX emitter.
@@ -28,10 +40,11 @@ extern class Particlefx {
         Which particle FX to reset a constant for is identified by the URL.
 
         @param url the particle FX that should have a constant reset
-        @param emitter_id the id of the emitter
+        @param emitterId the id of the emitter
         @param name the name of the constant
     **/
-    static function reset_constant(url:UrlOrString, emitter_id:HashOrString, name:HashOrString):Void;
+    @:native('reset_constant')
+    static function resetConstant(url:UrlOrString, emitterId:HashOrString, name:HashOrString):Void;
 
     /**
         Set a shader constant for a particle FX emitter.
@@ -42,11 +55,12 @@ extern class Particlefx {
         Which particle FX to set a constant for is identified by the URL.
 
         @param url the particle FX that should have a constant set
-        @param emitter_id the id of the emitter
+        @param emitterId the id of the emitter
         @param name the name of the constant
         @param value the value of the constant
     **/
-    static function set_constant(url:UrlOrString, emitter_id:HashOrString, name:HashOrString, value:Vector4):Void;
+    @:native('set_constant')
+    static function setConstant(url:UrlOrString, emitterId:HashOrString, name:HashOrString, value:Vector4):Void;
 
     /**
         Stop playing a particle fx.
@@ -61,13 +75,15 @@ extern class Particlefx {
 }
 
 @:native("_G.particlefx")
-extern enum abstract ParticlefxEmitterState({}) {
+extern enum abstract ParticlefxEmitterState({})
+{
     /**
         Sleeping state.
 
         The emitter does not have any living particles and will not spawn any particles in this state.
     **/
-    var EMITTER_STATE_SLEEPING;
+    @:native('EMITTER_STATE_SLEEPING')
+    var Sleeping;
 
     /**
         Prespawn state.
@@ -75,27 +91,31 @@ extern enum abstract ParticlefxEmitterState({}) {
         The emitter will be in this state when it has been started but before spawning any particles.
         Normally the emitter is in this state for a short time, depending on if a start delay has been set for this emitter or not.
     **/
-    var EMITTER_STATE_PRESPAWN;
+    @:native('EMITTER_STATE_PRESPAWN')
+    var PreSpawn;
 
     /**
         Spawning state.
 
         The emitter is spawning particles.
     **/
-    var EMITTER_STATE_SPAWNING;
+    @:native('EMITTER_STATE_SPAWNING')
+    var Spawning;
 
     /**
         Postspawn state.
 
         The emitter is not spawning any particles, but has particles that are still alive.
     **/
-    var EMITTER_STATE_POSTSPAWN;
+    @:native('EMITTER_STATE_POSTSPAWN')
+    var PostSpawn;
 }
 
 /**
     Options provided to the `stop()` method.
 **/
-typedef ParticleFxStopOptions = {
+typedef ParticleFxStopOptions =
+{
     /**
         instantly clear spawned particles
     **/

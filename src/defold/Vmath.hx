@@ -18,7 +18,8 @@ import defold.types.util.LuaArray;
     * All types performs equality comparison by each component value.
 **/
 @:native("_G.vmath")
-extern class Vmath {
+extern final class Vmath
+{
     /**
         Calculates the conjugate of a quaternion. The result is a
         quaternion with the same magnitudes but with the sign of
@@ -29,6 +30,7 @@ extern class Vmath {
         @param q1 quaternion of which to calculate the conjugate
         @return the conjugate
     **/
+    @:pure
     static function conj(q1:Quaternion):Quaternion;
 
     /**
@@ -46,6 +48,7 @@ extern class Vmath {
         @param v2 second vector
         @return a new vector representing the cross product
     **/
+    @:pure
     static function cross(v1:Vector3, v2:Vector3):Vector3;
 
     /**
@@ -65,6 +68,7 @@ extern class Vmath {
         @param v1 second vector
         @return dot product
     **/
+    @:pure
     @:overload(function(v1:Vector4, v2:Vector4):Float {})
     static function dot(v1:Vector3, v2:Vector3):Float;
 
@@ -81,6 +85,7 @@ extern class Vmath {
         @param m1 matrix to invert
         @return inverse of the supplied matrix
     **/
+    @:pure
     static function inv(m1:Matrix4):Matrix4;
 
     /**
@@ -93,6 +98,7 @@ extern class Vmath {
         @param v value of which to calculate the length
         @return length
     **/
+    @:pure
     @:overload(function(v:Quaternion):Float {})
     @:overload(function(v:Vector4):Float {})
     static function length(v:Vector3):Float;
@@ -105,9 +111,11 @@ extern class Vmath {
         @param v vector of which to calculate the squared length
         @return squared vector length
     **/
+    @:pure
+    @:native('length_sqr')
     @:overload(function(v:Quaternion):Float {})
     @:overload(function(v:Vector4):Float {})
-    static function length_sqr(v:Vector3):Float;
+    static function lengthSqr(v:Vector3):Float;
 
     /**
         Lerps between two vectors/quaternions/numbers.
@@ -133,6 +141,7 @@ extern class Vmath {
         @param q2 quaternion to lerp to
         @return the lerped vector/quaternion/number
     **/
+    @:pure
     @:overload(function(t:Float, q1:Quaternion, q2:Quaternion):Quaternion {})
     @:overload(function(t:Float, n1:Float, n2:Float):Float {})
     @:overload(function(t:Float, v1:Vector4, v2:Vector4):Vector4 {})
@@ -151,6 +160,7 @@ extern class Vmath {
         @param m1 existing matrix
         @return identity or copy matrix
     **/
+    @:pure
     static function matrix4(?m1:Matrix4):Matrix4;
 
     /**
@@ -162,7 +172,9 @@ extern class Vmath {
         @param angle angle in radians
         @return matrix represented by axis and angle
     **/
-    static function matrix4_axis_angle(v:Vector3, angle:Float):Matrix4;
+    @:pure
+    @:native('matrix4_axis_angle')
+    static function matrix4AxisAngle(v:Vector3, angle:Float):Matrix4;
 
     /**
         Creates a matrix from a quaternion.
@@ -173,7 +185,9 @@ extern class Vmath {
         @param q quaternion to create matrix from
         @return matrix represented by quaternion
     **/
-    static function matrix4_from_quat(q:Quaternion):Matrix4;
+    @:pure
+    @:native('matrix4_from_quat')
+    static function matrix4FromQuat(q:Quaternion):Matrix4;
 
     /**
         Creates a frustum matrix.
@@ -191,7 +205,9 @@ extern class Vmath {
         @param far coordinate for far clipping plane
         @return matrix representing the frustum
     **/
-    static function matrix4_frustum(left:Float, right:Float, bottom:Float, top:Float, near:Float, far:Float):Matrix4;
+    @:pure
+    @:native('matrix4_frustum')
+    static function matrix4Frustum(left:Float, right:Float, bottom:Float, top:Float, near:Float, far:Float):Matrix4;
 
     /**
         Creates a look-at view matrix.
@@ -205,7 +221,9 @@ extern class Vmath {
         @param up up vector
         @return look-at matrix
     **/
-    static function matrix4_look_at(eye:Vector3, look_at:Vector3, up:Vector3):Matrix4;
+    @:pure
+    @:native('matrix4_look_at')
+    static function matrix4LookAt(eye:Vector3, look_at:Vector3, up:Vector3):Matrix4;
 
     /**
         Creates an orthographic projection matrix.
@@ -219,7 +237,9 @@ extern class Vmath {
         @param far coordinate for far clipping plane
         @return orthographic projection matrix
     **/
-    static function matrix4_orthographic(left:Float, right:Float, bottom:Float, top:Float, near:Float, far:Float):Matrix4;
+    @:pure
+    @:native('matrix4_orthographic')
+    static function matrix4Orthographic(left:Float, right:Float, bottom:Float, top:Float, near:Float, far:Float):Matrix4;
 
     /**
         Creates a perspective projection matrix.
@@ -231,7 +251,9 @@ extern class Vmath {
         @param far coordinate for far clipping plane
         @return perspective projection matrix
     **/
-    static function matrix4_perspective(fov:Float, aspect:Float, near:Float, far:Float):Matrix4;
+    @:pure
+    @:native('matrix4_perspective')
+    static function matrix4Perspective(fov:Float, aspect:Float, near:Float, far:Float):Matrix4;
 
     /**
         Creates a matrix from rotation around x-axis.
@@ -242,7 +264,9 @@ extern class Vmath {
         @param angle angle in radians around x-axis
         @return matrix from rotation around x-axis
     **/
-    static function matrix4_rotation_x(angle:Float):Matrix4;
+    @:pure
+    @:native('matrix4_rotation_x')
+    static function matrix4RotationX(angle:Float):Matrix4;
 
     /**
         Creates a matrix from rotation around y-axis.
@@ -253,7 +277,9 @@ extern class Vmath {
         @param angle angle in radians around y-axis
         @return matrix from rotation around y-axis
     **/
-    static function matrix4_rotation_y(angle:Float):Matrix4;
+    @:pure
+    @:native('matrix4_rotation_y')
+    static function matrix4RotationY(angle:Float):Matrix4;
 
     /**
         Creates a matrix from rotation around z-axis.
@@ -264,7 +290,9 @@ extern class Vmath {
         @param angle angle in radians around z-axis
         @return matrix from rotation around z-axis
     **/
-    static function matrix4_rotation_z(angle:Float):Matrix4;
+    @:pure
+    @:native('matrix4_rotation_z')
+    static function matrix4RotationZ(angle:Float):Matrix4;
 
     /**
         The resulting matrix describes a translation of a point in euclidean space.
@@ -272,7 +300,9 @@ extern class Vmath {
         @param position position vector to create matrix from
         @return matrix from the supplied position vector
     **/
-    static function matrix4_translation(position:EitherType<Vector3,Vector4>): Matrix4;
+    @:pure
+    @:native('matrix4_translation')
+    static function matrix4Translation(position:EitherType<Vector3,Vector4>): Matrix4;
 
     /**
         Performs an element wise multiplication between two vectors of the same type
@@ -284,8 +314,10 @@ extern class Vmath {
         @param v2 second vector
         @return multiplied vector
     **/
+    @:pure
     @:overload(function(v1:Vector3, v2:Vector3):Vector3 {})
-    static function mul_per_elem(v1:Vector4, v2:Vector4):Vector4;
+    @:native('mul_per_elem')
+    static function mulPerElem(v1:Vector4, v2:Vector4):Vector4;
 
     /**
         Normalizes a vector, i.e. returns a new vector with the same
@@ -297,6 +329,7 @@ extern class Vmath {
         @param v1 vector to normalize
         @return new normalized vector
     **/
+    @:pure
     @:overload(function(v1:Quaternion):Quaternion {})
     @:overload(function(v1:Vector4):Vector4 {})
     static function normalize(v1:Vector3):Vector3;
@@ -314,7 +347,9 @@ extern class Vmath {
         @param m1 ortho-normalized matrix to invert
         @return inverse of the supplied matrix
     **/
-    static function ortho_inv(m1:Matrix4):Matrix4;
+    @:pure
+    @:native('ortho_inv')
+    static function orthoInv(m1:Matrix4):Matrix4;
 
     /**
         Projects a vector onto another vector.
@@ -330,6 +365,7 @@ extern class Vmath {
         @param v2 vector onto which the first will be projected, must not have zero length
         @return the projected extent of the first vector onto the second
     **/
+    @:pure
     static function project(v1:Vector3, v2:Vector3):Float;
 
     /**
@@ -344,6 +380,7 @@ extern class Vmath {
         @param z z coordinate
         @param w w coordinate
     **/
+    @:pure
     @:overload(function(?q1:Quaternion):Quaternion {})
     static function quat(x:Float, y:Float, z:Float, w:Float):Quaternion;
 
@@ -357,7 +394,9 @@ extern class Vmath {
         @param angle angle
         @return quaternion representing the axis-angle rotation
     **/
-    static function quat_axis_angle(v:Vector3, angle:Float):Quaternion;
+    @:pure
+    @:native('quat_axis_angle')
+    static function quatAxisAngle(v:Vector3, angle:Float):Quaternion;
 
     /**
         Creates a quaternion from three base unit vectors.
@@ -371,7 +410,9 @@ extern class Vmath {
         @param z z base vector
         @return quaternion representing the rotation of the specified base vectors
     **/
-    static function quat_basis(x:Vector3, y:Vector3, z:Vector3):Quaternion;
+    @:pure
+    @:native('quat_basis')
+    static function quatBasis(x:Vector3, y:Vector3, z:Vector3):Quaternion;
 
     /**
         Creates a quaternion to rotate between two unit vectors.
@@ -387,7 +428,9 @@ extern class Vmath {
         @param v2 second unit vector, after rotation
         @return quaternion representing the rotation from first to second vector
     **/
-    static function quat_from_to(v1:Vector3, v2:Vector3):Quaternion;
+    @:pure
+    @:native('quat_from_to')
+    static function quatFromTo(v1:Vector3, v2:Vector3):Quaternion;
 
     /**
         Creates a quaternion from rotation around x-axis.
@@ -398,7 +441,9 @@ extern class Vmath {
         @param angle angle in radians around x-axis
         @return quaternion representing the rotation around the x-axis
     **/
-    static function quat_rotation_x(angle:Float):Quaternion;
+    @:pure
+    @:native('quat_rotation_x')
+    static function quatRotationX(angle:Float):Quaternion;
 
     /**
         Creates a quaternion from rotation around y-axis.
@@ -409,7 +454,9 @@ extern class Vmath {
         @param angle angle in radians around y-axis
         @return quaternion representing the rotation around the y-axis
     **/
-    static function quat_rotation_y(angle:Float):Quaternion;
+    @:pure
+    @:native('quat_rotation_y')
+    static function quatRotationY(angle:Float):Quaternion;
 
     /**
         Creates a quaternion from rotation around z-axis.
@@ -420,7 +467,9 @@ extern class Vmath {
         @param angle angle in radians around z-axis
         @return quaternion representing the rotation around the z-axis
     **/
-    static function quat_rotation_z(angle:Float):Quaternion;
+    @:pure
+    @:native('quat_rotation_z')
+    static function quatRotationZ(angle:Float):Quaternion;
 
     /**
         Rotates a vector by a quaternion.
@@ -433,6 +482,7 @@ extern class Vmath {
         @param v vector to rotate
         @return the rotated vector
     **/
+    @:pure
     static function rotate(q:Quaternion, v:Vector3):Vector3;
 
     /**
@@ -471,6 +521,7 @@ extern class Vmath {
         @param q2 quaternion to slerp to
         @return the slerped vector
     **/
+    @:pure
     @:overload(function(t:Float, q1:Quaternion, q2:Quaternion):Quaternion {})
     @:overload(function(t:Float, v1:Vector4, v2:Vector4):Vector4 {})
     static function slerp(t:Float, v1:Vector3, v2:Vector3):Vector3;
@@ -481,11 +532,13 @@ extern class Vmath {
         @param t table of numbers
         @return new vector
     **/
+    @:pure
     static function vector(t:LuaArray<Float>):Vector;
 
     /**
         Creates a new zero vector, a vector from scalar value, from another existing vector or from given coordinates.
     **/
+    @:pure
     @:overload(function():Vector3 {})
     @:overload(function(n:Float):Vector3 {})
     @:overload(function(v:Vector3):Vector3 {})
@@ -494,6 +547,7 @@ extern class Vmath {
     /**
         Creates a new zero vector, a vector from scalar value, from another existing vector or from given coordinates.
     **/
+    @:pure
     @:overload(function():Vector4 {})
     @:overload(function(n:Float):Vector4 {})
     @:overload(function(v:Vector4):Vector4 {})

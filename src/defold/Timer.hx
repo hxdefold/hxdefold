@@ -1,5 +1,7 @@
 package defold;
 
+import defold.types.Hash;
+
 /**
     Timers allow you to set a delay and a callback to be called when the timer completes.
     The timers created with this API are updated with the collection timer where they
@@ -7,7 +9,8 @@ package defold;
     also affect the new timer.
 **/
 @:native("_G.timer")
-extern class Timer {
+extern final class Timer
+{
     /**
         Cancel a timer.
 
@@ -36,9 +39,20 @@ extern class Timer {
         @param delay time interval in seconds
         @param repeat true = repeat timer until cancel, false = one-shot timer
         @param callback timer callback function
-        @return identifier for the create timer, returns `Timer.INVALID_TIMER_HANDLE` if the timer can not be created
+        @return identifier for the create timer, returns `TimerHandle.Invalid` if the timer can not be created
     **/
-    static function delay<T>(delay:Float, repeat:Bool, callback:(self:T, handle:TimerHandle, time_elapsed:Float)->Void):TimerHandle;
+    static inline function delay(delay:Float, repeat:Bool, callback:(handle:TimerHandle, timeElapsed:Float)->Void):TimerHandle
+    {
+        // 1. hide the reall callback parameter which expects a function with a "self" argument
+        // 2. ensure that the global self reference is present for the callback
+        return delay_(delay, repeat, (self, handle, timeElapsed) ->
+        {
+            untyped __lua__('_G._hxdefold_self_ = {0}', self);
+            callback(handle, timeElapsed);
+            untyped __lua__('_G._hxdefold_self_ = nil');
+        });
+    }
+    @:native('delay') private static function delay_(delay:Float, repeat:Bool, callback:(Any, TimerHandle, Float)->Void):TimerHandle;
 
     /**
         Manual triggering a callback for a timer.
@@ -54,24 +68,30 @@ extern class Timer {
         @param handle the timer handle returned by `timer.delay()`
         @return the timer info, or `null` if timer is cancelled/completed
      */
-    static function get_info(handle:TimerHandle):TimerInfo;
-
-    /**
-        Indicates an invalid timer handle.
-    **/
-    static var INVALID_TIMER_HANDLE(default, never):TimerHandle;
+    @:pure
+    @:native('get_info')
+    static function getInfo(handle:TimerHandle):TimerInfo;
 }
 
-extern class TimerHandle {}
+@:native("_G.timer")
+extern enum abstract TimerHandle(Hash)
+{
+    @:native('INVALID_TIMER_HANDLE')
+    var Invalid;
+}
 
 /**
     Timer information returned by the `get_info()` method.
 **/
-extern class TimerInfo {
+extern final class TimerInfo
+{
     /** Time remaining until the next time a timer.delay() fires. */
-    var time_remaining:Float;
+    @:native('time_remaining')
+    var timeRemaining:Float;
+
     /** Time interval. */
     var delay: Float;
+
     /** `true` = repeat timer until cancel, `false` = one-shot timer. */
     var repeat: Bool;
 }

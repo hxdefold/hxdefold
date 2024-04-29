@@ -16,7 +16,8 @@ import defold.types.TileSourceResourceReference;
     Functions and constants to access resources.
 **/
 @:native("_G.resource")
-extern class Resource {
+extern final class Resource
+{
     /**
         Constructor-like function with two purposes:
 
@@ -36,13 +37,6 @@ extern class Resource {
         **Note:** This function can only be called within `@property()`.
     **/
     static function font(path:String):FontResourceReference;
-
-    /**
-        Return a reference to the Manifest that is currently loaded.
-
-        @return reference to the Manifest that is currently loaded
-    **/
-    static function get_current_manifest():ResourceManifestReference;
 
     /**
         Loads the resource data for a specific resource.
@@ -79,7 +73,8 @@ extern class Resource {
 
         *NOTE* Currently, only 1 mipmap is generated.
     **/
-    static function set_texture(path:HashOrString, table:ResourceSetTextureInfo, buffer:Buffer):Void;
+    @:native('set_texture')
+    static function setTexture(path:HashOrString, table:ResourceSetTextureInfo, buffer:Buffer):Void;
 
     /**
      * Gets texture info from a texture resource path or a texture handle.
@@ -87,7 +82,9 @@ extern class Resource {
      * @param path the path to the resource or a texture handle
      * @return info about the texture
     **/
-    static function get_texture_info(path:EitherType<HashOrString,TextureResourceHandle>):ResourceTextureInfo;
+    @:pure
+    @:native('get_texture_info')
+    static function getTextureInfo(path:EitherType<HashOrString,TextureResourceHandle>):ResourceTextureInfo;
 
     /**
         This function creates a new atlas resource that can be used in the same way as any atlas created during build time.
@@ -102,7 +99,8 @@ extern class Resource {
         @param table A table containing info about how to create the texture
         @return Returns the atlas resource path
     **/
-    static function create_atlas(path:String, table:ResourceAtlasInfo):Hash;
+    @:native('create_atlas')
+    static function createAtlas(path:String, table:ResourceAtlasInfo):Hash;
 
     /**
         This function creates a new buffer resource that can be used in the same way as any buffer created during build time.
@@ -118,7 +116,8 @@ extern class Resource {
         @param options A table containing info about how to create the buffer
         @return The resource buffer
     **/
-    static function create_buffer(path:HashOrString, options:ResourceCreateBufferOptions):Buffer;
+    @:native('create_buffer')
+    static function createBuffer(path:HashOrString, options:ResourceCreateBufferOptions):Buffer;
 
     /**
         Gets the buffer from a resource
@@ -126,7 +125,9 @@ extern class Resource {
         @param path The path to the resource
         @return The resource buffer
     **/
-    static function get_buffer(path:HashOrString):Buffer;
+    @:pure
+    @:native('get_buffer')
+    static function getBuffer(path:HashOrString):Buffer;
 
     /**
        Sets the buffer of a resource.
@@ -144,7 +145,8 @@ extern class Resource {
         @param buffer The resource buffer
         @param table options about how to set the buffer
     **/
-    static function set_buffer(path:HashOrString, buffer:Buffer, table:ResourceSetBufferOptions):Void;
+    @:native('set_buffer')
+    static function setBuffer(path:HashOrString, buffer:Buffer, table:ResourceSetBufferOptions):Void;
 
     /**
         Gets the text metrics from a font.
@@ -153,56 +155,9 @@ extern class Resource {
         @param text Text to measure
         @param options (optional) A table containing parameters for the text.
     **/
-    static function get_text_metrics(url:Hash, text:String, ?options:ResourceGetTextMetricsOptions):ResourceTextMetrics;
-
-    /**
-        Create, verify, and store a manifest to device.
-
-        Create a new manifest from a buffer. The created manifest is verified
-        by ensuring that the manifest was signed using the bundled public/private
-        key-pair during the bundle process and that the manifest supports the current
-        running engine version. Once the manifest is verified it is stored on device.
-        The next time the engine starts (or is rebooted) it will look for the stored
-        manifest before loading resources. Storing a new manifest allows the
-        developer to update the game, modify existing resources, or add new
-        resources to the game through LiveUpdate.
-
-        @param manifest_buffer the binary data that represents the manifest
-        @param callback the callback function executed once the engine has attempted to store the manifest.
-    **/
-    static function store_manifest<T>(manifest_buffer:String, callback:(self:T, status:ResourceLiveUpdateStatus)->Void):Void;
-
-    /**
-        Stores a zip file and uses it for live update content. The path is renamed and stored in the (internal) live update location.
-
-        @param path the path to the original file on disc
-        @param callback the callback function executed after the storage has completed
-        @param options optional table with extra parameters
-    **/
-    static function store_archive<T>(path:String, callback:(self:T, status:ResourceLiveUpdateStatus)->Void, ?options:ResourceStoreArchiveOptions):Void;
-
-    /**
-        Is any liveupdate data mounted and currently in use? This can be used to determine if a new manifest or zip file should be downloaded.
-
-        @return true if a liveupdate archive (any format) has been loaded
-    **/
-    static function is_using_liveupdate_data():Bool;
-
-    /**
-        Add a resource to the data archive and runtime index.
-
-        The resource will be verified internally before being added to the data archive.
-
-        @param manifest_reference The manifest to check against.
-        @param data The resource data that should be stored.
-        @param hexdigest The expected hash for the resource, retrieved through collectionproxy.missing_resources.
-        @param callback  The callback function that is executed once the engine has been attempted to store
-        the resource. Arguments:
-         * `self` The current object.
-         * `hexdigest` The hexdigest of the resource.
-         * `status` Whether or not the resource was successfully stored.
-    **/
-    static function store_resource<T>(manifest_reference:ResourceManifestReference, data:String, hexdigest:String, callback:T->String->Bool->Void):Void;
+    @:pure
+    @:native('get_text_metrics')
+    static function getTextMetrics(url:Hash, text:String, ?options:ResourceGetTextMetricsOptions):ResourceTextMetrics;
 
     /**
         Constructor-like function with two purposes:
@@ -222,18 +177,15 @@ extern class Resource {
 
         **Note:** This function can only be called within `@property()`.
     **/
-    static function tile_source(path:String):TileSourceResourceReference;
+    @:native('tile_source')
+    static function tileSource(path:String):TileSourceResourceReference;
 }
-
-/**
-    Resource manifest reference used by the `Resource` module.
-**/
-typedef ResourceManifestReference = Int;
 
 /**
     Texture info used by the `Resource.set_texture` method.
 **/
-typedef ResourceSetTextureInfo = {
+typedef ResourceSetTextureInfo =
+{
     /**
         The texture type
     **/
@@ -278,7 +230,8 @@ typedef ResourceSetTextureInfo = {
 /**
     Texture info returned by the `Resource.get_texture_info` method.
 **/
-typedef ResourceTextureInfo = {
+typedef ResourceTextureInfo =
+{
     /**
         The opaque handle to the texture resource
     **/
@@ -313,7 +266,8 @@ typedef ResourceTextureInfo = {
 /**
     Atlas info used by the `Resource.create_atlas` method.
 **/
-typedef ResourceAtlasInfo = {
+typedef ResourceAtlasInfo =
+{
     /**
         The path to the texture resource, e.g "/main/my_texture.texturec"
     **/
@@ -451,21 +405,25 @@ typedef ResourceTextMetrics =
     Resource type used in `ResourceTextureInfo.type` field.
 **/
 @:native("_G.resource")
-extern enum abstract ResourceTextureType(Int) {
+extern enum abstract ResourceTextureType(Int)
+{
     /**
         2D texture type.
     **/
-    var TEXTURE_TYPE_2D;
+    @:native('TEXTURE_TYPE_2D')
+    var Type2D;
 
     /**
         Cube map texture type
     **/
-    var TEXTURE_TYPE_CUBE_MAP;
+    @:native('TEXTURE_TYPE_CUBE_MAP')
+    var TypeCubeMap;
 
     /**
         2D Array texture type
     **/
-    var TEXTURE_TYPE_2D_ARRAY;
+    @:native('TEXTURE_TYPE_2D_ARRAY')
+    var TypeArray2D;
 }
 
 /**
@@ -476,199 +434,171 @@ extern enum abstract ResourceTextureType(Int) {
     On the Haxe side, use the `isAvailable()` method on the enum to check if a format is supported.
 **/
 @:native("_G.resource")
-extern enum abstract ResourceTextureFormat(Null<Int>) {
+extern enum abstract ResourceTextureFormat(Null<Int>)
+{
     /**
         Luminance type texture format.
     **/
-    var TEXTURE_FORMAT_LUMINANCE;
+    @:native('TEXTURE_FORMAT_LUMINANCE')
+    var Luminance;
 
     /**
         RGB type texture format.
     **/
-    var TEXTURE_FORMAT_RGB;
+    @:native('TEXTURE_FORMAT_RGB')
+    var Rgb;
 
     /**
         RGBA type texture format.
     **/
-    var TEXTURE_FORMAT_RGBA;
+    @:native('TEXTURE_FORMAT_RGBA')
+    var Rgba;
 
     /**
         RGB_PVRTC_2BPPV1 type texture format
     **/
-    var TEXTURE_FORMAT_RGB_PVRTC_2BPPV1;
+    @:native('TEXTURE_FORMAT_RGB_PVRTC_2BPPV1')
+    var RgbPvrtc2BPPv1;
 
     /**
         RGB_PVRTC_4BPPV1 type texture format
     **/
-    var TEXTURE_FORMAT_RGB_PVRTC_4BPPV1;
+    @:native('TEXTURE_FORMAT_RGB_PVRTC_4BPPV1')
+    var RgbPvrtc4BPPv1;
 
     /**
         RGBA_PVRTC_2BPPV1 type texture format
     **/
-    var TEXTURE_FORMAT_RGBA_PVRTC_2BPPV1;
+    @:native('TEXTURE_FORMAT_RGBA_PVRTC_2BPPV1')
+    var RgbaPvrtc2BPPv1;
 
     /**
         RGBA_PVRTC_4BPPV1 type texture format
     **/
-    var TEXTURE_FORMAT_RGBA_PVRTC_4BPPV1;
+    @:native('TEXTURE_FORMAT_RGBA_PVRTC_4BPPV1')
+    var RgbaPvrtc4BPPv1;
 
     /**
         RGB_ETC1 type texture format
     **/
-    var TEXTURE_FORMAT_RGB_ETC1;
+    @:native('TEXTURE_FORMAT_RGB_ETC1')
+    var RgbEtc1;
 
     /**
         RGBA_ETC2 type texture format
     **/
-    var TEXTURE_FORMAT_RGBA_ETC2;
+    @:native('TEXTURE_FORMAT_RGBA_ETC2')
+    var RgbEtc2;
 
     /**
         RGBA_ASTC_4x4 type texture format
     **/
-    var TEXTURE_FORMAT_RGBA_ASTC_4x4;
+    @:native('TEXTURE_FORMAT_RGBA_ASTC_4x4')
+    var RgbaAstc4x4;
 
     /**
         RGB_BC1 type texture format
     **/
-    var TEXTURE_FORMAT_RGB_BC1;
+    @:native('TEXTURE_FORMAT_RGB_BC1')
+    var RggBc1;
 
     /**
         RGBA_BC3 type texture format
     **/
-    var TEXTURE_FORMAT_RGBA_BC3;
+    @:native('TEXTURE_FORMAT_RGBA_BC3')
+    var RgbaBc3;
 
     /**
         R_BC4 type texture format
     **/
-    var TEXTURE_FORMAT_R_BC4;
+    @:native('TEXTURE_FORMAT_R_BC4')
+    var RBC4;
 
     /**
         RG_BC5 type texture format
     **/
-    var TEXTURE_FORMAT_RG_BC5;
+    @:native('TEXTURE_FORMAT_RG_BC5')
+    var RgBC5;
 
     /**
         RGBA_BC7 type texture format
     **/
-    var TEXTURE_FORMAT_RGBA_BC7;
+    @:native('TEXTURE_FORMAT_RGBA_BC7')
+    var RgbaBC7;
 
     /**
         RGB16F type texture format
     **/
-    var TEXTURE_FORMAT_RGB16F;
+    @:native('TEXTURE_FORMAT_RGB16F')
+    var Rgb16f;
 
     /**
         RGB32F type texture format
     **/
-    var TEXTURE_FORMAT_RGB32F;
+    @:native('TEXTURE_FORMAT_RGB32F')
+    var Rgb32f;
 
     /**
         RGBA16F type texture format
     **/
-    var TEXTURE_FORMAT_RGBA16F;
+    @:native('TEXTURE_FORMAT_RGBA16F')
+    var Rgba16f;
 
     /**
         RGBA32F type texture format
     **/
-    var TEXTURE_FORMAT_RGBA32F;
+    @:native('TEXTURE_FORMAT_RGBA32F')
+    var Rgba32f;
 
     /**
         R16F type texture format
     **/
-    var TEXTURE_FORMAT_R16F;
+    @:native('TEXTURE_FORMAT_R16F')
+    var R16f;
 
     /**
         RG16F type texture format
     **/
-    var TEXTURE_FORMAT_RG16F;
+    @:native('TEXTURE_FORMAT_RG16F')
+    var Rg16f;
 
     /**
         R32F type texture format
     **/
-    var TEXTURE_FORMAT_R32F;
+    @:native('TEXTURE_FORMAT_R32F')
+    var R32f;
 
     /**
         RG32F type texture format
     **/
-    var TEXTURE_FORMAT_RG32F;
+    @:native('TEXTURE_FORMAT_RG32F')
+    var Rg32f;
 
     /**
         Checks if the device running the game supports this format.
 
         @return `true` if the format is available on the device, otherwise `false`
     **/
-    public inline function isAvailable():Bool {
-
+    public inline function isAvailable():Bool
+    {
         return this != null;
     }
 }
 
 @:native("_G.resource")
-extern enum abstract ResourceLiveUpdateStatus({}) {
-    /**
-        Mismatch between between expected bundled resources and actual bundled resources.
-        The manifest expects a resource to be in the bundle, but it was not found in the bundle.
-        This is typically the case when a non-excluded resource was modified between publishing the bundle and publishing the manifest.
-    **/
-    var LIVEUPDATE_BUNDLED_RESOURCE_MISMATCH;
-
-    /**
-        Mismatch between running engine version and engine versions supported by manifest.
-    **/
-    var LIVEUPDATE_ENGINE_VERSION_MISMATCH;
-
-    /**
-        Failed to parse manifest data buffer. The manifest was probably produced by a different engine version.
-    **/
-    var LIVEUPDATE_FORMAT_ERROR;
-
-    /**
-        The handled resource is invalid.
-    **/
-    var LIVEUPDATE_INVALID_RESOURCE;
-
-    var LIVEUPDATE_OK;
-
-    /**
-        Mismatch between scheme used to load resources.
-        Resources are loaded with a different scheme than from manifest, for example over HTTP or directly from file.
-        This is typically the case when running the game directly from the editor instead of from a bundle.
-    **/
-    var LIVEUPDATE_SCHEME_MISMATCH;
-
-    /**
-        Mismatch between manifest expected signature and actual signature.
-    **/
-    var LIVEUPDATE_SIGNATURE_MISMATCH;
-
-    /**
-        Mismatch between manifest expected version and actual version.
-    **/
-    var LIVEUPDATE_VERSION_MISMATCH;
-}
-
-@:native("_G.resource")
-extern enum abstract ResourceTextureCompressionType({}) {
+extern enum abstract ResourceTextureCompressionType({})
+{
     /**
         No compression.
     **/
-    var COMPRESSION_TYPE_DEFAULT;
+    @:native('COMPRESSION_TYPE_DEFAULT')
+    var Default;
 
     /**
-        Compression with basic UASTC.
+        Compression with BASIS_UASTC.
     **/
-    var COMPRESSION_TYPE_BASIS_UASTC;
-}
-
-/**
-    Options used by the `Resource.store_archive` method.
-**/
-typedef ResourceStoreArchiveOptions =
-{
-    /**
-        If archive should be verified as well as stored (defaults to `true`).
-    **/
-    var ?verify:Bool;
+    @:native('COMPRESSION_TYPE_BASIS_UASTC')
+    var BasisUastc;
 }
 
 /**

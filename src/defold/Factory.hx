@@ -9,7 +9,8 @@ import defold.types.*;
     dynamically spawn game objects into the runtime.
 **/
 @:native("_G.factory")
-extern class Factory {
+extern final class Factory
+{
     /**
         Make a factory create a new game object.
 
@@ -42,7 +43,9 @@ extern class Factory {
         @param url the factory component to get status from
         @return status of the factory component
     **/
-    static function get_status(?url:HashOrStringOrUrl):FactoryStatus;
+    @:pure
+    @:native('get_status')
+    static function getStatus(?url:HashOrStringOrUrl):FactoryStatus;
 
     /**
         Load resources of a factory prototype.
@@ -52,9 +55,20 @@ extern class Factory {
         Calling this function when the factory is not marked as dynamic loading does nothing.
 
         @param url the factory component to load
-        @param complete_function function to call when resources are loaded.
+        @param completeFunction function to call when resources are loaded.
     **/
-    static function load<T>(?url:HashOrStringOrUrl, ?complete_function:(self:T, url:Url, result:Bool)->Void):Void;
+    static inline function load(?url:HashOrStringOrUrl, ?completeFunction:(url:Url, result:Bool)->Void):Void
+    {
+        // 1. hide the reall callback parameter which expects a function with a "self" argument
+        // 2. ensure that the global self reference is present for the callback
+        load_(url, completeFunction == null ? null : (self, url, result) ->
+        {
+            untyped __lua__('_G._hxdefold_self_ = {0}', self);
+            completeFunction(url, result);
+            untyped __lua__('_G._hxdefold_self_ = nil');
+        });
+    }
+    @:native('load') private static function load_(?url:HashOrStringOrUrl, ?completeFunction:(Any, Url, Bool)->Void):Void;
 
     /**
         Unload resources previously loaded using `Factory.load`.
@@ -80,15 +94,31 @@ extern class Factory {
         @param url the collection factory component
         @param prototype the path to the new prototype, or `null`
     **/
-    static function set_prototype(url:HashOrStringOrUrl, ?prototype:String):Void;
+    @:native('set_prototype')
+    static function setPrototype(url:HashOrStringOrUrl, ?prototype:String):Void;
 }
 
 /**
-    Possible return values for `Factory.get_Status`.
+    Possible return values for `Factory.get_status`.
 **/
 @:native("_G.factory")
-extern enum abstract FactoryStatus({}) {
-    var STATUS_UNLOADED;
-    var STATUS_LOADING;
-    var STATUS_LOADED;
+extern enum abstract FactoryStatus({})
+{
+    /**
+     * The factory is unloaded.
+     */
+    @:native('STATUS_UNLOADED')
+    var Unloaded;
+
+    /**
+     * The factory is loading.
+     */
+    @:native('STATUS_LOADING')
+    var Loading;
+
+    /**
+     * The factory is loaded.
+     */
+    @:native('STATUS_LOADED')
+    var Loaded;
 }

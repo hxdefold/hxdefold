@@ -36,16 +36,21 @@ using haxe.macro.Tools;
     Go.get(url, MyProperties.positionY); // faster
     ```
 **/
-class HashBuilder {
-	public static function build():Array<Field> {
+class HashBuilder
+{
+	public static function build():Array<Field>
+	{
 		#if macro
 		var fields:Array<Field> = Context.getBuildFields();
 
-		for (field in fields) {
-			switch (field.kind) {
+		for (field in fields)
+		{
+			switch (field.kind)
+			{
 				case FVar(t, expr):
 					{
-						if (t == null) {
+						if (t == null)
+						{
 							// Field without type, update its expression.
 							var hashCT = macro:defold.types.Hash;
 							var hashExpr = macro Defold.hash($v{field.name});
@@ -55,7 +60,9 @@ class HashBuilder {
 							}
 
 							field.kind = FProp("default", "never", hashCT, hashExpr);
-						} else {
+						}
+						else
+						{
 							field.kind = FProp("default", "never", t, expr);
 						}
 						field.access.push(AFinal);

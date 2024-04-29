@@ -16,29 +16,34 @@ import lua.Table;
     This abstract also offers adjusted array access, by automatically incrementing given
     indices by `1`. This lets us keeps the `0`-based array access convention on the Haxe side.
 **/
-abstract LuaArray<T>(Table<Int,T>) from Table<Int,T> to Table<Int,T> {
-
+abstract LuaArray<T>(Table<Int,T>) from Table<Int,T> to Table<Int,T>
+{
     @:from
-    static inline function fromArray<T>(arr:Array<T>):LuaArray<T> {
+    static inline function fromArray<T>(arr:Array<T>):LuaArray<T>
+    {
         return Table.fromArray(arr);
     }
 
     @:to
-    inline function toArray():Array<T> {
+    inline function toArray():Array<T>
+    {
         return Table.toArray(this);
     }
 
-    public inline function iterator():Iterator<T> {
+    public inline function iterator():Iterator<T>
+    {
         return toArray().iterator();
     }
 
     @:op([])
-    inline function get(i:Int):T {
+    inline function get(i:Int):T
+    {
         return this[i+1];
     }
 
     @:op([])
-    inline function set(i:Int, v:T):Void {
+    inline function set(i:Int, v:T):Void
+    {
         this[i+1] = v;
     }
 }

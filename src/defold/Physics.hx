@@ -13,7 +13,8 @@ import defold.types.util.LuaArray;
     See `PhysicsMessages` for related messages.
 **/
 @:native("_G.physics")
-extern class Physics {
+extern final class Physics
+{
     /**
         Requests a ray cast to be performed.
 
@@ -29,6 +30,7 @@ extern class Physics {
         @param groups a lua table containing the hashed groups for which to test collisions against
         @param options a lua table containing options for the raycast
     **/
+    @:pure
     static function raycast(from:Vector3, to:Vector3, groups:LuaArray<Hash>, ?options:PhysicsRaycastOptions):LuaArray<PhysicsMessageRayCastResponse>;
 
     /**
@@ -48,10 +50,8 @@ extern class Physics {
         @param groups a lua table containing the hashed groups for which to test collisions against
         @param request_id a number between [0,-255]. It will be sent back in the response for identification, 0 by default
     **/
-    static function raycast_async(from:Vector3, to:Vector3, groups:LuaArray<Hash>, ?request_id:Int):Void;
-
-    @:deprecated
-    static function ray_cast(from:Vector3, to:Vector3, groups:LuaArray<Hash>, ?request_id:Int):Void;
+    @:native('raycast_async')
+    static function raycastAsync(from:Vector3, to:Vector3, groups:LuaArray<Hash>, ?request_id:Int):Void;
 
     /**
         Get the gravity in runtime. The gravity returned is not global,
@@ -59,7 +59,9 @@ extern class Physics {
 
         Note: For 2D physics the z component will always be zero.
     **/
-    static function get_gravity():Vector3;
+    @:pure
+    @:native('get_gravity')
+    static function getGravity():Vector3;
 
     /**
         physics.set_gravity(gravity)
@@ -70,7 +72,8 @@ extern class Physics {
         Note: For 2D physics the z component of the gravity vector will be ignored.
         @param gravity the new gravity vector
     **/
-    static function set_gravity(gravity:Vector3):Void;
+    @:native('set_gravity')
+    static function setGravity(gravity:Vector3):Void;
 
     /**
         Flips the collision shapes horizontally for a collision object
@@ -78,7 +81,8 @@ extern class Physics {
         @param url the collision object that should flip its shapes
         @param flip `true` if the collision object should flip its shapes, `false` if not
     **/
-    static function set_hflip(url:HashOrStringOrUrl, flip:Bool):Void;
+    @:native('set_hflip')
+    static function setHflip(url:HashOrStringOrUrl, flip:Bool):Void;
 
     /**
         Flips the collision shapes vertically for a collision object
@@ -86,7 +90,8 @@ extern class Physics {
         @param url the collision object that should flip its shapes
         @param flip `true` if the collision object should flip its shapes, `false` if not
     **/
-    static function set_vflip(url:HashOrStringOrUrl, flip:Bool):Void;
+    @:native('set_vflip')
+    static function setVflip(url:HashOrStringOrUrl, flip:Bool):Void;
 
     /**
         Collision objects tend to fall asleep when inactive for a small period of time for efficiency reasons. This function wakes them up.
@@ -102,7 +107,8 @@ extern class Physics {
         @param url the collision object affected
         @param group the new group name to be assigned
     **/
-    static function set_group(url:HashOrStringOrUrl, group: String):Void;
+    @:native('set_group')
+    static function setGroup(url:HashOrStringOrUrl, group: String):Void;
 
     /**
         Returns the group name of a collision object as a hash.
@@ -110,7 +116,8 @@ extern class Physics {
         @param url the collision object to return the group of
         @return hash value of the group
     **/
-    static function get_group(url:HashOrStringOrUrl):Hash;
+    @:native('get_group')
+    static function getGroup(url:HashOrStringOrUrl):Hash;
 
     /**
         Sets or clears the masking of a group (maskbit) in a collision object.
@@ -119,7 +126,8 @@ extern class Physics {
         @param group the name of the group (maskbit) to modify in the mask
         @param maskbit boolean value of the new maskbit. `true` to enable, `false` to disable
     **/
-    static function set_maskbit(url:HashOrStringOrUrl, group:String, maskbit:Bool):Void;
+    @:native('set_maskbit')
+    static function setMaskbit(url:HashOrStringOrUrl, group:String, maskbit:Bool):Void;
 
     /**
         Returns `true` if the specified group is set in the mask of a collision object, `false` otherwise
@@ -128,47 +136,53 @@ extern class Physics {
         @param group the name of the group to check for
         @return boolean value of the maskbit. `true` if present, `false` otherwise
     **/
-    static function get_maskbit(url:HashOrString, group:String):Bool;
+    @:pure
+    @:native('get_maskbit')
+    static function getMaskbit(url:HashOrString, group:String):Bool;
 
     /**
         Create a physics joint between two collision object components.
 
         Note: Currently only supported in 2D physics.
         @param joint_type the joint type
-        @param collisionobject_a first collision object
-        @param joint_id id of the joint
-        @param position_a local position where to attach the joint on the first collision object
-        @param collisionobject_b second collision object
-        @param position_b local position where to attach the joint on the second collision object
+        @param collisionobjectA first collision object
+        @param jointId id of the joint
+        @param positionA local position where to attach the joint on the first collision object
+        @param collisionobjectB second collision object
+        @param positionB local position where to attach the joint on the second collision object
         @param properties optional joint specific properties table See each joint type for possible properties field.
     **/
-    @:overload(function(joint_type:PhysicsJointType, collisionobject_a:HashOrStringOrUrl, joint_id:HashOrString,
-        position_a:Vector3, collisionobject_b:HashOrStringOrUrl, position_b:Vector3, ?properties:PhysicsHingeJoint):Void {})
-    @:overload(function(joint_type:PhysicsJointType, collisionobject_a:HashOrStringOrUrl, joint_id:HashOrString,
-        position_a:Vector3, collisionobject_b:HashOrStringOrUrl, position_b:Vector3, ?properties:PhysicsSliderJoint):Void {})
-    @:overload(function(joint_type:PhysicsJointType, collisionobject_a:HashOrStringOrUrl, joint_id:HashOrString,
-        position_a:Vector3, collisionobject_b:HashOrStringOrUrl, position_b:Vector3, ?properties:PhysicsSpringJoint):Void {})
-    static function create_joint(joint_type:PhysicsJointType, collisionobject_a:HashOrStringOrUrl, joint_id:HashOrString,
-        position_a:Vector3, collisionobject_b:HashOrStringOrUrl, position_b:Vector3, ?properties:PhysicsFixedJoint):Void;
+    @:native('create_joint')
+    @:overload(function(joint_type:PhysicsJointType, collisionobjectA:HashOrStringOrUrl, jointId:HashOrString,
+        position_A:Vector3, collisionobjectB:HashOrStringOrUrl, position_B:Vector3, ?properties:PhysicsHingeJoint):Void {})
+    @:overload(function(joint_type:PhysicsJointType, collisionobjectA:HashOrStringOrUrl, jointId:HashOrString,
+        position_A:Vector3, collisionobjectB:HashOrStringOrUrl, position_B:Vector3, ?properties:PhysicsSliderJoint):Void {})
+    @:overload(function(joint_type:PhysicsJointType, collisionobjectA:HashOrStringOrUrl, jointId:HashOrString,
+        position_A:Vector3, collisionobjectB:HashOrStringOrUrl, position_B:Vector3, ?properties:PhysicsSpringJoint):Void {})
+    static function createJoint(joint_type:PhysicsJointType, collisionobjectA:HashOrStringOrUrl, jointId:HashOrString,
+        position_A:Vector3, collisionobjectB:HashOrStringOrUrl, position_B:Vector3, ?properties:PhysicsFixedJoint):Void;
 
     /**
         Destroy an already physics joint. The joint has to be created before a destroy can be issued.
 
         Note: Currently only supported in 2D physics.
         @param collisionobject collision object where the joint exist
-        @param joint_id id of the joint
+        @param jointId id of the joint
     **/
-    static function destroy_joint(collisionobject:HashOrStringOrUrl, joint_id:HashOrString):Void;
+    @:native('destroy_joint')
+    static function destroyJoint(collisionobject:HashOrStringOrUrl, jointId:HashOrString):Void;
 
     /**
         Get a table for properties for a connected joint. The joint has to be created before properties can be retrieved.
 
         Note: Currently only supported in 2D physics.
         @param collisionobject collision object where the joint exist
-        @param joint_id id of the joint
+        @param jointId id of the joint
         @return properties table. See the joint types for what fields are available
     **/
-    static function get_joint_properties(collisionobject:HashOrStringOrUrl, joint_id:HashOrString):EitherType<PhysicsFixedJoint,
+    @:pure
+    @:native('get_joint_properties')
+    static function getJointProperties(collisionobject:HashOrStringOrUrl, jointId:HashOrString):EitherType<PhysicsFixedJoint,
         EitherType<PhysicsHingeJoint, EitherType<PhysicsSliderJoint, PhysicsSpringJoint>>>;
 
     /**
@@ -176,41 +190,47 @@ extern class Physics {
 
         Note: Currently only supported in 2D physics.
         @param collisionobject collision object where the joint exist
-        @param joint_id id of the joint
+        @param jointId id of the joint
         @return reaction force for the joint
     **/
-    static function get_joint_reaction_force(collisionobject:HashOrStringOrUrl, joint_id:HashOrString):Vector3;
+    @:pure
+    @:native('get_joint_reaction_force')
+    static function getJointReactionForce(collisionobject:HashOrStringOrUrl, jointId:HashOrString):Vector3;
 
     /**
         Get the reaction torque for a joint. The joint has to be created before the reaction torque can be calculated.
 
         Note: Currently only supported in 2D physics.
         @param collisionobject collision object where the joint exist
-        @param joint_id id of the joint
+        @param jointId id of the joint
         @return the reaction torque on bodyB in N*m.
     **/
-    static function get_joint_reaction_torque(collisionobject:HashOrStringOrUrl, joint_id:HashOrString):Float;
+    @:pure
+    @:native('get_joint_reaction_torque')
+    static function getJointReactionTorque(collisionobject:HashOrStringOrUrl, jointId:HashOrString):Float;
 
     /**
         Updates the properties for an already connected joint. The joint has to be created before properties can be changed.
 
         Note: Currently only supported in 2D physics.
         @param collisionobject collision object where the joint exist
-        @param joint_id id of the joint
+        @param jointId id of the joint
         @param properties joint specific properties table
         Note: The collide_connected field cannot be updated/changed after a connection has been made.
     **/
-    @:overload(function(collisionobject:HashOrStringOrUrl, joint_id:HashOrString, properties:PhysicsHingeJoint):Void {})
-    @:overload(function(collisionobject:HashOrStringOrUrl, joint_id:HashOrString, properties:PhysicsSliderJoint):Void {})
-    @:overload(function(collisionobject:HashOrStringOrUrl, joint_id:HashOrString, properties:PhysicsSpringJoint):Void {})
-    static function set_joint_properties(collisionobject:HashOrStringOrUrl, joint_id:HashOrString, properties:PhysicsFixedJoint):Void;
+    @:native('set_joint_properties')
+    @:overload(function(collisionobject:HashOrStringOrUrl, jointId:HashOrString, properties:PhysicsHingeJoint):Void {})
+    @:overload(function(collisionobject:HashOrStringOrUrl, jointId:HashOrString, properties:PhysicsSliderJoint):Void {})
+    @:overload(function(collisionobject:HashOrStringOrUrl, jointId:HashOrString, properties:PhysicsSpringJoint):Void {})
+    static function setJointProperties(collisionobject:HashOrStringOrUrl, jointId:HashOrString, properties:PhysicsFixedJoint):Void;
 }
 
 /**
     Properties related to the `Physics` module.
 **/
 @:publicFields
-class PhysicsProperties {
+class PhysicsProperties
+{
     /**
         collision object angular damping.
 
@@ -254,7 +274,8 @@ class PhysicsProperties {
     Messages related to the `Physics` module.
 **/
 @:publicFields
-class PhysicsMessages {
+final class PhysicsMessages
+{
     /**
         Applies a force on a collision object.
 
@@ -339,7 +360,8 @@ class PhysicsMessages {
 /**
     Data for the `PhysicsMessages.apply_force` message.
 **/
-typedef PhysicsMessageApplyForce = {
+typedef PhysicsMessageApplyForce =
+{
     /**
         The force to be applied on the collision object, measured in Newton.
     **/
@@ -354,7 +376,8 @@ typedef PhysicsMessageApplyForce = {
 /**
     Data for the `PhysicsMessages.collision_response` message.
 **/
-typedef PhysicsMessageCollisionResponse = {
+typedef PhysicsMessageCollisionResponse =
+{
     /**
         The id of the instance the collision object collided with.
     **/
@@ -379,7 +402,8 @@ typedef PhysicsMessageCollisionResponse = {
 /**
     Data for the `PhysicsMessages.contact_point_response` message.
 **/
-typedef PhysicsMessageContactPointResponse = {
+typedef PhysicsMessageContactPointResponse =
+{
     /**
         World position of the contact point.
     **/
@@ -444,7 +468,8 @@ typedef PhysicsMessageContactPointResponse = {
 /**
     Data for the `PhysicsMessages.ray_cast_missed` message.
 **/
-typedef PhysicsMessageRayCastMissed = {
+typedef PhysicsMessageRayCastMissed =
+{
     /**
         Id supplied when the ray cast was requested.
     **/
@@ -454,7 +479,8 @@ typedef PhysicsMessageRayCastMissed = {
 /**
     Data for the `PhysicsMessages.ray_cast_response` message.
 **/
-typedef PhysicsMessageRayCastResponse = {
+typedef PhysicsMessageRayCastResponse =
+{
     /**
         The fraction of the hit measured along the ray, where 0 is the start of the ray and 1 is the end.
     **/
@@ -489,7 +515,8 @@ typedef PhysicsMessageRayCastResponse = {
 /**
     Data for the `PhysicsMessages.trigger_response` message.
 **/
-typedef PhysicsMessageTriggerResponse = {
+typedef PhysicsMessageTriggerResponse =
+{
     /**
         The id of the instance the collision object collided with.
     **/
@@ -514,7 +541,8 @@ typedef PhysicsMessageTriggerResponse = {
 /**
     Data for the `PhysicsMessages.velocity_response` message.
 **/
-typedef PhysicsMessageVelocityResponse = {
+typedef PhysicsMessageVelocityResponse =
+{
     /**
         The linear velocity, i.e. translation, of the collision object in units/s (pixels/s).
     **/
@@ -530,7 +558,8 @@ typedef PhysicsMessageVelocityResponse = {
 /**
     Physics fixed joint type.
 **/
-typedef PhysicsFixedJoint = {
+typedef PhysicsFixedJoint =
+{
     /**
         Set this flag to true if the attached bodies should collide.
     **/
@@ -545,7 +574,8 @@ typedef PhysicsFixedJoint = {
 /**
     Physics hinge joint type.
 **/
-typedef PhysicsHingeJoint = {
+typedef PhysicsHingeJoint =
+{
     /**
         Set this flag to true if the attached bodies should collide.
     **/
@@ -604,7 +634,8 @@ typedef PhysicsHingeJoint = {
 /**
     Physics slider joint type.
 **/
-typedef PhysicsSliderJoint = {
+typedef PhysicsSliderJoint =
+{
     /**
         Set this flag to true if the attached bodies should collide.
     **/
@@ -668,7 +699,8 @@ typedef PhysicsSliderJoint = {
 /**
     Physics spring joint type.
 **/
-typedef PhysicsSpringJoint = {
+typedef PhysicsSpringJoint =
+{
     /**
         Set this flag to true if the attached bodies should collide.
     **/
@@ -693,7 +725,8 @@ typedef PhysicsSpringJoint = {
 /**
     A lua table containing options for the raycast.
 **/
-typedef PhysicsRaycastOptions = {
+typedef PhysicsRaycastOptions =
+{
     /**
         Set to `true` to return all ray cast hits. If `false`, it will only return the closest hit.
     **/
@@ -704,12 +737,17 @@ typedef PhysicsRaycastOptions = {
     Types of physics joint available.
 **/
 @:native("_G.physics")
-extern enum abstract PhysicsJointType({}) {
-    var JOINT_TYPE_FIXED;
+extern enum abstract PhysicsJointType({})
+{
+    @:native('JOINT_TYPE_FIXED')
+    var Fixed;
 
-    var JOINT_TYPE_HINGE;
+    @:native('JOINT_TYPE_HINGE')
+    var Hinge;
 
-    var JOINT_TYPE_SLIDER;
+    @:native('JOINT_TYPE_SLIDER')
+    var Slider;
 
-    var JOINT_TYPE_SPRING;
+    @:native('JOINT_TYPE_SPRING')
+    var Spring;
 }

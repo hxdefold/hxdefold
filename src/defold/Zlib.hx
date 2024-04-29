@@ -4,7 +4,8 @@ package defold;
     Functions for compression and decompression of string buffers.
 **/
 @:native("_G.zlib")
-extern class Zlib {
+extern final class Zlib
+{
     /**
         Deflate (compress) a buffer.
 
@@ -13,6 +14,7 @@ extern class Zlib {
         @param buf buffer to deflate
         @return deflated buffer
     **/
+    @:pure
     static function deflate(buf:String):String;
 
     /**
@@ -23,5 +25,6 @@ extern class Zlib {
         @param buf buffer to inflate
         @return inflated buffer
     **/
+    @:pure
     static function inflate(buf:String):String;
 }

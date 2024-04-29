@@ -10,6 +10,7 @@ import haxe.macro.Type;
 using StringTools;
 using haxe.macro.Tools;
 using haxe.macro.TypeTools;
+using haxe.macro.ExprTools;
 
 private enum ScriptType {
     SNone;
@@ -40,7 +41,7 @@ private typedef ScriptExport = {
     var name:String;
     var position:String;
     var properties:Array<{name:String, value:String}>;
-    var callbacks:Array<{name:String, method:String, args:Array<String>, isVoid:Bool}>;
+    var callbacks:Array<Callback>;
 }
 
 private typedef Callback = {
@@ -87,18 +88,20 @@ private class Glue {
                             for (field in cl.fields.get())
                                 baseRenderScriptMethods[field.name] = true;
 
-                        case {params: [tData]}: // Generic type in file, do nothing.
+                        // Do not generate scripts from abstract or generic classes
+                        case {params: [tData]}:
+                        case _ if (cl.isAbstract):
 
                         default:
                             switch getScriptType(cl) {
                                 case SCode:
-                                    scriptClasses.push({cls: cl, data: getScriptPropertiesType(cl), type: SCode});
+                                    scriptClasses.push({cls: cl, type: SCode});
 
                                 case SGui:
-                                    scriptClasses.push({cls: cl, data: getScriptPropertiesType(cl), type: SGui});
+                                    scriptClasses.push({cls: cl, type: SGui});
 
                                 case SRender:
-                                    scriptClasses.push({cls: cl, data: getScriptPropertiesType(cl), type: SRender});
+                                    scriptClasses.push({cls: cl, type: SRender});
 
                                 default:
                             }
@@ -122,7 +125,7 @@ private class Glue {
             var cl = script.cls;
 
             // get data properties for generating `go.property` calls, which should be in the genrated script
-            var props = getProperties(script.data, cl.pos);
+            var props = getProperties(cl, cl.pos);
             props.sort(function(a,b) return a.order - b.order);
 
             var baseMethods, ext;
@@ -169,9 +172,19 @@ private class Glue {
                 position: {
                     var posStr = Std.string(cl.pos);
                     posStr.substring(5, posStr.length - 1);
-                },
+                }
             });
         }
+
+        var supportedDefoldVersion: String = haxe.macro.Context.definedValue('defold_version');
+        initExprs.push(macro {
+            var defoldVersion: String = untyped __lua__('sys.get_engine_info().version');
+            var supportedDefoldVersion: String = $v{supportedDefoldVersion};
+            if (defoldVersion != supportedDefoldVersion)
+            {
+                std.Sys.println('WARNING: the installed hxdefold version supports Defold $supportedDefoldVersion, but you are running $defoldVersion');
+            }
+        });
 
         if (initExprs.length > 0) {
             var td = macro class Init {
@@ -210,8 +223,21 @@ private class Glue {
             b.add('require "$requireModule"\n\n');
 
             for (cb in script.callbacks) {
-                var args = cb.args.join(", ");
-                b.add('function ${cb.name}($args)\n\t${if (cb.isVoid) "" else "return "}$EXPORT_TABLE.${cb.method}($args)\nend\n\n');
+                var callbackArgs = 'self';
+                var methodCallArgs = cb.args.join(", ");
+                var callbackArgs = if (methodCallArgs == '') 'self' else 'self, $methodCallArgs';
+
+                var callbackName = callbackNameToSnakeCase(cb.name);
+
+                b.add('
+function ${callbackName}($callbackArgs)
+    _hxdefold_tmp = ${ScriptBuilder.globalSelfRef}
+    ${ScriptBuilder.globalSelfRef} = self
+    ${if (cb.isVoid) "" else "ret = "}$EXPORT_TABLE.${cb.method}($methodCallArgs)
+    ${ScriptBuilder.globalSelfRef} = _hxdefold_tmp
+    ${if (cb.isVoid) "" else "return ret"}
+end
+');
             }
 
             sys.FileSystem.createDirectory(script.dir);
@@ -241,10 +267,7 @@ private class Glue {
 
             // in haxe 4, final is a keyword, so we need to handle this here
             // we could do it more elaborately via metadata or something, but oh well :)
-            var callbackName = switch fieldName {
-                case "final_": "final";
-                case _: fieldName;
-            };
+            var callbackName = fieldName;
 
             if (callbackNames.indexOf(callbackName) > -1) {
                 // This callback has already been defined by a previous call in the recursion.
@@ -279,7 +302,7 @@ private class Glue {
                         })
                     };
                 default:
-                    throw new Error("Overriden class field is not a method. This can't happen! :)", field.pos);
+                    Context.fatalError("Overriden class field is not a method. This can't happen! :)", field.pos);
             }
 
             var exportName = exportPrefix + fieldName;
@@ -317,37 +340,55 @@ private class Glue {
         }
     }
 
-    static function getProperties(type:Type, pos:Position):Array<{name:String, value:String, order:Int}> {
-        var result = [];
-        switch (type.follow()) {
-            case TAnonymous(_.get() => anon):
-                for (field in anon.fields) {
+    static function getProperties(cls:ClassType, pos:Position):Array<{name:String, value:String, order:Int}> {
+        var properties = [];
+
+        // recursively add the properties from all parent classes
+        if (cls.superClass != null)
+        {
+            properties = properties.concat(getProperties(cls.superClass.t.get(), pos));
+        }
+
+        for (field in cls.fields.get())
+        {
+            switch field.kind
+            {
+                case FVar(read, write):
                     var prop = field.meta.extract("property");
-                    switch (prop) {
-                        case []:
-                            continue;
+                    switch (prop)
+                    {
+                        case [] | null:
+                            // not a property
+
                         case [prop]:
                             var type = getPropertyType(field.type, field.pos);
                             var value = if (prop.params.length == 0) getDefaultValue(type) else parsePropertyExpr(type, prop.params, prop.pos);
                             var order = Context.getPosInfos(field.pos).min;
-                            result.push({name: field.name, value: value, order: order});
+                            properties.push({name: field.name, value: value, order: order});
+
                         default:
-                            throw new Error("Only single @property metadata is allowed", field.pos);
+                            Context.fatalError('only one @property tag is allowed on each field', pos);
                     }
-                }
-            default:
-                throw new Error('Invalid component data type: ${type.toString()}. Should be a structure.', pos);
+
+                default:
+                    // not a property
+            }
         }
-        return result;
+
+        return properties;
     }
 
-    static function getPropertyType(type:Type, pos:Position):PropertyType {
-        return switch (type.follow()) {
+    static function getPropertyType(type:Type, pos:Position):PropertyType
+    {
+        var actualType: Type = type.follow();
+
+        return switch actualType
+        {
             case TInst(_.get() => {pack: ["defold", "types"], name: "Hash"}, _): PHash;
             case TInst(_.get() => {pack: ["defold", "types"], name: "Url"}, _): PUrl;
             case TAbstract(_.get() => {pack: ["defold", "types"], name: "Vector3"}, _): PVector3;
             case TAbstract(_.get() => {pack: ["defold", "types"], name: "Vector4"}, _): PVector4;
-            case TInst(_.get() => {pack: ["defold", "types"], name: "Quaternion"}, _): PQuaternion;
+            case TAbstract(_.get() => {pack: ["defold", "types"], name: "Quaternion"}, _): PQuaternion;
             case TAbstract(_.get() => {pack: [], name: "Int"}, _): PInt;
             case TAbstract(_.get() => {pack: [], name: "Float"}, _): PFloat;
             case TAbstract(_.get() => {pack: [], name: "Bool"}, _): PBool;
@@ -357,7 +398,19 @@ private class Glue {
             case TAbstract(_.get() => {pack: ["defold", "types"], name: "TextureResourceReference"}, _): PTextureResourceReference;
             case TAbstract(_.get() => {pack: ["defold", "types"], name: "TileSourceResourceReference"}, _): PTileSourceResourceReference;
             case TAbstract(_.get() => {pack: ["defold", "types"], name: "BufferResourceReference"}, _): PBufferResourceReference;
-            default: throw new Error('Unsupported type for script property: ${type.toString()}', pos);
+
+            case TAbstract(_.get() => t, _):
+                /**
+                 * This recursive call allows the user to define abstracts over a property type,
+                 * and then use those abstracts for properties!
+                 */
+                return getPropertyType(t.type, pos);
+
+            default:
+                /**
+                 * We reached the final non-abstract type and didn't find any supported property type.
+                 */
+                Context.fatalError('Unsupported type for script property: ${type.toString()}', pos);
         }
     }
 
@@ -382,37 +435,65 @@ private class Glue {
 
     static function parsePropertyExpr(type:PropertyType, exprs:Array<Expr>, pos:Position):String {
         return switch [type, exprs] {
-            case [PBool, [{expr: EConst(CIdent(s = "true" | "false"))}]]:
-                s;
-            case [PHash, [{expr: EConst(CString(s))}]]:
+
+            case [PHash, [{expr: EConst(CString(s))}]]
+               | [PHash, [{expr: ECall(macro hash, [{expr: EConst(CString(s))}])}]]
+               | [PHash, [{expr: ECall(macro Defold.hash, [{expr: EConst(CString(s))}])}]]:
                 'hash(${haxe.Json.stringify(s)})';
+
             case [PUrl, _]:
-                throw new Error("No default value allowed for URL properties", pos);
+                Context.fatalError("No default value allowed for URL properties", pos);
+
             case [PFloat, [{expr: EConst(CFloat(s) | CInt(s))}]]:
                 s;
             case [PInt, [{expr: EConst(CInt(s))}]] if (Std.parseInt(s) != null):
                 s;
-            case [PVector3, [{expr: EConst(CFloat(x) | CInt(x))}, {expr: EConst(CFloat(y) | CInt(y))}, {expr: EConst(CFloat(z) | CInt(z))}]]:
+            case [PBool, [{expr: EConst(CIdent(s = "true" | "false"))}]]:
+                s;
+
+            case [PVector3, [{expr: ECall(macro vector3, [{expr: EConst(CFloat(x) | CInt(x))}, {expr: EConst(CFloat(y) | CInt(y))}, {expr: EConst(CFloat(z) | CInt(z))}])}]]
+               | [PVector3, [{expr: ECall(macro Vmath.vector3, [{expr: EConst(CFloat(x) | CInt(x))}, {expr: EConst(CFloat(y) | CInt(y))}, {expr: EConst(CFloat(z) | CInt(z))}])}]]:
                 'vmath.vector3($x, $y, $z)';
-            case [PVector4, [{expr: EConst(CFloat(x) | CInt(x))}, {expr: EConst(CFloat(y) | CInt(y))}, {expr: EConst(CFloat(z) | CInt(z))}, {expr: EConst(CFloat(w) | CInt(w))}]]:
+            case [PVector3, [{expr: ECall(macro vector3, [{expr: EConst(CFloat(n) | CInt(n))}]) }]]
+               | [PVector3, [{expr: ECall(macro Vmath.vector3, [{expr: EConst(CFloat(n) | CInt(n))}]) }]]:
+                'vmath.vector3($n)';
+            case [PVector3, [{expr: ECall(macro vector3, []) }]]
+               | [PVector3, [{expr: ECall(macro Vmath.vector3, []) }]]:
+                'vmath.vector3()';
+            case [PVector4, [{expr: ECall(macro vector4, [{expr: EConst(CFloat(x) | CInt(x))}, {expr: EConst(CFloat(y) | CInt(y))}, {expr: EConst(CFloat(z) | CInt(z))}, {expr: EConst(CFloat(w) | CInt(w))}])}]]
+               | [PVector4, [{expr: ECall(macro Vmath.vector4, [{expr: EConst(CFloat(x) | CInt(x))}, {expr: EConst(CFloat(y) | CInt(y))}, {expr: EConst(CFloat(z) | CInt(z))}, {expr: EConst(CFloat(w) | CInt(w))}])}]]:
                 'vmath.vector4($x, $y, $z, $w)';
-            case [PQuaternion, [{expr: EConst(CFloat(x) | CInt(x))}, {expr: EConst(CFloat(y) | CInt(y))}, {expr: EConst(CFloat(z) | CInt(z))}, {expr: EConst(CFloat(w) | CInt(w))}]]:
+            case [PVector4, [{expr: ECall(macro vector4, [{expr: EConst(CFloat(n) | CInt(n))}]) }]]
+               | [PVector4, [{expr: ECall(macro Vmath.vector4, [{expr: EConst(CFloat(n) | CInt(n))}]) }]]:
+                'vmath.vector4($n)';
+            case [PVector4, [{expr: ECall(macro vector4, []) }]]
+               | [PVector4, [{expr: ECall(macro Vmath.vector4, []) }]]:
+                'vmath.vector4()';
+            case [PQuaternion, [{expr: ECall(macro quat, [{expr: EConst(CFloat(x) | CInt(x))}, {expr: EConst(CFloat(y) | CInt(y))}, {expr: EConst(CFloat(z) | CInt(z))}, {expr: EConst(CFloat(w) | CInt(w))}])}]]
+               | [PQuaternion, [{expr: ECall(macro Vmath.quat, [{expr: EConst(CFloat(x) | CInt(x))}, {expr: EConst(CFloat(y) | CInt(y))}, {expr: EConst(CFloat(z) | CInt(z))}, {expr: EConst(CFloat(w) | CInt(w))}])}]]:
                 'vmath.quat($x, $y, $z, $w)';
-            case [PAtlasResourceReference, [{expr: EConst(CString(s))}]]:
+
+            case [PAtlasResourceReference, [{expr: EConst(CString(s))}]]
+               | [PAtlasResourceReference, [{expr: ECall(macro Resource.atlas, [{expr: EConst(CString(s))}])}]]:
                 'resource.atlas(${haxe.Json.stringify(s)})';
-            case [PFontResourceReference, [{expr: EConst(CString(s))}]]:
+            case [PFontResourceReference, [{expr: EConst(CString(s))}]]
+               | [PFontResourceReference, [{expr: ECall(macro Resource.font, [{expr: EConst(CString(s))}])}]]:
                 'resource.font(${haxe.Json.stringify(s)})';
-            case [PMaterialResourceReference, [{expr: EConst(CString(s))}]]:
+            case [PMaterialResourceReference, [{expr: EConst(CString(s))}]]
+               | [PMaterialResourceReference, [{expr: ECall(macro Resource.material, [{expr: EConst(CString(s))}])}]]:
                 'resource.material(${haxe.Json.stringify(s)})';
-            case [PTextureResourceReference, [{expr: EConst(CString(s))}]]:
+            case [PTextureResourceReference, [{expr: EConst(CString(s))}]]
+               | [PTextureResourceReference, [{expr: ECall(macro Resource.texture, [{expr: EConst(CString(s))}])}]]:
                 'resource.texture(${haxe.Json.stringify(s)})';
-            case [PTileSourceResourceReference, [{expr: EConst(CString(s))}]]:
+            case [PTileSourceResourceReference, [{expr: EConst(CString(s))}]]
+               | [PTileSourceResourceReference, [{expr: ECall(macro Resource.tileSource, [{expr: EConst(CString(s))}])}]]:
                 'resource.tile_source(${haxe.Json.stringify(s)})';
-            case [PBufferResourceReference, [{expr: EConst(CString(s))}]]:
+            case [PBufferResourceReference, [{expr: EConst(CString(s))}]]
+               | [PBufferResourceReference, [{expr: ECall(macro Resource.buffer, [{expr: EConst(CString(s))}])}]]:
                 'resource.buffer(${haxe.Json.stringify(s)})';
 
             default:
-                throw new Error('Invalid @property value for type ${type.getName().substr(1)}', pos);
+                Context.fatalError('Invalid @property value for type ${type.getName().substr(1)}', pos);
         }
     }
 
@@ -439,29 +520,6 @@ private class Glue {
     }
 
     /**
-        Checks the given class type `cl`, and its super classes recursively, and returns the
-        first generic parameter to be defined on a superclass, which is presumably the anonymous
-        type which will act as the script's properties.
-
-        **Note:** The type `cl` needs to have already been confirmed to be a script type, using `getScriptType()`.
-
-        @param cl The class type to check.
-        @return The type, which if followed should lead to an anonymous structure which is the script's properties.
-    **/
-    static function getScriptPropertiesType(cl:ClassType):Type {
-        return switch (cl) {
-            // Check if there is a super class with a type parameter.
-            case {superClass: {params: [tData]}}: tData;
-
-            // If there is a super class, but without a type parameter, check it recursively.
-            case _ if (cl.superClass != null): getScriptPropertiesType(cl.superClass.t.get());
-
-            // Otherwise it's definitely not a script.
-            default: throw new Error('getScriptPropertiesType() called for a type that is not a script.', Context.currentPos());
-        }
-    }
-
-    /**
         Returns `true`, if the given class type `cl` is one of the base types `Script`, `GuiScript` or `RenderScript`.
     **/
     static function isBaseScriptType(cl:ClassType):Bool {
@@ -469,6 +527,21 @@ private class Glue {
             && cl.pack[0] == "defold"
             && cl.pack[1] == "support"
             && ["Script", "GuiScript", "RenderScript"].indexOf(cl.name) > -1;
+    }
+
+    static function callbackNameToSnakeCase(name:String):String {
+
+        return switch name {
+            case 'init': 'init';
+            case 'final_': 'final';
+            case 'update': 'update';
+            case 'fixedUpdate': 'fixed_update';
+            case 'onMessage': 'on_message';
+            case 'onInput': 'on_input';
+            case 'onReload': 'on_reload';
+            default:
+                Context.fatalError('invalid callback name: $name', Context.currentPos());
+        }
     }
 }
 
@@ -500,7 +573,7 @@ class ScriptMacro {
             defoldRoot += "/";
         var outFile = absolutePath(Compiler.getOutput());
         if (!StringTools.startsWith(outFile, defoldRoot)) {
-            throw new Error("Haxe/Lua output file should be within specified defold project root (" + defoldRoot + "), but is " + outFile + ". Check -lua argument in your build hxml file.", Context.currentPos());
+            Context.fatalError("Haxe/Lua output file should be within specified defold project root (" + defoldRoot + "), but is " + outFile + ". Check -lua argument in your build hxml file.", Context.currentPos());
         }
 
         outDir = Path.join([defoldRoot, outDir]);
@@ -519,31 +592,30 @@ class ScriptMacro {
             if (afterTypingCalled) return;
             afterTypingCalled = true;
             glue.process(types);
-
-            std.Sys.println('
-=============================== WARNING ===============================
-
-hxdefold is being thoroughly reworked and will introduce breaking
-changes starting with v2.0.0 in the near future.
-
-To prepare for these changes and provide your feedback on them, please
-visit the pull-request:
-
-             https://github.com/hxdefold/hxdefold/pull/37
-
-Thank you for using hxdefold!
-
-=======================================================================
-');
         });
 
         Context.onAfterGenerate(glue.generate);
+
+        // create empty files for false library dependencies
+        // this is needed because the Haxe compiler will inevitably generate
+        // calls such as: _G.require("luv")
+        // and these will cause the Defold compiler to look for a lua file with this name
+        // at the project root
+        for (lib in [ 'luv', 'bit32', 'socket' ]) {
+            createEmptyFile(Path.join([defoldRoot, '$lib.lua']));
+        }
     }
 
     // sys.FileSystem.absolutePath is broken on Haxe 4, so we use the old method
     static function absolutePath(relPath:String):String {
         if (haxe.io.Path.isAbsolute(relPath)) return relPath;
         return haxe.io.Path.join([std.Sys.getCwd(), relPath]);
+    }
+
+    static inline function createEmptyFile(path:String) {
+        if (!sys.FileSystem.exists(path)) {
+            sys.io.File.saveContent(path, '');
+        }
     }
 }
 #end

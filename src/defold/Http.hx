@@ -6,7 +6,8 @@ import defold.types.Hash;
     Functions for performing HTTP and HTTPS requests.
 **/
 @:native("_G.http")
-extern class Http {
+extern final class Http
+{
     /**
         Perform a HTTP/HTTPS request.
 
@@ -24,16 +25,28 @@ extern class Http {
         @param method HTTP/HTTPS method, e.g. GET/PUT/POST/DELETE/...
         @param callback response callback
         @param headers optional lua-table with custom headers
-        @param post_data optional data to send
+        @param postData optional data to send
         @param options optional lua-table with request parameters
     **/
-    static function request<T>(url:String, method:String, callback:T->Hash->HttpResponse->Void, ?headers:lua.Table<String,String>, ?post_data:String, ?options:HttpOptions):Void;
+    static inline function request(url:String, method:String, callback:HttpResponse->Void, ?headers:lua.Table<String,String>, ?postData:String, ?options:HttpOptions):Void
+    {
+        // 1. hide the reall callback parameter which expects a function with a "self" argument
+        // 2. ensure that the global self reference is present for the callback
+        request_(url, method, (self, hash, response) ->
+        {
+            untyped __lua__('_G._hxdefold_self_ = {0}', self);
+            callback(response);
+            untyped __lua__('_G._hxdefold_self_ = nil');
+        }, headers, postData, options);
+    }
+    @:native('request') private static function request_(url:String, method:String, callback:(Any, Hash, HttpResponse)->Void, ?headers:lua.Table<String,String>, ?postData:String, ?options:HttpOptions):Void;
 }
 
 /**
     Type for the `response` argument for the http request callback.
 **/
-typedef HttpResponse = {
+typedef HttpResponse =
+{
     /**
         Status code.
     **/
@@ -53,7 +66,8 @@ typedef HttpResponse = {
 /**
     Type for the `options` argument of `Http.request` method.
 **/
-typedef HttpOptions = {
+typedef HttpOptions =
+{
     /**
         Request timeout in seconds
     **/

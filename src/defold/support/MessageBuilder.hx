@@ -26,12 +26,16 @@ import haxe.macro.Expr;
 
     This is handy for defining message enumerations that can later be used by pattern matching in `Script.on_message` methods.
 **/
-class MessageBuilder {
-    public static function build():Array<Field> {
+class MessageBuilder
+{
+    public static function build():Array<Field>
+    {
         #if macro
         var fields = Context.getBuildFields();
-        for (field in fields) {
-            switch (field.kind) {
+        for (field in fields)
+        {
+            switch (field.kind)
+            {
                 case FVar(t, null):
                     if (t == null) t = macro : Void;
                     var messageCT = macro : defold.types.Message<$t>;

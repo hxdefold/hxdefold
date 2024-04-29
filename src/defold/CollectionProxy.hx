@@ -8,9 +8,11 @@ import defold.types.Url;
     Messages for controlling and interacting with collection proxies
     which are used to dynamically load collections into the runtime.
 
-    See `CollectionproxyMessages` for related messages.
+    See `CollectionProxyMessages` for related messages.
 **/
-extern class Collectionproxy {
+@:native("_G.collectionproxy")
+extern final class CollectionProxy
+{
     /**
         Return an indexed table of missing resources for a collection proxy.
 
@@ -21,27 +23,31 @@ extern class Collectionproxy {
         check whether or not there are any missing resources in a collection proxy
         before attempting to load the collection proxy.
 
-        @param collectionproxy the collectionproxy to check for missing resources.
+        @param collectionProxy the collection proxy to check for missing resources.
         @return the missing resources
     **/
-    static function missing_resources(collectionproxy:Url):LuaArray<String>;
+    @:native('missing_resources')
+    static function missingResources(collectionProxy:Url):LuaArray<String>;
 
     /**
-        Returns a list of all the resources that the collection proxy is dependent on.
+        Returns an indexed table of resources for a collection proxy.
+        Each entry is a hexadecimal string that represents the data of the specific resource.
+        This representation corresponds with the filename for each individual resource that is exported when you bundle an application with LiveUpdate functionality.
 
-        Note: this method is currently undocumented, so it may be wrong here.
-
-        @param collectionproxy the collectionproxy to check
+        @param collectionProxy the collection proxy to check
         @return the necessary resources
     **/
-    static function get_resources(collectionproxy:Url):LuaArray<String>;
+    @:pure
+    @:native('get_resources')
+    static function getResources(collectionProxy:Url):LuaArray<String>;
 }
 
 /**
-    Messages related to the `Collectionproxy` module.
+    Messages related to the `CollectionProxy` module.
 **/
 @:publicFields
-class CollectionproxyMessages {
+class CollectionProxyMessages
+{
     /**
         Tells a collection proxy to start asynchronous loading of the referenced collection.
 
@@ -123,7 +129,7 @@ class CollectionproxyMessages {
         frame, 0 for 9 frames, and so on. The result in practice is that the game looks like it's updated at a much lower frequency than 60 Hz,
         which can be useful for debugging when each frame needs to be inspected.
     **/
-    static var set_time_step(default, never) = new Message<CollectionproxyMessageSetTimeStep>("set_time_step");
+    static var set_time_step(default, never) = new Message<CollectionProxyMessageSetTimeStep>("set_time_step");
 
     /**
         Tells a collection proxy to start unloading the referenced collection.
@@ -135,16 +141,31 @@ class CollectionproxyMessages {
 }
 
 /**
-    Data for the `CollectionproxyMessages.set_time_step` message.
+    Data for the `CollectionProxyMessages.set_time_step` message.
 **/
-typedef CollectionproxyMessageSetTimeStep = {
+typedef CollectionProxyMessageSetTimeStep =
+{
     /**
-        time-step scaling factor
+        Time-step scaling factor
     **/
     var factor:Float;
 
     /**
-        time-step mode: 0 for continuous and 1 for discrete
+        Time-step mode, either continous or discreet.
     **/
-    var mode:Int;
+    var mode:SetTimeStepMode;
+}
+
+
+enum abstract SetTimeStepMode(Int)
+{
+    /**
+        The continuous mode can be used for slow-motion or fast-forward effects.
+    **/
+    var Continuous = 0;
+
+    /**
+        The discrete mode is only useful when scaling the time-step to pass slower than real time (`factor` is below `1`).
+    **/
+    var Discrete = 1;
 }

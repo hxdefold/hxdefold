@@ -1,11 +1,11 @@
 {
     "name": "hxdefold",
-    "url": "https://github.com/nadako/hxdefold",
+    "url": "https://github.com/hxdefold/hxdefold",
     "description": "Defold game engine externs",
     "license": "MIT",
-    "version": "1.5.0",
+    "version": "2.0.0",
     "classPath": "src",
-    "releasenote": "Updated to Defold API 1.5.0",
+    "releasenote": "Major rework.",
     "contributors": ["nadako", "Haath"],
     "main": "defold.support.Run",
     "tags": ["game", "lua", "defold", "extern"]
