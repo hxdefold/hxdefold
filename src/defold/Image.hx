@@ -12,10 +12,27 @@ extern final class Image
         Load image (PNG or JPEG) from buffer.
 
         @param buffer image data buffer
-        @param premult premultiply alpha. optional and defaults to false
+        @param options an optional table containing parameters for loading the image.
         @return object with the following fields: width, height, type and buffer (raw data). nil is returned if loading fails.
     **/
-    static function load(buffer:String, ?premult:Bool):Null<ImageLoadResult>;
+    static function load(buffer:String, ?options:ImageLoadOptions):Null<ImageLoadResult>;
+
+    /**
+        Load image (PNG or JPEG) from a string buffer.
+
+        @param buffer image data buffer
+        @param options an optional table containing parameters for loading the image.
+        @return object with the following fields: width, height, type and buffer (raw data). nil is returned if loading fails.
+    **/
+    static function load_buffer(buffer:String, ?options:ImageLoadOptions):Null<ImageLoadResult>;
+}
+
+typedef ImageLoadOptions =
+{
+    /** True if alpha should be premultiplied into the color components. Defaults to `false`. **/
+    var ?premultiply_alpha:Bool;
+    /** True if the image contents should be flipped vertically. Defaults to `false`. **/
+    var ?flip_vertically:Bool;
 }
 
 /**
@@ -35,10 +52,12 @@ typedef ImageLoadResult =
 @:native("_G.image")
 extern enum abstract ImageType(Int)
 {
-    @:native('TYPE_LUMINANCE')
-    var Luminance;
     @:native('TYPE_RGB')
     var Rgb;
     @:native('TYPE_RGBA')
     var Rgba;
+    @:native('TYPE_LUMINANCE')
+    var Luminance;
+    @:native('TYPE_LUMINANCE_ALPHA')
+    var LuminanceAlpha;
 }
