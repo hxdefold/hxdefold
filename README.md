@@ -2,7 +2,7 @@
 
 # Haxe support library for the [Defold](https://www.defold.com/) game engine
 
-[![Build Status](https://travis-ci.org/hxdefold/hxdefold.svg?branch=master)](https://travis-ci.org/hxdefold/hxdefold) ![Defold API version: 1.6.2](https://img.shields.io/badge/api%20version-1.6.2-orange.svg)
+![Defold API version: 1.6.2](https://img.shields.io/badge/api%20version-1.6.2-orange.svg)
 
 This library allows writing beautiful [Haxe](https://haxe.org/) code for the [Defold](https://www.defold.com/) game engine \o/
 
@@ -17,8 +17,8 @@ This library allows writing beautiful [Haxe](https://haxe.org/) code for the [De
 (assuming you already [installed Haxe](https://haxe.org/download/)😊)
 
  - Install this library:
-	- From this repo: `haxelib git hxdefold https://github.com/hxdefold/hxdefold`
-	- Or from [lib.haxe.org](https://lib.haxe.org/): `haxelib install hxdefold`
+    - From this repo: `haxelib git hxdefold https://github.com/hxdefold/hxdefold`
+    - Or from [lib.haxe.org](https://lib.haxe.org/): `haxelib install hxdefold`
  - Run `haxelib run hxdefold init` inside your Defold project. It will create a sample `Hello.hx` script component class and a `build.hxml` for building it.
  - Read the comments in these files to quickly get some idea.
  - Build with `haxe build.hxml` to get the lua output.
@@ -28,21 +28,22 @@ This library allows writing beautiful [Haxe](https://haxe.org/) code for the [De
 ## How does it look like
 
 ```haxe
-// sample script component code
-
-// definition of the component data, passed as `self` to the callback methods
-typedef HelloData = {
-	// fields with @property annotation will show up in the editor
-	@property(9000) var power:Int;
-}
+import defold.support.Script;
 
 // component class that defines the callback methods
 // after compiling Haxe, the `Hello.script` will appear in the Defold project that can be attached to game objects
-class Hello extends defold.support.Script<HelloData> {
-	// the `init` callback method
-	override function init(self:HelloData) {
-		trace('Haxe is over ${self.power}!'); // will be printed to the debug console
-	}
+class Hello extends Script<HelloData> {
+
+    // fields with @property annotation will show up in the editor
+    @property var power:Int = 9000;
+
+    // the `init` callback method
+    override function init() {
+        trace('Haxe is over ${power}!'); // will be printed to the debug console
+    }
+
+    // the `update` callback method
+    override function update(dt:Float) {}
 }
 ```
 
@@ -50,13 +51,13 @@ class Hello extends defold.support.Script<HelloData> {
 
 Here is the [API reference](http://hxdefold.github.io/hxdefold/).
 
+Migration to v2 is documented in the [v2 pull request](https://github.com/hxdefold/hxdefold/pull/37).
+
+Details about usage can be found on [the wiki](https://github.com/hxdefold/hxdefold/wiki).
+
 And here are some example Defold projects, ported from Lua:
- * https://github.com/hxdefold/hxdefold-example-sidescroller
- * https://github.com/hxdefold/hxdefold-example-platformer
- * https://github.com/hxdefold/hxdefold-example-frogrunner
- * https://github.com/hxdefold/hxdefold-example-magiclink
- * https://github.com/hxdefold/hxdefold-example-throwacrow
- * https://github.com/hxdefold/hxdefold-example-warbattles
+* https://github.com/hxdefold/hxdefold-bunnymark
+
 
 ## How does it work?
 
@@ -74,11 +75,26 @@ go.property("power", 9000)
 require "main"
 
 function init(self)
-	_hxdefold_.Hello_init(self)
+    _hxdefold_.Hello_init(self)
 end
 ```
 
 You can then add this script to the game objects in the Defold Editor.
+
+
+## Versions
+
+- **Major** number will be incremented for significant reworks that are certainly forward-breaking.
+- **Minor** number will be incremented when updating to a new Defold API version. These updates may come with forward-breaking changes.
+- **Patch** version will be incremented for bug fixes and potentially backwards-breaking changes.
+
+Note that this is not standard [semver](https://semver.org/), since we might potentially ship backwards-breaking changes that increment only the patch number.
+
+| hxdefold | Haxe | Defold API |
+|:--------:|:----:|:----------:|
+| 2.0.0    | 4.3  | 1.6.2      |
+
+
 
 ## Logo
 
