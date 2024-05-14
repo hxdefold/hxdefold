@@ -92,7 +92,7 @@ Note that this is not standard [semver](https://semver.org/), since we might pot
 
 | hxdefold | Haxe | Defold API |
 |:--------:|:----:|:----------:|
-| 2.0.0    | 4.3  | 1.6.4      |
+| 2.0.*    | 4.3  | 1.6.4      |
 
 
 

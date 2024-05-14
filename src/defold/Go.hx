@@ -38,7 +38,7 @@ extern final class Go
         @param delay delay before the animation starts in seconds
         @param completeFunction function with parameters (url, property) to call when the animation has completed
     **/
-    static inline function animate<T>(url:HashOrStringOrUrl, property:Property<T>, playback:GoPlayback, to:T, easing:EitherType<GoEasing,Vector>, duration:Float, ?delay:Float, ?completeFunction:(Url, Property<T>)->Void):Void
+    static inline function animate<T>(url:HashOrStringOrUrl, property:Property<T>, playback:GoPlayback, to:T, easing:EitherType<GoEasing,Vector>, duration:Float, delay:Float = 0, ?completeFunction:(Url, Property<T>)->Void):Void
     {
         // 1. hide the reall callback parameter which expects a function with a "self" argument
         // 2. ensure that the global self reference is present for the callback

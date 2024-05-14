@@ -3,9 +3,9 @@
     "url": "https://github.com/nadako/hxdefold",
     "description": "Defold game engine externs",
     "license": "MIT",
-    "version": "2.0.0",
+    "version": "2.0.1",
     "classPath": "src",
-    "releasenote": "Major rework.",
+    "releasenote": "Fixed default value in Go.animate",
     "contributors": ["nadako", "Haath"],
     "main": "defold.support.Run",
     "tags": ["game", "lua", "defold", "extern"]
