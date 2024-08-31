@@ -262,6 +262,20 @@ extern final class Physics
      */
     @:native('update_mass')
     static function updateMass(collisionobject:HashOrStringOrUrl, mass:Float):Void;
+
+    /**
+     * Sets a physics world event listener. If a function is set, physics messages will no longer be sent.     
+     */
+    static inline function setListener(callback:(event:Hash, data:Dynamic)->Void):Void
+    {
+        setListener_((self, event, data) ->
+        {
+            untyped __lua__('_G._hxdefold_self_ = {0}', self);
+            callback(event, data);
+            untyped __lua__('_G._hxdefold_self_ = nil');
+        });
+    }
+    @:native('set_listener') private static function setListener_(callback:(Any, Hash, Dynamic)->Void):Void;
 }
 
 /**
