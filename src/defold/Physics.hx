@@ -262,7 +262,77 @@ extern final class Physics
      */
     @:native('update_mass')
     static function updateMass(collisionobject:HashOrStringOrUrl, mass:Float):Void;
+    
+    static inline function setListener<Tdata>(callback:(event:PhysicsEvent<Tdata>, data:Tdata)->Void):Void
+        {
+            setListener_((self, event:PhysicsEvent<Tdata>, data:Tdata) ->
+            {
+                // Properly casting the event from Hash to PhysicsEvent<Tdata>
+                // var physicsEvent:PhysicsEvent<Tdata> = cast event;
+        
+                // Assuming that the data needs to be cast as well
+                // var eventData:Tdata = cast data;
+        
+                untyped __lua__('_G._hxdefold_self_ = {0}', self);
+                callback(event, data);
+                untyped __lua__('_G._hxdefold_self_ = nil');
+            });
+        }
+            
+    @:native('set_listener') 
+    private static function setListener_<Tdata>(callback:(Any, PhysicsEvent<Tdata>, Tdata)->Void):Void;
 }
+
+enum abstract PhysicsEvent<T>(Hash) {
+    @:pure
+    public inline function new(s:String) this = Defold.hash(s);
+    // public static var triggerEvent:PhysicsEvent<TriggerEventData> = new PhysicsEvent("trigger_event");
+    public static var contactPointEvent(default, never) = new PhysicsEvent<ContactPointData>("contact_point_event");
+    public static var collisionEvent(default, never) = new PhysicsEvent<CollisionData>("collision_event");
+    public static var triggerEvent(default, never) = new PhysicsEvent<TriggerEventData>("trigger_event");
+    public static var rayCastResponse(default, never) = new PhysicsEvent<RayCastResponseData>("ray_cast_response");
+    public static var rayCastMissed(default, never) = new PhysicsEvent<RayCastMissedData>("ray_cast_missed");
+}
+
+typedef ContactPointData = {
+    var distance:Float;
+    var applied_impulse:Float;
+    var a:ObjectData;
+    var b:ObjectData;
+};
+
+typedef CollisionData = {
+    var a:ObjectData;
+    var b:ObjectData;
+};
+
+typedef ObjectData = {
+    var position:Vector3;
+    var relative_velocity:Vector3;
+    var mass:Float;
+    var group:Hash;
+    var id:Hash;
+    var normal:Vector3;
+};
+
+typedef TriggerEventData = {
+    var enter:Bool;
+    var a:ObjectData;
+    var b:ObjectData;
+};
+
+typedef RayCastResponseData = {
+    var group:Hash;
+    var request_id:Int;
+    var position:Vector3;
+    var fraction:Float;
+    var normal:Vector3;
+    var id:Hash;
+};
+
+typedef RayCastMissedData = {
+    var request_id:Int;
+};
 
 /**
     Properties related to the `Physics` module.
@@ -793,3 +863,4 @@ extern enum abstract PhysicsJointType({})
     @:native('JOINT_TYPE_WHEEL')
     var Wheel;
 }
+
