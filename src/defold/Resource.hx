@@ -327,6 +327,16 @@ typedef ResourceTextureInfo = {
 	var mipmaps:Int;
 
 	/**
+		Number of pages of the texture array. For 2D texture value is 1. For cube map - 6
+	**/
+	var ?page_count:Int;
+
+	/**
+		Usage flags of the texture.
+	**/
+	var ?flags:Int;
+
+	/**
 		The texture type. Supported values:
 	**/
 	var type:ResourceTextureType;
@@ -782,6 +792,16 @@ typedef ResourceCreateTextureInfo = {
 		Optional number of mipmaps to generate or present in the optional buffer
 	**/
 	var ?num_mipmaps:Int;
+
+	/**
+		Optional number of pages for a 2D texture array (when type is TEXTURE_TYPE_2D_ARRAY)
+	**/
+	var ?page_count:Int;
+
+	/**
+		Optional texture usage flags (bitmask) for the created texture
+	**/
+	var ?flags:Int;
 }
 
 /**
