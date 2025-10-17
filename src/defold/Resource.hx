@@ -10,6 +10,7 @@ import defold.types.AtlasResourceReference;
 import defold.types.FontResourceReference;
 import defold.types.MaterialResourceReference;
 import defold.types.TextureResourceReference;
+import defold.types.RenderTargetResourceReference;
 import defold.types.TileSourceResourceReference;
 
 /**
@@ -84,6 +85,16 @@ extern final class Resource {
 	@:pure
 	@:native('get_texture_info')
 	static function getTextureInfo(path:EitherType<HashOrString, TextureResourceHandle>):ResourceTextureInfo;
+
+	/**
+		Gets render target info from a render target resource path or a render target handle.
+
+		@param path the path to the resource or a render target handle
+		@return info about the render target and its attachments
+	**/
+	@:pure
+	@:native('get_render_target_info')
+	static function getRenderTargetInfo(path:EitherType<HashOrString, Int>):ResourceRenderTargetInfo;
 
 	/**
 		This function creates a new atlas resource that can be used in the same way as any atlas created during build time.
@@ -167,6 +178,13 @@ extern final class Resource {
 		**Note:** This function can only be called within `@property()`.
 	**/
 	static function texture(path:String):TextureResourceReference;
+
+	/**
+		Constructor-like function that loads the specified render target resource and returns a hash to its run-time version.
+		Note: This function can only be called within @property().
+	**/
+	@:native('render_target')
+	static function renderTarget(path:String):RenderTargetResourceReference;
 
 	/**
 		Constructor-like function with two purposes:
@@ -312,6 +330,59 @@ typedef ResourceTextureInfo = {
 		The texture type. Supported values:
 	**/
 	var type:ResourceTextureType;
+}
+
+/**
+	Render target info returned by the `Resource.get_render_target_info` method.
+**/
+typedef ResourceRenderTargetInfo = {
+	/** The opaque handle to the render target resource */
+	var handle:Int;
+
+	/** A table of attachments */
+	var attachments:LuaArray<ResourceRenderTargetAttachmentInfo>;
+}
+
+/**
+	Render target attachment info used by the `Resource.get_render_target_info` method.
+**/
+typedef ResourceRenderTargetAttachmentInfo = {
+	/** Width of the texture */
+	var width:Int;
+
+	/** Height of the texture */
+	var height:Int;
+
+	/** Depth of the texture (1 for 2D / 6 for cube map) */
+	var depth:Int;
+
+	/** Number of mipmaps of the texture */
+	var mipmaps:Int;
+
+	/** Texture type */
+	var type:ResourceTextureType;
+
+	/** The attachment buffer type */
+	var buffer_type:ResourceRenderTargetBufferType;
+
+	/** The hashed path to the attachment texture resource (only available for resource render targets) */
+	var ?texture:Hash;
+
+	/** The opaque handle to the attachment texture resource */
+	var handle:TextureResourceHandle;
+}
+
+/**
+	Render target attachment buffer types.
+**/
+@:native("_G.resource")
+extern enum abstract ResourceRenderTargetBufferType({}) {
+	@:native('BUFFER_TYPE_COLOR0') var Color0;
+	@:native('BUFFER_TYPE_COLOR1') var Color1;
+	@:native('BUFFER_TYPE_COLOR2') var Color2;
+	@:native('BUFFER_TYPE_COLOR3') var Color3;
+	@:native('BUFFER_TYPE_DEPTH') var Depth;
+	@:native('BUFFER_TYPE_STENCIL') var Stencil;
 }
 
 /**
