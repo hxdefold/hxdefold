@@ -77,6 +77,15 @@ extern final class Resource {
 	static function setTexture(path:HashOrString, table:ResourceSetTextureInfo, buffer:Buffer):Void;
 
 	/**
+		Update internal sound resource (wavc/oggc/opusc) with new data.
+
+		@param path The path to the resource
+		@param buffer A lua string containing the binary sound data
+	 */
+	@:native('set_sound')
+	static function setSound(path:HashOrString, buffer:String):Void;
+
+	/**
 	 * Gets texture info from a texture resource path or a texture handle.
 	 *
 	 * @param path the path to the resource or a texture handle
@@ -128,6 +137,18 @@ extern final class Resource {
 	**/
 	@:native('create_buffer')
 	static function createBuffer(path:HashOrString, options:ResourceCreateBufferOptions):Buffer;
+
+	/**
+		Creates a sound data resource.
+
+		Supported formats are .oggc, .opusc and .wavc.
+
+		@param path the path to the resource. Must not already exist.
+		@param options parameters for the sound data. See ResourceCreateSoundDataOptions
+		@return the resulting path hash to the resource
+	 */
+	@:native('create_sound_data')
+	static function createSoundData(path:String, options:ResourceCreateSoundDataOptions):Hash;
 
 	/**
 		Gets the buffer from a resource
@@ -811,4 +832,24 @@ typedef ResourceCreateTextureInfo = {
 typedef CreateTextureAsyncResult = {
 	var path:Hash;
 	var request_id:CreateTextureRequestId;
+}
+
+/**
+	Options used by the `Resource.create_sound_data` method.
+ */
+typedef ResourceCreateSoundDataOptions = {
+	/**
+		The raw data of the file. May be partial, but must include the header of the file.
+	 */
+	var data:String;
+
+	/**
+		If the file is partial, it must also specify the full size of the complete file.
+	 */
+	var ?filesize:Int;
+
+	/**
+		Is the data not representing the full file, but just the initial chunk?
+	 */
+	var ?partial:Bool;
 }
