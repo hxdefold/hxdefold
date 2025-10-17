@@ -229,6 +229,15 @@ extern final class Resource {
 	static function setAtlas(path:HashOrString, table:ResourceAtlasInfo):Void;
 
 	/**
+		Get runtime atlas info for a given atlas resource path.
+
+		Returns the atlas layout including geometries with rotation flags.
+	 */
+	@:pure
+	@:native('get_atlas')
+	static function getAtlas(path:HashOrString):ResourceAtlasInfo;
+
+	/**
 		This function creates a new texture resource that can be used in the same way as any texture created during build time.
 		The path to the new texture resource must have a '.texturec' extension, meaning "/path/my_texture" is not a valid path but "/path/my_texture.texturec" is.
 		The path must also be unique, attempting to create a texture with the same name as an existing resource will raise an error.
@@ -512,6 +521,11 @@ typedef ResourceAtlasGeometriesInfo = {
 		A list of the indices of the geometry in the form {i0, i1, i2, ..., in}. Each tripe in the list represents a triangle.
 	**/
 	var indices:Array<Int>;
+
+	/**
+		Whether this geometry uses a rotated image (clockwise 90 degrees).
+	 */
+	var ?rotated:Bool;
 }
 
 /**
