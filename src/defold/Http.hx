@@ -62,6 +62,11 @@ typedef HttpResponse = {
 	var headers:haxe.DynamicAccess<String>;
 
 	/**
+		The final URL after redirects (if any)
+	**/
+	var ?url:String;
+
+	/**
 		The stored path (if saved to disc)
 	**/
 	var ?path:String;
