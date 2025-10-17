@@ -957,6 +957,36 @@ extern final class Gui {
 	static function setFont(node:GuiNode, font:HashOrString):Void;
 
 	/**
+		Set a GUI font resource using the GUI component URL.
+
+		This maps to gui.set() with the property set to "fonts". Use msg.url() as the first argument.
+		Example:
+		  Gui.setFonts(msg.url(), "fonts", "/assets/title.font", lua.Table.of(["key" => "title_font"]))
+
+		@param url the GUI component url (use msg.url())
+		@param property must be the string "fonts"
+		@param resource the font resource path
+		@param options options table, e.g. { key = "my_font_name" }
+	**/
+	@:native('set')
+	static function setFonts(url:Url, property:String, resource:HashOrString, options:lua.Table<String, Dynamic>):Void;
+
+	/**
+		Set a GUI texture resource using the GUI component URL.
+
+		This maps to gui.set() with the property set to "textures". Use msg.url() as the first argument.
+		Example:
+		  Gui.setTextures(msg.url(), "textures", "/assets/logo.texturec", lua.Table.of(["key" => "logo_tex"]))
+
+		@param url the GUI component url (use msg.url())
+		@param property must be the string "textures"
+		@param resource the texture resource path
+		@param options options table, e.g. { key = "my_texture" }
+	**/
+	@:native('set')
+	static function setTextures(url:Url, property:String, resource:HashOrString, options:lua.Table<String, Dynamic>):Void;
+
+	/**
 		Sets the id of the specified node.
 
 		Nodes created with the `Gui.new_*_node()` functions get
@@ -1342,7 +1372,6 @@ extern final class Gui {
 		@param value the value to set
 		@param options (optional) options table - index integer index into array property (1 based) - key hash name of internal property
 	**/
-	@:overload(function(node:GuiNode, property:HashOrString, value:Dynamic, ?options:lua.Table.AnyTable):Void {})
 	static function set<T>(node:GuiNode, property:Property<T>, value:T, ?options:lua.Table.AnyTable):Void;
 }
 
