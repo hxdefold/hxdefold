@@ -313,6 +313,14 @@ typedef ResourceSetTextureInfo = {
 	var ?mipmap:Int;
 
 	/**
+		Optional array slice (page) index for 2D array textures.
+
+		When updating a texture created with type = TEXTURE_TYPE_2D_ARRAY,
+		use this field to select which slice to update.
+	**/
+	var ?page:Int;
+
+	/**
 		Specify the compression type for the data in the buffer object that holds the texture data. Defaults to `COMPRESSION_TYPE_DEFAULT`, i.e no compression.
 	**/
 	var ?compression_type:ResourceTextureCompressionType;
