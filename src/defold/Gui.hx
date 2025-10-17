@@ -132,6 +132,14 @@ extern final class Gui {
 	static function deleteTexture(texture:HashOrString):Void;
 
 	/**
+		Get a node type at runtime.
+
+		Returns a node type constant and an optional subtype hash if the node uses a custom type.
+	**/
+	@:native('get_type')
+	static function getType(node:GuiNode):GuiNodeTypeResult;
+
+	/**
 		Returns true if a node is visible and false if it's not. Invisible nodes are not rendered.
 
 		@param node node to query
@@ -1451,6 +1459,18 @@ extern enum abstract GuiAdjustMode(Int) {
 }
 
 /**
+	Enumeration of GUI node types returned by gui.get_type().
+**/
+@:native("_G.gui")
+extern enum abstract GuiNodeType(Int) {
+	@:native('TYPE_BOX') var TYPE_BOX;
+	@:native('TYPE_TEXT') var TYPE_TEXT;
+	@:native('TYPE_PIE') var TYPE_PIE;
+	@:native('TYPE_PARTICLEFX') var TYPE_PARTICLEFX;
+	@:native('TYPE_CUSTOM') var TYPE_CUSTOM;
+}
+
+/**
 	Enumeration of possible blend modes of a gui node.
 
 	Blend mode defines how the node will be blended with the background.
@@ -2036,6 +2056,17 @@ typedef GuiPlayFlipbookProperties = {
 		one of the `GuiNewTextureResultCode` codes if unsuccessful
 	**/
 	var code:GuiNewTextureResultCode;
+}
+
+/**
+	A type for returning the node type and optional subtype from `Gui.getType`.
+**/
+@:multiReturn extern final class GuiNodeTypeResult {
+	/** the node type constant */
+	var type:GuiNodeType;
+
+	/** optional subtype hash if the node uses a custom type */
+	var ?subtype:Hash;
 }
 
 /**

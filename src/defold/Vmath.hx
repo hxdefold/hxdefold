@@ -199,6 +199,44 @@ extern final class Vmath {
 	static function quatMatrix4(m:Matrix4):Quaternion;
 
 	/**
+		Converts euler angles (x, y, z) in degrees into a quaternion.
+
+		If the first argument is a Vector3, its components are used as x, y, z angles.
+
+		@param x rotation around x-axis in degrees or a Vector3 with euler angles in degrees
+		@param y rotation around y-axis in degrees
+		@param z rotation around z-axis in degrees
+		@return quaternion describing an equivalent rotation (YZX rotation sequence)
+	**/
+	@:pure
+	@:overload(function(v:Vector3):Quaternion {})
+	@:native('euler_to_quat')
+	static function eulerToQuat(x:Float, y:Float, z:Float):Quaternion;
+
+	/**
+		Converts a quaternion into euler angles (x, y, z) in degrees, based on YZX rotation order.
+
+		The provided quaternion is expected to be normalized.
+
+		@param q source quaternion
+		@return x euler angle x in degrees
+		@return y euler angle y in degrees
+		@return z euler angle z in degrees
+	**/
+	@:pure
+	@:native('quat_to_euler')
+	static function quatToEuler(q:Quaternion):VmathEulerAngles;
+
+	/**
+		Multi-return values for `Vmath.quatToEuler` (x, y, z in degrees).
+	**/
+	@:multiReturn extern final class VmathEulerAngles {
+		var x:Float;
+		var y:Float;
+		var z:Float;
+	}
+
+	/**
 		Creates a frustum matrix.
 
 		Constructs a frustum matrix from the given values. The left, right,
