@@ -63,7 +63,7 @@ extern final class Render {
 		@param unit texture unit to enable disable for
 	**/
 	@:native('disable_texture')
-	static function disableTexture(unit:Int):Void;
+	static function disableTexture(binding:EitherType<Int, HashOrString>):Void;
 
 	/**
 		Draws all objects matching a predicate.
@@ -89,7 +89,7 @@ extern final class Render {
 		Draws all 3d debug graphics such as lines drawn with "draw_line" messages and physics visualization.
 	**/
 	@:native('draw_debug3d')
-	static function drawDebug3d():Void;
+	static function drawDebug3d(?options:RenderDebugDrawOptions):Void;
 
 	/**
 		Enables a material.
@@ -117,7 +117,27 @@ extern final class Render {
 		@param bufferType buffer type from which to enable the texture
 	**/
 	@:native('enable_texture')
-	static function enableTexture(unit:Int, handleOrName:EitherType<RenderTarget, TextureResourceHandle>, bufferType:RenderBufferType):Void;
+	static function enableTexture(binding:EitherType<Int, HashOrString>, handleOrName:EitherType<RenderTarget, TextureResourceHandle>,
+		bufferType:RenderBufferType):Void;
+
+	/**
+		Set or reset a compute program.
+
+		@param compute Optional compute program to set. Omit or set to null to disable.
+	**/
+	@:native('set_compute')
+	static function setCompute(?compute:HashOrString):Void;
+
+	/**
+		Dispatch the currently set compute program.
+
+		@param x Number of workgroups in X
+		@param y Number of workgroups in Y
+		@param z Number of workgroups in Z
+		@param options Optional table with properties (e.g. constants)
+	**/
+	@:native('dispatch_compute')
+	static function dispatchCompute(x:Int, y:Int, z:Int, ?options:RenderComputeOptions):Void;
 
 	/**
 		Gets the window height, as specified for the project.
@@ -137,7 +157,7 @@ extern final class Render {
 	**/
 	@:pure
 	@:native('get_render_target_height')
-	static function getRenderTargetHeight(renderTarget:RenderTarget, bufferType:RenderBufferType):Int;
+	static function getRenderTargetHeight(renderTarget:EitherType<RenderTarget, HashOrString>, bufferType:RenderBufferType):Int;
 
 	/**
 		Retrieve a buffer width from a render target.
@@ -148,7 +168,7 @@ extern final class Render {
 	**/
 	@:pure
 	@:native('get_render_target_width')
-	static function getRenderTargetWidth(renderTarget:RenderTarget, bufferType:RenderBufferType):Int;
+	static function getRenderTargetWidth(renderTarget:EitherType<RenderTarget, HashOrString>, bufferType:RenderBufferType):Int;
 
 	/**
 		Gets the window width, as specified for the project.
@@ -262,6 +282,15 @@ extern final class Render {
 	static function setProjection(matrix:Matrix4):Void;
 
 	/**
+		Set or reset the active camera for rendering.
+
+		@param camera Optional camera id to use. Omit or set to null to reset.
+		@param options Optional table with behaviour parameters.
+	**/
+	@:native('set_camera')
+	static function setCamera(?camera:HashOrString, ?options:SetCameraOptions):Void;
+
+	/**
 		Sets a render target. Subsequent draw operations will be to the
 		render target until it is replaced by a subsequent call to set_render_target.
 
@@ -269,7 +298,7 @@ extern final class Render {
 		@param options optional table with behaviour parameters
 	**/
 	@:native('set_render_target')
-	static function setRenderTarget(renderarget:RenderTarget, ?options:SetRenderTargetOptions):Void;
+	static function setRenderTarget(renderarget:EitherType<RenderTarget, HashOrString>, ?options:SetRenderTargetOptions):Void;
 
 	/**
 		Sets the render target size.
@@ -279,7 +308,7 @@ extern final class Render {
 		@param height new render target height
 	**/
 	@:native('set_render_target_size')
-	static function setRenderTargetSize(renderarget:RenderTarget, width:Int, height:Int):Void;
+	static function setRenderTargetSize(renderarget:EitherType<RenderTarget, HashOrString>, width:Int, height:Int):Void;
 
 	/**
 		Sets the stencil test function.
@@ -316,6 +345,14 @@ extern final class Render {
 	**/
 	@:native('set_view')
 	static function setView(matrix:Matrix4):Void;
+
+	/**
+		Set a listener for render context events.
+
+		@param callback Optional callback function. Omit or set to null to remove listener.
+	**/
+	@:native('set_listener')
+	static function setListener(?callback:RenderContextEvent->Void):Void;
 
 	/**
 		Sets the render viewport.
@@ -847,4 +884,60 @@ typedef RenderDrawOptions = {
 		Constants to use while rendering
 	**/
 	var ?constants:RenderConstantBuffer;
+
+	/**
+		Order to sort draw calls (optional)
+	**/
+	var ?sort_order:RenderSortOrder;
+}
+
+/**
+	Options for Render.draw_debug3d
+**/
+typedef RenderDebugDrawOptions = {
+	/** Use this frustum matrix to cull debug draw items */
+	var ?frustum:Matrix4;
+
+	/** Which frustum planes to use */
+	var ?frustum_planes:RenderDrawFrustumPlanes;
+}
+
+/**
+	Options for Render.dispatch_compute
+**/
+typedef RenderComputeOptions = {
+	/** Optional constants buffer */
+	var ?constants:RenderConstantBuffer;
+}
+
+/**
+	Options for Render.set_camera
+**/
+typedef SetCameraOptions = {
+	/** If true, use the camera frustum for culling when drawing */
+	var ?use_frustum:Bool;
+}
+
+/**
+	Render draw sort order
+**/
+@:native("_G.render")
+extern enum abstract RenderSortOrder({}) {
+	@:native('SORT_BACK_TO_FRONT')
+	var BackToFront;
+	@:native('SORT_FRONT_TO_BACK')
+	var FrontToBack;
+	@:native('SORT_NONE')
+	var None;
+}
+
+/**
+	Render context events for set_listener callback
+**/
+@:native("_G.render")
+extern enum abstract RenderContextEvent({}) {
+	@:native('CONTEXT_EVENT_CONTEXT_LOST')
+	var ContextLost;
+	@:native('CONTEXT_EVENT_CONTEXT_RESTORED')
+	var ContextRestored;
 }

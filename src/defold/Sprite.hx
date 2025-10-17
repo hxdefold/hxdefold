@@ -147,6 +147,10 @@ class SpriteProperties {
 
 	/**
 		The image used when rendering the sprite.
+
+		You can set/get the image for a specific sampler by passing an options table with a `key` field to `go.set`/`go.get`:
+		- `go.set("#sprite", "image", myAtlas, { key: "tex1" })`
+		- `var current = go.get("#sprite", "image", { key: "tex1" })`
 	**/
 	static var image(default, never) = new Property<TextureResourceReference>("image");
 
