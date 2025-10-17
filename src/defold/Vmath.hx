@@ -228,15 +228,6 @@ extern final class Vmath {
 	static function quatToEuler(q:Quaternion):VmathEulerAngles;
 
 	/**
-		Multi-return values for `Vmath.quatToEuler` (x, y, z in degrees).
-	**/
-	@:multiReturn extern final class VmathEulerAngles {
-		var x:Float;
-		var y:Float;
-		var z:Float;
-	}
-
-	/**
 		Creates a frustum matrix.
 
 		Constructs a frustum matrix from the given values. The left, right,
@@ -631,4 +622,13 @@ extern final class Vmath {
 	@:overload(function(n:Float):Vector4 {})
 	@:overload(function(v:Vector4):Vector4 {})
 	static function vector4(x:Float, y:Float, z:Float, w:Float):Vector4;
+}
+
+/**
+	Multi-return values for `Vmath.quatToEuler` (x, y, z in degrees).
+**/
+@:multiReturn extern final class VmathEulerAngles {
+	var x:Float;
+	var y:Float;
+	var z:Float;
 }

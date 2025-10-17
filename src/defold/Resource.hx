@@ -12,6 +12,7 @@ import defold.types.MaterialResourceReference;
 import defold.types.TextureResourceReference;
 import defold.types.RenderTargetResourceReference;
 import defold.types.TileSourceResourceReference;
+import defold.types.util.LuaArray;
 
 /**
 	Functions and constants to access resources.
@@ -263,7 +264,6 @@ extern final class Resource {
 		@param callback Optional callback to be executed when the texture has been created
 		@return A tuple containing the hash to the resource and the request ID
 	**/
-	@:multiReturn
 	static inline function createTextureAsync(path:String, table:ResourceCreateTextureInfo,
 			?callback:(CreateTextureRequestId, TextureResourceHandle) -> Void):CreateTextureAsyncResult {
 		return createTextureAsync_(path, table, callback != null ? (self, request_id, resource) -> {

@@ -2113,7 +2113,8 @@ typedef GuiPlayFlipbookProperties = {
 /**
 	A type for returning the node type and optional subtype from `Gui.getType`.
 **/
-@:multiReturn extern final class GuiNodeTypeResult {
+@:multiReturn
+typedef GuiNodeTypeResult = {
 	/** the node type constant */
 	var type:GuiNodeType;
 
