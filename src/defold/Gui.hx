@@ -386,6 +386,29 @@ extern final class Gui {
 	static function getLayout():Hash;
 
 	/**
+		Sets the active GUI layout by id.
+
+		Returns true if the layout was found and activated, otherwise false.
+		When Auto Layout Selection is disabled you can control the layout
+		explicitly at runtime using this function.
+
+		@param id layout id (hash or string)
+		@return true if layout was changed
+	 */
+	@:native('set_layout')
+	static function setLayout(id:HashOrString):Bool;
+
+	/**
+		Returns a table of available GUI layouts and their sizes.
+
+		The returned table maps layout id (hash) to a Vector2-like size where x,y
+		represent the width and height for that layout.
+	 */
+	@:pure
+	@:native('get_layouts')
+	static function getLayouts():lua.Table<Hash, Vector>;
+
+	/**
 		Gets the leading of the text node.
 
 		@param node node from where to get the leading

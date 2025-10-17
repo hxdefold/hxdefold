@@ -235,6 +235,18 @@ extern final class Go {
 	static function getWorldTransform(?id:HashOrStringOrUrl):Matrix4;
 
 	/**
+		Updates the world transform for a game object instance and its hierarchy up to the root.
+
+		This function forces a recalculation of the world transform of the specified object
+		(including parents up to the root) which can be useful after multiple local transform
+		changes when an immediate world transform update is needed.
+
+		@param id optional id of the game object instance to update, by default the instance of the calling script
+	 */
+	@:native('update_world_transform')
+	static function updateWorldTransform(?id:HashOrStringOrUrl):Void;
+
+	/**
 		Sets a named property of the specified game object or component.
 
 		@param url url of the game object or component having the property
