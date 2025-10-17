@@ -1309,6 +1309,33 @@ extern final class Gui {
 	**/
 	@:native('stop_particlefx')
 	static function stopParticlefx(node:GuiNode):Void;
+
+	/**
+		Gets a named property of the specified GUI node.
+
+		Properties available in the default GUI system are documented in the `GuiNodeProperties` class.
+
+		@param node the gui node to get a property from
+		@param property the property to retrieve
+		@param options (optional) options table - index integer index into array property (1 based) - key hash name of internal property
+		@return the value of the specified property
+	**/
+	@:pure
+	@:overload(function(node:GuiNode, property:HashOrString, ?options:lua.Table.AnyTable):Dynamic {})
+	static function get<T>(node:GuiNode, property:Property<T>, ?options:lua.Table.AnyTable):T;
+
+	/**
+		Sets a named property of the specified GUI node.
+
+		Properties available in the default GUI system are documented in the `GuiNodeProperties` class.
+
+		@param node the gui node to set a property on
+		@param property the property to set
+		@param value the value to set
+		@param options (optional) options table - index integer index into array property (1 based) - key hash name of internal property
+	**/
+	@:overload(function(node:GuiNode, property:HashOrString, value:Dynamic, ?options:lua.Table.AnyTable):Void {})
+	static function set<T>(node:GuiNode, property:Property<T>, value:T, ?options:lua.Table.AnyTable):Void;
 }
 
 /**
@@ -2009,4 +2036,170 @@ typedef GuiPlayFlipbookProperties = {
 		one of the `GuiNewTextureResultCode` codes if unsuccessful
 	**/
 	var code:GuiNewTextureResultCode;
+}
+
+/**
+	Properties related to the `Gui` module.
+**/
+@:publicFields
+class GuiNodeProperties {
+	/**
+		The position of the node.
+	**/
+	static var position(default, never) = new Property<Vector3>("position");
+
+	/**
+		The position of the node on the x-axis.
+	**/
+	static var positionX(default, never) = new Property<Float>("position.x");
+
+	/**
+		The position of the node on the y-axis.
+	**/
+	static var positionY(default, never) = new Property<Float>("position.y");
+
+	/**
+		The position of the node on the z-axis.
+	**/
+	static var positionZ(default, never) = new Property<Float>("position.z");
+
+	/**
+		The rotation of the node.
+	**/
+	static var rotation(default, never) = new Property<Vector3>("rotation");
+
+	/**
+		The rotation of the node around the x-axis.
+	**/
+	static var rotationX(default, never) = new Property<Float>("rotation.x");
+
+	/**
+		The rotation of the node around the y-axis.
+	**/
+	static var rotationY(default, never) = new Property<Float>("rotation.y");
+
+	/**
+		The rotation of the node around the z-axis.
+	**/
+	static var rotationZ(default, never) = new Property<Float>("rotation.z");
+
+	/**
+		The euler rotation of the node.
+	**/
+	static var euler(default, never) = new Property<Vector3>("euler");
+
+	/**
+		The euler rotation of the node around the x-axis.
+	**/
+	static var eulerX(default, never) = new Property<Float>("euler.x");
+
+	/**
+		The euler rotation of the node around the y-axis.
+	**/
+	static var eulerY(default, never) = new Property<Float>("euler.y");
+
+	/**
+		The euler rotation of the node around the z-axis.
+	**/
+	static var eulerZ(default, never) = new Property<Float>("euler.z");
+
+	/**
+		The scale of the node.
+	**/
+	static var scale(default, never) = new Property<Vector3>("scale");
+
+	/**
+		The scale of the node on the x-axis.
+	**/
+	static var scaleX(default, never) = new Property<Float>("scale.x");
+
+	/**
+		The scale of the node on the y-axis.
+	**/
+	static var scaleY(default, never) = new Property<Float>("scale.y");
+
+	/**
+		The scale of the node on the z-axis.
+	**/
+	static var scaleZ(default, never) = new Property<Float>("scale.z");
+
+	/**
+		The color of the node.
+	**/
+	static var color(default, never) = new Property<Vector4>("color");
+
+	/**
+		The red component of the node color.
+	**/
+	static var colorR(default, never) = new Property<Float>("color.x");
+
+	/**
+		The green component of the node color.
+	**/
+	static var colorG(default, never) = new Property<Float>("color.y");
+
+	/**
+		The blue component of the node color.
+	**/
+	static var colorB(default, never) = new Property<Float>("color.z");
+
+	/**
+		The alpha component of the node color.
+	**/
+	static var colorA(default, never) = new Property<Float>("color.w");
+
+	/**
+		The outline color of the node.
+	**/
+	static var outline(default, never) = new Property<Vector4>("outline");
+
+	/**
+		The shadow color of the node.
+	**/
+	static var shadow(default, never) = new Property<Vector4>("shadow");
+
+	/**
+		The size of the node.
+	**/
+	static var size(default, never) = new Property<Vector3>("size");
+
+	/**
+		The width of the node.
+	**/
+	static var sizeX(default, never) = new Property<Float>("size.x");
+
+	/**
+		The height of the node.
+	**/
+	static var sizeY(default, never) = new Property<Float>("size.y");
+
+	/**
+		The depth of the node.
+	**/
+	static var sizeZ(default, never) = new Property<Float>("size.z");
+
+	/**
+		The fill angle for pie nodes.
+	**/
+	static var fill_angle(default, never) = new Property<Float>("fill_angle");
+
+	/**
+		The inner radius for pie nodes.
+	**/
+	static var inner_radius(default, never) = new Property<Float>("inner_radius");
+
+	/**
+		The leading for text nodes.
+	**/
+	static var leading(default, never) = new Property<Float>("leading");
+
+	/**
+		The tracking for text nodes.
+	**/
+	static var tracking(default, never) = new Property<Float>("tracking");
+
+	/**
+		The slice9 values for nodes using slice-9 texturing.
+	**/
+	static var slice9(default, never) = new Property<Vector4>("slice9");
 }
