@@ -27,7 +27,7 @@ jobs:
 
       - name: Prepare haxelib
         run: |
-          haxelib setup ~/.haxelib
+          haxelib setup ~/haxelib
           haxelib install dox --always
 
       - name: Build API docs
