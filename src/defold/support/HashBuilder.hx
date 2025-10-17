@@ -7,35 +7,35 @@ import haxe.macro.Expr;
 using haxe.macro.ExprTools;
 using haxe.macro.Tools;
 
-/**
-    This is a helper build macro for easily building classes with `Hash` values.
-
-    For example we can define a class like this:
-    ```haxe
-    @:build(defold.support.HashBuilder.build())
-    class MyProperties {
-        var zoom;
-        var speed;
-        var positionY = "position.y";
-    }
-    ```
-
-    It will be modified by this macro to this:
-    ```haxe
-    class MyProperties {
-        public static final zoom(default,never) = Defold.hash("zoom");
-        public static final speed(default,never) = Defold.hash("speed");
-        public static final positionY(default,never) = Defold.hash("position.y");
-    }
-    ```
-
-    This is useful, because hashes that are used often should be pre-computed and stored for better performance.
-    ```haxe
-    Go.get(url, "position.y"); // slow
-
-    Go.get(url, MyProperties.positionY); // faster
-    ```
-**/
+/** *
+ * This is a helper build macro for easily building classes with `Hash` values.
+ *
+ * For example we can define a class like this:
+ * ```haxe
+ * @:build(defold.support.HashBuilder.build())
+ * class MyProperties {
+ * var zoom;
+ * var speed;
+ * var positionY = "position.y";
+ * }
+ * ```
+ *
+ * It will be modified by this macro to this:
+ * ```haxe
+ * class MyProperties {
+ * public static final zoom(default,never) = Defold.hash("zoom");
+ * public static final speed(default,never) = Defold.hash("speed");
+ * public static final positionY(default,never) = Defold.hash("position.y");
+ * }
+ * ```
+ *
+ * This is useful, because hashes that are used often should be pre-computed and stored for better performance.
+ * ```haxe
+ * Go.get(url, "position.y"); // slow
+ *
+ * Go.get(url, MyProperties.positionY); // faster
+ * ```
+* */
 class HashBuilder
 {
 	public static function build():Array<Field>

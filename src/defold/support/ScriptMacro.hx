@@ -400,16 +400,16 @@ end
             case TAbstract(_.get() => {pack: ["defold", "types"], name: "BufferResourceReference"}, _): PBufferResourceReference;
 
             case TAbstract(_.get() => t, _):
-                /**
+                /**                 *
                  * This recursive call allows the user to define abstracts over a property type,
                  * and then use those abstracts for properties!
-                 */
+                 **/
                 return getPropertyType(t.type, pos);
 
             default:
-                /**
+                /**                 *
                  * We reached the final non-abstract type and didn't find any supported property type.
-                 */
+                 **/
                 Context.fatalError('Unsupported type for script property: ${type.toString()}', pos);
         }
     }
@@ -497,13 +497,13 @@ end
         }
     }
 
-    /**
-        Checks the given class type `cl`, and its super classes recursively, to check if it is initially
-        based on one of the `Script`, `GuiScript` or `RenderScript` types.
-
-        @param cl The class type to check.
-        @return The script type `cl` is extending, or `SNone` if it is not a script type.
-    **/
+    /**     *
+     * Checks the given class type `cl`, and its super classes recursively, to check if it is initially
+     * based on one of the `Script`, `GuiScript` or `RenderScript` types.
+     *
+     * @param cl The class type to check.
+     * @return The script type `cl` is extending, or `SNone` if it is not a script type.
+    * */
     static function getScriptType(cl:ClassType):ScriptType {
         return switch (cl) {
             // Check if the base class is a type of script.
@@ -519,9 +519,9 @@ end
         }
     }
 
-    /**
-        Returns `true`, if the given class type `cl` is one of the base types `Script`, `GuiScript` or `RenderScript`.
-    **/
+    /**     *
+     * Returns `true`, if the given class type `cl` is one of the base types `Script`, `GuiScript` or `RenderScript`.
+    * */
     static function isBaseScriptType(cl:ClassType):Bool {
         return cl.pack.length == 2
             && cl.pack[0] == "defold"

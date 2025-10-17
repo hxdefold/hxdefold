@@ -1,20 +1,20 @@
 package defold;
 
-/**
+/** *
  * Graphics functions and constants.
- *
+ * 
  * Note: Graphics-related constants are exposed here. Existing constants under
  * the render and resource modules may still be present but are deprecated in
  * favor of using this module.
- */
+ **/
 @:native("_G.graphics")
 extern final class Graphics {}
 
-/**
+/** *
  * Texture formats and related graphics constants moved from render/resource.
  * These are exposed as enums to allow type-safe usage and availability checks
  * when the constant may be missing on some devices (null underlying value).
- */
+ **/
 @:native("_G.graphics")
 extern enum abstract GraphicsTextureFormat(Null<Int>) {
 	@:native('TEXTURE_FORMAT_LUMINANCE') var Luminance;

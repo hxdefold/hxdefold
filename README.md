@@ -3,6 +3,10 @@
 # Haxe support library for the [Defold](https://www.defold.com/) game engine
 
 ![Defold API version: 1.11.1](https://img.shields.io/badge/api%20version-1.11.1-orange.svg)
+[![Wiki](https://img.shields.io/badge/docs-wiki-blue)](https://github.com/hxdefold/hxdefold/wiki)
+[![API Reference](https://img.shields.io/badge/docs-API%20reference-brightgreen)](https://hxdefold.github.io/hxdefold/)
+[![haxelib](https://img.shields.io/badge/haxelib-hxdefold-orange)](https://lib.haxe.org/p/hxdefold)
+
 
 This library allows writing beautiful [Haxe](https://haxe.org/) code for the [Defold](https://www.defold.com/) game engine \o/
 

@@ -1,8 +1,8 @@
 package defold.types;
 
-/**
-    Quaternion type, can be created with `defold.Vmath.quat`.
-**/
+/** *
+ * Quaternion type, can be created with `defold.Vmath.quat`.
+* */
 @:forward
 extern abstract Quaternion(QuaternionData)
 {

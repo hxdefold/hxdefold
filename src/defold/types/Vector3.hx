@@ -1,8 +1,8 @@
 package defold.types;
 
-/**
-    Vector3 type, can be created with `defold.Vmath.vector3`.
-**/
+/** *
+ * Vector3 type, can be created with `defold.Vmath.vector3`.
+* */
 @:forward
 extern abstract Vector3(Vector3Data)
 {

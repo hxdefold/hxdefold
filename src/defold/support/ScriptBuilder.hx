@@ -50,9 +50,9 @@ class ScriptBuilder
 
             switch field.kind
             {
-                /**
+                /**                 *
                  * Remove non-static variables and replace them with accessors to the self object.
-                 */
+                 **/
                 case FVar(t, e) if (!field.access.contains(AStatic)):
 
                     var propertyMeta: MetadataEntry = fieldGetMeta(field, 'property');
@@ -148,41 +148,41 @@ class ScriptBuilder
                     }
 
 
-                /**
+                /**                 *
                  * Properties are only allowed with getters and/or setters.
                  * Currently we are not handling properties with 'default' access, so we should make them raise errors.
-                 */
+                 **/
                 case FProp('default', _, _, _) | FProp(_, 'default', _, _)  if (!field.access.contains(AStatic)):
                     Context.fatalError('script class fields with access "default" are currently not supported', field.pos);
 
 
-                /**
+                /**                 *
                  * Non-static dynamic functions are not currently supported.
                  * Only a single class instance is created in practice, so we should force the user to explicitly make it static.
-                 */
+                 **/
                 case FFun(f) if (field.access.contains(ADynamic) && !field.access.contains(AStatic)):
                     Context.fatalError('script classes shall not define non-static dynamic functions', field.pos);
 
 
-                /**
+                /**                 *
                  * The init method is kept and added later, in case we want to add some statements to it.
-                 */
+                 **/
                 case FFun(f) if (field.name == 'init'):
                     initMethod = field;
 
 
-                /**
+                /**                 *
                  * All other fields shall be kept as-is.
-                 */
+                 **/
                 default:
                     newFields.push(field);
             }
         }
 
 
-        /**
+        /**         *
          * If any additional init statements are needed for the class, insert them here...
-         */
+         **/
         if (additionalInitStatements.length > 0)
         {
             // we need to add initialization statements to init()
@@ -219,9 +219,9 @@ class ScriptBuilder
         }
 
 
-        /**
+        /**         *
          * Generate properties-related fields and types.
-         */
+         **/
         if (scriptClass.superClass != null)
         {
             // get properties from the super-classes as well
@@ -236,10 +236,10 @@ class ScriptBuilder
         return newFields;
     }
 
-    /**
+    /**     *
      * This method defines a class called `ScriptNameProperties` with public static `Property<T>` fields
      * for each property of the `ScriptName` script.
-     */
+     **/
     static function definePropertiesType(scriptClass: ClassType, properties: Array<Property>, pos: Position): String
     {
         var fields: Array<Field> = [];
@@ -247,12 +247,12 @@ class ScriptBuilder
         {
             fields.push(generatePropertyField(prop.name, prop.name, prop.doc, prop.type.toComplexType(), pos));
 
-            /**
+            /**             *
              * Now let's go one step further...
-             *
+             * 
              * Take properties of the following 3 types: Vector3, Vector4, Quaternion
              * And generate also property hashes for their `.x`, `.y`, `.z`, and `.w` components!
-             */
+             **/
             switch prop.type.followWithAbstracts()
             {
                 case TInst(_.get() => {pack: ["defold", "types"], name: "Vector3Data"}, _):
@@ -355,9 +355,9 @@ class ScriptBuilder
             argDocs.push('@param ${property.name} ${property.doc == null ? "" : property.doc}');
         }
 
-        /**
+        /**         *
          * The expression of the method is simply to initialize the lua table and return it.
-         */
+         **/
         var tableInit: String = '{ ${tableInitExprs.join(', ')} }';
         var tableInitArgs: Array<Expr> = [ macro $v{tableInit} ];
         for (property in properties)

@@ -1,8 +1,8 @@
 package defold;
 
-/**
+/** *
  * Functions for checking Defold userdata types.
- */
+ **/
 @:native("_G.types")
 extern final class Types {
 	/** Check if passed value is a hash */
