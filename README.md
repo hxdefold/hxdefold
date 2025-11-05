@@ -96,6 +96,7 @@ Note that this is not standard [semver](https://semver.org/), since we might pot
 
 | hxdefold | Haxe | Defold API |
 |:--------:|:----:|:----------:|
+| 2.2.*    | 4.3  | 1.11.2     |
 | 2.1.*    | 4.3  | 1.11.1     |
 | 2.0.*    | 4.3  | 1.6.4      |
 

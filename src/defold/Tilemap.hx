@@ -4,10 +4,10 @@ import defold.types.*;
 
 /** *
  * Functions and messages used to manipulate tile map components.
-* */
+**/
 @:native("_G.tilemap")
 extern final class Tilemap {
-	/**	 *
+	/**
 	 * Get the bounds for a tile map. This function returns multiple values:
 	 * The lower left corner index x and y coordinates (1-indexed),
 	 * the tile map width and the tile map height.
@@ -16,12 +16,12 @@ extern final class Tilemap {
 	 * the bounds are calculated as if all layers were collapsed into one.
 	 *
 	 * @param url the tile map
-	* */
+	**/
 	@:pure
 	@:native('get_bounds')
 	static function getBounds(url:HashOrStringOrUrl):TilemapBounds;
 
-	/**	 *
+	/**
 	 * Get the tile set at the specified position in the tilemap.
 	 * The position is identified by the tile index starting at origo
 	 * with index 1, 1. (see `Tilemap.set_tile`)
@@ -33,12 +33,12 @@ extern final class Tilemap {
 	 * @param x x coordinate of the tile
 	 * @param y y coordinate of the tile
 	 * @return index of the tile
-	* */
+	**/
 	@:pure
 	@:native('get_tile')
 	static function getTile(url:HashOrStringOrUrl, layer:HashOrString, x:Int, y:Int):Int;
 
-	/**	 *
+	/**
 	 * Get full tile info at the specified layer and coordinates.
 	 *
 	 * @param url the tile map
@@ -46,23 +46,23 @@ extern final class Tilemap {
 	 * @param x x coordinate of the tile
 	 * @param y y coordinate of the tile
 	 * @return Tile information (index and flags)
-	* */
+	**/
 	@:pure
 	@:native('get_tile_info')
 	static function getTileInfo(url:HashOrStringOrUrl, layer:HashOrString, x:Int, y:Int):TilemapTileInfo;
 
-	/**	 *
+	/**
 	 * Get all tile indices for a layer as a table of rows.
 	 *
 	 * @param url the tile map
 	 * @param layer of the layer
 	 * @return table of rows with tile indexes
-	* */
+	**/
 	@:pure
 	@:native('get_tiles')
 	static function getTiles(url:HashOrStringOrUrl, layer:HashOrString):lua.Table<Int, lua.Table<Int, Int>>;
 
-	/**	 *
+	/**
 	 * Reset a shader constant for a tile map.
 	 *
 	 * The constant must be defined in the material assigned to the tile map.
@@ -71,11 +71,11 @@ extern final class Tilemap {
 	 *
 	 * @param url the tile map that should have a constant reset
 	 * @param name of the constant
-	* */
+	**/
 	@:native('reset_constant')
 	static function resetConstant(url:HashOrStringOrUrl, name:HashOrString):Void;
 
-	/**	 *
+	/**
 	 * Set a shader constant for a tile map.
 	 *
 	 * The constant must be defined in the material assigned to the tile map.
@@ -86,11 +86,11 @@ extern final class Tilemap {
 	 * @param url the tile map that should have a constant set
 	 * @param name of the constant
 	 * @param value of the constant
-	* */
+	**/
 	@:native('set_constant')
 	static function setConstant(url:HashOrStringOrUrl, name:HashOrString, value:Vector4):Void;
 
-	/**	 *
+	/**
 	 * Set a tile in a tile map.
 	 *
 	 * Replace a tile in a tile map with a new tile.
@@ -120,49 +120,49 @@ extern final class Tilemap {
 	 * @param tile index of new tile to set. 0 resets the cell
 	 * @param hFlipped if the tile should be horizontally flipped
 	 * @param vFlipped if the tile should be vertically flipped
-	* */
+	**/
 	@:native('set_tile')
 	static function setTile(url:HashOrStringOrUrl, layer:HashOrString, x:Int, y:Int, tile:Int, ?hFlipped:Bool, ?vFlipped:Bool):Void;
 
-	/**	 *
+	/**
 	 * Sets the visibility of the tilemap layer.
 	 *
 	 * @param url the tile map
 	 * @param layer name of the layer
 	 * @param visible should the layer be visible
-	* */
+	**/
 	@:native('set_visible')
 	static function setVisible(url:HashOrStringOrUrl, layer:HashOrString, visible:Bool):Void;
 }
 
 /** *
  * Return value of `Tilemap.get_bounds` method.
-* */
+**/
 @:multiReturn extern final class TilemapBounds {
-	/**	 *
+	/**
 	 * x coordinate of the bottom left corner
-	* */
+	**/
 	var x:Int;
 
-	/**	 *
+	/**
 	 * y coordinate of the bottom left corner
-	* */
+	**/
 	var y:Int;
 
-	/**	 *
+	/**
 	 * number of columns in the tile map
-	* */
+	**/
 	var w:Int;
 
-	/**	 *
+	/**
 	 * number of rows in the tile map
-	* */
+	**/
 	var h:Int;
 }
 
 /** *
  * Tile info returned by `Tilemap.get_tile_info`.
-* */
+**/
 typedef TilemapTileInfo = {
 	var index:Int;
 	var h_flip:Bool;

@@ -4,25 +4,25 @@ import defold.types.BufferData;
 
 /** *
  * Functions for creating image objects.
- **/
+**/
 @:native("_G.image")
 extern final class Image {
-	/**	 *
+	/**
 	 * Load image (PNG or JPEG) from buffer.
 	 *
 	 * @param buffer image data buffer
 	 * @param options an optional table containing parameters for loading the image.
 	 * @return object with the following fields: width, height, type and buffer (raw data). nil is returned if loading fails.
-	* */
+	**/
 	static function load(buffer:String, ?options:ImageLoadOptions):Null<ImageLoadResult>;
 
-	/**	 *
+	/**
 	 * Load image (PNG or JPEG) from a string buffer.
 	 *
 	 * @param buffer image data buffer
 	 * @param options an optional table containing parameters for loading the image.
 	 * @return object with the following fields: width, height, type and buffer (raw data). nil is returned if loading fails.
-	* */
+	**/
 	static function load_buffer(buffer:String, ?options:ImageLoadOptions):Null<ImageLoadResult>;
 }
 
@@ -36,7 +36,7 @@ typedef ImageLoadOptions = {
 
 /** *
  * Return type of the `Image.load` method.
- **/
+**/
 typedef ImageLoadResult = {
 	var width:Int;
 	var height:Int;
@@ -46,7 +46,7 @@ typedef ImageLoadResult = {
 
 /** *
  * Image type, used in `ImageLoadResult.type`.
-* */
+**/
 @:native("_G.image")
 extern enum abstract ImageType(Int) {
 	@:native('TYPE_RGB')
